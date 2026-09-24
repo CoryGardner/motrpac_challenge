@@ -2,7 +2,7 @@
 
 ## Molecular Tissue Fingerprints
 
-Can molecular signatures identify a tissue reliably?
+*Can molecular signatures identify a tissue reliably?*
 
 ### Challenge
 
@@ -10,7 +10,7 @@ Use one or more omics layers to predict tissue identity and determine whether a 
 
 ### Data
 
-Individual-sample rat endurance-training data across a selected set of tissues, with GTEx or another tissue resource for external context.
+Individual-sample rat endurance-training data across a selected set of tissues, with [GTEx](https://gtexportal.org/) or another tissue resource for external context.
 
 ### Potential Outputs
 
