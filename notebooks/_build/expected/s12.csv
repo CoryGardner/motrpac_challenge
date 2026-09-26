@@ -1,0 +1,11 @@
+key,section,published_value,reference_value,tolerance,source,note
+s12.median_rho_WATSC,12,0.371812725090036,0.371812725090036,0.005,results/09_discordance/summary.csv (WAT-SC median_rho),recomputed live
+s12.median_rho_CORTEX,12,0.0298199279711884,0.0298199279711884,0.005,results/09_discordance/summary.csv (CORTEX median_rho),recomputed live
+s12.n_sig_either,12,1948,1948,0,results/09_discordance/discordance_rates.csv (sum n_sig_either); FINDINGS_ONE_PAGER item 5,recomputed live; 56 contrasts FDR 0.10
+s12.n_one_layer_only,12,1899,1899,0,results/09_discordance/discordance_rates.csv (sum n_one_layer_only),recomputed live
+s12.n_sign_discordant,12,4,4,0,results/09_discordance/discordance_rates.csv (sum n_sign_discordant),recomputed live
+s12.n_concordant,12,45,45,0,results/09_discordance/discordance_rates.csv (sum n_concordant),recomputed live
+s12.auroc_one_layer_logreg_with_flag,12,0.7799763305392329,0.7799763305392329,0.005,SUMMARY.md Discordance table (any_one_layer logreg 0.780),recomputed live; includes circular is_training_regulated
+s12.auroc_one_layer_logreg_without_flag,12,0.7419852925755585,0.7419852925755585,0.005,SUMMARY.md Discordance table (any_one_layer (no regulated flag) logreg 0.742),recomputed live
+s12.auroc_one_layer_rf_with_flag,12,0.7752668443169652,0.7752668443169652,0.005,SUMMARY.md Discordance table (any_one_layer rf 0.775),recomputed live; RF differs from published at 1e-4 (0.77521 in this run)
+s12.auroc_one_layer_rf_without_flag,12,0.7466004793343886,0.7466004793343886,0.005,SUMMARY.md Discordance table (any_one_layer (no regulated flag) rf 0.747),recomputed live; RF differs from published at 1e-4 (0.74667 in this run)

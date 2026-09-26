@@ -1,0 +1,12 @@
+key,section,published_value,reference_value,tolerance,source,note
+s05.bal_acc_rr_k20,05,0.9757894736842105,0.9757894736842105,0.005,results/05_panels/TRNSCRPT/panel_curve.csv; SUMMARY.md panel size k=20,round-robin selector; recomputed live
+s05.bal_acc_fclassif_k20,05,0.3989473684210526,0.3989473684210526,0.005,results/05_panels/TRNSCRPT/panel_curve_fclassif.csv,F-test selector; recomputed live
+s05.bal_acc_rr_k10,05,0.8136842105263158,0.8136842105263158,0.005,results/05_panels/TRNSCRPT/panel_curve.csv; SUMMARY.md panel size k=10,recomputed live
+s05.bal_acc_rr_k50,05,0.9926315789473683,0.9926315789473683,0.005,results/05_panels/TRNSCRPT/panel_curve.csv; SUMMARY.md panel size k=50,recomputed live
+s05.smallest_k_bal_acc_ge_099,05,50,50,0,results/05_panels/TRNSCRPT/panel_curve.csv,from the full published grid when RECOMPUTE=False
+s05.n_errors_k20,05,23,23,0,results/05_panels/TRNSCRPT/confusable_pairs_k20.csv (sum of count),recomputed live; same seed
+s05.top_error_count_k20,05,12,12,0,results/05_panels/TRNSCRPT/confusable_pairs_k20.csv,VENACV->BAT; derived by code
+s05.n_candidate_panel,05,10,10,0,results/05_panels/TRNSCRPT/candidate_panel.csv; SUMMARY.md stable candidate panel,stability selection loaded when RECOMPUTE=False
+s05.n_panel_tissues_covered,05,10,10,0,results/05_panels/TRNSCRPT/candidate_panel_annotated.csv,distinct marker_tissue; annotation recomputed live
+s05.n_flag_regulated,05,2,2,0,results/05_panels/TRNSCRPT/candidate_panel_annotated.csv; SUMMARY.md risk_T7_regulated,annotation recomputed live
+s05.n_flag_qc,05,2,2,0,results/05_panels/TRNSCRPT/candidate_panel_annotated.csv; SUMMARY.md risk_qc_correlated,annotation recomputed live

@@ -1,0 +1,11 @@
+,gene_symbol,marker_tissue,source_effect_z,target_effect_z,target_top_organ,fails_in_target,risk_T7_regulated,risk_qc_correlated
+0,Hoxb13,COLON,4.35,1.52,Colon - Transverse,False,False,False
+4,Trim29,WAT-SC,3.05,-1.5,Testis,True,False,False
+6,Ankrd2,SKM-GN,1.61,0.56,Muscle - Skeletal,False,False,False
+7,Gdf10,VENACV,1.15,-0.89,Lung,True,False,True
+8,Gnb3,HEART,2.61,-1.61,Ovary,True,False,True
+10,Shisa6,HIPPOC,2.0,0.26,Brain - Hippocampus,False,,
+16,Qrfpr,ADRNL,3.7,-1.79,Brain - Hypothalamus,True,True,True
+17,Akr1c3,OVARY,4.21,-1.59,Adipose - Subcutaneous,True,True,False
+18,Rnf10,BLOOD,3.09,0.81,Whole Blood,False,,
+19,Cyp21a1,ADRNL,3.8,1.66,Adrenal Gland,False,False,True

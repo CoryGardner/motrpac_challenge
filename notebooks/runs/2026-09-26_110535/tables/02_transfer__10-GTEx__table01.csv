@@ -1,0 +1,6 @@
+,step,genes,lost_at_step
+0,MoTrPAC genes (stacked TRNSCRPT),21193,0
+1,… with a row in the RGD rat–human table,16881,4312
+2,… with any human ortholog (id or symbol),16881,0
+3,… whose ortholog is strictly 1:1 (both directions),14609,2272
+4,"… whose human gene is a GTEx column (Ensembl id + symbol fallback, deduplicated)",14569,40

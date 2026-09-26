@@ -1,0 +1,34 @@
+,cell,provenance
+0,4,notebook-only helper
+1,6,copied verbatim from src/motrpac/config.py
+2,8,copied verbatim from src/motrpac/io.py
+3,10,copied verbatim from src/motrpac/splits.py
+4,12,copied verbatim from src/motrpac/models.py
+5,14,copied verbatim from src/motrpac/conformal.py
+6,16,copied verbatim from src/motrpac/discordance.py
+7,18,copied verbatim from src/motrpac/transfer.py
+8,20,copied verbatim from src/motrpac/plots.py
+9,24,"from scripts/02_inventory.py::main, verbatim"
+10,25,from scripts/02_inventory.py::main
+11,26,from scripts/10_make_report.py
+12,30,from scripts/03_eda.py::r2_categorical
+13,30,from scripts/03_eda.py::pca_of
+14,31,from scripts/03_eda.py::main
+15,36,from scripts/04_prot_diagnostic.py::r2_cat
+16,36,from scripts/04_prot_diagnostic.py::main
+17,40,from scripts/03_eda.py::shared_with
+18,43,from scripts/04_fingerprint_baselines.py::main
+19,48,from scripts/04_fingerprint_baselines.py::confusable_pairs
+20,51,from scripts/05_compact_panels.py::main
+21,58,from scripts/05_annotate_panel.py::main
+22,61,from scripts/06_conformal_certify.py::proba_on
+23,61,from scripts/06_conformal_certify.py::split_train
+24,62,"from scripts/06_conformal_certify.py::main, the fold loop, conformal"
+25,64,from scripts/06_conformal_certify.py::main
+26,72,from scripts/06_conformal_certify.py
+27,75,from scripts/06_conformal_certify.py::panel_family
+28,75,from scripts/06_conformal_certify.py::certify_losses
+29,78,"from scripts/06_conformal_certify.py::main, verbatim logic"
+30,87,from scripts/08_shift_tests.py::coverage_with
+31,87,from scripts/08_shift_tests.py::eval_split
+32,87,from scripts/08_shift_tests.py::main

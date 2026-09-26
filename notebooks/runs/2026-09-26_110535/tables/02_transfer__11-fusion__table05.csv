@@ -1,0 +1,8 @@
+,tissue,max_auroc_collection_library_plex,max_auroc_qc_metrics,max_auroc_all_covariates,verdict
+0,CORTEX,0.7395833333333333,0.3541666666666666,0.4375,training
+1,HEART,0.9583333333333331,0.7916666666666666,0.875,unresolvable: sequencing depth separates the groups
+2,KIDNEY,0.8854166666666666,0.6875,0.7916666666666666,unresolvable: trnscrpt_library covariates classify the groups (AUROC 0.89)
+3,LIVER,0.6770833333333333,0.6979166666666666,0.5520833333333333,training
+4,LUNG,0.6666666666666666,0.4999999999999999,0.4999999999999999,training
+5,SKM-GN,0.9166666666666666,0.9583333333333331,1.0,unresolvable: trnscrpt_depth covariates classify the groups (AUROC 0.92)
+6,WAT-SC,0.78125,0.6354166666666666,0.53125,training

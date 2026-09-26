@@ -1,0 +1,15 @@
+,run,file,identical_bytes,counts_and_ks_equal,max_abs_float_diff
+0,TRNSCRPT,certificate_by_fold.csv,True,True,0.0
+1,TRNSCRPT,certificate_validity.csv,True,True,0.0
+2,TRNSCRPT,certificate_distribution.csv,True,True,0.0
+3,TRNSCRPT,certificate_final.csv,True,True,0.0
+4,TRNSCRPT,certificate_final_repeats.csv,True,True,0.0
+5,TRNSCRPT,certificate_alpha_delta_grid.csv,True,True,0.0
+6,TRNSCRPT,sizing_table.csv,True,True,0.0
+7,TRNSCRPT_pooled_a05,certificate_by_fold.csv,False,True,2.220446049250313e-16
+8,TRNSCRPT_pooled_a05,certificate_validity.csv,True,True,0.0
+9,TRNSCRPT_pooled_a05,certificate_distribution.csv,True,True,0.0
+10,TRNSCRPT_pooled_a05,certificate_final.csv,False,True,1.1102230246251565e-16
+11,TRNSCRPT_pooled_a05,certificate_final_repeats.csv,True,True,0.0
+12,TRNSCRPT_pooled_a05,certificate_alpha_delta_grid.csv,True,True,0.0
+13,TRNSCRPT_pooled_a05,sizing_table.csv,True,True,0.0

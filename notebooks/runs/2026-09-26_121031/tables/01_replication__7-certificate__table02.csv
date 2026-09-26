@@ -1,0 +1,4 @@
+,n_err,point_error,cp_upper_bound,passes_alpha
+0,0,0.0,0.0994,True
+1,1,0.0455,0.1656,False
+2,2,0.0909,0.2242,False

@@ -1,0 +1,21 @@
+source: counts
+OmicsMatrix(TRNSCRPT-counts-stacked: 899 samples, 21193 features, 50 animals)
+stack TRNSCRPT/counts (stacked filter): 19 tissues, 899 samples, 21193 genes with >= 10 counts in >= 20% of samples in >= 1 tissue (in every tissue: 10424; recovered 10769 tissue-restricted genes that the per-tissue inner join drops; annotation union 32883); absent = 0 counts, log2 CPM on total library size
+sample-level split REJECTED -> 50 pid(s) appear in both train and test: ['10023259', '10024735', '10025626', '10025707', '10025979']
+  animals on both sides: 50 of 50
+animal-grouped split: all 5 folds pass the assertion
+  fold 0 centroid   bal.acc=0.984 macroF1=0.984 (2.4s, 10 test animals)
+  fold 0 logreg_l2  bal.acc=0.989 macroF1=0.989 (3.5s, 10 test animals)
+  fold 1 centroid   bal.acc=0.979 macroF1=0.979 (1.9s, 10 test animals)
+  fold 1 logreg_l2  bal.acc=1.000 macroF1=1.000 (3.4s, 10 test animals)
+  fold 2 centroid   bal.acc=0.979 macroF1=0.979 (1.9s, 10 test animals)
+  fold 2 logreg_l2  bal.acc=0.995 macroF1=0.995 (3.1s, 10 test animals)
+  fold 3 centroid   bal.acc=0.989 macroF1=0.989 (1.9s, 10 test animals)
+  fold 3 logreg_l2  bal.acc=1.000 macroF1=1.000 (3.5s, 10 test animals)
+  fold 4 centroid   bal.acc=0.979 macroF1=0.978 (1.9s, 10 test animals)
+  fold 4 logreg_l2  bal.acc=0.989 macroF1=0.989 (3.3s, 10 test animals)
+best baseline: logreg_l2  balanced accuracy 0.995 ± 0.005 (sd over folds)
+per-fold balanced accuracy:
+centroid (recomputed): 17 misclassified samples of 899; confused pairs identical to published: True
+logreg_l2 (recomputed): 5 misclassified samples of 899; confused pairs identical to published: True
+rf (loaded): 7 misclassified samples of 899; confused pairs identical to published: True

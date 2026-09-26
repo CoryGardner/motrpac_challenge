@@ -1,0 +1,16 @@
+,seconds
+0 setup + library,0.6
+1 Setup and data inventory,6.5
+2 PCA and variance partition,4.3
+3 Proteomics diagnostic,2.5
+4 baselines,79.0
+5 panels,360.1
+6 conformal sets,12.5
+7 certificate,124.7
+8 shift tests,41.1
+11 fusion,1704.5
+12 discordance,89.9
+14 QC-only baseline (new),0.3
+13 limitations,0.0
+99 self-check,0.0
+TOTAL,2426.0000000000005

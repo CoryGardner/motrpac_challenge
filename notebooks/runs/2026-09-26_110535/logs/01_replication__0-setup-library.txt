@@ -1,0 +1,11 @@
+figures, tables and printed output of this run are saved under /home/cory/projects/MoTrPAC/code/pipeline/notebooks/runs/2026-09-26_110535
+     module    status  inline_lines  src_lines
+     config identical            52         52
+         io identical           466        466
+     splits identical           106        106
+     models identical           407        407
+  conformal identical           261        261
+discordance identical           203        203
+   transfer identical           323        323
+      plots identical           152        152
+inline library identical to src/motrpac (after the 3 documented edits)

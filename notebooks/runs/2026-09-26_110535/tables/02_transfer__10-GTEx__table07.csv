@@ -1,0 +1,10 @@
+,model,conformal,coverage_mapped,coverage_mapped_prefix,frac_empty_mapped,frac_empty_mapped_prefix,avg_set_size_mapped,avg_set_size_mapped_prefix
+0,k20,marginal,0.364,0.368,0.616,0.611,0.384,0.389
+1,k20,mondrian,0.329,0.208,0.0,0.65,2.353,0.353
+2,k20,floored,0.522,0.404,0.0,0.452,2.548,0.553
+3,k50,marginal,0.363,0.368,0.631,0.627,0.369,0.373
+4,k50,mondrian,0.302,0.181,0.0,0.784,2.216,0.216
+5,k50,floored,0.51,0.393,0.0,0.568,2.428,0.432
+6,full,marginal,0.062,0.064,0.938,0.936,0.062,0.064
+7,full,mondrian,0.198,0.078,0.0,0.92,2.08,0.08
+8,full,floored,0.252,0.133,0.0,0.865,2.133,0.135

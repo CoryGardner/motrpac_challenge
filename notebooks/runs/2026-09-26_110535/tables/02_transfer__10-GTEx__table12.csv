@@ -1,0 +1,9 @@
+,,mean,mean,std,std
+selector,,standard,transfer_aware,standard,transfer_aware
+representation,k,,,,
+pairs,20,0.934,0.943,0.011,0.011
+pairs,50,0.972,0.981,0.009,0.006
+rank,20,0.914,0.947,0.01,0.012
+rank,50,0.968,0.975,0.008,0.016
+zscore,20,0.976,0.979,0.011,0.004
+zscore,50,0.989,0.988,0.004,0.004

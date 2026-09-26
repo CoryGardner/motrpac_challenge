@@ -1,0 +1,7 @@
+,alpha,delta,n_splits,frac_certified_k20,frac_any_certified,median_certified_k,n_splits_published,frac_certified_k20_published,frac_any_certified_published,median_certified_k_published
+0,0.05,0.05,100,0.0,0.0,,100,0.0,0.0,
+1,0.1,0.05,100,0.0,0.0,,100,0.0,0.0,
+2,0.1,0.1,100,0.52,0.7,20.0,100,0.52,0.7,20.0
+3,0.2,0.05,100,0.89,0.97,15.0,100,0.89,0.97,15.0
+4,0.2,0.1,100,0.89,0.97,15.0,100,0.89,0.97,15.0
+5,0.05,0.1,100,0.0,0.0,,100,0.0,0.0,

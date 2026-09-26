@@ -1,0 +1,4 @@
+,panel,n_genes,present_in_bodymap
+0,k=20 (all-animal fit),20,20
+1,k=50 (all-animal fit),50,50
+2,T5 stable core,10,10

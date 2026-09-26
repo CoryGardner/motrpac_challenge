@@ -1,0 +1,15 @@
+# Core (everything in src/ and scripts/ runs with these)
+numpy>=1.24
+pandas>=2.0
+scikit-learn>=1.3
+scipy>=1.10
+matplotlib>=3.7
+pytest>=7
+# Install the library itself in editable mode so `import motrpac` works from anywhere:
+-e .
+# Optional extras (import-guarded; install when useful):
+#   umap-learn   nicer 2-D embeddings than PCA for EDA
+#   pyarrow      parquet caching of stacked matrices
+#   statsmodels  variance partitioning / mixed models
+#   mapie        reference implementation of conformal classification (to cross-check ours)
+#   jupyter      notebooks (not in the core path)

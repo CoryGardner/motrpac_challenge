@@ -1,0 +1,4 @@
+,model,source,balanced_accuracy_mean,balanced_accuracy_std,macro_f1_mean,log_loss_mean,balanced_accuracy_mean_published,balanced_accuracy_std_published,diff
+0,centroid,recomputed,0.9821,0.0047,0.982,0.4813,0.9821,0.0047,-0.0
+1,logreg_l2,recomputed,0.9947,0.0053,0.9947,0.0357,0.9947,0.0053,-0.0
+2,rf,loaded,0.9926,0.0071,0.9925,0.0951,0.9926,0.0071,-0.0

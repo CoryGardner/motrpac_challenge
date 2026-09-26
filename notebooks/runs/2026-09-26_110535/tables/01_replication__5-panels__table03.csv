@@ -1,0 +1,11 @@
+,gene_symbol,selection_frequency,marker_tissue,rank_in_tissue,effect_size,next_highest_tissue,regulated_tissues,r_pct_mrna_in_marker_tissue,risk_T7_regulated,risk_qc_correlated
+0,Cyp21a1,1.0,ADRNL,1,11.56,VENACV,,-0.8,False,True
+1,Gabrd,0.88,CORTEX,6,1.33,HIPPOC,,0.17,False,False
+2,Lrrc10,0.94,HEART,6,2.9,VENACV,LUNG,0.06,False,False
+3,Fibcd1l1,1.0,HIPPOC,3,3.59,CORTEX,,-0.01,False,False
+4,Pmch,0.96,HYPOTH,1,8.17,CORTEX,,0.03,False,False
+5,Umod,1.0,KIDNEY,1,11.79,TESTES,,-0.43,False,False
+6,Cldn18,0.94,LUNG,1,8.55,TESTES,,0.34,False,False
+7,Akr1c3,1.0,OVARY,2,8.23,WAT-SC,OVARY,-0.06,True,False
+8,Ccl25,1.0,SMLINT,2,6.57,COLON,SMLINT,0.25,True,False
+9,Fcrl5,0.9,SPLEEN,10,5.42,BLOOD,WAT-SC,-0.52,False,True

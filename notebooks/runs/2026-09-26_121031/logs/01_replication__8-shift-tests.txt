@@ -1,0 +1,37 @@
+  train_male_test_female       full       acc=0.913 cov_src=0.931 cov_target=0.764 (seen: 0.807) size=0.78 unseen=OVARY
+  train_male_test_female       panel_k20  acc=0.893 cov_src=0.931 cov_target=0.788 (seen: 0.833) size=0.82 unseen=OVARY
+  train_female_test_male       full       acc=0.942 cov_src=0.931 cov_target=0.824 (seen: 0.873) size=0.82 unseen=TESTES
+  train_female_test_male       panel_k20  acc=0.900 cov_src=0.931 cov_target=0.833 (seen: 0.882) size=0.83 unseen=TESTES
+  holdout_group_8w             full       acc=1.000 cov_src=0.944 cov_target=0.894 (seen: 0.894) size=0.89 unseen=-
+  holdout_group_8w             panel_k20  acc=0.989 cov_src=0.907 cov_target=0.867 (seen: 0.867) size=0.87 unseen=-
+  holdout_group_1w             full       acc=0.967 cov_src=0.889 cov_target=0.872 (seen: 0.872) size=0.88 unseen=-
+  holdout_group_1w             panel_k20  acc=0.956 cov_src=0.917 cov_target=0.850 (seen: 0.850) size=0.87 unseen=-
+  train_control_test_trained   full       acc=0.979 cov_src=0.944 cov_target=0.880 (seen: 0.880) size=0.89 unseen=-
+  train_control_test_trained   panel_k20  acc=0.961 cov_src=0.944 cov_target=0.903 (seen: 0.903) size=0.92 unseen=-
+TRNSCRPT shift splits: 40 s
+TRNSCRPT: max |recomputed − published (post-fix)| over accuracy_all, coverage_source_id, coverage_target_seen, cov_target_recal_N3, qhat: 1.11e-16
+range of recalibrated coverage (N = 3): 0.898 – 0.925
+  loaded OmicsMatrix(METAB/BAT: 52 samples, 1312 features, 52 animals)
+  loaded OmicsMatrix(METAB/HEART: 50 samples, 1430 features, 50 animals)
+  loaded OmicsMatrix(METAB/HIPPOC: 49 samples, 1250 features, 49 animals)
+  loaded OmicsMatrix(METAB/KIDNEY: 50 samples, 1494 features, 50 animals)
+  loaded OmicsMatrix(METAB/LIVER: 50 samples, 1487 features, 50 animals)
+  loaded OmicsMatrix(METAB/LUNG: 50 samples, 1467 features, 50 animals)
+  loaded OmicsMatrix(METAB/PLASMA: 50 samples, 1268 features, 50 animals)
+  loaded OmicsMatrix(METAB/SKM-GN: 50 samples, 1235 features, 50 animals)
+  loaded OmicsMatrix(METAB/WAT-SC: 50 samples, 1286 features, 50 animals)
+  stack METAB/norm: 9 tissues, 436 samples, 193 features after join=inner (union 3002); dropped 15 samples missing > 20% of features ({'BAT': 14, 'HEART': 1}); complete-features filter kept 193/435 features with no missing value in any sample
+METAB core 9: 436 vials × 193 features, 50 animals
+  train_male_test_female       full       acc=1.000 cov_src=0.743 cov_target=0.569 (seen: 0.569) size=0.57 unseen=-
+  train_male_test_female       panel_k10  acc=0.981 cov_src=0.800 cov_target=0.722 (seen: 0.722) size=0.72 unseen=-
+  train_female_test_male       full       acc=1.000 cov_src=0.889 cov_target=0.873 (seen: 0.873) size=0.87 unseen=-
+  train_female_test_male       panel_k10  acc=1.000 cov_src=0.944 cov_target=0.918 (seen: 0.918) size=0.92 unseen=-
+  holdout_group_8w             full       acc=1.000 cov_src=0.925 cov_target=0.880 (seen: 0.880) size=0.88 unseen=-
+  holdout_group_8w             panel_k10  acc=1.000 cov_src=0.943 cov_target=0.892 (seen: 0.892) size=0.89 unseen=-
+  holdout_group_1w             full       acc=1.000 cov_src=0.885 cov_target=0.831 (seen: 0.831) size=0.83 unseen=-
+  holdout_group_1w             panel_k10  acc=0.989 cov_src=0.904 cov_target=0.888 (seen: 0.888) size=0.89 unseen=-
+  train_control_test_trained   full       acc=1.000 cov_src=1.000 cov_target=0.937 (seen: 0.937) size=0.94 unseen=-
+  train_control_test_trained   panel_k10  acc=0.997 cov_src=1.000 cov_target=0.980 (seen: 0.980) size=0.98 unseen=-
+METAB_core9: max |recomputed − published (post-fix)| over accuracy_all, coverage_source_id, coverage_target_seen, cov_target_recal_N3, qhat: 1.11e-16
+METAB male→female, full model: accuracy 1.000, target coverage 0.569, after recalibration on 3 female animals 0.946
+per-tissue coverage, male→female, full model: WAT-SC 0.00, KIDNEY 0.04, BAT 0.17, HEART 0.46, LIVER 0.68, LUNG 0.72, SKM-GN 0.96, HIPPOC 1.00, PLASMA 1.00

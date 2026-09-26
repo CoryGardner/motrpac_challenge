@@ -1,0 +1,14 @@
+899 vials × 21193 genes, 50 animals, 19 tissues
+  fold 0: 18 fit / 22 calibration / 10 test animals; LAC α=0.1 coverage pooled=0.916 one-per-animal=0.832
+  fold 1: 18 fit / 22 calibration / 10 test animals; LAC α=0.1 coverage pooled=0.883 one-per-animal=0.983
+  fold 2: 18 fit / 22 calibration / 10 test animals; LAC α=0.1 coverage pooled=0.878 one-per-animal=0.878
+  fold 3: 18 fit / 22 calibration / 10 test animals; LAC α=0.1 coverage pooled=0.961 one-per-animal=0.917
+  fold 4: 18 fit / 22 calibration / 10 test animals; LAC α=0.1 coverage pooled=0.900 one-per-animal=0.972
+conformal-set leg: 12 s
+rows matched: 120 of 120; max |recomputed − published| over coverage, set size, q̂, frac_empty: 4.44e-16
+max |recomputed − published| per-tissue coverage: 1.11e-16
+tissues under 0.85 (marginal, pooled): SKM-GN, SKM-VL, VENACV, HIPPOC
+α = 0.05: a class needs ≥ 19 calibration vials for a finite Mondrian threshold
+α = 0.10: a class needs ≥ 9 calibration vials for a finite Mondrian threshold
+α = 0.20: a class needs ≥ 4 calibration vials for a finite Mondrian threshold
+pooled calibration vials per tissue (last fold): min 10 for OVARY | others 12 – 22

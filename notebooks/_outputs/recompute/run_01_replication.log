@@ -1,0 +1,403 @@
+[NbConvertApp] Converting notebook 01_replication.ipynb to notebook
+[IPKernelApp] WARNING | Kernel is running over TCP without encryption. All communication (including code and outputs) is sent in plain text and is susceptible to eavesdropping. Use IPC transport or launch with kernel manager-provisioned CurveZMQ keys to enable transport encryption.
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+/home/cory/miniconda3/envs/motrpac-py/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+[NbConvertApp] Writing 1691541 bytes to _outputs/recompute/01_replication_recompute.ipynb

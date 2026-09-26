@@ -1,0 +1,4 @@
+,panel,n_genes,with_1to1_ortholog_in_gtex,lost
+0,k=20 (all-gene fit),20,16,Pmch;Fibcd1l1;Abo3;Lrrc10
+1,k=50 (all-gene fit),50,39,Ucp1;Pmch;Fibcd1l1;Trem3;RGD1565323;Cxcl3;Cyp11b2;LOC691352;Abo3;AABR07040887.1;Lrrc10
+2,T5 stable core,10,7,Lrrc10;Fibcd1l1;Pmch

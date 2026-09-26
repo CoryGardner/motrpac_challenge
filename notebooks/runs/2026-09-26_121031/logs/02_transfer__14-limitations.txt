@@ -1,0 +1,9 @@
+animals per tissue — TRNSCRPT classifier matrix (sections 4 / 13): min / median / max = 24 / 50 / 50
+single-sex tissues: ['OVARY', 'TESTES']
+
+io._stack_counts — the per-tissue expression mask, computed on all samples before any split:
+    masks = pd.concat([((om.X >= min_count).mean(axis=0) >= min_frac).rename(om.meta["tissue"].iloc[0])
+    keep_any, keep_all = masks.any(axis=1), masks.all(axis=1)
+    vals = log_cpm(counts, log=True).loc[:, keep_any.to_numpy()]
+    n_any, n_all = int(keep_any.sum()), int(keep_all.sum())
+    out.notes.append("genes_expressed_in_n_tissues:" + ",".join(str(int(v)) for v in masks.sum(axis=1).loc[vals.columns]))

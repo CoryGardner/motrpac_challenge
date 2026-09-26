@@ -1,0 +1,16 @@
+  loaded OmicsMatrix(PROT/CORTEX: 60 samples, 11108 features, 60 animals)
+  loaded OmicsMatrix(PROT/HEART: 60 samples, 9184 features, 60 animals)
+  loaded OmicsMatrix(PROT/KIDNEY: 60 samples, 9852 features, 60 animals)
+  loaded OmicsMatrix(PROT/LIVER: 59 samples, 9791 features, 59 animals)
+  loaded OmicsMatrix(PROT/LUNG: 60 samples, 10877 features, 60 animals)
+  loaded OmicsMatrix(PROT/SKM-GN: 57 samples, 5999 features, 57 animals)
+  loaded OmicsMatrix(PROT/WAT-SC: 60 samples, 9964 features, 60 animals)
+  stack PROT/norm: 7 tissues, 416 samples, 3917 features after join=inner (union 18398)
+fold 0: 48 training / 12 test animals; 333 / 83 samples; 7 tissues; overall fraction of NaN values 0.018
+across-tissue R² of tissue per protein, quantiles: {0.5: 0.062, 0.9: 0.209, 0.99: 0.545} ; proteins with R² > 0.5: 49 of 3917
+largest-|coefficient| proteins per tissue (3 each):
+fold-0 test accuracy (7 tissues; chance = 1/7):
+
+HEART: samples per TMT channel x sex
+
+LIVER: samples per TMT channel x sex

@@ -1,0 +1,7 @@
+,model,n_recal,n_test_individuals,coverage_recalibrated,coverage_recalibrated_prefix,coverage_source_cal_same_test,coverage_source_cal_same_test_prefix,set_size_recalibrated,set_size_recalibrated_prefix
+0,k20,3,5,0.943,0.97,0.619,0.619,0.998,1.106
+1,k20,5,3,0.914,0.928,0.62,0.62,0.92,0.956
+2,k50,3,5,0.937,0.942,0.662,0.662,0.953,1.108
+3,k50,5,3,0.92,0.93,0.658,0.658,0.934,0.944
+4,full,3,5,0.946,0.971,0.711,0.711,0.946,0.971
+5,full,5,3,0.919,0.949,0.71,0.71,0.919,0.949

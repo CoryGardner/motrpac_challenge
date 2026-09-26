@@ -1,0 +1,7 @@
+,target,covariate,logreg_drop_one_dAUROC
+0,any_one_layer,is_training_regulated,0.03799103796367424
+8,any_one_layer,var_a,0.03202229531773216
+7,any_one_layer,rho,0.0209871633747409
+17,any_one_layer (no regulated flag),var_a,0.04570211642695378
+16,any_one_layer (no regulated flag),rho,0.028185743823038758
+10,any_one_layer (no regulated flag),mean_a,0.021970162761900783

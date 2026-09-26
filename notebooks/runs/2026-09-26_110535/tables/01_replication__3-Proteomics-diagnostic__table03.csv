@@ -1,0 +1,8 @@
+tissue,n,n_channels,R2_channel~sex (recomputed),R2_channel~sex (published),max_R2_sex_PC1-5 (published),max_R2_channel|design_PC1-5 (published)
+CORTEX,60,10,0.0,0.0,0.307,0.542
+HEART,60,10,1.0,1.0,0.88,0.457
+KIDNEY,60,10,0.0,0.0,0.989,0.911
+LIVER,59,10,1.0,1.0,0.952,0.333
+LUNG,60,10,0.0,0.0,0.42,0.697
+SKM-GN,57,10,0.003,0.003,0.423,0.324
+WAT-SC,60,10,0.0,0.0,0.919,0.178

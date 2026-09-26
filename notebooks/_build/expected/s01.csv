@@ -1,0 +1,10 @@
+key,section,published_value,reference_value,tolerance,source,note
+s01.n_animals,01,147,147,1e-09,results/02_inventory/summary.json (n_animals),
+s01.n_vials,01,6156,6156,1e-09,results/REPORT.md §02 (Animals in PHENO: 147; vials: 6156),
+s01.max_pid_per_bid,01,1,1,1e-09,CLAUDE.md (147 bids <-> 147 pids),one-to-one check
+s01.max_bid_per_pid,01,1,1,1e-09,CLAUDE.md (147 bids <-> 147 pids),one-to-one check
+s01.n_tables,01,92,92,1e-09,results/02_inventory/summary.json (tables),
+s01.n_unmatched_after_fallback,01,0,0,1e-09,results/SUMMARY.md (Unmatched samples: 0),zero by construction: counted after the bid fallback
+s01.n_bid_fallback,01,,2,1e-09,this notebook (new count; not in pipeline results),IMMUNO/PLASMA: 2 sample columns matched only via bid prefix
+s01.n_fusion_tissues,01,7,7,1e-09,results/02_inventory/summary.json (fusion_tissues),
+s01.fusion_common_bid_total,01,345,345,1e-09,results/02_inventory/fusion_overlap.csv (sum of n_common_bid),

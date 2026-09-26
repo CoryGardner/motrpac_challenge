@@ -1,0 +1,4 @@
+,accuracy (adults),"coverage, MoTrPAC-calibrated","empty-set rate, MoTrPAC-calibrated","coverage, recalibrated on 3 BodyMap animals","coverage, recalibrated on 5","set size, recalibrated on 3"
+k20,1.0,0.618,0.382,0.943,0.914,0.998
+k50,0.985,0.662,0.324,0.937,0.92,0.953
+full,1.0,0.706,0.294,0.946,0.919,0.946

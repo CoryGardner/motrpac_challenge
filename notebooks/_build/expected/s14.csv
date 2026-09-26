@@ -1,0 +1,12 @@
+key,section,published_value,reference_value,tolerance,source,note
+s14.acc_technical,14,,0.8731533209186841,0.005,notebook run 2026-09-25 (new analysis),NEW: not in the pipeline; section-4 folds; probe p4 reported bal. acc. 0.876 on its own folds
+s14.bal_acc_technical,14,,0.8742105263157894,0.005,notebook run 2026-09-25 (new analysis),NEW
+s14.acc_composition,14,,0.9488268156424582,0.005,notebook run 2026-09-25 (new analysis),NEW
+s14.bal_acc_composition,14,,0.951578947368421,0.005,notebook run 2026-09-25 (new analysis),NEW
+s14.acc_all,14,,0.9754934823091247,0.005,notebook run 2026-09-25 (new analysis),NEW
+s14.bal_acc_all,14,,0.9757894736842104,0.005,notebook run 2026-09-25 (new analysis),NEW
+s14.n_tissues_one_plate,14,,19,0,notebook run 2026-09-25 (new analysis),NEW: tissues whose vials all share one RNA extraction plate
+s14.n_plates,14,,17,0,notebook run 2026-09-25 (new analysis),NEW: RNA_extr_plate_ID levels among study vials
+s14.n_flowcells,14,,4,0,notebook run 2026-09-25 (new analysis),NEW: Seq_flowcell_ID levels among study vials
+s14.bodymap_adult_k20,14,1.0,1.0,1e-09,results/12_bodymap/age_shift_accuracy.csv (stage 21 k20); pre-fix file identical,loaded
+s14.bodymap_adult_full,14,1.0,1.0,1e-09,results/12_bodymap/age_shift_accuracy.csv (stage 21 full); pre-fix file identical,loaded

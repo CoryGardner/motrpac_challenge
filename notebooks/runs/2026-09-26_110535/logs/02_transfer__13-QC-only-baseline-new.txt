@@ -1,0 +1,68 @@
+section 4 is in notebook 01: folds rebuilt here with the identical call grouped_kfold(om.meta, 'tissue', 5, C.SEED)
+rebuilt folds are identical to the fold assignment notebook 01 (section 4) wrote to _outputs/s04/folds.csv
+matrix: 899 vials, 50 animals, 19 tissues
+QC table: 935 rows × 82 columns
+study vials: 899; duplicated vial labels: 0
+section-4 vials without a QC row: 0; QC vials not in the section-4 matrix: 0
+QC 'Tissue' text ↔ tissue code is one-to-one: True
+per fold:
+      technical  composition   all  n_test_vials  n_test_animals
+fold                                                            
+0         0.838        0.944 0.944           179              10
+1         0.889        0.967 0.983           180              10
+2         0.856        0.939 0.967           180              10
+3         0.906        0.944 0.989           180              10
+4         0.878        0.950 0.994           180              10
+
+summary (5 animal-grouped folds, mean ± sd):
+             n_features  acc_mean  acc_sd  bal_acc_mean  bal_acc_sd
+features                                                           
+technical            12     0.873   0.027         0.874       0.025
+composition          10     0.949   0.011         0.952       0.010
+all                  22     0.975   0.020         0.976       0.020
+chance (1 / number of tissues): 0.053
+    model  balanced_accuracy_mean  balanced_accuracy_std  accuracy_mean  accuracy_std  n_test_animals_mean
+ centroid                   0.982                  0.005          0.981         0.005               10.000
+logreg_l2                   0.995                  0.005          0.994         0.006               10.000
+       rf                   0.993                  0.007          0.992         0.007               10.000
+(the probe p4 reported balanced accuracy on its own sex-balanced animal folds; it wrote no file to the repo, so its values are not reproduced here)
+levels of each batch column within a tissue (1 = the whole tissue in one batch):
+        RNA_extr_plate_ID  Lib_batch_ID  Lib_prep_date  Seq_flowcell_ID  Seq_flowcell_lane  Seq_batch  GET_site
+tissue                                                                                                         
+ADRNL                   1             1              1                1                  1          1         1
+BAT                     1             1              2                1                  1          1         1
+BLOOD                   1             1              1                1                  1          1         1
+COLON                   1             1              1                1                  1          1         1
+CORTEX                  1             1              1                1                  1          1         1
+HEART                   1             1              1                1                  1          1         1
+HIPPOC                  1             1              1                1                  1          1         1
+HYPOTH                  1             1              1                1                  1          1         1
+KIDNEY                  1             1              2                1                  1          1         1
+LIVER                   1             1              1                1                  1          1         1
+LUNG                    1             1              1                1                  1          1         1
+OVARY                   1             1              1                1                  1          1         1
+SKM-GN                  1             1              1                1                  1          1         1
+SKM-VL                  1             1              1                1                  1          1         1
+SMLINT                  1             1              1                1                  1          1         1
+SPLEEN                  1             1              1                1                  1          1         1
+TESTES                  1             1              1                1                  1          1         1
+VENACV                  1             1              1                1                  1          1         1
+WAT-SC                  1             1              1                1                  1          1         1
+
+per batch column:
+                   levels  max tissues per level  levels shared by >1 tissue  tissues in exactly 1 level
+RNA_extr_plate_ID      17                      2                           2                          19
+Lib_batch_ID           17                      2                           2                          19
+Lib_prep_date          18                      3                           2                          17
+Seq_flowcell_ID         4                      7                           4                          19
+Seq_flowcell_lane       2                     13                           2                          19
+Seq_batch               4                      7                           4                          19
+GET_site                2                     10                           2                          19
+ stage_weeks  full   k20   k50
+           2 0.941 0.765 0.824
+           6 1.000 0.970 0.970
+          21 1.000 1.000 0.985
+         104 0.938 0.908 0.923
+
+BodyMap adults (21 weeks): accuracy full model 1.000, k = 20 panel 1.000, k = 50 panel 0.985
+vs QC-only on MoTrPAC (all QC features): 0.975 — a QC-only model cannot transfer, because the QC table and its batches do not exist for BodyMap

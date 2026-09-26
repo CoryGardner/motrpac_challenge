@@ -1,0 +1,221 @@
+                                                                            step  genes  lost_at_step
+                                                MoTrPAC genes (stacked TRNSCRPT)  21193             0
+                                         … with a row in the RGD rat–human table  16881          4312
+                                        … with any human ortholog (id or symbol)  16881             0
+                              … whose ortholog is strictly 1:1 (both directions)  14609          2272
+… whose human gene is a GTEx column (Ensembl id + symbol fallback, deduplicated)  14569            40
+
+GTEx matches: 14523 by human Ensembl id, 46 by symbol fallback; GTEx matrix has 56156 genes
+                                    recomputed  published
+rat_genes_with_1to1_human_ortholog       14609      14609
+orthologs_present_in_gtex                14569      14569
+matched_by_human_ensembl_id              14523      14523
+matched_by_symbol_fallback                  46         46
+lost_to_orthology                         6624       6624
+
+GTEx metadata: 2485 samples, 862 donors, 17 tissues (published: 2485 samples, 862 donors)
+phase 13 tables loaded from /home/cory/projects/MoTrPAC/code/pipeline/results/13_gtex
+              panel  n_genes  with_1to1_ortholog_in_gtex                                                                                   lost
+k=20 (all-gene fit)       20                          16                                                              Pmch;Fibcd1l1;Abo3;Lrrc10
+k=50 (all-gene fit)       50                          39 Ucp1;Pmch;Fibcd1l1;Trem3;RGD1565323;Cxcl3;Cyp11b2;LOC691352;Abo3;AABR07040887.1;Lrrc10
+     T5 stable core       10                           7                                                                   Lrrc10;Fibcd1l1;Pmch
+
+Per-tissue accuracy (super-class scoring for muscle):
+model                              k20   k50  full    n
+gtex_tissue                                            
+Adipose - Subcutaneous            0.45  0.06  0.25  150
+Adrenal Gland                     0.75  0.96  0.99  150
+Artery - Aorta                    0.38  0.81  1.00  150
+Brain - Cortex                    0.85  0.97  0.97  150
+Brain - Hippocampus               0.67  0.88  0.81  150
+Brain - Hypothalamus              0.88  0.95  0.55  150
+Colon - Transverse                0.55  0.75  0.71  150
+Heart - Left Ventricle            0.03  0.76  0.81  150
+Kidney - Cortex                   0.98  0.96  0.99   85
+Liver                             0.91  0.98  1.00  150
+Lung                              0.89  0.99  0.99  150
+Muscle - Skeletal                 0.99  1.00  1.00  150
+Ovary                             0.00  0.00  0.92  150
+Small Intestine - Terminal Ileum  0.83  0.86  0.71  150
+Spleen                            0.99  0.99  0.99  150
+Testis                            0.28  0.43  0.91  150
+Whole Blood                       0.83  1.00  1.00  150
+
+Overall:
+       sample_weighted  macro  published_sample_weighted  published_macro
+model                                                                    
+k20              0.654  0.662                      0.654            0.662
+k50              0.781  0.786                      0.781            0.786
+full             0.855  0.858                      0.855            0.858
+k = 20, derived from confusion_k20.csv:
+                                    n  correct  accuracy main_wrong_call  main_wrong_frac
+gtex_tissue                                                                              
+Adipose - Subcutaneous            150       67      0.45           COLON             0.27
+Adrenal Gland                     150      113      0.75          HYPOTH             0.18
+Artery - Aorta                    150       57      0.38           HEART             0.53
+Brain - Cortex                    150      128      0.85          HIPPOC             0.15
+Brain - Hippocampus               150      100      0.67          CORTEX             0.25
+Brain - Hypothalamus              150      132      0.88          HIPPOC             0.06
+Colon - Transverse                150       82      0.55           HEART             0.17
+Heart - Left Ventricle            150        5      0.03          SKM-GN             0.88
+Kidney - Cortex                    85       83      0.98           ADRNL             0.01
+Liver                             150      136      0.91          SKM-VL             0.09
+Lung                              150      133      0.89          WAT-SC             0.09
+Muscle - Skeletal                 150      149      0.99          WAT-SC             0.01
+Ovary                             150        0      0.00           HEART             0.95
+Small Intestine - Terminal Ileum  150      124      0.83           HEART             0.11
+Spleen                            150      149      0.99          SKM-VL             0.01
+Testis                            150       42      0.28          VENACV             0.39
+Whole Blood                       150      125      0.83          SKM-VL             0.16
+max |confusion-derived − published per-tissue accuracy| over the three models: 1.1102230246251565e-16
+All GTEx samples, rat calibration, α = 0.10:
+model conformal  coverage_mapped  coverage_mapped_prefix  frac_empty_mapped  frac_empty_mapped_prefix  avg_set_size_mapped  avg_set_size_mapped_prefix
+  k20  marginal            0.364                   0.368              0.616                     0.611                0.384                       0.389
+  k20  mondrian            0.329                   0.208              0.000                     0.650                2.353                       0.353
+  k20   floored            0.522                   0.404              0.000                     0.452                2.548                       0.553
+  k50  marginal            0.363                   0.368              0.631                     0.627                0.369                       0.373
+  k50  mondrian            0.302                   0.181              0.000                     0.784                2.216                       0.216
+  k50   floored            0.510                   0.393              0.000                     0.568                2.428                       0.432
+ full  marginal            0.062                   0.064              0.938                     0.936                0.062                       0.064
+ full  mondrian            0.198                   0.078              0.000                     0.920                2.080                       0.080
+ full   floored            0.252                   0.133              0.000                     0.865                2.133                       0.135
+
+Per GTEx tissue, k = 20, rat calibration:
+conformal                         marginal  mondrian  floored  accuracy_k20
+gtex_tissue                                                                
+Adipose - Subcutaneous                0.05      0.03     0.05          0.45
+Adrenal Gland                         0.33      0.26     0.33          0.75
+Artery - Aorta                        0.00      0.05     0.05          0.38
+Brain - Cortex                        0.44      0.31     0.44          0.85
+Brain - Hippocampus                   0.22      0.17     0.22          0.67
+Brain - Hypothalamus                  0.69      0.41     0.69          0.88
+Colon - Transverse                    0.29      0.00     0.29          0.55
+Heart - Left Ventricle                0.03      0.00     0.03          0.03
+Kidney - Cortex                       0.91      0.65     0.91          0.98
+Liver                                 0.85      0.11     0.85          0.91
+Lung                                  0.61      0.11     0.61          0.89
+Muscle - Skeletal                     0.43      0.99     0.99          0.99
+Ovary                                 0.00      1.00     1.00          0.00
+Small Intestine - Terminal Ileum      0.57      0.35     0.57          0.83
+Spleen                                0.79      0.29     0.79          0.99
+Testis                                0.00      1.00     1.00          0.28
+Whole Blood                           0.22      0.01     0.22          0.83
+
+Recalibration on GTEx donors:
+model  n_recal  draws  coverage_recalibrated  coverage_recalibrated_prefix  coverage_source_cal_same_test  coverage_source_cal_same_test_prefix  set_size_recalibrated  set_size_recalibrated_prefix  frac_empty_recalibrated
+  k20        3     20                  0.954                         0.880                          0.364                                 0.368                 11.697                         4.149                    0.009
+  k20        5     20                  0.933                         0.949                          0.364                                 0.368                  6.282                         6.984                    0.014
+  k50        3     20                  0.959                         0.902                          0.363                                 0.368                 11.624                         3.456                    0.008
+  k50        5     20                  0.936                         0.950                          0.363                                 0.368                  4.036                         4.382                    0.000
+ full        3     20                  0.951                         0.880                          0.062                                 0.064                 11.178                         1.514                    0.019
+ full        5     20                  0.866                         0.877                          0.062                                 0.064                  2.045                         1.609                    0.071
+rat tissues whose Mondrian threshold is infinite (in every Mondrian / floored set): ['OVARY', 'TESTES'] {'OVARY': 8, 'TESTES': 7} calibration vials
+
+GTEx samples per donor: median 3, range 1–9
+               median_cal_samples  frac_draws_infinite  set_size_recalibrated
+model n_recal                                                                
+full  3                       7.5                 0.55                 11.178
+      5                      13.0                 0.05                  2.045
+k20   3                       9.0                 0.45                 11.697
+      5                      14.5                 0.00                  6.282
+k50   3                       8.5                 0.50                 11.624
+      5                      16.0                 0.00                  4.036
+native GTEx k20 (accuracy)             0.979
+native GTEx k20 (balanced accuracy)    0.979
+imported rat k20                       0.654
+imported rat k50                       0.781
+imported rat full                      0.855
+gap native − imported k20              0.325
+
+k = 20 rat panel genes that fail or weaken in GTEx (10 of 20):
+gene_symbol marker_tissue  source_effect_z  target_effect_z       target_top_organ fails_in_target risk_T7_regulated risk_qc_correlated
+     Hoxb13         COLON             4.35             1.52     Colon - Transverse           False             False              False
+     Trim29        WAT-SC             3.05            -1.50                 Testis            True             False              False
+     Ankrd2        SKM-GN             1.61             0.56      Muscle - Skeletal           False             False              False
+      Gdf10        VENACV             1.15            -0.89                   Lung            True             False               True
+       Gnb3         HEART             2.61            -1.61                  Ovary            True             False               True
+     Shisa6        HIPPOC             2.00             0.26    Brain - Hippocampus           False               NaN                NaN
+      Qrfpr         ADRNL             3.70            -1.79   Brain - Hypothalamus            True              True               True
+     Akr1c3         OVARY             4.21            -1.59 Adipose - Subcutaneous            True              True              False
+      Rnf10         BLOOD             3.09             0.81            Whole Blood           False               NaN                NaN
+    Cyp21a1         ADRNL             3.80             1.66          Adrenal Gland           False             False               True
+phase 14 tables loaded from /home/cory/projects/MoTrPAC/code/pipeline/results/14_transfer and /home/cory/projects/MoTrPAC/code/pipeline/results/14_transfer_cpm
+MoTrPAC animal-grouped CV balanced accuracy (the cost):
+                      mean                     std               
+selector          standard transfer_aware standard transfer_aware
+representation k                                                 
+pairs          20    0.934          0.943    0.011          0.011
+               50    0.972          0.981    0.009          0.006
+rank           20    0.914          0.947    0.010          0.012
+               50    0.968          0.975    0.008          0.016
+zscore         20    0.976          0.979    0.011          0.004
+               50    0.989          0.988    0.004          0.004
+
+Target accuracy:
+selector                          standard  transfer_aware
+target         k  representation                          
+BodyMap adults 20 pairs              0.941           0.824
+                  rank               0.926           0.853
+                  zscore             1.000           0.941
+               50 pairs              0.941           0.985
+                  rank               0.985           0.985
+                  zscore             0.985           0.956
+GTEx           20 pairs              0.285           0.479
+                  rank               0.287           0.498
+                  zscore             0.654           0.641
+               50 pairs              0.637           0.577
+                  rank               0.632           0.518
+                  zscore             0.781           0.738
+
+Coverage, standard selector, source-calibrated vs recalibrated on 3 target individuals (with pre-fix values):
+        target  k representation  coverage_source_cal  coverage_source_cal_prefix  coverage_recalibrated  coverage_recalibrated_prefix  set_size_recalibrated  set_size_recalibrated_prefix
+BodyMap adults 20         zscore                0.618                       0.618                  0.930                         0.965                  0.965                         1.091
+BodyMap adults 50         zscore                0.662                       0.662                  0.928                         0.936                  0.945                         1.099
+BodyMap adults 20           rank                0.956                       0.956                  0.928                         0.966                  0.973                         1.151
+BodyMap adults 50           rank                0.750                       0.809                  0.900                         0.941                  0.944                         1.136
+BodyMap adults 20          pairs                0.588                       0.603                  0.938                         0.966                  1.005                         1.345
+BodyMap adults 50          pairs                0.368                       0.382                  0.928                         0.968                  1.096                         1.456
+          GTEx 20         zscore                0.364                       0.368                  0.966                         0.872                 13.892                         3.624
+          GTEx 50         zscore                0.363                       0.368                  0.930                         0.906                  8.862                         3.408
+          GTEx 20           rank                0.350                       0.351                  0.964                         0.836                 14.797                         6.071
+          GTEx 50           rank                0.241                       0.251                  0.925                         0.892                 10.526                         6.066
+          GTEx 20          pairs                0.158                       0.157                  0.975                         0.855                 15.811                         7.727
+          GTEx 50          pairs                0.067                       0.075                  0.924                         0.887                 10.753                         5.957
+      selector representation  k  accuracy_tpm  accuracy_cpm  cpm_minus_tpm
+      standard         zscore 20         0.654         0.668          0.014
+      standard         zscore 50         0.781         0.788          0.006
+      standard           rank 20         0.287         0.329          0.043
+      standard           rank 50         0.632         0.573         -0.058
+      standard          pairs 20         0.285         0.297          0.013
+      standard          pairs 50         0.637         0.622         -0.015
+transfer_aware         zscore 20         0.641         0.648          0.007
+transfer_aware         zscore 50         0.738         0.750          0.012
+transfer_aware           rank 20         0.498         0.472         -0.026
+transfer_aware           rank 50         0.518         0.532          0.014
+transfer_aware          pairs 20         0.479         0.475         -0.004
+transfer_aware          pairs 50         0.577         0.573         -0.003
+
+standard selector, rank + pairs, mean (CPM − TPM) accuracy: -0.0044
+standard selector, on CPM, mean (rank/pairs − z-score) accuracy: -0.272
+
+Per GTEx tissue, k = 20, standard selector:
+representation                   pairs        rank       zscore      
+units                              cpm   tpm   cpm   tpm    cpm   tpm
+organ                                                                
+Adipose - Subcutaneous            0.09  0.02  0.43  0.13   0.46  0.45
+Adrenal Gland                     0.00  0.00  0.00  0.00   0.74  0.75
+Artery - Aorta                    0.00  0.00  0.00  0.00   0.37  0.38
+Brain - Cortex                    0.02  0.03  0.06  0.06   0.91  0.85
+Brain - Hippocampus               0.23  0.13  0.32  0.19   0.72  0.67
+Brain - Hypothalamus              0.05  0.07  0.02  0.05   0.89  0.88
+Colon - Transverse                0.09  0.12  0.05  0.11   0.56  0.55
+Heart - Left Ventricle            0.00  0.00  0.00  0.01   0.05  0.03
+Kidney - Cortex                   0.95  0.89  0.98  0.96   0.98  0.98
+Liver                             0.95  0.87  0.97  0.74   0.91  0.91
+Lung                              0.80  0.78  0.59  0.70   0.90  0.89
+Muscle - Skeletal                 0.51  0.60  0.95  0.92   0.99  0.99
+Ovary                             0.86  0.75  0.91  0.80   0.00  0.00
+Small Intestine - Terminal Ileum  0.71  0.79  0.53  0.45   0.81  0.83
+Spleen                            0.05  0.00  0.07  0.01   0.99  0.99
+Testis                            0.01  0.01  0.00  0.04   0.29  0.28
+Whole Blood                       0.02  0.02  0.01  0.01   0.91  0.83

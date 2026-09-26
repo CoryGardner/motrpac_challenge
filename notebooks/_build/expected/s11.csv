@@ -1,0 +1,14 @@
+key,section,published_value,reference_value,tolerance,source,note
+s11.taskA_best_single,11,1.0,1.0,1e-09,results/07_fusion/taskA_summary.csv (max single-omic balanced_accuracy_mean),loaded
+s11.taskA_best_fusion,11,0.9988888888888889,0.9988888888888889,1e-09,results/07_fusion/taskA_summary.csv (max fusion balanced_accuracy_mean),loaded
+s11.taskA_min_arm,11,0.9932098765432098,0.9932098765432098,1e-09,results/07_fusion/taskA_summary.csv (min balanced_accuracy_mean),loaded
+s11.taskB_n_fusion_beats_single,11,0,0,0,results/07_fusion/taskB_best_vs_null.csv (sum fusion_beats_single_by_gt_sd),recomputed from loaded taskB_summary + taskB_null
+s11.taskB_n_beats_null,11,7,7,0,results/07_fusion/taskB_best_vs_null.csv (sum best_beats_null_p95),recomputed from loaded taskB_summary + taskB_null
+s11.taskB_null_p95_max,11,0.8958333333333334,0.8958333333333334,1e-09,results/07_fusion/taskB_best_vs_null.csv (max null_p95_max_auroc),recomputed from loaded taskB_null
+s11.batch_n_unresolvable,11,3,3,0,results/07_fusion/batch_conclusion.csv (verdict != training),verdict rule rerun on loaded tables
+s11.skmgn_depth_rf,11,0.9166666666666666,0.9166666666666666,1e-09,results/07_fusion/batch_covariate_auroc.csv (SKM-GN trnscrpt_depth rf),the '0.917'; loaded
+s11.skmgn_qc_logreg,11,0.9583333333333331,0.9583333333333331,1e-09,results/07_fusion/batch_covariate_auroc.csv (SKM-GN trnscrpt_qc logreg),the '0.958'; loaded
+s11.skmgn_qc_logreg_p,11,0.0099009900990099,0.0099009900990099,1e-09,results/07_fusion/batch_covariate_auroc.csv (SKM-GN trnscrpt_qc logreg p_perm),100-draw within-sex null; loaded
+s11.skmgn_depth_rf_live,11,0.9166666666666666,0.9166666666666666,0.005,results/07_fusion/batch_covariate_auroc.csv (SKM-GN trnscrpt_depth rf),recomputed live (same seed; no null)
+s11.skmgn_qc_logreg_live,11,0.9583333333333331,0.9583333333333331,0.005,results/07_fusion/batch_covariate_auroc.csv (SKM-GN trnscrpt_qc logreg),recomputed live (no null)
+s11.skmgn_qc_rf_live,11,0.9583333333333331,0.9583333333333331,0.005,results/07_fusion/batch_covariate_auroc.csv (SKM-GN trnscrpt_qc rf),recomputed live (same seed)

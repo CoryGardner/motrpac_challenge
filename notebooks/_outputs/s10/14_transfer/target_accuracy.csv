@@ -1,0 +1,313 @@
+target,selector,representation,k,organ,n,accuracy,top_prediction
+BodyMap adults,standard,zscore,20,Adrenal,8,1.0,ADRNL
+BodyMap adults,standard,zscore,20,Brain,8,1.0,HIPPOC
+BodyMap adults,standard,zscore,20,Heart,8,1.0,HEART
+BodyMap adults,standard,zscore,20,Kidney,8,1.0,KIDNEY
+BodyMap adults,standard,zscore,20,Liver,8,1.0,LIVER
+BodyMap adults,standard,zscore,20,Lung,8,1.0,LUNG
+BodyMap adults,standard,zscore,20,Muscle,8,1.0,SKM-GN
+BodyMap adults,standard,zscore,20,Spleen,8,1.0,SPLEEN
+BodyMap adults,standard,zscore,20,Testes,4,1.0,TESTES
+BodyMap adults,standard,zscore,50,Adrenal,8,1.0,ADRNL
+BodyMap adults,standard,zscore,50,Brain,8,1.0,HIPPOC
+BodyMap adults,standard,zscore,50,Heart,8,1.0,HEART
+BodyMap adults,standard,zscore,50,Kidney,8,1.0,KIDNEY
+BodyMap adults,standard,zscore,50,Liver,8,0.875,LIVER
+BodyMap adults,standard,zscore,50,Lung,8,1.0,LUNG
+BodyMap adults,standard,zscore,50,Muscle,8,1.0,SKM-GN
+BodyMap adults,standard,zscore,50,Spleen,8,1.0,SPLEEN
+BodyMap adults,standard,zscore,50,Testes,4,1.0,TESTES
+BodyMap adults,standard,rank,20,Adrenal,8,0.75,ADRNL
+BodyMap adults,standard,rank,20,Brain,8,1.0,CORTEX
+BodyMap adults,standard,rank,20,Heart,8,1.0,HEART
+BodyMap adults,standard,rank,20,Kidney,8,0.875,KIDNEY
+BodyMap adults,standard,rank,20,Liver,8,1.0,LIVER
+BodyMap adults,standard,rank,20,Lung,8,0.875,LUNG
+BodyMap adults,standard,rank,20,Muscle,8,1.0,SKM-VL
+BodyMap adults,standard,rank,20,Spleen,8,0.875,SPLEEN
+BodyMap adults,standard,rank,20,Testes,4,1.0,TESTES
+BodyMap adults,standard,rank,50,Adrenal,8,1.0,ADRNL
+BodyMap adults,standard,rank,50,Brain,8,1.0,HIPPOC
+BodyMap adults,standard,rank,50,Heart,8,1.0,HEART
+BodyMap adults,standard,rank,50,Kidney,8,1.0,KIDNEY
+BodyMap adults,standard,rank,50,Liver,8,1.0,LIVER
+BodyMap adults,standard,rank,50,Lung,8,0.875,LUNG
+BodyMap adults,standard,rank,50,Muscle,8,1.0,SKM-VL
+BodyMap adults,standard,rank,50,Spleen,8,1.0,SPLEEN
+BodyMap adults,standard,rank,50,Testes,4,1.0,TESTES
+BodyMap adults,standard,pairs,20,Adrenal,8,1.0,ADRNL
+BodyMap adults,standard,pairs,20,Brain,8,1.0,CORTEX
+BodyMap adults,standard,pairs,20,Heart,8,1.0,HEART
+BodyMap adults,standard,pairs,20,Kidney,8,1.0,KIDNEY
+BodyMap adults,standard,pairs,20,Liver,8,1.0,LIVER
+BodyMap adults,standard,pairs,20,Lung,8,0.875,LUNG
+BodyMap adults,standard,pairs,20,Muscle,8,0.625,SKM-GN
+BodyMap adults,standard,pairs,20,Spleen,8,1.0,SPLEEN
+BodyMap adults,standard,pairs,20,Testes,4,1.0,TESTES
+BodyMap adults,standard,pairs,50,Adrenal,8,1.0,ADRNL
+BodyMap adults,standard,pairs,50,Brain,8,1.0,CORTEX
+BodyMap adults,standard,pairs,50,Heart,8,0.5,HEART
+BodyMap adults,standard,pairs,50,Kidney,8,1.0,KIDNEY
+BodyMap adults,standard,pairs,50,Liver,8,1.0,LIVER
+BodyMap adults,standard,pairs,50,Lung,8,1.0,LUNG
+BodyMap adults,standard,pairs,50,Muscle,8,1.0,SKM-VL
+BodyMap adults,standard,pairs,50,Spleen,8,1.0,SPLEEN
+BodyMap adults,standard,pairs,50,Testes,4,1.0,TESTES
+BodyMap adults,transfer_aware,zscore,20,Adrenal,8,0.875,ADRNL
+BodyMap adults,transfer_aware,zscore,20,Brain,8,1.0,HIPPOC
+BodyMap adults,transfer_aware,zscore,20,Heart,8,1.0,HEART
+BodyMap adults,transfer_aware,zscore,20,Kidney,8,1.0,KIDNEY
+BodyMap adults,transfer_aware,zscore,20,Liver,8,0.875,LIVER
+BodyMap adults,transfer_aware,zscore,20,Lung,8,0.75,LUNG
+BodyMap adults,transfer_aware,zscore,20,Muscle,8,1.0,SKM-GN
+BodyMap adults,transfer_aware,zscore,20,Spleen,8,1.0,SPLEEN
+BodyMap adults,transfer_aware,zscore,20,Testes,4,1.0,TESTES
+BodyMap adults,transfer_aware,zscore,50,Adrenal,8,0.75,ADRNL
+BodyMap adults,transfer_aware,zscore,50,Brain,8,1.0,HIPPOC
+BodyMap adults,transfer_aware,zscore,50,Heart,8,1.0,HEART
+BodyMap adults,transfer_aware,zscore,50,Kidney,8,1.0,KIDNEY
+BodyMap adults,transfer_aware,zscore,50,Liver,8,0.875,LIVER
+BodyMap adults,transfer_aware,zscore,50,Lung,8,1.0,LUNG
+BodyMap adults,transfer_aware,zscore,50,Muscle,8,1.0,SKM-GN
+BodyMap adults,transfer_aware,zscore,50,Spleen,8,1.0,SPLEEN
+BodyMap adults,transfer_aware,zscore,50,Testes,4,1.0,TESTES
+BodyMap adults,transfer_aware,rank,20,Adrenal,8,0.5,ADRNL
+BodyMap adults,transfer_aware,rank,20,Brain,8,1.0,CORTEX
+BodyMap adults,transfer_aware,rank,20,Heart,8,1.0,HEART
+BodyMap adults,transfer_aware,rank,20,Kidney,8,1.0,KIDNEY
+BodyMap adults,transfer_aware,rank,20,Liver,8,1.0,LIVER
+BodyMap adults,transfer_aware,rank,20,Lung,8,0.25,WAT-SC
+BodyMap adults,transfer_aware,rank,20,Muscle,8,1.0,SKM-VL
+BodyMap adults,transfer_aware,rank,20,Spleen,8,1.0,SPLEEN
+BodyMap adults,transfer_aware,rank,20,Testes,4,1.0,TESTES
+BodyMap adults,transfer_aware,rank,50,Adrenal,8,0.875,ADRNL
+BodyMap adults,transfer_aware,rank,50,Brain,8,1.0,CORTEX
+BodyMap adults,transfer_aware,rank,50,Heart,8,1.0,HEART
+BodyMap adults,transfer_aware,rank,50,Kidney,8,1.0,KIDNEY
+BodyMap adults,transfer_aware,rank,50,Liver,8,1.0,LIVER
+BodyMap adults,transfer_aware,rank,50,Lung,8,1.0,LUNG
+BodyMap adults,transfer_aware,rank,50,Muscle,8,1.0,SKM-VL
+BodyMap adults,transfer_aware,rank,50,Spleen,8,1.0,SPLEEN
+BodyMap adults,transfer_aware,rank,50,Testes,4,1.0,TESTES
+BodyMap adults,transfer_aware,pairs,20,Adrenal,8,0.25,VENACV
+BodyMap adults,transfer_aware,pairs,20,Brain,8,1.0,CORTEX
+BodyMap adults,transfer_aware,pairs,20,Heart,8,1.0,HEART
+BodyMap adults,transfer_aware,pairs,20,Kidney,8,1.0,KIDNEY
+BodyMap adults,transfer_aware,pairs,20,Liver,8,1.0,LIVER
+BodyMap adults,transfer_aware,pairs,20,Lung,8,0.25,WAT-SC
+BodyMap adults,transfer_aware,pairs,20,Muscle,8,1.0,SKM-GN
+BodyMap adults,transfer_aware,pairs,20,Spleen,8,1.0,SPLEEN
+BodyMap adults,transfer_aware,pairs,20,Testes,4,1.0,TESTES
+BodyMap adults,transfer_aware,pairs,50,Adrenal,8,0.875,ADRNL
+BodyMap adults,transfer_aware,pairs,50,Brain,8,1.0,CORTEX
+BodyMap adults,transfer_aware,pairs,50,Heart,8,1.0,HEART
+BodyMap adults,transfer_aware,pairs,50,Kidney,8,1.0,KIDNEY
+BodyMap adults,transfer_aware,pairs,50,Liver,8,1.0,LIVER
+BodyMap adults,transfer_aware,pairs,50,Lung,8,1.0,LUNG
+BodyMap adults,transfer_aware,pairs,50,Muscle,8,1.0,SKM-GN
+BodyMap adults,transfer_aware,pairs,50,Spleen,8,1.0,SPLEEN
+BodyMap adults,transfer_aware,pairs,50,Testes,4,1.0,TESTES
+GTEx,standard,zscore,20,Adipose - Subcutaneous,150,0.44666666666666666,WAT-SC
+GTEx,standard,zscore,20,Adrenal Gland,150,0.7533333333333333,ADRNL
+GTEx,standard,zscore,20,Artery - Aorta,150,0.38,HEART
+GTEx,standard,zscore,20,Brain - Cortex,150,0.8533333333333334,CORTEX
+GTEx,standard,zscore,20,Brain - Hippocampus,150,0.6666666666666666,HIPPOC
+GTEx,standard,zscore,20,Brain - Hypothalamus,150,0.88,HYPOTH
+GTEx,standard,zscore,20,Colon - Transverse,150,0.5466666666666666,COLON
+GTEx,standard,zscore,20,Heart - Left Ventricle,150,0.03333333333333333,SKM-GN
+GTEx,standard,zscore,20,Kidney - Cortex,85,0.9764705882352941,KIDNEY
+GTEx,standard,zscore,20,Liver,150,0.9066666666666666,LIVER
+GTEx,standard,zscore,20,Lung,150,0.8866666666666667,LUNG
+GTEx,standard,zscore,20,Muscle - Skeletal,150,0.9933333333333333,SKM-GN
+GTEx,standard,zscore,20,Ovary,150,0.0,HEART
+GTEx,standard,zscore,20,Small Intestine - Terminal Ileum,150,0.8266666666666667,SMLINT
+GTEx,standard,zscore,20,Spleen,150,0.9933333333333333,SPLEEN
+GTEx,standard,zscore,20,Testis,150,0.28,VENACV
+GTEx,standard,zscore,20,Whole Blood,150,0.8333333333333334,BLOOD
+GTEx,standard,zscore,50,Adipose - Subcutaneous,150,0.06,BAT
+GTEx,standard,zscore,50,Adrenal Gland,150,0.96,ADRNL
+GTEx,standard,zscore,50,Artery - Aorta,150,0.8066666666666666,VENACV
+GTEx,standard,zscore,50,Brain - Cortex,150,0.9733333333333334,CORTEX
+GTEx,standard,zscore,50,Brain - Hippocampus,150,0.88,HIPPOC
+GTEx,standard,zscore,50,Brain - Hypothalamus,150,0.9533333333333334,HYPOTH
+GTEx,standard,zscore,50,Colon - Transverse,150,0.7533333333333333,COLON
+GTEx,standard,zscore,50,Heart - Left Ventricle,150,0.76,HEART
+GTEx,standard,zscore,50,Kidney - Cortex,85,0.9647058823529412,KIDNEY
+GTEx,standard,zscore,50,Liver,150,0.98,LIVER
+GTEx,standard,zscore,50,Lung,150,0.9866666666666667,LUNG
+GTEx,standard,zscore,50,Muscle - Skeletal,150,1.0,SKM-GN
+GTEx,standard,zscore,50,Ovary,150,0.0,VENACV
+GTEx,standard,zscore,50,Small Intestine - Terminal Ileum,150,0.86,SMLINT
+GTEx,standard,zscore,50,Spleen,150,0.9933333333333333,SPLEEN
+GTEx,standard,zscore,50,Testis,150,0.43333333333333335,WAT-SC
+GTEx,standard,zscore,50,Whole Blood,150,1.0,BLOOD
+GTEx,standard,rank,20,Adipose - Subcutaneous,150,0.12666666666666668,OVARY
+GTEx,standard,rank,20,Adrenal Gland,150,0.0,OVARY
+GTEx,standard,rank,20,Artery - Aorta,150,0.0,OVARY
+GTEx,standard,rank,20,Brain - Cortex,150,0.06,OVARY
+GTEx,standard,rank,20,Brain - Hippocampus,150,0.18666666666666668,OVARY
+GTEx,standard,rank,20,Brain - Hypothalamus,150,0.04666666666666667,OVARY
+GTEx,standard,rank,20,Colon - Transverse,150,0.10666666666666667,OVARY
+GTEx,standard,rank,20,Heart - Left Ventricle,150,0.006666666666666667,OVARY
+GTEx,standard,rank,20,Kidney - Cortex,85,0.9647058823529412,KIDNEY
+GTEx,standard,rank,20,Liver,150,0.74,LIVER
+GTEx,standard,rank,20,Lung,150,0.7,LUNG
+GTEx,standard,rank,20,Muscle - Skeletal,150,0.92,SKM-VL
+GTEx,standard,rank,20,Ovary,150,0.8,OVARY
+GTEx,standard,rank,20,Small Intestine - Terminal Ileum,150,0.44666666666666666,OVARY
+GTEx,standard,rank,20,Spleen,150,0.013333333333333334,SMLINT
+GTEx,standard,rank,20,Testis,150,0.04,OVARY
+GTEx,standard,rank,20,Whole Blood,150,0.006666666666666667,SKM-VL
+GTEx,standard,rank,50,Adipose - Subcutaneous,150,0.0,OVARY
+GTEx,standard,rank,50,Adrenal Gland,150,0.36666666666666664,ADRNL
+GTEx,standard,rank,50,Artery - Aorta,150,0.04,OVARY
+GTEx,standard,rank,50,Brain - Cortex,150,0.8133333333333334,CORTEX
+GTEx,standard,rank,50,Brain - Hippocampus,150,0.58,HIPPOC
+GTEx,standard,rank,50,Brain - Hypothalamus,150,0.62,HYPOTH
+GTEx,standard,rank,50,Colon - Transverse,150,0.66,COLON
+GTEx,standard,rank,50,Heart - Left Ventricle,150,0.5733333333333334,HEART
+GTEx,standard,rank,50,Kidney - Cortex,85,0.6352941176470588,KIDNEY
+GTEx,standard,rank,50,Liver,150,1.0,LIVER
+GTEx,standard,rank,50,Lung,150,1.0,LUNG
+GTEx,standard,rank,50,Muscle - Skeletal,150,1.0,SKM-GN
+GTEx,standard,rank,50,Ovary,150,0.6,OVARY
+GTEx,standard,rank,50,Small Intestine - Terminal Ileum,150,0.84,SMLINT
+GTEx,standard,rank,50,Spleen,150,0.17333333333333334,BLOOD
+GTEx,standard,rank,50,Testis,150,0.9666666666666667,TESTES
+GTEx,standard,rank,50,Whole Blood,150,0.8733333333333333,BLOOD
+GTEx,standard,pairs,20,Adipose - Subcutaneous,150,0.02,OVARY
+GTEx,standard,pairs,20,Adrenal Gland,150,0.0,OVARY
+GTEx,standard,pairs,20,Artery - Aorta,150,0.0,OVARY
+GTEx,standard,pairs,20,Brain - Cortex,150,0.03333333333333333,OVARY
+GTEx,standard,pairs,20,Brain - Hippocampus,150,0.13333333333333333,OVARY
+GTEx,standard,pairs,20,Brain - Hypothalamus,150,0.07333333333333333,OVARY
+GTEx,standard,pairs,20,Colon - Transverse,150,0.12,OVARY
+GTEx,standard,pairs,20,Heart - Left Ventricle,150,0.0,OVARY
+GTEx,standard,pairs,20,Kidney - Cortex,85,0.8941176470588236,KIDNEY
+GTEx,standard,pairs,20,Liver,150,0.8733333333333333,LIVER
+GTEx,standard,pairs,20,Lung,150,0.78,LUNG
+GTEx,standard,pairs,20,Muscle - Skeletal,150,0.6,SKM-GN
+GTEx,standard,pairs,20,Ovary,150,0.7533333333333333,OVARY
+GTEx,standard,pairs,20,Small Intestine - Terminal Ileum,150,0.7933333333333333,SMLINT
+GTEx,standard,pairs,20,Spleen,150,0.0,SMLINT
+GTEx,standard,pairs,20,Testis,150,0.006666666666666667,OVARY
+GTEx,standard,pairs,20,Whole Blood,150,0.02,SKM-VL
+GTEx,standard,pairs,50,Adipose - Subcutaneous,150,0.006666666666666667,VENACV
+GTEx,standard,pairs,50,Adrenal Gland,150,0.08666666666666667,VENACV
+GTEx,standard,pairs,50,Artery - Aorta,150,0.17333333333333334,OVARY
+GTEx,standard,pairs,50,Brain - Cortex,150,0.9866666666666667,CORTEX
+GTEx,standard,pairs,50,Brain - Hippocampus,150,0.8533333333333334,HIPPOC
+GTEx,standard,pairs,50,Brain - Hypothalamus,150,0.8733333333333333,HYPOTH
+GTEx,standard,pairs,50,Colon - Transverse,150,0.7533333333333333,COLON
+GTEx,standard,pairs,50,Heart - Left Ventricle,150,0.21333333333333335,SKM-GN
+GTEx,standard,pairs,50,Kidney - Cortex,85,0.6235294117647059,KIDNEY
+GTEx,standard,pairs,50,Liver,150,1.0,LIVER
+GTEx,standard,pairs,50,Lung,150,0.9866666666666667,LUNG
+GTEx,standard,pairs,50,Muscle - Skeletal,150,1.0,SKM-GN
+GTEx,standard,pairs,50,Ovary,150,0.3,VENACV
+GTEx,standard,pairs,50,Small Intestine - Terminal Ileum,150,0.84,SMLINT
+GTEx,standard,pairs,50,Spleen,150,0.5266666666666666,SPLEEN
+GTEx,standard,pairs,50,Testis,150,0.9,TESTES
+GTEx,standard,pairs,50,Whole Blood,150,0.7,BLOOD
+GTEx,transfer_aware,zscore,20,Adipose - Subcutaneous,150,0.24666666666666667,VENACV
+GTEx,transfer_aware,zscore,20,Adrenal Gland,150,0.23333333333333334,OVARY
+GTEx,transfer_aware,zscore,20,Artery - Aorta,150,0.10666666666666667,ADRNL
+GTEx,transfer_aware,zscore,20,Brain - Cortex,150,0.82,CORTEX
+GTEx,transfer_aware,zscore,20,Brain - Hippocampus,150,0.5933333333333334,HIPPOC
+GTEx,transfer_aware,zscore,20,Brain - Hypothalamus,150,0.8666666666666667,HYPOTH
+GTEx,transfer_aware,zscore,20,Colon - Transverse,150,0.4266666666666667,COLON
+GTEx,transfer_aware,zscore,20,Heart - Left Ventricle,150,0.44666666666666666,HEART
+GTEx,transfer_aware,zscore,20,Kidney - Cortex,85,0.9294117647058824,KIDNEY
+GTEx,transfer_aware,zscore,20,Liver,150,0.9066666666666666,LIVER
+GTEx,transfer_aware,zscore,20,Lung,150,0.94,LUNG
+GTEx,transfer_aware,zscore,20,Muscle - Skeletal,150,0.68,SKM-VL
+GTEx,transfer_aware,zscore,20,Ovary,150,0.26666666666666666,ADRNL
+GTEx,transfer_aware,zscore,20,Small Intestine - Terminal Ileum,150,0.7933333333333333,SMLINT
+GTEx,transfer_aware,zscore,20,Spleen,150,0.9333333333333333,SPLEEN
+GTEx,transfer_aware,zscore,20,Testis,150,0.86,TESTES
+GTEx,transfer_aware,zscore,20,Whole Blood,150,0.98,BLOOD
+GTEx,transfer_aware,zscore,50,Adipose - Subcutaneous,150,0.30666666666666664,VENACV
+GTEx,transfer_aware,zscore,50,Adrenal Gland,150,0.9466666666666667,ADRNL
+GTEx,transfer_aware,zscore,50,Artery - Aorta,150,0.013333333333333334,ADRNL
+GTEx,transfer_aware,zscore,50,Brain - Cortex,150,0.9933333333333333,CORTEX
+GTEx,transfer_aware,zscore,50,Brain - Hippocampus,150,0.7666666666666667,HIPPOC
+GTEx,transfer_aware,zscore,50,Brain - Hypothalamus,150,0.8866666666666667,HYPOTH
+GTEx,transfer_aware,zscore,50,Colon - Transverse,150,0.4,COLON
+GTEx,transfer_aware,zscore,50,Heart - Left Ventricle,150,0.8666666666666667,HEART
+GTEx,transfer_aware,zscore,50,Kidney - Cortex,85,0.9764705882352941,KIDNEY
+GTEx,transfer_aware,zscore,50,Liver,150,0.98,LIVER
+GTEx,transfer_aware,zscore,50,Lung,150,0.96,LUNG
+GTEx,transfer_aware,zscore,50,Muscle - Skeletal,150,0.9733333333333334,SKM-GN
+GTEx,transfer_aware,zscore,50,Ovary,150,0.0,ADRNL
+GTEx,transfer_aware,zscore,50,Small Intestine - Terminal Ileum,150,0.84,SMLINT
+GTEx,transfer_aware,zscore,50,Spleen,150,0.8666666666666667,SPLEEN
+GTEx,transfer_aware,zscore,50,Testis,150,0.9266666666666666,TESTES
+GTEx,transfer_aware,zscore,50,Whole Blood,150,0.94,BLOOD
+GTEx,transfer_aware,rank,20,Adipose - Subcutaneous,150,0.013333333333333334,VENACV
+GTEx,transfer_aware,rank,20,Adrenal Gland,150,0.006666666666666667,OVARY
+GTEx,transfer_aware,rank,20,Artery - Aorta,150,0.68,VENACV
+GTEx,transfer_aware,rank,20,Brain - Cortex,150,0.7,CORTEX
+GTEx,transfer_aware,rank,20,Brain - Hippocampus,150,0.44666666666666666,HIPPOC
+GTEx,transfer_aware,rank,20,Brain - Hypothalamus,150,0.92,HYPOTH
+GTEx,transfer_aware,rank,20,Colon - Transverse,150,0.47333333333333333,COLON
+GTEx,transfer_aware,rank,20,Heart - Left Ventricle,150,0.013333333333333334,VENACV
+GTEx,transfer_aware,rank,20,Kidney - Cortex,85,0.9882352941176471,KIDNEY
+GTEx,transfer_aware,rank,20,Liver,150,0.9933333333333333,LIVER
+GTEx,transfer_aware,rank,20,Lung,150,0.9733333333333334,LUNG
+GTEx,transfer_aware,rank,20,Muscle - Skeletal,150,0.8,SKM-GN
+GTEx,transfer_aware,rank,20,Ovary,150,0.29333333333333333,LUNG
+GTEx,transfer_aware,rank,20,Small Intestine - Terminal Ileum,150,0.02666666666666667,LUNG
+GTEx,transfer_aware,rank,20,Spleen,150,0.013333333333333334,LUNG
+GTEx,transfer_aware,rank,20,Testis,150,1.0,TESTES
+GTEx,transfer_aware,rank,20,Whole Blood,150,0.3333333333333333,BLOOD
+GTEx,transfer_aware,rank,50,Adipose - Subcutaneous,150,0.12,VENACV
+GTEx,transfer_aware,rank,50,Adrenal Gland,150,0.16666666666666666,LUNG
+GTEx,transfer_aware,rank,50,Artery - Aorta,150,0.08666666666666667,HEART
+GTEx,transfer_aware,rank,50,Brain - Cortex,150,0.8266666666666667,CORTEX
+GTEx,transfer_aware,rank,50,Brain - Hippocampus,150,0.36,HIPPOC
+GTEx,transfer_aware,rank,50,Brain - Hypothalamus,150,0.9933333333333333,HYPOTH
+GTEx,transfer_aware,rank,50,Colon - Transverse,150,0.5533333333333333,COLON
+GTEx,transfer_aware,rank,50,Heart - Left Ventricle,150,0.12,VENACV
+GTEx,transfer_aware,rank,50,Kidney - Cortex,85,0.9294117647058824,KIDNEY
+GTEx,transfer_aware,rank,50,Liver,150,0.9933333333333333,LIVER
+GTEx,transfer_aware,rank,50,Lung,150,1.0,LUNG
+GTEx,transfer_aware,rank,50,Muscle - Skeletal,150,0.8266666666666667,SKM-GN
+GTEx,transfer_aware,rank,50,Ovary,150,0.0,LUNG
+GTEx,transfer_aware,rank,50,Small Intestine - Terminal Ileum,150,0.7,SMLINT
+GTEx,transfer_aware,rank,50,Spleen,150,0.0,LIVER
+GTEx,transfer_aware,rank,50,Testis,150,0.9866666666666667,TESTES
+GTEx,transfer_aware,rank,50,Whole Blood,150,0.32666666666666666,BLOOD
+GTEx,transfer_aware,pairs,20,Adipose - Subcutaneous,150,0.02,VENACV
+GTEx,transfer_aware,pairs,20,Adrenal Gland,150,0.0,OVARY
+GTEx,transfer_aware,pairs,20,Artery - Aorta,150,0.7733333333333333,VENACV
+GTEx,transfer_aware,pairs,20,Brain - Cortex,150,1.0,CORTEX
+GTEx,transfer_aware,pairs,20,Brain - Hippocampus,150,0.4866666666666667,HIPPOC
+GTEx,transfer_aware,pairs,20,Brain - Hypothalamus,150,0.92,HYPOTH
+GTEx,transfer_aware,pairs,20,Colon - Transverse,150,0.56,COLON
+GTEx,transfer_aware,pairs,20,Heart - Left Ventricle,150,0.0,VENACV
+GTEx,transfer_aware,pairs,20,Kidney - Cortex,85,0.9529411764705882,KIDNEY
+GTEx,transfer_aware,pairs,20,Liver,150,0.98,LIVER
+GTEx,transfer_aware,pairs,20,Lung,150,0.98,LUNG
+GTEx,transfer_aware,pairs,20,Muscle - Skeletal,150,0.5466666666666666,SKM-GN
+GTEx,transfer_aware,pairs,20,Ovary,150,0.11333333333333333,LUNG
+GTEx,transfer_aware,pairs,20,Small Intestine - Terminal Ileum,150,0.06666666666666667,LUNG
+GTEx,transfer_aware,pairs,20,Spleen,150,0.006666666666666667,LUNG
+GTEx,transfer_aware,pairs,20,Testis,150,0.7466666666666667,TESTES
+GTEx,transfer_aware,pairs,20,Whole Blood,150,0.2,SKM-VL
+GTEx,transfer_aware,pairs,50,Adipose - Subcutaneous,150,0.07333333333333333,VENACV
+GTEx,transfer_aware,pairs,50,Adrenal Gland,150,0.0,VENACV
+GTEx,transfer_aware,pairs,50,Artery - Aorta,150,0.43333333333333335,VENACV
+GTEx,transfer_aware,pairs,50,Brain - Cortex,150,0.94,CORTEX
+GTEx,transfer_aware,pairs,50,Brain - Hippocampus,150,0.6133333333333333,HIPPOC
+GTEx,transfer_aware,pairs,50,Brain - Hypothalamus,150,0.9866666666666667,HYPOTH
+GTEx,transfer_aware,pairs,50,Colon - Transverse,150,0.6133333333333333,COLON
+GTEx,transfer_aware,pairs,50,Heart - Left Ventricle,150,0.08666666666666667,VENACV
+GTEx,transfer_aware,pairs,50,Kidney - Cortex,85,0.9882352941176471,KIDNEY
+GTEx,transfer_aware,pairs,50,Liver,150,0.9733333333333334,LIVER
+GTEx,transfer_aware,pairs,50,Lung,150,1.0,LUNG
+GTEx,transfer_aware,pairs,50,Muscle - Skeletal,150,0.9733333333333334,SKM-GN
+GTEx,transfer_aware,pairs,50,Ovary,150,0.0,LUNG
+GTEx,transfer_aware,pairs,50,Small Intestine - Terminal Ileum,150,0.84,SMLINT
+GTEx,transfer_aware,pairs,50,Spleen,150,0.0,LIVER
+GTEx,transfer_aware,pairs,50,Testis,150,0.9933333333333333,TESTES
+GTEx,transfer_aware,pairs,50,Whole Blood,150,0.4666666666666667,BLOOD

@@ -1,0 +1,79 @@
+fusion helpers defined; settings: {'assays': 'TRNSCRPT,METAB', 'assays_b': 'TRNSCRPT,PROT,METAB', 'kinds': ['centroid', 'logreg_l2', 'rf'], 'n_splits': 5, 'prefilter': 5000, 'n_perm': 200, 'perm_jobs': -1, 'durations': ['1w', '2w', '4w', '8w'], 'primary': '8w', 'seed': 20260925}
+Task A test animals per fold: [10, 10, 10, 10, 10]
+            arm     model  balanced_accuracy_mean  balanced_accuracy_sd
+   single:METAB  centroid                  1.0000                0.0000
+   single:METAB logreg_l2                  1.0000                0.0000
+   single:METAB        rf                  1.0000                0.0000
+   early_fusion  centroid                  0.9989                0.0025
+   early_fusion        rf                  0.9989                0.0025
+    late_fusion logreg_l2                  0.9989                0.0025
+single:TRNSCRPT        rf                  0.9989                0.0025
+single:TRNSCRPT logreg_l2                  0.9978                0.0030
+   early_fusion logreg_l2                  0.9954                0.0044
+single:TRNSCRPT  centroid                  0.9932                0.0061
+
+best single-omic arm 1.0000  vs  best fusion arm 0.9989;  lowest arm 0.9932
+Task B arms per tissue: {'CORTEX': 13, 'HEART': 13, 'KIDNEY': 13, 'LIVER': 13, 'LUNG': 13, 'SKM-GN': 13, 'WAT-SC': 13} | permutation draws per tissue: {'CORTEX': 200, 'HEART': 200, 'KIDNEY': 200, 'LIVER': 200, 'LUNG': 200, 'SKM-GN': 200, 'WAT-SC': 200}
+tissue               best_arm  best_auroc  single_auroc  single_sd  fusion_auroc  fusion_minus_single  null_median_max_auroc  null_p95_max_auroc  p_perm  fusion_beats_single_by_gt_sd  best_beats_null_p95
+CORTEX   single:PROT/centroid       1.000         1.000      0.000         0.938               -0.062                  0.729               0.896   0.020                         False                 True
+ HEART early_fusion/logreg_l2       1.000         1.000      0.000         1.000                0.000                  0.688               0.875   0.005                         False                 True
+KIDNEY  late_fusion/logreg_l2       1.000         1.000      0.000         1.000                0.000                  0.667               0.875   0.005                         False                 True
+ LIVER early_fusion/logreg_l2       1.000         1.000      0.000         1.000                0.000                  0.708               0.876   0.005                         False                 True
+  LUNG  single:METAB/centroid       1.000         1.000      0.000         0.958               -0.042                  0.695               0.875   0.015                         False                 True
+SKM-GN early_fusion/logreg_l2       1.000         1.000      0.000         1.000                0.000                  0.708               0.896   0.010                         False                 True
+WAT-SC  late_fusion/logreg_l2       0.958         0.958      0.083         0.958                0.000                  0.688               0.855   0.005                         False                 True
+
+max |recomputed − published| over ['best_auroc', 'fusion_auroc', 'null_p95_max_auroc', 'p_perm'] : 5.724587470723463e-17
+fusion beats best single by > 1 sd: 0 of 7 tissues (published 0)
+best arm beats the null's 95th percentile: 7 of 7 tissues (published 7)
+null 95th percentile of the best-of-arms AUROC, range over tissues: 0.855–0.896
+best single-omic AUROC, control vs each duration (animal-grouped CV):
+duration    1w    2w    4w    8w
+tissue                          
+CORTEX   0.958 0.958 0.833 1.000
+HEART    1.000 1.000 1.000 1.000
+KIDNEY   1.000 1.000 0.833 1.000
+LIVER    1.000 1.000 0.958 1.000
+LUNG     0.958 1.000 1.000 1.000
+SKM-GN   1.000 1.000 1.000 1.000
+WAT-SC   0.833 1.000 0.958 0.958
+
+mean over tissues: {'1w': 0.964, '2w': 0.994, '4w': 0.94, '8w': 0.994}
+
+TMT plex/channel balance (Cramér's V, group vs batch):
+tissue  n_control  n_8w  V_tmt_plex  V_tmt11_channel
+CORTEX          9    10        0.22             0.61
+ HEART         10    10        0.18             0.66
+KIDNEY         10    10        0.18             0.55
+ LIVER         10    10        0.18             0.66
+  LUNG         10    10        0.18             0.59
+SKM-GN          8     9        0.46             0.68
+WAT-SC         10    10        0.26             0.73
+batch-check inputs: 2430 control/8w pheno rows; 899 TRNSCRPT library-meta vials
+recomputed 'separates' flag equals the published one: True
+84 covariate-classifier rows (7 tissues × feature sets × 2 models); 3605 screened tissue × variable rows
+tissue  max_auroc_collection_library_plex  max_auroc_qc_metrics  max_auroc_all_covariates                                                                    verdict
+CORTEX                              0.740                 0.354                     0.438                                                                   training
+ HEART                              0.958                 0.792                     0.875                        unresolvable: sequencing depth separates the groups
+KIDNEY                              0.885                 0.688                     0.792 unresolvable: trnscrpt_library covariates classify the groups (AUROC 0.89)
+ LIVER                              0.677                 0.698                     0.552                                                                   training
+  LUNG                              0.667                 0.500                     0.500                                                                   training
+SKM-GN                              0.917                 0.958                     1.000   unresolvable: trnscrpt_depth covariates classify the groups (AUROC 0.92)
+WAT-SC                              0.781                 0.635                     0.531                                                                   training
+
+verdicts equal to published batch_conclusion.csv: True
+published overall verdict: training in 4 of 7 tissues, unresolvable in HEART, KIDNEY, SKM-GN (sequencing depth differs between the arms in HEART)
+unresolvable tissues: 3 of 7
+tissue    feature_set  model  n_features  auroc_mean  auroc_sd  null_p95_auroc  p_perm
+SKM-GN trnscrpt_depth logreg           9      0.6771    0.3957          0.8333  0.1782
+SKM-GN trnscrpt_depth     rf           9      0.9167    0.1443             NaN     NaN
+SKM-GN    trnscrpt_qc logreg          26      0.9583    0.0722          0.8056  0.0099
+SKM-GN    trnscrpt_qc     rf          26      0.9583    0.0722             NaN     NaN
+
+(1) sequencing-depth covariates, RF: AUROC 0.917 = the verdict rule's max over the 'pure' (collection/library/depth/plex) sets for SKM-GN: 0.917; its own null: none (RF rows have no permutation null)
+(2) library-QC fractions: logreg 0.958, RF 0.958; logreg permutation p = 0.010 (null 95th pct 0.806)
+    for comparison, depth covariates with logreg: 0.677, p = 0.178
+    SKM-GN logreg rows with p_perm ≤ 0.05: [('trnscrpt_qc', 0.958, 0.0099), ('all_batch_covariates', 0.958, 0.0099)]
+  live trnscrpt_depth  rf    : AUROC 0.9167  (published 0.9167); 9 covariates, 20 animals, 4 folds
+  live trnscrpt_qc     logreg: AUROC 0.9583  (published 0.9583); 26 covariates, 20 animals, 4 folds
+  live trnscrpt_qc     rf    : AUROC 0.9583  (published 0.9583); 26 covariates, 20 animals, 4 folds

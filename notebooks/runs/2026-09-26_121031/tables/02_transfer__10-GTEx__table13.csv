@@ -1,0 +1,13 @@
+target,k,representation,standard,transfer_aware
+BodyMap adults,20,pairs,0.941,0.824
+BodyMap adults,20,rank,0.926,0.853
+BodyMap adults,20,zscore,1.0,0.941
+BodyMap adults,50,pairs,0.941,0.985
+BodyMap adults,50,rank,0.985,0.985
+BodyMap adults,50,zscore,0.985,0.956
+GTEx,20,pairs,0.285,0.479
+GTEx,20,rank,0.287,0.498
+GTEx,20,zscore,0.654,0.641
+GTEx,50,pairs,0.637,0.577
+GTEx,50,rank,0.632,0.518
+GTEx,50,zscore,0.781,0.738

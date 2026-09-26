@@ -1,0 +1,2 @@
+motrpac_genes,rat_genes_with_1to1_human_ortholog,orthologs_present_in_gtex,matched_by_human_ensembl_id,matched_by_symbol_fallback,lost_to_orthology,gtex_genes,gtex_samples,gtex_donors
+21193,14609,14569,14523,46,6624,56156,2485,862
