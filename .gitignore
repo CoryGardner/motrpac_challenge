@@ -8,3 +8,8 @@ data/external/
 results/
 !results/.gitkeep
 .DS_Store
+.superpowers/
+site/_screenshots/
+tools/node_modules/
+tools/package-lock.json
+notebooks/_outputs/
