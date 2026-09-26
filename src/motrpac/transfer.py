@@ -12,6 +12,7 @@ held-out source animals are compared with sets recalibrated on a few target indi
 from __future__ import annotations
 
 import itertools
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -127,6 +128,7 @@ def calibrate_models(pm_c, Lp_cal, Zp_cal, y_cal, classes, alpha, model_names):
         q_c = cp.conformal_quantile_per_class(scores, y_idx, alpha, len(classes), fallback=q)
         q_f = cp.conformal_quantile_per_class(scores, y_idx, alpha, len(classes), fallback=q, floor=q)
         out[name] = {"q": q, "q_class": q_c, "q_floor": q_f, "n_cal": int(len(scores)),
+                     "scores": scores, "y_idx": y_idx,
                      "proba": (lambda Lr, Zr, n=name: pm_c.proba(n, Lr, Zr)[0])}
     return out
 
@@ -162,11 +164,13 @@ def per_organ_coverage(calib, classes, Lp_t, Zp_t, mt, organ_map, model_names, v
 
 
 def conformal_transfer(calib, classes, Lp_t, Zp_t, mt, organ_map, alpha, stage_col, primary_stage, recal_ns, recal_repeats, rng,
-                       model_names, ood_organs):
+                       model_names, ood_organs, collect: list | None = None):
     """Source-calibrated sets (marginal, Mondrian, floored Mondrian) on the target per stage, what the sets hold for the
     out-of-distribution organs at the primary stage, and recalibration on N target individuals
     (pooled tissues; the calibration label is the organ's best-scoring mapped class), tested on the
-    remaining individuals of the primary stage. `mt` needs columns organ, group_id and `stage_col`."""
+    remaining individuals of the primary stage. `mt` needs columns organ, group_id and `stage_col`.
+    `collect` (a list, optional) receives one dict per recalibration draw: model, n_recal, draw, the chosen
+    individuals, the recalibrated threshold q_t and the number of calibration scores behind it."""
     conf_rows, ood_rows, recal_rows = [], [], []
     primary = (mt[stage_col] == primary_stage).to_numpy()
     for name in model_names:
@@ -208,7 +212,7 @@ def conformal_transfer(calib, classes, Lp_t, Zp_t, mt, organ_map, alpha, stage_c
             if combos is None or len(combos) > recal_repeats:
                 combos = [tuple(rng.choice(ids, size=n_recal, replace=False)) for _ in range(recal_repeats)]
             cov_r, cov_s, emp_r, emp_s, sz_r = [], [], [], [], []
-            for chosen in combos:
+            for draw, chosen in enumerate(combos):
                 m_c = sub_ad["group_id"].isin(chosen).to_numpy() & mapped_ad
                 m_t = ~sub_ad["group_id"].isin(chosen).to_numpy() & mapped_ad
                 if not m_c.any() or not m_t.any():
@@ -217,6 +221,9 @@ def conformal_transfer(calib, classes, Lp_t, Zp_t, mt, organ_map, alpha, stage_c
                        for i in np.flatnonzero(m_c)]
                 sc, _ = cp.calibration_scores(p_ad[m_c], np.array(y_c), classes, "lac")
                 q_t = cp.conformal_quantile(sc, alpha)
+                if collect is not None:
+                    collect.append({"model": name, "n_recal": n_recal, "draw": draw, "chosen": ";".join(str(c) for c in chosen),
+                                    "q_t": q_t, "n_cal_scores": int(len(sc))})
                 for q_use, cov_list, emp_list in ((q_t, cov_r, emp_r), (cal["q"], cov_s, emp_s)):
                     sets = cp.predict_sets(p_ad[m_t], q_use, "lac")
                     covered = [any(sets[j, classes.index(t)] for t in organ_map[sub_ad.loc[i, "organ"]] if t in classes)
@@ -230,6 +237,45 @@ def conformal_transfer(calib, classes, Lp_t, Zp_t, mt, organ_map, alpha, stage_c
                                "frac_empty_recalibrated": float(np.mean(emp_r)), "frac_empty_source_cal": float(np.mean(emp_s)),
                                "set_size_recalibrated": float(np.mean(sz_r))})
     return pd.DataFrame(conf_rows), pd.DataFrame(ood_rows), pd.DataFrame(recal_rows)
+
+
+def save_transfer_scores(out_dir, calib, classes, mt, keep_cols, Lp_c, Zp_c, cal_meta, collect, organ_map, model_names,
+                         pm_all=None, Lp_all=None, Zp_all=None):
+    """--save-scores for the transfer phases: per target sample, the probabilities of the calibrated models
+    (`calib`, fit without the calibration animals) under every model name; per model, the LAC calibration
+    scores of the held-out source animals (`cal_meta` rows, same order as `calib[name]["scores"]`); the
+    per-draw recalibration thresholds collected by `conformal_transfer`; the class list and the organ map.
+    If the all-animal models `pm_all` are given (with their target matrices), each sample also carries
+    `pred_all_animals`, the call of the model the accuracy tables use. Everything a viewer needs to rebuild
+    the prediction sets outside the pipeline."""
+    import json
+    out_dir = Path(out_dir)
+    base = mt[keep_cols].copy()
+    base.insert(0, "sample", mt.index.astype(str))
+    rows = []
+    for name in model_names:
+        p = calib[name]["proba"](Lp_c, Zp_c)
+        df = base.copy()
+        df["model"] = name
+        for j, c in enumerate(classes):
+            df[f"p_{c}"] = p[:, j]
+        if pm_all is not None:
+            pa, cls = pm_all.proba(name, Lp_all, Zp_all)
+            df["pred_all_animals"] = np.asarray(cls)[pa.argmax(axis=1)]
+        rows.append(df)
+    pd.concat(rows, ignore_index=True).to_csv(out_dir / "scores_target_probs.csv", index=False)
+    cal_rows = []
+    for name in model_names:
+        df = cal_meta[["pid", "tissue"]].copy()
+        df.insert(0, "viallabel", cal_meta.index.astype(str))
+        df["model"] = name
+        df["score_lac"] = calib[name]["scores"]
+        cal_rows.append(df)
+    pd.concat(cal_rows, ignore_index=True).to_csv(out_dir / "scores_calibration.csv", index=False)
+    pd.DataFrame(collect or [], columns=["model", "n_recal", "draw", "chosen", "q_t", "n_cal_scores"]).to_csv(
+        out_dir / "recal_thresholds.csv", index=False)
+    (out_dir / "classes.json").write_text(json.dumps(list(classes)))
+    (out_dir / "organ_map.json").write_text(json.dumps({o: (sorted(ts) if ts else None) for o, ts in organ_map.items()}))
 
 
 def gene_check(pm, genes, sym, Zm_df, y, Zt_df, mt_primary, tissue_to_organ, flags):

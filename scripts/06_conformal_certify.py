@@ -21,6 +21,8 @@ certificate_final.png, sizing_table.csv
 """
 from __future__ import annotations
 
+import json
+
 import numpy as np
 import pandas as pd
 from sklearn.impute import SimpleImputer
@@ -77,7 +79,47 @@ def panel_family(X_fit, y_fit, grid, prefilter, model):
         Z = sc.transform(pre.transform(imp.transform(X)))
         idx, clf = fam[k]
         return clf.predict(Z[:, idx])
+
+    def proba(k, X):
+        """Class probabilities of the k-panel classifier and its class order (for --save-scores)."""
+        Z = sc.transform(pre.transform(imp.transform(X)))
+        idx, clf = fam[k]
+        return clf.predict_proba(Z[:, idx]), list(clf.classes_)
+    predict.proba = proba
     return predict
+
+
+def reorder_columns(p, cls, classes):
+    """Probability columns in `classes` order; a class the estimator never saw gets a zero column."""
+    out = np.zeros((p.shape[0], len(classes)))
+    for j, c in enumerate(cls):
+        if c in classes:
+            out[:, classes.index(c)] = p[:, j]
+    return out
+
+
+def score_tables(om, fold, fit_idx, cal_idx, cal_opa, te, est, p_te, fam, grid, classes, y_idx):
+    """--save-scores rows for one outer fold: test-vial probabilities and LAC calibration scores (pooled
+    vials and one vial per animal) for the full model and the k = 20 / 50 panels of the same fit animals."""
+    meta = om.meta[["pid", "tissue", "sex", "group"]].copy()
+    meta.index.name = "viallabel"
+    prob_rows, cal_rows = [], []
+    for mname in ["full"] + [f"k{k}" for k in (20, 50) if k in grid]:
+        def proba_rows(idx):
+            if mname == "full":
+                return proba_on(est, om.X.to_numpy(dtype=float)[idx], classes)
+            return reorder_columns(*fam.proba(int(mname[1:]), om.X.to_numpy(dtype=float)[idx]), classes)
+        pt = p_te if mname == "full" else proba_rows(te)
+        df = meta.iloc[te].reset_index().assign(fold=fold, model=mname)
+        for j, c in enumerate(classes):
+            df[f"p_{c}"] = pt[:, j]
+        prob_rows.append(df)
+        for mode, cidx in (("pooled", cal_idx), ("one_per_animal", cal_opa)):
+            pc = proba_rows(cidx)
+            dc = meta.iloc[cidx].reset_index().assign(fold=fold, model=mname, calibration=mode,
+                                                      score_lac=cp.lac_scores(pc, y_idx[cidx]))
+            cal_rows.append(dc)
+    return pd.concat(prob_rows, ignore_index=True), pd.concat(cal_rows, ignore_index=True)
 
 
 def certify_losses(predict, X, y, g, cal_idx, cal_opa, te, grid, alpha, delta, one_per_animal):
@@ -113,6 +155,9 @@ def main() -> None:
     ap.add_argument("--alpha-delta-grid", default="0.05:0.05,0.10:0.05,0.10:0.10,0.20:0.05,0.20:0.10,0.05:0.10",
                     help="(alpha:delta) pairs re-evaluated on the same calibration errors")
     ap.add_argument("--k-of-interest", type=int, default=20)
+    ap.add_argument("--save-scores", action="store_true",
+                    help="also write per-vial test probabilities and calibration scores (full model and k = 20 / 50 "
+                         "panels, repeat 0 of every fold): scores_test_probs.csv, scores_calibration.csv, classes.json")
     args = ap.parse_args()
     cli.banner("06_conformal_certify", args)
     source = cli.resolve_source(args.assay, args.source)
@@ -134,7 +179,8 @@ def main() -> None:
     grid = [k for k in grid if k <= X.shape[1]]
 
     cov_rows, pc_rows, cert_rows, valid_rows, err_store = [], [], [], [], []
-    ad_grid = [(float(a), float(d)) for a, d in (pair.split(":") for pair in args.alpha_delta_grid.split(",") if pair.strip())]
+    score_probs, score_cal = [], []
+    ad_grid =[(float(a), float(d)) for a, d in (pair.split(":") for pair in args.alpha_delta_grid.split(",") if pair.strip())]
     for fold, (tr, te) in enumerate(grouped_kfold(om.meta, args.label, n_splits, args.seed)):
         for rep in range(n_repeats):
             seed_r = args.seed + 1000 * fold + rep
@@ -160,6 +206,11 @@ def main() -> None:
                                 pc_rows.append(r.per_class.assign(fold=fold, calibration=mode, conformal=cname, method=method, alpha=alpha))
                 lac = [c for c in cov_rows if c["fold"] == fold and c["method"] == "lac" and c["alpha"] == 0.1 and c["conformal"] == "marginal"]
                 print(f"  fold {fold}: LAC α=0.1 coverage pooled={lac[0]['coverage']:.3f} one-per-animal={lac[1]['coverage']:.3f}")
+                if args.save_scores:
+                    fam0 = panel_family(X[fit_idx], y[fit_idx], grid, prefilter, args.model)
+                    sp, sc_ = score_tables(om, fold, fit_idx, cal_idx, cal_opa, te, est, p_te, fam0, grid, classes, y_idx)
+                    score_probs.append(sp)
+                    score_cal.append(sc_)
             # (b) certificate on calibration animals; validity on test animals
             predict = panel_family(X[fit_idx], y[fit_idx], grid, prefilter, args.model)
             k1, k2, table, test_err, errs = certify_losses(predict, X, y, g, cal_idx, cal_opa, te, grid, args.alpha, args.delta,
@@ -179,6 +230,11 @@ def main() -> None:
 
     cov = pd.DataFrame(cov_rows)
     cov.to_csv(out / "coverage.csv", index=False)
+    if args.save_scores:
+        pd.concat(score_probs, ignore_index=True).to_csv(out / "scores_test_probs.csv", index=False)
+        pd.concat(score_cal, ignore_index=True).to_csv(out / "scores_calibration.csv", index=False)
+        (out / "classes.json").write_text(json.dumps(classes))
+        print(f"  wrote scores_test_probs.csv, scores_calibration.csv, classes.json to {out}")
     pc = pd.concat(pc_rows, ignore_index=True)
     pc.to_csv(out / "per_class_coverage.csv", index=False)
     cert = pd.concat(cert_rows, ignore_index=True)

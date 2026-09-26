@@ -26,7 +26,8 @@ import numpy as np
 import pandas as pd
 from motrpac import cli, config as C, conformal as cp, io, models, report
 from motrpac.splits import assert_no_group_leak
-from motrpac.transfer import PanelModels, calibrate_models, conformal_transfer, per_organ_coverage, score_block, zscore
+from motrpac.transfer import PanelModels, calibrate_models, conformal_transfer, per_organ_coverage, save_transfer_scores, \
+    score_block, zscore
 
 ORGAN_MAP = {"Adrenal": {"ADRNL"}, "Brain": {"CORTEX", "HIPPOC", "HYPOTH"}, "Heart": {"HEART"}, "Kidney": {"KIDNEY"},
              "Liver": {"LIVER"}, "Lung": {"LUNG"}, "Muscle": {"SKM-GN", "SKM-VL"}, "Spleen": {"SPLEEN"},
@@ -53,6 +54,9 @@ def main() -> None:
     ap.add_argument("--cal-frac", type=float, default=0.3)
     ap.add_argument("--recal-animals", default="3,5")
     ap.add_argument("--recal-repeats", type=int, default=20)
+    ap.add_argument("--save-scores", action="store_true",
+                    help="also write per-sample probabilities of the calibrated models, the calibration scores, the "
+                         "per-draw recalibration thresholds, classes.json and organ_map.json")
     args = ap.parse_args()
     cli.banner("12_bodymap_validate", args)
     out = cli.outdir("12_bodymap", args.out)
@@ -134,9 +138,13 @@ def main() -> None:
     calib = calibrate_models(pm_c, Lm_c, Zm_c, y[cal_idx], classes, args.alpha, model_names)
     Lt_c, Zt_c = pm_c.target_matrices(lb[shared].to_numpy(dtype=float))
     adults = (mb["stage_weeks"] == 21).to_numpy()
+    collect = [] if args.save_scores else None
     conf_df, ood, recal = conformal_transfer(calib, classes, Lt_c, Zt_c, mb, ORGAN_MAP, args.alpha, "stage_weeks", 21,
                                              [int(v) for v in args.recal_animals.split(",") if v.strip()], args.recal_repeats, rng,
-                                             model_names, ["Thymus", "Uterus"])
+                                             model_names, ["Thymus", "Uterus"], collect=collect)
+    if args.save_scores:
+        save_transfer_scores(out, calib, classes, mb, ["organ", "stage_weeks", "sex", "animal_id"], Lt_c, Zt_c,
+                             om.meta.iloc[cal_idx], collect, ORGAN_MAP, model_names, pm_all=pm, Lp_all=Lb_pre, Zp_all=Zb_pre)
     conf_df.to_csv(out / "conformal_transfer.csv", index=False)
     ood.to_csv(out / "ood_sets.csv", index=False)
     recal.to_csv(out / "recalibration.csv", index=False)

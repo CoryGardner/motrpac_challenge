@@ -21,7 +21,7 @@ import pandas as pd
 from motrpac import cli, config as C, io, models, report
 from motrpac.splits import assert_no_group_leak
 from motrpac.transfer import PanelModels, calibrate_models, conformal_transfer, gene_check, gtex_symbols, match_gtex_orthologs, \
-    one_to_one_orthologs, per_organ_coverage, score_block, zscore
+    one_to_one_orthologs, per_organ_coverage, save_transfer_scores, score_block, zscore
 
 GTEX_TO_RAT = {
     "Whole Blood": {"BLOOD"}, "Muscle - Skeletal": {"SKM-GN", "SKM-VL"}, "Adipose - Subcutaneous": {"WAT-SC"},
@@ -40,6 +40,9 @@ def main() -> None:
     ap.add_argument("--cal-frac", type=float, default=0.3)
     ap.add_argument("--recal-donors", default="3,5")
     ap.add_argument("--recal-repeats", type=int, default=20)
+    ap.add_argument("--save-scores", action="store_true",
+                    help="also write per-sample probabilities of the calibrated models, the calibration scores, the "
+                         "per-draw recalibration thresholds, classes.json and organ_map.json")
     args = ap.parse_args()
     cli.banner("13_gtex_transfer", args)
     out = cli.outdir("13_gtex", args.out)
@@ -128,8 +131,12 @@ def main() -> None:
     calib = calibrate_models(pm_c, Lm_c, Zm_c, y[cal_idx], classes, args.alpha, model_names)
     Lt_c, Zt_c = pm_c.target_matrices(L_tgt)
     recal_ns = [int(v) for v in args.recal_donors.split(",") if v.strip()]
+    collect = [] if args.save_scores else None
     conf_df, ood, recal = conformal_transfer(calib, classes, Lt_c, Zt_c, mg, GTEX_TO_RAT, args.alpha, "stage", "adult",
-                                             recal_ns, args.recal_repeats, rng, model_names, [])
+                                             recal_ns, args.recal_repeats, rng, model_names, [], collect=collect)
+    if args.save_scores:
+        save_transfer_scores(out, calib, classes, mg, ["organ", "donor", "stage"], Lt_c, Zt_c, om.meta.iloc[cal_idx],
+                             collect, GTEX_TO_RAT, model_names, pm_all=pm, Lp_all=Lt_pre, Zp_all=Zt_pre)
     conf_df.to_csv(out / "conformal_transfer.csv", index=False)
     recal.to_csv(out / "recalibration.csv", index=False)
     # per-tissue coverage with rat calibration: marginal vs Mondrian vs marginal-floor Mondrian
