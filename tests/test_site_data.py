@@ -62,11 +62,15 @@ def test_ladder_rungs_carry_n_and_spread_or_pending():
 
 @pytest.mark.skipif(not (RES / "06_conformal").exists(), reason="results/ absent")
 def test_provenance_values_match_results_files():
-    entries = _load("provenance.json")["entries"]
+    prov = _load("provenance.json")
+    entries = prov["entries"]
     checked = 0
     for e in entries:
         if e.get("pending"):
             assert e.get("reason"), e
+            continue
+        if e.get("agg") == "recomputed":
+            assert e.get("note") and e.get("files"), e
             continue
         if not e.get("file"):
             continue
@@ -75,10 +79,22 @@ def test_provenance_values_match_results_files():
         if p.suffix == ".csv":
             df = pd.read_csv(p)
             sel = df
-            for k, v in (e.get("row") or {}).items():
+            for k, v in (e.get("where") or {}).items():
                 sel = sel[sel[k].astype(str) == str(v)]
-            assert len(sel) == 1, f"{e['id']}: row selector {e.get('row')} matched {len(sel)} rows in {e['file']}"
-            got = sel[e["column"]].iloc[0]
+            agg = e.get("agg", "value")
+            if agg == "value":
+                assert len(sel) == 1, f"{e['id']}: selector {e.get('where')} matched {len(sel)} rows in {e['file']}"
+                got = sel[e["column"]].iloc[0]
+            elif agg == "mean":
+                got = sel[e["column"]].astype(float).mean()
+            elif agg == "std":
+                got = sel[e["column"]].astype(float).std()
+            elif agg == "sum":
+                got = sel[e["column"]].astype(float).sum()
+            elif agg == "count":
+                got = len(sel)
+            else:
+                raise AssertionError(f"{e['id']}: unknown agg {agg}")
             if isinstance(e["value"], (int, float)) and not isinstance(e["value"], bool):
                 assert math.isclose(float(got), float(e["value"]), abs_tol=e.get("tol", 1e-6)), (e["id"], got, e["value"])
             else:
@@ -91,6 +107,12 @@ def test_provenance_values_match_results_files():
             assert d == e["value"], (e["id"], d, e["value"])
             checked += 1
     assert checked >= 20, f"only {checked} provenance entries were checkable"
+    # copied tables: the JSON copy has the same number of rows as the CSV it cites (sample tables are quantised copies)
+    for t in prov["tables"]:
+        p = ROOT / t["file"]
+        assert p.exists(), t
+        n = sum(1 for _ in open(p)) - 1
+        assert n == t["n_rows"] or t.get("matrix") or t.get("quantised"), (t["id"], n, t["n_rows"])
 
 
 def test_sample_exports_have_expected_shapes():

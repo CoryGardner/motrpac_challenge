@@ -1,0 +1,3464 @@
+{
+"_meta": {
+"generated": "2026-09-26 23:37 UTC",
+"git_hash": "1bd7e3e",
+"sources": [
+"results/02_inventory/inventory.csv",
+"results/02_inventory/tissue_by_assay.csv",
+"results/04_baselines/TRNSCRPT/confusable_pairs_logreg_l2.csv",
+"results/04_baselines/TRNSCRPT/confusion_logreg_l2.csv",
+"results/04_baselines/TRNSCRPT/per_fold.csv",
+"results/04_baselines/TRNSCRPT/summary.csv",
+"results/05_panels/TRNSCRPT/candidate_panel_annotated.csv",
+"results/05_panels/TRNSCRPT/confusable_pairs_k20.csv",
+"results/05_panels/TRNSCRPT/confusion_k20.csv",
+"results/05_panels/TRNSCRPT/confusion_k30.csv",
+"results/05_panels/TRNSCRPT/panel_curve.csv",
+"results/05_panels/TRNSCRPT/panel_curve_fclassif.csv",
+"results/05_panels/TRNSCRPT/selected_by_fold.csv",
+"results/05_panels/TRNSCRPT/selection_consistency.csv",
+"results/05_panels/TRNSCRPT/stability_k20_annotated.csv",
+"results/06_conformal/TRNSCRPT/certificate_alpha_delta_grid.csv",
+"results/06_conformal/TRNSCRPT/certificate_distribution.csv",
+"results/06_conformal/TRNSCRPT/certificate_final.csv",
+"results/06_conformal/TRNSCRPT/certificate_validity.csv",
+"results/06_conformal/TRNSCRPT/coverage.csv",
+"results/06_conformal/TRNSCRPT/coverage_marginal_vs_mondrian.csv",
+"results/06_conformal/TRNSCRPT/per_tissue_marginal_vs_mondrian_alpha0.1.csv",
+"results/06_conformal/TRNSCRPT/sizing_table.csv",
+"results/07_fusion/batch_conclusion.csv",
+"results/07_fusion/batch_covariate_auroc.csv",
+"results/07_fusion/taskA_summary.csv",
+"results/07_fusion/taskB_best_vs_null.csv",
+"results/07_fusion/taskB_duration_summary.csv",
+"results/08_shift/METAB_core9/shift_table.csv",
+"results/08_shift/TRNSCRPT/shift_per_class.csv",
+"results/08_shift/TRNSCRPT/shift_recalibration.csv",
+"results/08_shift/TRNSCRPT/shift_table.csv",
+"results/08_shift/readout_certificates.csv",
+"results/09_discordance/discordance_rates.csv",
+"results/09_discordance/prediction_auroc.csv",
+"results/09_discordance/summary.csv",
+"results/12_bodymap/accuracy_by_organ.csv",
+"results/12_bodymap/age_shift.csv",
+"results/12_bodymap/age_shift_accuracy.csv",
+"results/12_bodymap/conformal_transfer.csv",
+"results/12_bodymap/confusion_full_adult.csv",
+"results/12_bodymap/confusion_k20_adult.csv",
+"results/12_bodymap/confusion_k50_adult.csv",
+"results/12_bodymap/coverage_by_organ.csv",
+"results/12_bodymap/gene_overlap.csv",
+"results/12_bodymap/juvenile_marker_check.csv",
+"results/12_bodymap/native_panel.csv",
+"results/12_bodymap/ood_sets.csv",
+"results/12_bodymap/panel_gene_check.csv",
+"results/12_bodymap/panel_survival.csv",
+"results/12_bodymap/recalibration.csv",
+"results/13_gtex/accuracy_by_tissue.csv",
+"results/13_gtex/accuracy_overall.csv",
+"results/13_gtex/conformal_transfer.csv",
+"results/13_gtex/confusion_full.csv",
+"results/13_gtex/confusion_k20.csv",
+"results/13_gtex/confusion_k50.csv",
+"results/13_gtex/coverage_by_tissue.csv",
+"results/13_gtex/gene_overlap.csv",
+"results/13_gtex/native_panel.csv",
+"results/13_gtex/panel_gene_check.csv",
+"results/13_gtex/panel_survival.csv",
+"results/13_gtex/recalibration.csv",
+"results/14_transfer/motrpac_cv_cost.csv",
+"results/14_transfer/panels.csv",
+"results/14_transfer/recalibration.csv",
+"results/14_transfer/target_accuracy.csv",
+"results/14_transfer/target_summary.csv",
+"results/14_transfer_cpm/target_accuracy.csv",
+"results/14_transfer_cpm/target_summary.csv",
+"results/15_time_course/5_6_fingerprint/part5_by_duration.csv",
+"results/16_identifiability/batch_counts.csv",
+"results/16_identifiability/estimable_pairs.csv",
+"results/16_identifiability/nesting_ACETYL.csv",
+"results/16_identifiability/nesting_ATAC.csv",
+"results/16_identifiability/nesting_IMMUNO.csv",
+"results/16_identifiability/nesting_METHYL.csv",
+"results/16_identifiability/nesting_PHOSPHO.csv",
+"results/16_identifiability/nesting_PROT.csv",
+"results/16_identifiability/nesting_TRNSCRPT.csv",
+"results/16_identifiability/nesting_UBIQ.csv",
+"results/16_identifiability/qc_only_per_fold.csv",
+"results/16_identifiability/qc_only_summary.csv",
+"results/31_site_regen/06_conformal/TRNSCRPT/scores_calibration.csv",
+"results/31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv",
+"results/31_site_regen/13_gtex/recal_thresholds.csv"
+]
+},
+"entries": [
+{
+"id": "gtex_recal_infinite_draws",
+"value": {
+"full_n3": {
+"frac_infinite": 0.55,
+"draws": 20,
+"n_cal_scores_median": 7.5
+},
+"full_n5": {
+"frac_infinite": 0.05,
+"draws": 20,
+"n_cal_scores_median": 13.0
+},
+"k20_n3": {
+"frac_infinite": 0.45,
+"draws": 20,
+"n_cal_scores_median": 9.0
+},
+"k20_n5": {
+"frac_infinite": 0.0,
+"draws": 20,
+"n_cal_scores_median": 14.5
+},
+"k50_n3": {
+"frac_infinite": 0.5,
+"draws": 20,
+"n_cal_scores_median": 8.5
+},
+"k50_n5": {
+"frac_infinite": 0.0,
+"draws": 20,
+"n_cal_scores_median": 16.0
+}
+},
+"file": null,
+"files": [
+"results/31_site_regen/13_gtex/recal_thresholds.csv"
+],
+"agg": "recomputed",
+"note": "fraction of recalibration draws whose threshold is +\u221e (too few mapped samples for a finite rank), from the per-draw thresholds"
+},
+{
+"id": "fusion_n_beats_single",
+"value": 0.0,
+"file": "results/07_fusion/taskB_best_vs_null.csv",
+"where": {},
+"column": "fusion_beats_single_by_gt_sd",
+"agg": "sum",
+"tol": 1e-06,
+"note": "count of tissues where a fusion arm beats the best single omic by more than its fold sd"
+},
+{
+"id": "fusion_n_beats_null",
+"value": 7.0,
+"file": "results/07_fusion/taskB_best_vs_null.csv",
+"where": {},
+"column": "best_beats_null_p95",
+"agg": "sum",
+"tol": 1e-06
+},
+{
+"id": "fusion_n_tissues",
+"value": 7,
+"file": "results/07_fusion/taskB_best_vs_null.csv",
+"where": {},
+"column": "tissue",
+"agg": "count",
+"tol": 1e-06
+},
+{
+"id": "disc_n_sig_either",
+"value": 1948.0,
+"file": "results/09_discordance/discordance_rates.csv",
+"where": {},
+"column": "n_sig_either",
+"agg": "sum",
+"tol": 1e-06
+},
+{
+"id": "disc_n_one_layer",
+"value": 1899.0,
+"file": "results/09_discordance/discordance_rates.csv",
+"where": {},
+"column": "n_one_layer_only",
+"agg": "sum",
+"tol": 1e-06
+},
+{
+"id": "disc_n_sign",
+"value": 4.0,
+"file": "results/09_discordance/discordance_rates.csv",
+"where": {},
+"column": "n_sign_discordant",
+"agg": "sum",
+"tol": 1e-06
+},
+{
+"id": "disc_n_concordant",
+"value": 45.0,
+"file": "results/09_discordance/discordance_rates.csv",
+"where": {},
+"column": "n_concordant",
+"agg": "sum",
+"tol": 1e-06
+},
+{
+"id": "disc_auroc_with_flag",
+"value": 0.7799763305392329,
+"file": "results/09_discordance/prediction_auroc.csv",
+"where": {
+"target": "any_one_layer",
+"model": "logreg"
+},
+"column": "auroc",
+"agg": "mean",
+"tol": 1e-06
+},
+{
+"id": "disc_auroc_without_flag",
+"value": 0.7419852925755586,
+"file": "results/09_discordance/prediction_auroc.csv",
+"where": {
+"target": "any_one_layer (no regulated flag)",
+"model": "logreg"
+},
+"column": "auroc",
+"agg": "mean",
+"tol": 1e-06
+},
+{
+"id": "tile_acc_k20",
+"value": 0.9757894736842105,
+"file": "results/05_panels/TRNSCRPT/panel_curve.csv",
+"where": {
+"k": 20
+},
+"column": "balanced_accuracy",
+"agg": "mean",
+"tol": 1e-06,
+"note": "mean over 5 animal-grouped folds; round-robin selector + logreg_l2"
+},
+{
+"id": "tile_acc_k20_sd",
+"value": 0.007981974151633152,
+"file": "results/05_panels/TRNSCRPT/panel_curve.csv",
+"where": {
+"k": 20
+},
+"column": "balanced_accuracy",
+"agg": "std",
+"tol": 1e-06
+},
+{
+"id": "tile_bodymap_k20",
+"value": 1.0,
+"file": "results/12_bodymap/age_shift_accuracy.csv",
+"where": {
+"stage_weeks": 21
+},
+"column": "k20",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "tile_bodymap_cov_k20",
+"value": 0.6176470588235294,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "k20",
+"conformal": "marginal"
+},
+"column": "coverage_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "tile_bodymap_empty_k20",
+"value": 0.3823529411764705,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "k20",
+"conformal": "marginal"
+},
+"column": "frac_empty_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "tile_estimable",
+"value": 1,
+"file": "results/16_identifiability/estimable_pairs.csv",
+"where": {
+"assay": "TRNSCRPT"
+},
+"column": "n_pairs_estimable",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "tile_estimable_total",
+"value": 171,
+"file": "results/16_identifiability/estimable_pairs.csv",
+"where": {
+"assay": "TRNSCRPT"
+},
+"column": "n_pairs_total",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "tile_estimable_pairs",
+"value": "OVARY|TESTES",
+"file": "results/16_identifiability/estimable_pairs.csv",
+"where": {
+"assay": "TRNSCRPT"
+},
+"column": "estimable_pairs",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "acc_k20",
+"value": 0.9757894736842105,
+"file": "results/05_panels/TRNSCRPT/panel_curve.csv",
+"where": {
+"k": 20
+},
+"column": "balanced_accuracy",
+"agg": "mean",
+"tol": 1e-06
+},
+{
+"id": "acc_k20_sd",
+"value": 0.007981974151633152,
+"file": "results/05_panels/TRNSCRPT/panel_curve.csv",
+"where": {
+"k": 20
+},
+"column": "balanced_accuracy",
+"agg": "std",
+"tol": 1e-06
+},
+{
+"id": "acc_k50",
+"value": 0.9926315789473683,
+"file": "results/05_panels/TRNSCRPT/panel_curve.csv",
+"where": {
+"k": 50
+},
+"column": "balanced_accuracy",
+"agg": "mean",
+"tol": 1e-06
+},
+{
+"id": "acc_k50_sd",
+"value": 0.0028827503026586563,
+"file": "results/05_panels/TRNSCRPT/panel_curve.csv",
+"where": {
+"k": 50
+},
+"column": "balanced_accuracy",
+"agg": "std",
+"tol": 1e-06
+},
+{
+"id": "acc_full",
+"value": 0.9947368421052633,
+"file": "results/04_baselines/TRNSCRPT/summary.csv",
+"where": {
+"model": "logreg_l2"
+},
+"column": "balanced_accuracy_mean",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "acc_full_sd",
+"value": 0.0052631578947368,
+"file": "results/04_baselines/TRNSCRPT/summary.csv",
+"where": {
+"model": "logreg_l2"
+},
+"column": "balanced_accuracy_std",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "acc_fclassif_k20",
+"value": 0.3989473684210526,
+"file": "results/05_panels/TRNSCRPT/panel_curve_fclassif.csv",
+"where": {
+"k": 20
+},
+"column": "balanced_accuracy",
+"agg": "mean",
+"tol": 1e-06,
+"note": "F-test selector at the same k"
+},
+{
+"id": "cov_id_k20_marginal_pooled",
+"value": 0.8999006828057109,
+"file": null,
+"files": [
+"results/31_site_regen/06_conformal/TRNSCRPT/scores_calibration.csv",
+"results/31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv"
+],
+"agg": "recomputed",
+"note": "mean over 5 folds of the coverage recomputed from the phase-06 design scores (k20, marginal, pooled)"
+},
+{
+"id": "cov_id_k20_marginal_one_per_animal",
+"value": 0.9242085661080075,
+"file": null,
+"files": [
+"results/31_site_regen/06_conformal/TRNSCRPT/scores_calibration.csv",
+"results/31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv"
+],
+"agg": "recomputed",
+"note": "mean over 5 folds of the coverage recomputed from the phase-06 design scores (k20, marginal, one_per_animal)"
+},
+{
+"id": "cov_id_k20_mondrian_pooled",
+"value": 0.916610800744879,
+"file": null,
+"files": [
+"results/31_site_regen/06_conformal/TRNSCRPT/scores_calibration.csv",
+"results/31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv"
+],
+"agg": "recomputed",
+"note": "mean over 5 folds of the coverage recomputed from the phase-06 design scores (k20, mondrian, pooled)"
+},
+{
+"id": "cov_id_k20_mondrian_one_per_animal",
+"value": 0.9620608317815023,
+"file": null,
+"files": [
+"results/31_site_regen/06_conformal/TRNSCRPT/scores_calibration.csv",
+"results/31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv"
+],
+"agg": "recomputed",
+"note": "mean over 5 folds of the coverage recomputed from the phase-06 design scores (k20, mondrian, one_per_animal)"
+},
+{
+"id": "cov_id_k20_floored_pooled",
+"value": 0.9744320297951583,
+"file": null,
+"files": [
+"results/31_site_regen/06_conformal/TRNSCRPT/scores_calibration.csv",
+"results/31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv"
+],
+"agg": "recomputed",
+"note": "mean over 5 folds of the coverage recomputed from the phase-06 design scores (k20, floored, pooled)"
+},
+{
+"id": "cov_id_k20_floored_one_per_animal",
+"value": 0.9620608317815023,
+"file": null,
+"files": [
+"results/31_site_regen/06_conformal/TRNSCRPT/scores_calibration.csv",
+"results/31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv"
+],
+"agg": "recomputed",
+"note": "mean over 5 folds of the coverage recomputed from the phase-06 design scores (k20, floored, one_per_animal)"
+},
+{
+"id": "cov_id_k50_marginal_pooled",
+"value": 0.9010117939168218,
+"file": null,
+"files": [
+"results/31_site_regen/06_conformal/TRNSCRPT/scores_calibration.csv",
+"results/31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv"
+],
+"agg": "recomputed",
+"note": "mean over 5 folds of the coverage recomputed from the phase-06 design scores (k50, marginal, pooled)"
+},
+{
+"id": "cov_id_k50_marginal_one_per_animal",
+"value": 0.9065301055245187,
+"file": null,
+"files": [
+"results/31_site_regen/06_conformal/TRNSCRPT/scores_calibration.csv",
+"results/31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv"
+],
+"agg": "recomputed",
+"note": "mean over 5 folds of the coverage recomputed from the phase-06 design scores (k50, marginal, one_per_animal)"
+},
+{
+"id": "cov_id_k50_mondrian_pooled",
+"value": 0.916610800744879,
+"file": null,
+"files": [
+"results/31_site_regen/06_conformal/TRNSCRPT/scores_calibration.csv",
+"results/31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv"
+],
+"agg": "recomputed",
+"note": "mean over 5 folds of the coverage recomputed from the phase-06 design scores (k50, mondrian, pooled)"
+},
+{
+"id": "cov_id_k50_mondrian_one_per_animal",
+"value": 0.9565549348230913,
+"file": null,
+"files": [
+"results/31_site_regen/06_conformal/TRNSCRPT/scores_calibration.csv",
+"results/31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv"
+],
+"agg": "recomputed",
+"note": "mean over 5 folds of the coverage recomputed from the phase-06 design scores (k50, mondrian, one_per_animal)"
+},
+{
+"id": "cov_id_k50_floored_pooled",
+"value": 0.9822098075729361,
+"file": null,
+"files": [
+"results/31_site_regen/06_conformal/TRNSCRPT/scores_calibration.csv",
+"results/31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv"
+],
+"agg": "recomputed",
+"note": "mean over 5 folds of the coverage recomputed from the phase-06 design scores (k50, floored, pooled)"
+},
+{
+"id": "cov_id_k50_floored_one_per_animal",
+"value": 0.9565549348230913,
+"file": null,
+"files": [
+"results/31_site_regen/06_conformal/TRNSCRPT/scores_calibration.csv",
+"results/31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv"
+],
+"agg": "recomputed",
+"note": "mean over 5 folds of the coverage recomputed from the phase-06 design scores (k50, floored, one_per_animal)"
+},
+{
+"id": "cov_id_full_marginal_pooled",
+"value": 0.9076846679081317,
+"file": "results/06_conformal/TRNSCRPT/coverage.csv",
+"where": {
+"calibration": "pooled",
+"conformal": "marginal",
+"method": "lac",
+"alpha": 0.1
+},
+"column": "coverage",
+"agg": "mean",
+"tol": 1e-06
+},
+{
+"id": "cov_id_full_marginal_pooled_sd",
+"value": 0.03344165978828118,
+"file": "results/06_conformal/TRNSCRPT/coverage.csv",
+"where": {
+"calibration": "pooled",
+"conformal": "marginal",
+"method": "lac",
+"alpha": 0.1
+},
+"column": "coverage",
+"agg": "std",
+"tol": 1e-06
+},
+{
+"id": "empty_id_full_marginal_pooled",
+"value": 0.09008069522036,
+"file": "results/06_conformal/TRNSCRPT/coverage.csv",
+"where": {
+"calibration": "pooled",
+"conformal": "marginal",
+"method": "lac",
+"alpha": 0.1
+},
+"column": "frac_empty",
+"agg": "mean",
+"tol": 1e-06
+},
+{
+"id": "size_id_full_marginal_pooled",
+"value": 0.9099193047796399,
+"file": "results/06_conformal/TRNSCRPT/coverage.csv",
+"where": {
+"calibration": "pooled",
+"conformal": "marginal",
+"method": "lac",
+"alpha": 0.1
+},
+"column": "avg_set_size",
+"agg": "mean",
+"tol": 1e-06
+},
+{
+"id": "cov_id_full_marginal_one_per_animal",
+"value": 0.9164804469273742,
+"file": "results/06_conformal/TRNSCRPT/coverage.csv",
+"where": {
+"calibration": "one_per_animal",
+"conformal": "marginal",
+"method": "lac",
+"alpha": 0.1
+},
+"column": "coverage",
+"agg": "mean",
+"tol": 1e-06
+},
+{
+"id": "cov_id_full_marginal_one_per_animal_sd",
+"value": 0.06352859787704009,
+"file": "results/06_conformal/TRNSCRPT/coverage.csv",
+"where": {
+"calibration": "one_per_animal",
+"conformal": "marginal",
+"method": "lac",
+"alpha": 0.1
+},
+"column": "coverage",
+"agg": "std",
+"tol": 1e-06
+},
+{
+"id": "empty_id_full_marginal_one_per_animal",
+"value": 0.08018001241464925,
+"file": "results/06_conformal/TRNSCRPT/coverage.csv",
+"where": {
+"calibration": "one_per_animal",
+"conformal": "marginal",
+"method": "lac",
+"alpha": 0.1
+},
+"column": "frac_empty",
+"agg": "mean",
+"tol": 1e-06
+},
+{
+"id": "size_id_full_marginal_one_per_animal",
+"value": 0.9198199875853506,
+"file": "results/06_conformal/TRNSCRPT/coverage.csv",
+"where": {
+"calibration": "one_per_animal",
+"conformal": "marginal",
+"method": "lac",
+"alpha": 0.1
+},
+"column": "avg_set_size",
+"agg": "mean",
+"tol": 1e-06
+},
+{
+"id": "cov_id_full_mondrian_pooled",
+"value": 0.9188268156424583,
+"file": "results/06_conformal/TRNSCRPT/coverage.csv",
+"where": {
+"calibration": "pooled",
+"conformal": "mondrian",
+"method": "lac",
+"alpha": 0.1
+},
+"column": "coverage",
+"agg": "mean",
+"tol": 1e-06
+},
+{
+"id": "cov_id_full_mondrian_pooled_sd",
+"value": 0.024640709929028715,
+"file": "results/06_conformal/TRNSCRPT/coverage.csv",
+"where": {
+"calibration": "pooled",
+"conformal": "mondrian",
+"method": "lac",
+"alpha": 0.1
+},
+"column": "coverage",
+"agg": "std",
+"tol": 1e-06
+},
+{
+"id": "empty_id_full_mondrian_pooled",
+"value": 0.07893854748603349,
+"file": "results/06_conformal/TRNSCRPT/coverage.csv",
+"where": {
+"calibration": "pooled",
+"conformal": "mondrian",
+"method": "lac",
+"alpha": 0.1
+},
+"column": "frac_empty",
+"agg": "mean",
+"tol": 1e-06
+},
+{
+"id": "size_id_full_mondrian_pooled",
+"value": 0.9210614525139666,
+"file": "results/06_conformal/TRNSCRPT/coverage.csv",
+"where": {
+"calibration": "pooled",
+"conformal": "mondrian",
+"method": "lac",
+"alpha": 0.1
+},
+"column": "avg_set_size",
+"agg": "mean",
+"tol": 1e-06
+},
+{
+"id": "cov_id_full_mondrian_one_per_animal",
+"value": 0.9643140906269398,
+"file": null,
+"files": [
+"results/31_site_regen/06_conformal/TRNSCRPT/scores_calibration.csv",
+"results/31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv"
+],
+"agg": "recomputed",
+"note": "mean over 5 folds of the coverage recomputed from the phase-06 design scores (full, mondrian, one_per_animal)"
+},
+{
+"id": "cov_id_full_floored_pooled",
+"value": 0.9699813780260709,
+"file": "results/06_conformal/TRNSCRPT/coverage.csv",
+"where": {
+"calibration": "pooled",
+"conformal": "floored",
+"method": "lac",
+"alpha": 0.1
+},
+"column": "coverage",
+"agg": "mean",
+"tol": 1e-06
+},
+{
+"id": "cov_id_full_floored_pooled_sd",
+"value": 0.015495862098185983,
+"file": "results/06_conformal/TRNSCRPT/coverage.csv",
+"where": {
+"calibration": "pooled",
+"conformal": "floored",
+"method": "lac",
+"alpha": 0.1
+},
+"column": "coverage",
+"agg": "std",
+"tol": 1e-06
+},
+{
+"id": "empty_id_full_floored_pooled",
+"value": 0.027783985102420816,
+"file": "results/06_conformal/TRNSCRPT/coverage.csv",
+"where": {
+"calibration": "pooled",
+"conformal": "floored",
+"method": "lac",
+"alpha": 0.1
+},
+"column": "frac_empty",
+"agg": "mean",
+"tol": 1e-06
+},
+{
+"id": "size_id_full_floored_pooled",
+"value": 0.9722160148975793,
+"file": "results/06_conformal/TRNSCRPT/coverage.csv",
+"where": {
+"calibration": "pooled",
+"conformal": "floored",
+"method": "lac",
+"alpha": 0.1
+},
+"column": "avg_set_size",
+"agg": "mean",
+"tol": 1e-06
+},
+{
+"id": "cov_id_full_floored_one_per_animal",
+"value": 0.9643140906269398,
+"file": null,
+"files": [
+"results/31_site_regen/06_conformal/TRNSCRPT/scores_calibration.csv",
+"results/31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv"
+],
+"agg": "recomputed",
+"note": "mean over 5 folds of the coverage recomputed from the phase-06 design scores (full, floored, one_per_animal)"
+},
+{
+"id": "cov_train_male_test_female_k20_marginal",
+"value": 0.8329411764705882,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_male_test_female",
+"arm": "panel_k20"
+},
+"column": "coverage_target_seen",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "acc_train_male_test_female_k20",
+"value": 0.8930957683741648,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_male_test_female",
+"arm": "panel_k20"
+},
+"column": "accuracy_all",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "empty_train_male_test_female_k20",
+"value": 0.1826280623608017,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_male_test_female",
+"arm": "panel_k20"
+},
+"column": "lac_frac_empty_target",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "size_train_male_test_female_k20_marginal",
+"value": 0.8173719376391982,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_male_test_female",
+"arm": "panel_k20"
+},
+"column": "avg_set_size_target",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "covsrc_train_male_test_female_k20",
+"value": 0.9305555555555556,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_male_test_female",
+"arm": "panel_k20"
+},
+"column": "coverage_source_id",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "recal3_train_male_test_female_k20",
+"value": 0.9144385026737968,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_male_test_female",
+"arm": "panel_k20"
+},
+"column": "cov_target_recal_N3",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "unseen_train_male_test_female_k20",
+"value": "OVARY",
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_male_test_female",
+"arm": "panel_k20"
+},
+"column": "unseen_classes",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_train_male_test_female_k20_mondrian",
+"value": 1.0,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_male_test_female",
+"arm": "panel_k20"
+},
+"column": "coverage_target_seen_mondrian",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "size_train_male_test_female_k20_mondrian",
+"value": 18.0,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_male_test_female",
+"arm": "panel_k20"
+},
+"column": "avg_set_size_target_mondrian",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_train_male_test_female_k20_floored",
+"value": 1.0,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_male_test_female",
+"arm": "panel_k20"
+},
+"column": "coverage_target_seen_floored",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "size_train_male_test_female_k20_floored",
+"value": 18.0,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_male_test_female",
+"arm": "panel_k20"
+},
+"column": "avg_set_size_target_floored",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_train_male_test_female_k50_marginal",
+"value": null,
+"pending": true,
+"reason": "phase 08 ran the k = 20 panel and the full model only"
+},
+{
+"id": "cov_train_male_test_female_k50_mondrian",
+"value": null,
+"pending": true,
+"reason": "phase 08 ran the k = 20 panel and the full model only"
+},
+{
+"id": "cov_train_male_test_female_k50_floored",
+"value": null,
+"pending": true,
+"reason": "phase 08 ran the k = 20 panel and the full model only"
+},
+{
+"id": "cov_train_male_test_female_full_marginal",
+"value": 0.8070588235294117,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_male_test_female",
+"arm": "full"
+},
+"column": "coverage_target_seen",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "acc_train_male_test_female_full",
+"value": 0.9131403118040088,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_male_test_female",
+"arm": "full"
+},
+"column": "accuracy_all",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "empty_train_male_test_female_full",
+"value": 0.220489977728285,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_male_test_female",
+"arm": "full"
+},
+"column": "lac_frac_empty_target",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "size_train_male_test_female_full_marginal",
+"value": 0.779510022271715,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_male_test_female",
+"arm": "full"
+},
+"column": "avg_set_size_target",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "covsrc_train_male_test_female_full",
+"value": 0.9305555555555556,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_male_test_female",
+"arm": "full"
+},
+"column": "coverage_source_id",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "recal3_train_male_test_female_full",
+"value": 0.9034759358288772,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_male_test_female",
+"arm": "full"
+},
+"column": "cov_target_recal_N3",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "unseen_train_male_test_female_full",
+"value": "OVARY",
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_male_test_female",
+"arm": "full"
+},
+"column": "unseen_classes",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_train_male_test_female_full_mondrian",
+"value": 1.0,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_male_test_female",
+"arm": "full"
+},
+"column": "coverage_target_seen_mondrian",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "size_train_male_test_female_full_mondrian",
+"value": 18.0,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_male_test_female",
+"arm": "full"
+},
+"column": "avg_set_size_target_mondrian",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_train_male_test_female_full_floored",
+"value": 1.0,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_male_test_female",
+"arm": "full"
+},
+"column": "coverage_target_seen_floored",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "size_train_male_test_female_full_floored",
+"value": 18.0,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_male_test_female",
+"arm": "full"
+},
+"column": "avg_set_size_target_floored",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_train_female_test_male_k20_marginal",
+"value": 0.8823529411764706,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_female_test_male",
+"arm": "panel_k20"
+},
+"column": "coverage_target_seen",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "acc_train_female_test_male_k20",
+"value": 0.9,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_female_test_male",
+"arm": "panel_k20"
+},
+"column": "accuracy_all",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "empty_train_female_test_male_k20",
+"value": 0.1666666666666666,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_female_test_male",
+"arm": "panel_k20"
+},
+"column": "lac_frac_empty_target",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "size_train_female_test_male_k20_marginal",
+"value": 0.8333333333333334,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_female_test_male",
+"arm": "panel_k20"
+},
+"column": "avg_set_size_target",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "covsrc_train_female_test_male_k20",
+"value": 0.9305555555555556,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_female_test_male",
+"arm": "panel_k20"
+},
+"column": "coverage_source_id",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "recal3_train_female_test_male_k20",
+"value": 0.9213903743315508,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_female_test_male",
+"arm": "panel_k20"
+},
+"column": "cov_target_recal_N3",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "unseen_train_female_test_male_k20",
+"value": "TESTES",
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_female_test_male",
+"arm": "panel_k20"
+},
+"column": "unseen_classes",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_train_female_test_male_k20_mondrian",
+"value": 1.0,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_female_test_male",
+"arm": "panel_k20"
+},
+"column": "coverage_target_seen_mondrian",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "size_train_female_test_male_k20_mondrian",
+"value": 18.0,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_female_test_male",
+"arm": "panel_k20"
+},
+"column": "avg_set_size_target_mondrian",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_train_female_test_male_k20_floored",
+"value": 1.0,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_female_test_male",
+"arm": "panel_k20"
+},
+"column": "coverage_target_seen_floored",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "size_train_female_test_male_k20_floored",
+"value": 18.0,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_female_test_male",
+"arm": "panel_k20"
+},
+"column": "avg_set_size_target_floored",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_train_female_test_male_k50_marginal",
+"value": null,
+"pending": true,
+"reason": "phase 08 ran the k = 20 panel and the full model only"
+},
+{
+"id": "cov_train_female_test_male_k50_mondrian",
+"value": null,
+"pending": true,
+"reason": "phase 08 ran the k = 20 panel and the full model only"
+},
+{
+"id": "cov_train_female_test_male_k50_floored",
+"value": null,
+"pending": true,
+"reason": "phase 08 ran the k = 20 panel and the full model only"
+},
+{
+"id": "cov_train_female_test_male_full_marginal",
+"value": 0.8729411764705882,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_female_test_male",
+"arm": "full"
+},
+"column": "coverage_target_seen",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "acc_train_female_test_male_full",
+"value": 0.9422222222222222,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_female_test_male",
+"arm": "full"
+},
+"column": "accuracy_all",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "empty_train_female_test_male_full",
+"value": 0.1755555555555555,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_female_test_male",
+"arm": "full"
+},
+"column": "lac_frac_empty_target",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "size_train_female_test_male_full_marginal",
+"value": 0.8244444444444444,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_female_test_male",
+"arm": "full"
+},
+"column": "avg_set_size_target",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "covsrc_train_female_test_male_full",
+"value": 0.9305555555555556,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_female_test_male",
+"arm": "full"
+},
+"column": "coverage_source_id",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "recal3_train_female_test_male_full",
+"value": 0.9139037433155082,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_female_test_male",
+"arm": "full"
+},
+"column": "cov_target_recal_N3",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "unseen_train_female_test_male_full",
+"value": "TESTES",
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_female_test_male",
+"arm": "full"
+},
+"column": "unseen_classes",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_train_female_test_male_full_mondrian",
+"value": 1.0,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_female_test_male",
+"arm": "full"
+},
+"column": "coverage_target_seen_mondrian",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "size_train_female_test_male_full_mondrian",
+"value": 18.0,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_female_test_male",
+"arm": "full"
+},
+"column": "avg_set_size_target_mondrian",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_train_female_test_male_full_floored",
+"value": 1.0,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_female_test_male",
+"arm": "full"
+},
+"column": "coverage_target_seen_floored",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "size_train_female_test_male_full_floored",
+"value": 18.0,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_female_test_male",
+"arm": "full"
+},
+"column": "avg_set_size_target_floored",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "acc_bodymap_k20",
+"value": 1.0,
+"file": "results/12_bodymap/age_shift_accuracy.csv",
+"where": {
+"stage_weeks": 21
+},
+"column": "k20",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_bodymap_k20_marginal",
+"value": 0.6176470588235294,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "k20",
+"conformal": "marginal"
+},
+"column": "coverage_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "empty_bodymap_k20_marginal",
+"value": 0.3823529411764705,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "k20",
+"conformal": "marginal"
+},
+"column": "frac_empty_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "size_bodymap_k20_marginal",
+"value": 0.6176470588235294,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "k20",
+"conformal": "marginal"
+},
+"column": "avg_set_size_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "recal3_bodymap_k20",
+"value": 0.9426243330313098,
+"file": "results/12_bodymap/recalibration.csv",
+"where": {
+"model": "k20",
+"n_recal": 3
+},
+"column": "coverage_recalibrated",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "recal3size_bodymap_k20",
+"value": 0.997912262156448,
+"file": "results/12_bodymap/recalibration.csv",
+"where": {
+"model": "k20",
+"n_recal": 3
+},
+"column": "set_size_recalibrated",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "n_bodymap_k20_marginal",
+"value": 68,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "k20",
+"conformal": "marginal"
+},
+"column": "n_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_bodymap_k20_mondrian",
+"value": 0.3382352941176471,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "k20",
+"conformal": "mondrian"
+},
+"column": "coverage_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "empty_bodymap_k20_mondrian",
+"value": 0.0,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "k20",
+"conformal": "mondrian"
+},
+"column": "frac_empty_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "size_bodymap_k20_mondrian",
+"value": 2.367647058823529,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "k20",
+"conformal": "mondrian"
+},
+"column": "avg_set_size_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "n_bodymap_k20_mondrian",
+"value": 68,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "k20",
+"conformal": "mondrian"
+},
+"column": "n_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_bodymap_k20_floored",
+"value": 0.6911764705882353,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "k20",
+"conformal": "floored"
+},
+"column": "coverage_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "empty_bodymap_k20_floored",
+"value": 0.0,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "k20",
+"conformal": "floored"
+},
+"column": "frac_empty_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "size_bodymap_k20_floored",
+"value": 2.7205882352941178,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "k20",
+"conformal": "floored"
+},
+"column": "avg_set_size_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "n_bodymap_k20_floored",
+"value": 68,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "k20",
+"conformal": "floored"
+},
+"column": "n_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "acc_bodymap_k50",
+"value": 0.9852941176470588,
+"file": "results/12_bodymap/age_shift_accuracy.csv",
+"where": {
+"stage_weeks": 21
+},
+"column": "k50",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_bodymap_k50_marginal",
+"value": 0.6617647058823529,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "k50",
+"conformal": "marginal"
+},
+"column": "coverage_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "empty_bodymap_k50_marginal",
+"value": 0.3235294117647059,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "k50",
+"conformal": "marginal"
+},
+"column": "frac_empty_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "size_bodymap_k50_marginal",
+"value": 0.6764705882352942,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "k50",
+"conformal": "marginal"
+},
+"column": "avg_set_size_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "recal3_bodymap_k50",
+"value": 0.9365171650055372,
+"file": "results/12_bodymap/recalibration.csv",
+"where": {
+"model": "k50",
+"n_recal": 3
+},
+"column": "coverage_recalibrated",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "recal3size_bodymap_k50",
+"value": 0.9530177187153932,
+"file": "results/12_bodymap/recalibration.csv",
+"where": {
+"model": "k50",
+"n_recal": 3
+},
+"column": "set_size_recalibrated",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "n_bodymap_k50_marginal",
+"value": 68,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "k50",
+"conformal": "marginal"
+},
+"column": "n_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_bodymap_k50_mondrian",
+"value": 0.2352941176470588,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "k50",
+"conformal": "mondrian"
+},
+"column": "coverage_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "empty_bodymap_k50_mondrian",
+"value": 0.0,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "k50",
+"conformal": "mondrian"
+},
+"column": "frac_empty_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "size_bodymap_k50_mondrian",
+"value": 2.264705882352941,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "k50",
+"conformal": "mondrian"
+},
+"column": "avg_set_size_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "n_bodymap_k50_mondrian",
+"value": 68,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "k50",
+"conformal": "mondrian"
+},
+"column": "n_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_bodymap_k50_floored",
+"value": 0.6911764705882353,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "k50",
+"conformal": "floored"
+},
+"column": "coverage_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "empty_bodymap_k50_floored",
+"value": 0.0,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "k50",
+"conformal": "floored"
+},
+"column": "frac_empty_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "size_bodymap_k50_floored",
+"value": 2.735294117647059,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "k50",
+"conformal": "floored"
+},
+"column": "avg_set_size_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "n_bodymap_k50_floored",
+"value": 68,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "k50",
+"conformal": "floored"
+},
+"column": "n_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "acc_bodymap_full",
+"value": 1.0,
+"file": "results/12_bodymap/age_shift_accuracy.csv",
+"where": {
+"stage_weeks": 21
+},
+"column": "full",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_bodymap_full_marginal",
+"value": 0.7058823529411765,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "full",
+"conformal": "marginal"
+},
+"column": "coverage_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "empty_bodymap_full_marginal",
+"value": 0.2941176470588235,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "full",
+"conformal": "marginal"
+},
+"column": "frac_empty_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "size_bodymap_full_marginal",
+"value": 0.7058823529411765,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "full",
+"conformal": "marginal"
+},
+"column": "avg_set_size_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "recal3_bodymap_full",
+"value": 0.9460674015906576,
+"file": "results/12_bodymap/recalibration.csv",
+"where": {
+"model": "full",
+"n_recal": 3
+},
+"column": "coverage_recalibrated",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "recal3size_bodymap_full",
+"value": 0.9460674015906576,
+"file": "results/12_bodymap/recalibration.csv",
+"where": {
+"model": "full",
+"n_recal": 3
+},
+"column": "set_size_recalibrated",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "n_bodymap_full_marginal",
+"value": 68,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "full",
+"conformal": "marginal"
+},
+"column": "n_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_bodymap_full_mondrian",
+"value": 0.2794117647058823,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "full",
+"conformal": "mondrian"
+},
+"column": "coverage_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "empty_bodymap_full_mondrian",
+"value": 0.0,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "full",
+"conformal": "mondrian"
+},
+"column": "frac_empty_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "size_bodymap_full_mondrian",
+"value": 2.2205882352941178,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "full",
+"conformal": "mondrian"
+},
+"column": "avg_set_size_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "n_bodymap_full_mondrian",
+"value": 68,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "full",
+"conformal": "mondrian"
+},
+"column": "n_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_bodymap_full_floored",
+"value": 0.75,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "full",
+"conformal": "floored"
+},
+"column": "coverage_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "empty_bodymap_full_floored",
+"value": 0.0,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "full",
+"conformal": "floored"
+},
+"column": "frac_empty_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "size_bodymap_full_floored",
+"value": 2.6911764705882355,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "full",
+"conformal": "floored"
+},
+"column": "avg_set_size_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "n_bodymap_full_floored",
+"value": 68,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "full",
+"conformal": "floored"
+},
+"column": "n_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "acc_gtex_k20",
+"value": 0.6539235412474849,
+"file": "results/13_gtex/accuracy_overall.csv",
+"where": {
+"model": "k20"
+},
+"column": "accuracy_sample_weighted",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_gtex_k20_marginal",
+"value": 0.3637826961770624,
+"file": "results/13_gtex/conformal_transfer.csv",
+"where": {
+"stage": "adult",
+"model": "k20",
+"conformal": "marginal"
+},
+"column": "coverage_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "empty_gtex_k20_marginal",
+"value": 0.6164989939637827,
+"file": "results/13_gtex/conformal_transfer.csv",
+"where": {
+"stage": "adult",
+"model": "k20",
+"conformal": "marginal"
+},
+"column": "frac_empty_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "size_gtex_k20_marginal",
+"value": 0.3835010060362173,
+"file": "results/13_gtex/conformal_transfer.csv",
+"where": {
+"stage": "adult",
+"model": "k20",
+"conformal": "marginal"
+},
+"column": "avg_set_size_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "recal3_gtex_k20",
+"value": 0.9544042733273792,
+"file": "results/13_gtex/recalibration.csv",
+"where": {
+"model": "k20",
+"n_recal": 3
+},
+"column": "coverage_recalibrated",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "recal3size_gtex_k20",
+"value": 11.69662694772028,
+"file": "results/13_gtex/recalibration.csv",
+"where": {
+"model": "k20",
+"n_recal": 3
+},
+"column": "set_size_recalibrated",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "n_gtex_k20_marginal",
+"value": 2485,
+"file": "results/13_gtex/conformal_transfer.csv",
+"where": {
+"stage": "adult",
+"model": "k20",
+"conformal": "marginal"
+},
+"column": "n_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_gtex_k20_mondrian",
+"value": 0.3291750503018109,
+"file": "results/13_gtex/conformal_transfer.csv",
+"where": {
+"stage": "adult",
+"model": "k20",
+"conformal": "mondrian"
+},
+"column": "coverage_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "empty_gtex_k20_mondrian",
+"value": 0.0,
+"file": "results/13_gtex/conformal_transfer.csv",
+"where": {
+"stage": "adult",
+"model": "k20",
+"conformal": "mondrian"
+},
+"column": "frac_empty_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "size_gtex_k20_mondrian",
+"value": 2.352917505030181,
+"file": "results/13_gtex/conformal_transfer.csv",
+"where": {
+"stage": "adult",
+"model": "k20",
+"conformal": "mondrian"
+},
+"column": "avg_set_size_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "n_gtex_k20_mondrian",
+"value": 2485,
+"file": "results/13_gtex/conformal_transfer.csv",
+"where": {
+"stage": "adult",
+"model": "k20",
+"conformal": "mondrian"
+},
+"column": "n_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_gtex_k20_floored",
+"value": 0.5215291750503018,
+"file": "results/13_gtex/conformal_transfer.csv",
+"where": {
+"stage": "adult",
+"model": "k20",
+"conformal": "floored"
+},
+"column": "coverage_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "empty_gtex_k20_floored",
+"value": 0.0,
+"file": "results/13_gtex/conformal_transfer.csv",
+"where": {
+"stage": "adult",
+"model": "k20",
+"conformal": "floored"
+},
+"column": "frac_empty_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "size_gtex_k20_floored",
+"value": 2.548088531187122,
+"file": "results/13_gtex/conformal_transfer.csv",
+"where": {
+"stage": "adult",
+"model": "k20",
+"conformal": "floored"
+},
+"column": "avg_set_size_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "n_gtex_k20_floored",
+"value": 2485,
+"file": "results/13_gtex/conformal_transfer.csv",
+"where": {
+"stage": "adult",
+"model": "k20",
+"conformal": "floored"
+},
+"column": "n_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "acc_gtex_k50",
+"value": 0.7814889336016096,
+"file": "results/13_gtex/accuracy_overall.csv",
+"where": {
+"model": "k50"
+},
+"column": "accuracy_sample_weighted",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_gtex_k50_marginal",
+"value": 0.3629778672032193,
+"file": "results/13_gtex/conformal_transfer.csv",
+"where": {
+"stage": "adult",
+"model": "k50",
+"conformal": "marginal"
+},
+"column": "coverage_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "empty_gtex_k50_marginal",
+"value": 0.6313883299798793,
+"file": "results/13_gtex/conformal_transfer.csv",
+"where": {
+"stage": "adult",
+"model": "k50",
+"conformal": "marginal"
+},
+"column": "frac_empty_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "size_gtex_k50_marginal",
+"value": 0.3686116700201207,
+"file": "results/13_gtex/conformal_transfer.csv",
+"where": {
+"stage": "adult",
+"model": "k50",
+"conformal": "marginal"
+},
+"column": "avg_set_size_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "recal3_gtex_k50",
+"value": 0.9592233996675894,
+"file": "results/13_gtex/recalibration.csv",
+"where": {
+"model": "k50",
+"n_recal": 3
+},
+"column": "coverage_recalibrated",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "recal3size_gtex_k50",
+"value": 11.624427101911984,
+"file": "results/13_gtex/recalibration.csv",
+"where": {
+"model": "k50",
+"n_recal": 3
+},
+"column": "set_size_recalibrated",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "n_gtex_k50_marginal",
+"value": 2485,
+"file": "results/13_gtex/conformal_transfer.csv",
+"where": {
+"stage": "adult",
+"model": "k50",
+"conformal": "marginal"
+},
+"column": "n_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_gtex_k50_mondrian",
+"value": 0.3018108651911468,
+"file": "results/13_gtex/conformal_transfer.csv",
+"where": {
+"stage": "adult",
+"model": "k50",
+"conformal": "mondrian"
+},
+"column": "coverage_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "empty_gtex_k50_mondrian",
+"value": 0.0,
+"file": "results/13_gtex/conformal_transfer.csv",
+"where": {
+"stage": "adult",
+"model": "k50",
+"conformal": "mondrian"
+},
+"column": "frac_empty_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "size_gtex_k50_mondrian",
+"value": 2.216498993963783,
+"file": "results/13_gtex/conformal_transfer.csv",
+"where": {
+"stage": "adult",
+"model": "k50",
+"conformal": "mondrian"
+},
+"column": "avg_set_size_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "n_gtex_k50_mondrian",
+"value": 2485,
+"file": "results/13_gtex/conformal_transfer.csv",
+"where": {
+"stage": "adult",
+"model": "k50",
+"conformal": "mondrian"
+},
+"column": "n_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_gtex_k50_floored",
+"value": 0.510261569416499,
+"file": "results/13_gtex/conformal_transfer.csv",
+"where": {
+"stage": "adult",
+"model": "k50",
+"conformal": "floored"
+},
+"column": "coverage_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "empty_gtex_k50_floored",
+"value": 0.0,
+"file": "results/13_gtex/conformal_transfer.csv",
+"where": {
+"stage": "adult",
+"model": "k50",
+"conformal": "floored"
+},
+"column": "frac_empty_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "size_gtex_k50_floored",
+"value": 2.428169014084507,
+"file": "results/13_gtex/conformal_transfer.csv",
+"where": {
+"stage": "adult",
+"model": "k50",
+"conformal": "floored"
+},
+"column": "avg_set_size_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "n_gtex_k50_floored",
+"value": 2485,
+"file": "results/13_gtex/conformal_transfer.csv",
+"where": {
+"stage": "adult",
+"model": "k50",
+"conformal": "floored"
+},
+"column": "n_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "acc_gtex_full",
+"value": 0.854728370221328,
+"file": "results/13_gtex/accuracy_overall.csv",
+"where": {
+"model": "full"
+},
+"column": "accuracy_sample_weighted",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_gtex_full_marginal",
+"value": 0.0619718309859154,
+"file": "results/13_gtex/conformal_transfer.csv",
+"where": {
+"stage": "adult",
+"model": "full",
+"conformal": "marginal"
+},
+"column": "coverage_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "empty_gtex_full_marginal",
+"value": 0.9380281690140844,
+"file": "results/13_gtex/conformal_transfer.csv",
+"where": {
+"stage": "adult",
+"model": "full",
+"conformal": "marginal"
+},
+"column": "frac_empty_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "size_gtex_full_marginal",
+"value": 0.0619718309859154,
+"file": "results/13_gtex/conformal_transfer.csv",
+"where": {
+"stage": "adult",
+"model": "full",
+"conformal": "marginal"
+},
+"column": "avg_set_size_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "recal3_gtex_full",
+"value": 0.9506761028326765,
+"file": "results/13_gtex/recalibration.csv",
+"where": {
+"model": "full",
+"n_recal": 3
+},
+"column": "coverage_recalibrated",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "recal3size_gtex_full",
+"value": 11.177532052752412,
+"file": "results/13_gtex/recalibration.csv",
+"where": {
+"model": "full",
+"n_recal": 3
+},
+"column": "set_size_recalibrated",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "n_gtex_full_marginal",
+"value": 2485,
+"file": "results/13_gtex/conformal_transfer.csv",
+"where": {
+"stage": "adult",
+"model": "full",
+"conformal": "marginal"
+},
+"column": "n_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_gtex_full_mondrian",
+"value": 0.1983903420523138,
+"file": "results/13_gtex/conformal_transfer.csv",
+"where": {
+"stage": "adult",
+"model": "full",
+"conformal": "mondrian"
+},
+"column": "coverage_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "empty_gtex_full_mondrian",
+"value": 0.0,
+"file": "results/13_gtex/conformal_transfer.csv",
+"where": {
+"stage": "adult",
+"model": "full",
+"conformal": "mondrian"
+},
+"column": "frac_empty_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "size_gtex_full_mondrian",
+"value": 2.079678068410463,
+"file": "results/13_gtex/conformal_transfer.csv",
+"where": {
+"stage": "adult",
+"model": "full",
+"conformal": "mondrian"
+},
+"column": "avg_set_size_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "n_gtex_full_mondrian",
+"value": 2485,
+"file": "results/13_gtex/conformal_transfer.csv",
+"where": {
+"stage": "adult",
+"model": "full",
+"conformal": "mondrian"
+},
+"column": "n_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_gtex_full_floored",
+"value": 0.2519114688128772,
+"file": "results/13_gtex/conformal_transfer.csv",
+"where": {
+"stage": "adult",
+"model": "full",
+"conformal": "floored"
+},
+"column": "coverage_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "empty_gtex_full_floored",
+"value": 0.0,
+"file": "results/13_gtex/conformal_transfer.csv",
+"where": {
+"stage": "adult",
+"model": "full",
+"conformal": "floored"
+},
+"column": "frac_empty_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "size_gtex_full_floored",
+"value": 2.1331991951710263,
+"file": "results/13_gtex/conformal_transfer.csv",
+"where": {
+"stage": "adult",
+"model": "full",
+"conformal": "floored"
+},
+"column": "avg_set_size_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "n_gtex_full_floored",
+"value": 2485,
+"file": "results/13_gtex/conformal_transfer.csv",
+"where": {
+"stage": "adult",
+"model": "full",
+"conformal": "floored"
+},
+"column": "n_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "gtex_heart_k20",
+"value": 0.0333333333333333,
+"file": "results/13_gtex/accuracy_by_tissue.csv",
+"where": {
+"model": "k20",
+"gtex_tissue": "Heart - Left Ventricle"
+},
+"column": "accuracy",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "gtex_heart_k20_top",
+"value": "SKM-GN",
+"file": "results/13_gtex/accuracy_by_tissue.csv",
+"where": {
+"model": "k20",
+"gtex_tissue": "Heart - Left Ventricle"
+},
+"column": "top_prediction",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "gtex_heart_k20_top_frac",
+"value": 0.88,
+"file": "results/13_gtex/accuracy_by_tissue.csv",
+"where": {
+"model": "k20",
+"gtex_tissue": "Heart - Left Ventricle"
+},
+"column": "top_prediction_frac",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "gtex_ovary_k20",
+"value": 0.0,
+"file": "results/13_gtex/accuracy_by_tissue.csv",
+"where": {
+"model": "k20",
+"gtex_tissue": "Ovary"
+},
+"column": "accuracy",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "gtex_ovary_k20_top",
+"value": "HEART",
+"file": "results/13_gtex/accuracy_by_tissue.csv",
+"where": {
+"model": "k20",
+"gtex_tissue": "Ovary"
+},
+"column": "top_prediction",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "gtex_ovary_k20_top_frac",
+"value": 0.9533333333333334,
+"file": "results/13_gtex/accuracy_by_tissue.csv",
+"where": {
+"model": "k20",
+"gtex_tissue": "Ovary"
+},
+"column": "top_prediction_frac",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "gtex_native_k20",
+"value": 0.9790744466800804,
+"file": "results/13_gtex/native_panel.csv",
+"where": {},
+"column": "native_gtex_panel_k20_accuracy",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "bodymap_native_k20",
+"value": 0.9925373134328358,
+"file": "results/12_bodymap/native_panel.csv",
+"where": {},
+"column": "native_panel_k20_accuracy_9_mapped_organs",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "bodymap_imported_k20_all_ages",
+"value": 0.9104477611940298,
+"file": "results/12_bodymap/native_panel.csv",
+"where": {},
+"column": "imported_k20_accuracy_9_mapped_organs_all_ages",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "bodymap_acc_2wk_k20",
+"value": 0.7647058823529411,
+"file": "results/12_bodymap/age_shift_accuracy.csv",
+"where": {
+"stage_weeks": 2
+},
+"column": "k20",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "bodymap_acc_6wk_k20",
+"value": 0.9701492537313432,
+"file": "results/12_bodymap/age_shift_accuracy.csv",
+"where": {
+"stage_weeks": 6
+},
+"column": "k20",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "bodymap_acc_104wk_k20",
+"value": 0.9076923076923076,
+"file": "results/12_bodymap/age_shift_accuracy.csv",
+"where": {
+"stage_weeks": 104
+},
+"column": "k20",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "bodymap_floored_k20",
+"value": 0.6911764705882353,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "k20",
+"conformal": "floored"
+},
+"column": "coverage_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "shared_genes_bodymap",
+"value": 21040,
+"file": "results/12_bodymap/gene_overlap.csv",
+"where": {},
+"column": "shared_ensembl",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "motrpac_genes",
+"value": 21193,
+"file": "results/12_bodymap/gene_overlap.csv",
+"where": {},
+"column": "motrpac_genes",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "orthologs_1to1",
+"value": 14609,
+"file": "results/13_gtex/gene_overlap.csv",
+"where": {},
+"column": "rat_genes_with_1to1_human_ortholog",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "orthologs_in_gtex",
+"value": 14569,
+"file": "results/13_gtex/gene_overlap.csv",
+"where": {},
+"column": "orthologs_present_in_gtex",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "gtex_samples",
+"value": 2485,
+"file": "results/13_gtex/gene_overlap.csv",
+"where": {},
+"column": "gtex_samples",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "gtex_donors",
+"value": 862,
+"file": "results/13_gtex/gene_overlap.csv",
+"where": {},
+"column": "gtex_donors",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "qc_technical",
+"value": 0.8731533209186841,
+"file": "results/16_identifiability/qc_only_summary.csv",
+"where": {
+"features": "technical"
+},
+"column": "acc_mean",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "qc_technical_sd",
+"value": 0.026763414866885,
+"file": "results/16_identifiability/qc_only_summary.csv",
+"where": {
+"features": "technical"
+},
+"column": "acc_sd",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "qc_composition",
+"value": 0.9488268156424582,
+"file": "results/16_identifiability/qc_only_summary.csv",
+"where": {
+"features": "composition"
+},
+"column": "acc_mean",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "qc_composition_sd",
+"value": 0.0107194449036286,
+"file": "results/16_identifiability/qc_only_summary.csv",
+"where": {
+"features": "composition"
+},
+"column": "acc_sd",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "qc_all",
+"value": 0.9754934823091248,
+"file": "results/16_identifiability/qc_only_summary.csv",
+"where": {
+"features": "all"
+},
+"column": "acc_mean",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "qc_all_sd",
+"value": 0.0203799168734061,
+"file": "results/16_identifiability/qc_only_summary.csv",
+"where": {
+"features": "all"
+},
+"column": "acc_sd",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "n_plates",
+"value": 17,
+"file": "results/16_identifiability/batch_counts.csv",
+"where": {
+"assay": "TRNSCRPT",
+"variable": "RNA_extr_plate_ID"
+},
+"column": "n_levels",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "n_lib_batches",
+"value": 17,
+"file": "results/16_identifiability/batch_counts.csv",
+"where": {
+"assay": "TRNSCRPT",
+"variable": "Lib_batch_ID"
+},
+"column": "n_levels",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "n_flowcells",
+"value": 4,
+"file": "results/16_identifiability/batch_counts.csv",
+"where": {
+"assay": "TRNSCRPT",
+"variable": "Seq_flowcell_ID"
+},
+"column": "n_levels",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cert_k20_frac",
+"value": 0.52,
+"file": "results/06_conformal/TRNSCRPT/certificate_distribution.csv",
+"where": {
+"k": 20
+},
+"column": "frac_certified",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cert_any_frac",
+"value": 0.7,
+"file": "results/06_conformal/TRNSCRPT/certificate_alpha_delta_grid.csv",
+"where": {
+"alpha": 0.1,
+"delta": 0.1
+},
+"column": "frac_any_certified",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "n_zero_error_0505",
+"value": 59,
+"file": "results/06_conformal/TRNSCRPT/sizing_table.csv",
+"where": {
+"alpha": 0.05,
+"delta": 0.05
+},
+"column": "n_zero_error_needed",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "n_zero_error_1005",
+"value": 29,
+"file": "results/06_conformal/TRNSCRPT/sizing_table.csv",
+"where": {
+"alpha": 0.1,
+"delta": 0.05
+},
+"column": "n_zero_error_needed",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "n_zero_error_1010",
+"value": 22,
+"file": "results/06_conformal/TRNSCRPT/sizing_table.csv",
+"where": {
+"alpha": 0.1,
+"delta": 0.1
+},
+"column": "n_zero_error_needed",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "n_zero_error_2010",
+"value": 11,
+"file": "results/06_conformal/TRNSCRPT/sizing_table.csv",
+"where": {
+"alpha": 0.2,
+"delta": 0.1
+},
+"column": "n_zero_error_needed",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "skmgn_cov_marginal",
+"value": 0.42,
+"file": "results/06_conformal/TRNSCRPT/per_tissue_marginal_vs_mondrian_alpha0.1.csv",
+"where": {
+"y_true": "SKM-GN"
+},
+"column": "coverage_marginal",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "skmgn_cov_mondrian",
+"value": 0.8800000000000001,
+"file": "results/06_conformal/TRNSCRPT/per_tissue_marginal_vs_mondrian_alpha0.1.csv",
+"where": {
+"y_true": "SKM-GN"
+},
+"column": "coverage_mondrian",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "pgk2_testes_2wk",
+"value": 0.226569076381019,
+"file": "results/12_bodymap/juvenile_marker_check.csv",
+"where": {
+"gene_symbol": "Pgk2",
+"organ": "Testes",
+"stage_weeks": 2
+},
+"column": "mean_log2_cpm",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "pgk2_testes_21wk",
+"value": 9.681903699899747,
+"file": "results/12_bodymap/juvenile_marker_check.csv",
+"where": {
+"gene_symbol": "Pgk2",
+"organ": "Testes",
+"stage_weeks": 21
+},
+"column": "mean_log2_cpm",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "gtex_heart_k20_to_skm_frac",
+"value": 0.9066666666666666,
+"file": null,
+"files": [
+"results/13_gtex/confusion_k20.csv"
+],
+"agg": "recomputed",
+"note": "fraction of GTEx heart samples called either skeletal muscle class (SKM-GN + SKM-VL) by the k20 panel"
+},
+{
+"id": "gtex_recal_k20_n3_frac_inf",
+"value": 0.45,
+"file": null,
+"files": [
+"results/31_site_regen/13_gtex/recal_thresholds.csv"
+],
+"agg": "recomputed",
+"note": "fraction of the 20 three-donor recalibration draws (k20) whose threshold is +\u221e"
+}
+],
+"tables": [
+{
+"id": "selection_consistency",
+"file": "results/05_panels/TRNSCRPT/selection_consistency.csv",
+"json_file": "panel_curve.json",
+"json_path": "consistency",
+"n_rows": 11
+},
+{
+"id": "baselines_summary",
+"file": "results/04_baselines/TRNSCRPT/summary.csv",
+"json_file": "panel_curve.json",
+"json_path": "baselines",
+"n_rows": 3
+},
+{
+"id": "baselines_per_fold",
+"file": "results/04_baselines/TRNSCRPT/per_fold.csv",
+"json_file": "panel_curve.json",
+"json_path": "baselines_per_fold",
+"n_rows": 15
+},
+{
+"id": "confusion_k20",
+"file": "results/05_panels/TRNSCRPT/confusion_k20.csv",
+"json_file": "confusion_motrpac.json",
+"json_path": "confusion.k20.counts",
+"n_rows": 19,
+"matrix": true
+},
+{
+"id": "confusion_k30",
+"file": "results/05_panels/TRNSCRPT/confusion_k30.csv",
+"json_file": "confusion_motrpac.json",
+"json_path": "confusion.k30.counts",
+"n_rows": 19,
+"matrix": true
+},
+{
+"id": "confusion_full",
+"file": "results/04_baselines/TRNSCRPT/confusion_logreg_l2.csv",
+"json_file": "confusion_motrpac.json",
+"json_path": "confusion.full.counts",
+"n_rows": 19,
+"matrix": true
+},
+{
+"id": "confusable_k20",
+"file": "results/05_panels/TRNSCRPT/confusable_pairs_k20.csv",
+"json_file": "confusion_motrpac.json",
+"json_path": "confusable_k20",
+"n_rows": 7
+},
+{
+"id": "confusable_full",
+"file": "results/04_baselines/TRNSCRPT/confusable_pairs_logreg_l2.csv",
+"json_file": "confusion_motrpac.json",
+"json_path": "confusable_full",
+"n_rows": 4
+},
+{
+"id": "stable_core",
+"file": "results/05_panels/TRNSCRPT/candidate_panel_annotated.csv",
+"json_file": "stable_core.json",
+"json_path": "core",
+"n_rows": 10
+},
+{
+"id": "stability_k20_annotated",
+"file": "results/05_panels/TRNSCRPT/stability_k20_annotated.csv",
+"json_file": "stable_core.json",
+"json_path": "stability_k20",
+"n_rows": 51
+},
+{
+"id": "certificate_distribution",
+"file": "results/06_conformal/TRNSCRPT/certificate_distribution.csv",
+"json_file": "certificate.json",
+"json_path": "distribution",
+"n_rows": 6
+},
+{
+"id": "certificate_alpha_delta_grid",
+"file": "results/06_conformal/TRNSCRPT/certificate_alpha_delta_grid.csv",
+"json_file": "certificate.json",
+"json_path": "alpha_delta_grid",
+"n_rows": 6
+},
+{
+"id": "sizing_table",
+"file": "results/06_conformal/TRNSCRPT/sizing_table.csv",
+"json_file": "certificate.json",
+"json_path": "sizing",
+"n_rows": 4
+},
+{
+"id": "certificate_validity",
+"file": "results/06_conformal/TRNSCRPT/certificate_validity.csv",
+"json_file": "certificate.json",
+"json_path": "validity",
+"n_rows": 100
+},
+{
+"id": "certificate_final",
+"file": "results/06_conformal/TRNSCRPT/certificate_final.csv",
+"json_file": "certificate.json",
+"json_path": "final_first_repeat",
+"n_rows": 12
+},
+{
+"id": "readout_certificates",
+"file": "results/08_shift/readout_certificates.csv",
+"json_file": "certificate.json",
+"json_path": "readout",
+"n_rows": 2
+},
+{
+"id": "coverage_marginal_vs_mondrian",
+"file": "results/06_conformal/TRNSCRPT/coverage_marginal_vs_mondrian.csv",
+"json_file": "certificate.json",
+"json_path": "coverage_summary",
+"n_rows": 18
+},
+{
+"id": "per_tissue_marginal_vs_mondrian",
+"file": "results/06_conformal/TRNSCRPT/per_tissue_marginal_vs_mondrian_alpha0.1.csv",
+"json_file": "certificate.json",
+"json_path": "per_tissue_alpha01",
+"n_rows": 19
+},
+{
+"id": "coverage_per_fold",
+"file": "results/06_conformal/TRNSCRPT/coverage.csv",
+"json_file": "certificate.json",
+"json_path": "coverage_per_fold",
+"n_rows": 120
+},
+{
+"id": "shift_table",
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"json_file": "shift.json",
+"json_path": "table",
+"n_rows": 10
+},
+{
+"id": "shift_recalibration",
+"file": "results/08_shift/TRNSCRPT/shift_recalibration.csv",
+"json_file": "shift.json",
+"json_path": "recalibration",
+"n_rows": 20
+},
+{
+"id": "shift_per_class",
+"file": "results/08_shift/TRNSCRPT/shift_per_class.csv",
+"json_file": "shift.json",
+"json_path": "per_class",
+"n_rows": 186
+},
+{
+"id": "shift_table_metab",
+"file": "results/08_shift/METAB_core9/shift_table.csv",
+"json_file": "shift.json",
+"json_path": "metab_core9",
+"n_rows": 10
+},
+{
+"id": "bodymap_age_accuracy",
+"file": "results/12_bodymap/age_shift_accuracy.csv",
+"json_file": "bodymap.json",
+"json_path": "age_accuracy",
+"n_rows": 4
+},
+{
+"id": "bodymap_age_shift",
+"file": "results/12_bodymap/age_shift.csv",
+"json_file": "bodymap.json",
+"json_path": "age_shift",
+"n_rows": 4
+},
+{
+"id": "bodymap_conformal",
+"file": "results/12_bodymap/conformal_transfer.csv",
+"json_file": "bodymap.json",
+"json_path": "conformal",
+"n_rows": 36
+},
+{
+"id": "bodymap_recalibration",
+"file": "results/12_bodymap/recalibration.csv",
+"json_file": "bodymap.json",
+"json_path": "recalibration",
+"n_rows": 6
+},
+{
+"id": "bodymap_coverage_by_organ",
+"file": "results/12_bodymap/coverage_by_organ.csv",
+"json_file": "bodymap.json",
+"json_path": "coverage_by_organ",
+"n_rows": 99
+},
+{
+"id": "bodymap_ood_sets",
+"file": "results/12_bodymap/ood_sets.csv",
+"json_file": "bodymap.json",
+"json_path": "ood_sets",
+"n_rows": 18
+},
+{
+"id": "bodymap_panel_survival",
+"file": "results/12_bodymap/panel_survival.csv",
+"json_file": "bodymap.json",
+"json_path": "panel_survival",
+"n_rows": 3
+},
+{
+"id": "bodymap_gene_check",
+"file": "results/12_bodymap/panel_gene_check.csv",
+"json_file": "bodymap.json",
+"json_path": "gene_check",
+"n_rows": 20
+},
+{
+"id": "bodymap_accuracy_by_organ",
+"file": "results/12_bodymap/accuracy_by_organ.csv",
+"json_file": "bodymap.json",
+"json_path": "accuracy_by_organ",
+"n_rows": 132
+},
+{
+"id": "bodymap_native",
+"file": "results/12_bodymap/native_panel.csv",
+"json_file": "bodymap.json",
+"json_path": "native",
+"n_rows": 1
+},
+{
+"id": "bodymap_gene_overlap",
+"file": "results/12_bodymap/gene_overlap.csv",
+"json_file": "bodymap.json",
+"json_path": "gene_overlap",
+"n_rows": 1
+},
+{
+"id": "bodymap_juvenile_markers",
+"file": "results/12_bodymap/juvenile_marker_check.csv",
+"json_file": "bodymap.json",
+"json_path": "juvenile_markers",
+"n_rows": 880
+},
+{
+"id": "gtex_accuracy_by_tissue",
+"file": "results/13_gtex/accuracy_by_tissue.csv",
+"json_file": "gtex.json",
+"json_path": "accuracy_by_tissue",
+"n_rows": 51
+},
+{
+"id": "gtex_accuracy_overall",
+"file": "results/13_gtex/accuracy_overall.csv",
+"json_file": "gtex.json",
+"json_path": "accuracy_overall",
+"n_rows": 3
+},
+{
+"id": "gtex_conformal",
+"file": "results/13_gtex/conformal_transfer.csv",
+"json_file": "gtex.json",
+"json_path": "conformal",
+"n_rows": 9
+},
+{
+"id": "gtex_recalibration",
+"file": "results/13_gtex/recalibration.csv",
+"json_file": "gtex.json",
+"json_path": "recalibration",
+"n_rows": 6
+},
+{
+"id": "gtex_coverage_by_tissue",
+"file": "results/13_gtex/coverage_by_tissue.csv",
+"json_file": "gtex.json",
+"json_path": "coverage_by_tissue",
+"n_rows": 153
+},
+{
+"id": "gtex_gene_check",
+"file": "results/13_gtex/panel_gene_check.csv",
+"json_file": "gtex.json",
+"json_path": "gene_check",
+"n_rows": 20
+},
+{
+"id": "gtex_panel_survival",
+"file": "results/13_gtex/panel_survival.csv",
+"json_file": "gtex.json",
+"json_path": "panel_survival",
+"n_rows": 3
+},
+{
+"id": "gtex_native",
+"file": "results/13_gtex/native_panel.csv",
+"json_file": "gtex.json",
+"json_path": "native",
+"n_rows": 1
+},
+{
+"id": "gtex_gene_overlap",
+"file": "results/13_gtex/gene_overlap.csv",
+"json_file": "gtex.json",
+"json_path": "gene_overlap",
+"n_rows": 1
+},
+{
+"id": "rep_target_summary",
+"file": "results/14_transfer/target_summary.csv",
+"json_file": "representations.json",
+"json_path": "target_summary",
+"n_rows": 24
+},
+{
+"id": "rep_target_accuracy",
+"file": "results/14_transfer/target_accuracy.csv",
+"json_file": "representations.json",
+"json_path": "target_accuracy",
+"n_rows": 312
+},
+{
+"id": "rep_recalibration",
+"file": "results/14_transfer/recalibration.csv",
+"json_file": "representations.json",
+"json_path": "recalibration",
+"n_rows": 48
+},
+{
+"id": "rep_cv_cost",
+"file": "results/14_transfer/motrpac_cv_cost.csv",
+"json_file": "representations.json",
+"json_path": "motrpac_cv_cost",
+"n_rows": 60
+},
+{
+"id": "rep_panels",
+"file": "results/14_transfer/panels.csv",
+"json_file": "representations.json",
+"json_path": "panels",
+"n_rows": 8
+},
+{
+"id": "rep_cpm_target_summary",
+"file": "results/14_transfer_cpm/target_summary.csv",
+"json_file": "representations.json",
+"json_path": "cpm_target_summary",
+"n_rows": 12
+},
+{
+"id": "rep_cpm_target_accuracy",
+"file": "results/14_transfer_cpm/target_accuracy.csv",
+"json_file": "representations.json",
+"json_path": "cpm_target_accuracy",
+"n_rows": 204
+},
+{
+"id": "nesting_ACETYL",
+"file": "results/16_identifiability/nesting_ACETYL.csv",
+"json_file": "nesting.json",
+"json_path": "nesting.ACETYL",
+"n_rows": 2
+},
+{
+"id": "nesting_ATAC",
+"file": "results/16_identifiability/nesting_ATAC.csv",
+"json_file": "nesting.json",
+"json_path": "nesting.ATAC",
+"n_rows": 9
+},
+{
+"id": "nesting_IMMUNO",
+"file": "results/16_identifiability/nesting_IMMUNO.csv",
+"json_file": "nesting.json",
+"json_path": "nesting.IMMUNO",
+"n_rows": 2
+},
+{
+"id": "nesting_METHYL",
+"file": "results/16_identifiability/nesting_METHYL.csv",
+"json_file": "nesting.json",
+"json_path": "nesting.METHYL",
+"n_rows": 9
+},
+{
+"id": "nesting_PHOSPHO",
+"file": "results/16_identifiability/nesting_PHOSPHO.csv",
+"json_file": "nesting.json",
+"json_path": "nesting.PHOSPHO",
+"n_rows": 2
+},
+{
+"id": "nesting_PROT",
+"file": "results/16_identifiability/nesting_PROT.csv",
+"json_file": "nesting.json",
+"json_path": "nesting.PROT",
+"n_rows": 2
+},
+{
+"id": "nesting_TRNSCRPT",
+"file": "results/16_identifiability/nesting_TRNSCRPT.csv",
+"json_file": "nesting.json",
+"json_path": "nesting.TRNSCRPT",
+"n_rows": 9
+},
+{
+"id": "nesting_UBIQ",
+"file": "results/16_identifiability/nesting_UBIQ.csv",
+"json_file": "nesting.json",
+"json_path": "nesting.UBIQ",
+"n_rows": 2
+},
+{
+"id": "estimable_pairs",
+"file": "results/16_identifiability/estimable_pairs.csv",
+"json_file": "nesting.json",
+"json_path": "estimable_pairs",
+"n_rows": 8
+},
+{
+"id": "batch_counts",
+"file": "results/16_identifiability/batch_counts.csv",
+"json_file": "nesting.json",
+"json_path": "batch_counts",
+"n_rows": 37
+},
+{
+"id": "qc_only_summary",
+"file": "results/16_identifiability/qc_only_summary.csv",
+"json_file": "qc_baseline.json",
+"json_path": "summary",
+"n_rows": 3
+},
+{
+"id": "qc_only_per_fold",
+"file": "results/16_identifiability/qc_only_per_fold.csv",
+"json_file": "qc_baseline.json",
+"json_path": "per_fold",
+"n_rows": 15
+},
+{
+"id": "batch_conclusion",
+"file": "results/07_fusion/batch_conclusion.csv",
+"json_file": "batch_verdict.json",
+"json_path": "conclusion",
+"n_rows": 7
+},
+{
+"id": "batch_covariate_auroc",
+"file": "results/07_fusion/batch_covariate_auroc.csv",
+"json_file": "batch_verdict.json",
+"json_path": "covariate_auroc",
+"n_rows": 84
+},
+{
+"id": "tc_part5_by_duration",
+"file": "results/15_time_course/5_6_fingerprint/part5_by_duration.csv",
+"json_file": "batch_verdict.json",
+"json_path": "part5_by_duration",
+"n_rows": 20
+},
+{
+"id": "fusion_taskA",
+"file": "results/07_fusion/taskA_summary.csv",
+"json_file": "fusion.json",
+"json_path": "taskA",
+"n_rows": 10
+},
+{
+"id": "fusion_taskB",
+"file": "results/07_fusion/taskB_best_vs_null.csv",
+"json_file": "fusion.json",
+"json_path": "taskB",
+"n_rows": 7
+},
+{
+"id": "fusion_taskB_duration",
+"file": "results/07_fusion/taskB_duration_summary.csv",
+"json_file": "fusion.json",
+"json_path": "taskB_duration",
+"n_rows": 28
+},
+{
+"id": "discordance_summary",
+"file": "results/09_discordance/summary.csv",
+"json_file": "discordance.json",
+"json_path": "summary",
+"n_rows": 7
+},
+{
+"id": "discordance_rates",
+"file": "results/09_discordance/discordance_rates.csv",
+"json_file": "discordance.json",
+"json_path": "rates",
+"n_rows": 56
+},
+{
+"id": "tissue_by_assay",
+"file": "results/02_inventory/tissue_by_assay.csv",
+"json_file": "inventory.json",
+"json_path": "tissue_by_assay",
+"n_rows": 20
+},
+{
+"id": "inventory",
+"file": "results/02_inventory/inventory.csv",
+"json_file": "inventory.json",
+"json_path": "inventory",
+"n_rows": 92
+},
+{
+"id": "samples_motrpac",
+"file": "results/31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv",
+"json_file": "samples_motrpac.json",
+"json_path": "samples",
+"n_rows": 899,
+"quantised": 6
+},
+{
+"id": "samples_12_bodymap",
+"file": "results/31_site_regen/12_bodymap/scores_target_probs.csv",
+"json_file": "samples_bodymap.json",
+"json_path": "samples",
+"n_rows": 316,
+"quantised": 6
+},
+{
+"id": "samples_13_gtex",
+"file": "results/31_site_regen/13_gtex/scores_target_probs.csv",
+"json_file": "samples_gtex.json",
+"json_path": "samples",
+"n_rows": 2485,
+"quantised": 6
+}
+]
+}

@@ -646,6 +646,11 @@ def export_headline(w: Writer, prov: Prov, rec: pd.DataFrame | None):
         "pgk2_testes_2wk": P.val("pgk2_testes_2wk", "12_bodymap/juvenile_marker_check.csv", "mean_log2_cpm", where={"gene_symbol": "Pgk2", "organ": "Testes", "stage_weeks": 2}),
         "pgk2_testes_21wk": P.val("pgk2_testes_21wk", "12_bodymap/juvenile_marker_check.csv", "mean_log2_cpm", where={"gene_symbol": "Pgk2", "organ": "Testes", "stage_weeks": 21}),
     }
+    # super-class fractions from the confusion matrix (the spec's "heart → skeletal muscle 0.907" is SKM-GN + SKM-VL)
+    ck = P.read("13_gtex/confusion_k20.csv").set_index("organ")
+    heart = ck.loc["Heart - Left Ventricle"]
+    extras["gtex_heart_k20_to_skm_frac"] = P.recomputed("gtex_heart_k20_to_skm_frac", float((heart["SKM-GN"] + heart["SKM-VL"]) / heart.sum()),
+                                                        ["13_gtex/confusion_k20.csv"], "fraction of GTEx heart samples called either skeletal muscle class (SKM-GN + SKM-VL) by the k20 panel")
     rt = REGEN / "13_gtex" / "recal_thresholds.csv"
     if rt.exists():
         r = pd.read_csv(rt)
@@ -870,6 +875,12 @@ def export_fixtures(w: Writer, motrpac: tuple, bodymap: tuple, gtex: tuple):
     for m in MODELS:
         calibrations[f"bodymap_{m}"] = {"scores": cal_b[m]["scores"], "y_idx": cal_b[m]["y_idx"], "n_classes": n_cls}
         calibrations[f"gtex_{m}"] = {"scores": cal_g[m]["scores"], "y_idx": cal_g[m]["y_idx"], "n_classes": n_cls}
+    # test-only truncated calibrations: n = 8 (+∞ at α = 0.05 and 0.10, the largest score at 0.20) and n = 18 (+∞ at α = 0.05)
+    for n_small in (8, 18):
+        for m in MODELS:
+            src = cal_m["0"]["one_per_animal"]
+            calibrations[f"motrpac_f0_opa_first{n_small}_{m}"] = {"scores": src["scores"][m][:n_small], "y_idx": src["y_idx"][:n_small], "n_classes": n_cls,
+                                                                  "note": f"test-only: the first {n_small} one-vial-per-animal calibration scores of fold 0"}
     f0 = [s for s in samples_m if s["fold"] == 0]
     chosen_m, seen = [], set()
     for s in f0:
@@ -901,7 +912,7 @@ def export_fixtures(w: Writer, motrpac: tuple, bodymap: tuple, gtex: tuple):
                       "expected_true_idx": true_idx})
     for s in chosen_m:
         for m in MODELS:
-            for mode in ("pooled", "one_per_animal"):
+            for mode in ("pooled", "one_per_animal", "opa_first8", "opa_first18"):
                 for a in C.ALPHAS:
                     for v in VARIANTS:
                         add(s["id"], s["p"][m], f"motrpac_f0_{mode}_{m}", a, v, classes.index(s["tissue"]))
@@ -928,7 +939,7 @@ ANCHORS = [  # (id in provenance, spec value, tolerance)
     ("bodymap_acc_104wk_k20", 0.908, 0.0005), ("bodymap_native_k20", 0.9925, 0.00005), ("cov_bodymap_k20_marginal", 0.618, 0.0005),
     ("empty_bodymap_k20_marginal", 0.382, 0.0005), ("bodymap_floored_k20", 0.691, 0.0005), ("recal3_bodymap_k20", 0.943, 0.0005),
     ("recal3size_bodymap_k20", 0.998, 0.0005), ("acc_gtex_k20", 0.654, 0.0005), ("acc_gtex_k50", 0.781, 0.0005), ("acc_gtex_full", 0.855, 0.0005),
-    ("gtex_native_k20", 0.979, 0.0005), ("gtex_heart_k20", 0.033, 0.0005), ("gtex_heart_k20_top_frac", 0.907, 0.0005), ("gtex_ovary_k20", 0.0, 1e-9),
+    ("gtex_native_k20", 0.979, 0.0005), ("gtex_heart_k20", 0.033, 0.0005), ("gtex_heart_k20_to_skm_frac", 0.907, 0.0005), ("gtex_ovary_k20", 0.0, 1e-9),
     ("gtex_ovary_k20_top_frac", 0.953, 0.0005), ("cov_gtex_k20_marginal", 0.364, 0.0005), ("empty_gtex_k20_marginal", 0.616, 0.0005),
     ("cov_gtex_full_marginal", 0.062, 0.0005), ("empty_gtex_full_marginal", 0.938, 0.0005), ("recal3_gtex_k20", 0.954, 0.0005),
     ("recal3size_gtex_k20", 11.70, 0.005), ("gtex_recal_k20_n3_frac_inf", 0.45, 0.005), ("qc_technical", 0.873, 0.0005), ("qc_technical_sd", 0.027, 0.0005),
@@ -1151,12 +1162,12 @@ def main():
     total = sum(p.stat().st_size for p in SITE.glob("*.json"))
     print(f"== {len(prov.entries)} provenance entries, {len(prov.tables)} tables; site/data total {total / 1e6:.2f} MB; largest "
           f"{max(SITE.glob('*.json'), key=lambda p: p.stat().st_size).name}")
+    if args.reconciliation:
+        reconciliation(prov.entries, ROOT / "docs" / "NUMBERS_RECONCILIATION.md")
     if args.check_anchors:
         ok = check_anchors(prov.entries)
         if not ok:
             sys.exit(2)
-    if args.reconciliation:
-        reconciliation(prov.entries, ROOT / "docs" / "NUMBERS_RECONCILIATION.md")
 
 
 if __name__ == "__main__":
