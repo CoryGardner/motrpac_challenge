@@ -1,6 +1,6 @@
 # Numbers reconciliation — what the site shows, where it comes from, and what moved with the conformal-quantile fix
 
-Generated 2026-09-27 01:29 UTC by `scripts/30_export_site_data.py --reconciliation` from `site/data/provenance.json`.
+Generated 2026-09-27 02:03 UTC by `scripts/30_export_site_data.py --reconciliation` from `site/data/provenance.json`.
 `results/` (post-fix, 2026-09-25) is the truth; the pre-fix snapshot is `../../backup/pipeline_history/results_pre_quantile_fix_2026-09-25/`. Values are shown to 4 decimals; the JSON holds them unrounded.
 
 ## 1. Headline numbers (the home-page tiles and the transfer ladder)
@@ -36,11 +36,11 @@ Generated 2026-09-27 01:29 UTC by `scripts/30_export_site_data.py --reconciliati
 | `recal3_gtex_k20` | 0.9544 | 0.8795 | yes | `results/13_gtex/recalibration.csv` | `{"model": "k20", "n_recal": 3}` | `coverage_recalibrated` | value |
 | `recal3size_gtex_k20` | 11.6966 | 4.1494 | yes | `results/13_gtex/recalibration.csv` | `{"model": "k20", "n_recal": 3}` | `set_size_recalibrated` | value |
 | `gtex_recal_k20_n3_frac_inf` | 0.4500 |  |  | `results/31_site_regen/13_gtex/recal_thresholds.csv` | `{}` | `` | recomputed |
-| `qc_technical` | 0.8732 |  |  | `results/16_identifiability/qc_only_summary.csv` | `{"features": "technical"}` | `acc_mean` | value |
-| `qc_composition` | 0.9488 |  |  | `results/16_identifiability/qc_only_summary.csv` | `{"features": "composition"}` | `acc_mean` | value |
-| `qc_all` | 0.9755 |  |  | `results/16_identifiability/qc_only_summary.csv` | `{"features": "all"}` | `acc_mean` | value |
+| `qc_technical` | 0.8742 |  |  | `results/16_identifiability/qc_only_summary.csv` | `{"features": "technical"}` | `bal_acc_mean` | value |
+| `qc_composition` | 0.9516 |  |  | `results/16_identifiability/qc_only_summary.csv` | `{"features": "composition"}` | `bal_acc_mean` | value |
+| `qc_all` | 0.9758 |  |  | `results/16_identifiability/qc_only_summary.csv` | `{"features": "all"}` | `bal_acc_mean` | value |
 
-## 2. Every exported number that moved with the fix (99 of 183 comparable entries)
+## 2. Every exported number that moved with the fix (113 of 203 comparable entries)
 
 | id | post-fix | pre-fix | source | selector | column |
 |---|---|---|---|---|---|
@@ -60,6 +60,20 @@ Generated 2026-09-27 01:29 UTC by `scripts/30_export_site_data.py --reconciliati
 | `cov_id_full_floored_pooled_sd` | 0.0155 | 0.0093 | `results/06_conformal/TRNSCRPT/coverage.csv` | `{"calibration": "pooled", "conformal": "floored", "method": "lac", "alpha": 0.1}` | `coverage` |
 | `empty_id_full_floored_pooled` | 0.0278 | 0.0089 | `results/06_conformal/TRNSCRPT/coverage.csv` | `{"calibration": "pooled", "conformal": "floored", "method": "lac", "alpha": 0.1}` | `frac_empty` |
 | `size_id_full_floored_pooled` | 0.9722 | 1.0178 | `results/06_conformal/TRNSCRPT/coverage.csv` | `{"calibration": "pooled", "conformal": "floored", "method": "lac", "alpha": 0.1}` | `avg_set_size` |
+| `cov_train_control_test_trained_k20_marginal` | 0.9026 | 0.9040 | `results/08_shift/TRNSCRPT/shift_table.csv` | `{"split": "train_control_test_trained", "arm": "panel_k20"}` | `coverage_target_seen` |
+| `size_train_control_test_trained_k20_marginal` | 0.9193 | 0.9221 | `results/08_shift/TRNSCRPT/shift_table.csv` | `{"split": "train_control_test_trained", "arm": "panel_k20"}` | `avg_set_size_target` |
+| `recal3_train_control_test_trained_k20` | 0.9243 | 0.9322 | `results/08_shift/TRNSCRPT/shift_table.csv` | `{"split": "train_control_test_trained", "arm": "panel_k20"}` | `cov_target_recal_N3` |
+| `cov_train_control_test_trained_k20_mondrian` | 1.0000 | 0.7107 | `results/08_shift/TRNSCRPT/shift_table.csv` | `{"split": "train_control_test_trained", "arm": "panel_k20"}` | `coverage_target_seen_mondrian` |
+| `size_train_control_test_trained_k20_mondrian` | 19.0000 | 0.7177 | `results/08_shift/TRNSCRPT/shift_table.csv` | `{"split": "train_control_test_trained", "arm": "panel_k20"}` | `avg_set_size_target_mondrian` |
+| `cov_train_control_test_trained_k20_floored` | 1.0000 | 0.9263 | `results/08_shift/TRNSCRPT/shift_table.csv` | `{"split": "train_control_test_trained", "arm": "panel_k20"}` | `coverage_target_seen_floored` |
+| `size_train_control_test_trained_k20_floored` | 19.0000 | 0.9458 | `results/08_shift/TRNSCRPT/shift_table.csv` | `{"split": "train_control_test_trained", "arm": "panel_k20"}` | `avg_set_size_target_floored` |
+| `cov_train_control_test_trained_full_marginal` | 0.8804 | 0.8846 | `results/08_shift/TRNSCRPT/shift_table.csv` | `{"split": "train_control_test_trained", "arm": "full"}` | `coverage_target_seen` |
+| `size_train_control_test_trained_full_marginal` | 0.8901 | 0.8943 | `results/08_shift/TRNSCRPT/shift_table.csv` | `{"split": "train_control_test_trained", "arm": "full"}` | `avg_set_size_target` |
+| `recal3_train_control_test_trained_full` | 0.9184 | 0.9346 | `results/08_shift/TRNSCRPT/shift_table.csv` | `{"split": "train_control_test_trained", "arm": "full"}` | `cov_target_recal_N3` |
+| `cov_train_control_test_trained_full_mondrian` | 1.0000 | 0.7191 | `results/08_shift/TRNSCRPT/shift_table.csv` | `{"split": "train_control_test_trained", "arm": "full"}` | `coverage_target_seen_mondrian` |
+| `size_train_control_test_trained_full_mondrian` | 19.0000 | 0.7218 | `results/08_shift/TRNSCRPT/shift_table.csv` | `{"split": "train_control_test_trained", "arm": "full"}` | `avg_set_size_target_mondrian` |
+| `cov_train_control_test_trained_full_floored` | 1.0000 | 0.9110 | `results/08_shift/TRNSCRPT/shift_table.csv` | `{"split": "train_control_test_trained", "arm": "full"}` | `coverage_target_seen_floored` |
+| `size_train_control_test_trained_full_floored` | 19.0000 | 0.9221 | `results/08_shift/TRNSCRPT/shift_table.csv` | `{"split": "train_control_test_trained", "arm": "full"}` | `avg_set_size_target_floored` |
 | `cov_train_male_test_female_k20_marginal` | 0.8329 | 0.8376 | `results/08_shift/TRNSCRPT/shift_table.csv` | `{"split": "train_male_test_female", "arm": "panel_k20"}` | `coverage_target_seen` |
 | `size_train_male_test_female_k20_marginal` | 0.8174 | 0.8218 | `results/08_shift/TRNSCRPT/shift_table.csv` | `{"split": "train_male_test_female", "arm": "panel_k20"}` | `avg_set_size_target` |
 | `covsrc_train_male_test_female_k20` | 0.9306 | 0.9444 | `results/08_shift/TRNSCRPT/shift_table.csv` | `{"split": "train_male_test_female", "arm": "panel_k20"}` | `coverage_source_id` |
@@ -166,6 +180,18 @@ These documents are not edited (a banner at the top of each points here). For ea
 
 | id | value | files / reason |
 |---|---|---|
+| `bodymap_acc_2wk_k20_ci` | [0.676056338028169, 0.8461538461538461] | `results/31_site_regen/12_bodymap/scores_target_probs.csv`: 95 % cluster bootstrap over the 8 BodyMap animals at 2 weeks (k20) |
+| `bodymap_acc_2wk_k50_ci` | [0.7887323943661971, 0.8615384615384616] | `results/31_site_regen/12_bodymap/scores_target_probs.csv`: 95 % cluster bootstrap over the 8 BodyMap animals at 2 weeks (k50) |
+| `bodymap_acc_2wk_full_ci` | [0.9014084507042254, 0.9846153846153847] | `results/31_site_regen/12_bodymap/scores_target_probs.csv`: 95 % cluster bootstrap over the 8 BodyMap animals at 2 weeks (full) |
+| `bodymap_acc_6wk_k20_ci` | [0.9264705882352942, 1.0] | `results/31_site_regen/12_bodymap/scores_target_probs.csv`: 95 % cluster bootstrap over the 8 BodyMap animals at 6 weeks (k20) |
+| `bodymap_acc_6wk_k50_ci` | [0.9264705882352942, 1.0] | `results/31_site_regen/12_bodymap/scores_target_probs.csv`: 95 % cluster bootstrap over the 8 BodyMap animals at 6 weeks (k50) |
+| `bodymap_acc_6wk_full_ci` | [0.6305833524471807, 1.0] | `results/31_site_regen/12_bodymap/scores_target_probs.csv`: 95 % cluster bootstrap over the 8 BodyMap animals at 6 weeks (full) |
+| `bodymap_acc_21wk_k20_ci` | [0.6305833524471807, 1.0] | `results/31_site_regen/12_bodymap/scores_target_probs.csv`: 95 % cluster bootstrap over the 8 BodyMap animals at 21 weeks (k20) |
+| `bodymap_acc_21wk_k50_ci` | [0.9558823529411765, 1.0] | `results/31_site_regen/12_bodymap/scores_target_probs.csv`: 95 % cluster bootstrap over the 8 BodyMap animals at 21 weeks (k50) |
+| `bodymap_acc_21wk_full_ci` | [0.6305833524471807, 1.0] | `results/31_site_regen/12_bodymap/scores_target_probs.csv`: 95 % cluster bootstrap over the 8 BodyMap animals at 21 weeks (full) |
+| `bodymap_acc_104wk_k20_ci` | [0.8461538461538461, 0.967741935483871] | `results/31_site_regen/12_bodymap/scores_target_probs.csv`: 95 % cluster bootstrap over the 8 BodyMap animals at 104 weeks (k20) |
+| `bodymap_acc_104wk_k50_ci` | [0.8888888888888888, 0.96875] | `results/31_site_regen/12_bodymap/scores_target_probs.csv`: 95 % cluster bootstrap over the 8 BodyMap animals at 104 weeks (k50) |
+| `bodymap_acc_104wk_full_ci` | [0.8970588235294118, 0.9841269841269841] | `results/31_site_regen/12_bodymap/scores_target_probs.csv`: 95 % cluster bootstrap over the 8 BodyMap animals at 104 weeks (full) |
 | `gtex_recal_infinite_draws` | table | `results/31_site_regen/13_gtex/recal_thresholds.csv`: fraction of recalibration draws whose threshold is +∞ (too few mapped samples for a finite rank), from the per-draw thresholds |
 | `n_trnscrpt_animals` | 50 | `results/04_baselines/TRNSCRPT/per_fold.csv`: train + test animals of one fold |
 | `n_bodymap_adult_animals` | 8 | `results/12_bodymap/recalibration.csv`: recalibration + test individuals |
@@ -186,6 +212,9 @@ These documents are not edited (a banner at the top of each points here). For ea
 | `cov_id_k50_floored_one_per_animal` | 0.9566 | `results/31_site_regen/06_conformal/TRNSCRPT/scores_calibration.csv`, `results/31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv`: mean over 5 folds of the coverage recomputed from the phase-06 design scores (k50, floored, one_per_animal) |
 | `cov_id_full_mondrian_one_per_animal` | 0.9643 | `results/31_site_regen/06_conformal/TRNSCRPT/scores_calibration.csv`, `results/31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv`: mean over 5 folds of the coverage recomputed from the phase-06 design scores (full, mondrian, one_per_animal) |
 | `cov_id_full_floored_one_per_animal` | 0.9643 | `results/31_site_regen/06_conformal/TRNSCRPT/scores_calibration.csv`, `results/31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv`: mean over 5 folds of the coverage recomputed from the phase-06 design scores (full, floored, one_per_animal) |
+| `empty_seen_train_control_test_trained_k20` | 0.0807 | `results/31_site_regen/08_shift_k20/scores_target_vials.csv`: empty-set rate over the target vials of seen classes (the unseen sex-specific tissue's vials excluded) |
+| `empty_seen_train_control_test_trained_k50` | 0.1043 | `results/31_site_regen/08_shift_k50/scores_target_vials.csv`: empty-set rate over the target vials of seen classes (the unseen sex-specific tissue's vials excluded) |
+| `empty_seen_train_control_test_trained_full` | 0.1099 | `results/31_site_regen/08_shift_k20/scores_target_vials.csv`: empty-set rate over the target vials of seen classes (the unseen sex-specific tissue's vials excluded) |
 | `empty_seen_train_male_test_female_k20` | 0.1365 | `results/31_site_regen/08_shift_k20/scores_target_vials.csv`: empty-set rate over the target vials of seen classes (the unseen sex-specific tissue's vials excluded) |
 | `empty_seen_train_male_test_female_k50` | 0.1624 | `results/31_site_regen/08_shift_k50/scores_target_vials.csv`: empty-set rate over the target vials of seen classes (the unseen sex-specific tissue's vials excluded) |
 | `empty_seen_train_male_test_female_full` | 0.1765 | `results/31_site_regen/08_shift_k20/scores_target_vials.csv`: empty-set rate over the target vials of seen classes (the unseen sex-specific tissue's vials excluded) |

@@ -8,13 +8,14 @@ Fingerprints*. A leakage-safe evaluation pipeline, an interactive site, and an h
 cross-validation, and the panel fit on all animals names every mapped adult organ correctly in another laboratory's rats
 (rat BodyMap: 9 of 11 organs have a MoTrPAC counterpart, muscle and brain are scored as super-classes; 68 samples from
 8 animals). But "reliably" has three parts and only the first survives on its own. The 90 % conformal guarantee that comes
-with the panel does not travel: calibrated on MoTrPAC it covers 0.618 of the BodyMap adults and 0.364 of human GTEx
+with the panel survives a change of training state (fit on the 10 sedentary controls alone, the panel names the tissue of
+the 40 trained animals at 0.961 with coverage 0.903) but does not travel: calibrated on MoTrPAC it covers 0.618 of the BodyMap adults and 0.364 of human GTEx
 samples, failing by *abstaining* (empty sets) rather than by confident mistakes; three target animals repair it within
 species at one tissue per set, three donors do not repair it across species (11.7 tissues per set). And within a single
 multi-tissue study the tissue axis cannot be separated from processing: each tissue sits entirely inside one RNA
 extraction plate, one library batch and one flowcell (1 of 171 tissue pairs, ovary and testes, shares all three, and it is
 also the sex contrast),
-so library QC numbers alone classify tissue at 0.975 (0.873 from purely technical ones). Within-study accuracy is
+so library QC numbers alone classify tissue at 0.976 balanced accuracy (0.874 from purely technical ones). Within-study accuracy is
 therefore not evidence that the signature is biology; the transfer to an independently processed cohort is, and where
 batch could be measured directly, on a reference RNA pool run on six plates at both sites, it was about 1.6 % of the
 variance that separates tissues.
@@ -45,12 +46,13 @@ All numbers below are read from `results/` by `scripts/30_export_site_data.py`; 
 | 50-gene panel / all genes | 0.993 / 0.995 | `results/05_panels/TRNSCRPT/panel_curve.csv, results/04_baselines/TRNSCRPT/summary.csv` |
 | F-test selector at k = 20 (why the selector matters) | 0.399 | `results/05_panels/TRNSCRPT/panel_curve_fclassif.csv` |
 | Coverage of 90 % sets in-distribution (pooled / one vial per animal) | 0.908 / 0.916 | `results/06_conformal/TRNSCRPT/coverage.csv` |
+| Trained animals, panel fit on the sedentary controls only: accuracy k20 / coverage | 0.961 / 0.903 | `results/08_shift/TRNSCRPT/shift_table.csv` |
 | BodyMap adults (another lab): accuracy k20 / coverage / empty sets | 1.000 / 0.618 / 0.382 | `results/12_bodymap/` |
 | BodyMap recalibrated on 3 animals: coverage at set size | 0.943 at 1.00 | `results/12_bodymap/recalibration.csv` |
 | GTEx (human): accuracy k20 / k50 / full | 0.654 / 0.781 / 0.855 | `results/13_gtex/accuracy_overall.csv` |
 | GTEx coverage k20 / empty; recalibrated on 3 donors: coverage at set size | 0.364 / 0.616; 0.954 at 11.70 | `results/13_gtex/` |
 | Estimable tissue pairs within study (RNA-seq) | 1 of 171 (ovary and testes) | `results/16_identifiability/estimable_pairs.csv` |
-| QC covariates alone: technical / composition / all | 0.873 / 0.949 / 0.975 | `results/16_identifiability/qc_only_summary.csv` |
+| QC covariates alone, balanced accuracy: technical / composition / all | 0.874 / 0.952 / 0.976 | `results/16_identifiability/qc_only_summary.csv` |
 
 `figures/summary_figure.png` is the three-panel composite for slides (transfer ladder · stable core · identifiability).
 

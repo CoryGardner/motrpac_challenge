@@ -4,6 +4,7 @@ import { figure, bar, refLine, tokens, template, CONFIG } from "./charts.js";
 
 export const RUNGS = [
   { id: "in_distribution", label: "In-distribution<br>(held-out animals)", short: "In-distribution" },
+  { id: "train_control_test_trained", label: "Trained animals<br>(fit on controls only)", short: "Training state (controls → trained)" },
   { id: "train_male_test_female", label: "Held-out sex<br>males → females", short: "Held-out sex (M → F)" },
   { id: "train_female_test_male", label: "Held-out sex<br>females → males", short: "Held-out sex (F → M)" },
   { id: "different_lab", label: "Other laboratory<br>(rat BodyMap adults)", short: "Other laboratory (BodyMap)" },
@@ -27,7 +28,7 @@ export function ladderBuild(H, state) {
     return plus.some((v) => v) || minus.some((v) => v) ? { type: "data", symmetric: false, array: plus, arrayminus: minus, visible: true, color: tokens().ink2, thickness: 1.5, width: 4 } : undefined;
   };
   const ci = (c) => (c ? ` [${fmt(c[0])}, ${fmt(c[1])}]` : "");
-  const hoverAcc = rows.map((r) => (r && !r.pending ? `accuracy ${fmt(r.accuracy)}${r.accuracy_sd ? " ± " + fmt(r.accuracy_sd) + " (sd over folds)" : ""}${r.accuracy_ci ? " 95 % CI" + ci(r.accuracy_ci) : ""}<br>n = ${r.n_samples} samples, ${r.n_individuals} individuals${r.accuracy_cv40 ? "<br>same panel size under the 40-animal CV of the Fingerprint page: " + fmt(r.accuracy_cv40) : ""}${r.accuracy_refit !== null && r.accuracy_refit !== undefined ? "<br>the refit model that carries the sets: " + fmt(r.accuracy_refit) : ""}${r.accuracy_seen !== null && r.accuracy_seen !== undefined ? "<br>the unseen sex-specific tissue's vials count as wrong; balanced accuracy over seen classes " + fmt(r.accuracy_seen) : ""}` : "pending"));
+  const hoverAcc = rows.map((r) => (r && !r.pending ? `accuracy ${fmt(r.accuracy)}${r.accuracy_sd ? " ± " + fmt(r.accuracy_sd) + " (sd over folds)" : ""}${r.accuracy_ci ? " 95 % CI" + ci(r.accuracy_ci) : ""}<br>n = ${r.n_samples} samples, ${r.n_individuals} individuals${r.n_source_animals ? "<br>source: " + r.n_source_animals + " animals, " + r.n_calibration_animals + " of them calibration" : ""}${r.accuracy_cv40 ? "<br>same panel size under the 40-animal CV of the Fingerprint page: " + fmt(r.accuracy_cv40) : ""}${r.accuracy_refit !== null && r.accuracy_refit !== undefined ? "<br>the refit model that carries the sets: " + fmt(r.accuracy_refit) : ""}${r.accuracy_seen !== null && r.accuracy_seen !== undefined ? "<br>the unseen sex-specific tissue's vials count as wrong; balanced accuracy over seen classes " + fmt(r.accuracy_seen) : ""}` : "pending"));
   const hoverCov = rows.map((r) => (r && !r.pending ? `coverage ${fmt(r.coverage)}${r.coverage_sd ? " ± " + fmt(r.coverage_sd) + " (sd over folds)" : ""}${r.coverage_ci ? " 95 % CI" + ci(r.coverage_ci) : ""}${r.n_samples_coverage ? " (n = " + r.n_samples_coverage + " seen-class vials)" : ""}<br>empty sets ${r.empty === null || r.empty === undefined ? "—" : fmt(r.empty)}${r.wrong_non_empty !== null && r.wrong_non_empty !== undefined ? ", non-empty but wrong " + fmt(r.wrong_non_empty) : ""}<br>mean set size ${fmt(r.set_size, 2)}${r.n_classes_seen && r.set_size >= r.n_classes_seen ? " — every seen tissue in every set (per-class thresholds +∞)" : ""}${r.recal_n3 !== null && r.recal_n3 !== undefined ? "<br>recalibrated on 3 target individuals: " + fmt(r.recal_n3) : ""}` : "pending"));
   const traces = [
     { ...bar(x, acc, { name: "accuracy", slot: 1, text: acc.map((v) => (v === null ? "" : fmt(v))), hover: "%{customdata}<extra>accuracy</extra>" }), customdata: hoverAcc, error_y: err("accuracy", "accuracy_ci", "accuracy_sd") },
@@ -44,6 +45,18 @@ export function ladderBuild(H, state) {
                                                   source: r.pending ? r.reason : (r.source || []).join("; ") } : { shift: RUNGS[i].short })) };
   return { traces, layout: { yaxis: { range: [0, 1.08], title: { text: "fraction" }, tickformat: ".1f" }, xaxis: { tickfont: { size: 11 } }, shapes: ref.shapes, annotations, barmode: "group",
                             legend: { y: 1.14 }, margin: { t: 40, b: 60 } }, table };
+}
+
+/** The title states what the data show: which models keep the 90 % coverage on the training-state rung (point estimate ≥ 0.90, or interval reaching it). */
+export function ladderTitle(H) {
+  const keep = ["k20", "k50", "full"].filter((m) => { const r = pick(H.ladder, "train_control_test_trained", m, "marginal"); return r && !r.pending && (r.coverage >= 0.9 || (r.coverage_ci && r.coverage_ci[1] >= 0.9)); });
+  const lose = ["k20", "k50", "full"].filter((m) => !keep.includes(m));
+  const name = { k20: "the 20-gene panel", k50: "the 50-gene panel", full: "the all-gene model" };
+  const list = (ms) => ms.map((m) => name[m]).join(ms.length === 2 ? " and " : ", ").replace(/, ([^,]*)$/, " and $1");
+  const head = "Accuracy degrades gracefully across shifts; the 90 % guarantee survives ";
+  if (keep.length === 3) return head + "a change of training state, not of sex, laboratory or species";
+  if (keep.length === 0) return head + "none of them";
+  return head + `a change of training state for ${list(keep)} (not for ${list(lose)}), and no shift beyond that`;
 }
 
 /** Mount the ladder with its controls into `container`. opts.full adds the calibration control (in-distribution rung). */
@@ -64,12 +77,14 @@ export async function mountLadder(container, H, opts = {}) {
   );
   if (opts.full) ctl.append(control("In-distribution calibration", segmented([["pooled", "pooled vials"], ["one_per_animal", "one vial per animal"]], state.calib, (v) => { state.calib = v; rerender(); }, "calibration")));
   const opa = pick(H.ladder, "in_distribution", "full", "marginal", "one_per_animal");
+  const tr20 = pick(H.ladder, "train_control_test_trained", "k20", "marginal");
+  const sx20 = pick(H.ladder, "train_male_test_female", "k20", "marginal");
   fig = await figure(container, {
-    title: opts.title || "Accuracy degrades gracefully across shifts; the 90 % guarantee survives none of them",
+    title: opts.title || ladderTitle(H),
     subtitle: "Per shift: accuracy (balanced in-distribution; sample-weighted on mapped tissues elsewhere) and the coverage of α = 0.10 prediction sets calibrated on the source. Whiskers: sd over 5 folds in-distribution, 95 % cluster-bootstrap intervals over animals or donors on the shifts.",
     build: () => ladderBuild(H, state),
     source: "results/05_panels/TRNSCRPT/panel_curve.csv, results/04_baselines/TRNSCRPT/summary.csv, results/06_conformal/TRNSCRPT/coverage.csv (full model) and results/31_site_regen/06_conformal/TRNSCRPT/scores_*.csv (k20/k50, recomputed with the same design), results/08_shift/TRNSCRPT/shift_table.csv, results/12_bodymap/{age_shift_accuracy,conformal_transfer}.csv, results/13_gtex/{accuracy_overall,conformal_transfer}.csv",
-    notShow: "why coverage falls: it falls through empty sets, not through wrong confident sets. Each rung pairs the accuracy and the coverage of the same models: in-distribution, the models fit on 18 animals per fold whose sets are calibrated on 22 (the headline 0.976 on the Fingerprint page is the 40-animal CV of the same panel size); on the BodyMap and GTEx rungs the accuracy bar is the panel fit on all 50 animals and the sets come from its 35-animal refit (the refit's own accuracy is in the hover). The held-out-sex accuracy counts the unseen sex-specific tissue's vials as wrong, while coverage is over seen-class vials (both n in the hover); in-distribution calibration is pooled vials unless switched (one vial per animal gives " + fmt(opa?.coverage) + " for the full model). On the held-out sex the Mondrian and floored sets are full 18-tissue sets, which is why they read 1.0: the source calibration holds 8 vials per class, and with 8 scores the α = 0.10 rank ⌈9 × 0.9⌉ = 9 exceeds 8, so every per-class threshold is +∞.",
+    notShow: "why coverage falls: it falls through empty sets, not through wrong confident sets. Each rung pairs the accuracy and the coverage of the same models: in-distribution, the models fit on 18 animals per fold whose sets are calibrated on 22 (the headline 0.976 on the Fingerprint page is the 40-animal CV of the same panel size); on the BodyMap and GTEx rungs the accuracy bar is the panel fit on all 50 animals and the sets come from its 35-animal refit (the refit's own accuracy is in the hover). The held-out-sex accuracy counts the unseen sex-specific tissue's vials as wrong, while coverage is over seen-class vials (both n in the hover); in-distribution calibration is pooled vials unless switched (one vial per animal gives " + fmt(opa?.coverage) + " for the full model). The training-state rung fits the model on " + (tr20 ? tr20.n_source_animals - tr20.n_calibration_animals : "—") + " of the " + (tr20?.n_source_animals ?? "—") + " sedentary control animals, calibrates on the other " + (tr20?.n_calibration_animals ?? "—") + " and tests every vial of the " + (tr20?.n_individuals ?? "—") + " trained animals. On the held-out-sex and training-state rungs the Mondrian and floored sets are full sets (every tissue the model knows), which is why they read 1.0: the source calibration holds " + (sx20?.n_calibration_animals ?? "—") + " (sex) or at most " + (tr20?.n_calibration_animals ?? "—") + " (training state) vials per class, and with n ≤ " + (sx20?.n_calibration_animals ?? "—") + " scores the α = 0.10 rank ⌈(n + 1) × 0.9⌉ exceeds n, so every per-class threshold is +∞.",
     toolbar: ctl,
     height: "tall",
   });

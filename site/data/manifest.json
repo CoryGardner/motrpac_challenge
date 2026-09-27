@@ -1,6 +1,6 @@
 {
- "generated": "2026-09-27 01:29 UTC",
- "git_hash": "69e92de",
+ "generated": "2026-09-27 02:03 UTC",
+ "git_hash": "208ef60",
  "results_dir": "results",
  "phases": {
   "02_inventory": {
@@ -2263,7 +2263,7 @@
   },
   {
    "name": "bodymap.json",
-   "bytes": 190713
+   "bytes": 191318
   },
   {
    "name": "certificate.json",
@@ -2311,7 +2311,7 @@
   },
   {
    "name": "headline.json",
-   "bytes": 44795
+   "bytes": 52214
   },
   {
    "name": "inventory.json",
@@ -2331,7 +2331,7 @@
   },
   {
    "name": "provenance.json",
-   "bytes": 90291
+   "bytes": 102916
   },
   {
    "name": "qc_baseline.json",

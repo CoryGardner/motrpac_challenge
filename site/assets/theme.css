@@ -132,6 +132,8 @@ code, .source, .kv dd, p, li, .callout, .explain { overflow-wrap: anywhere; }
 .seg { max-width: 100%; flex-wrap: wrap; }
 .control input[type="range"] { padding: 0; border: 0; background: transparent; accent-color: var(--c1); }
 .control .val { color: var(--ink); font-variant-numeric: tabular-nums; }
+.control.is-off { opacity: 0.5; }
+.control.is-off .seg button, .control.is-off input[type="range"] { cursor: not-allowed; }
 .seg { display: inline-flex; border: 1px solid var(--axis); border-radius: var(--radius); overflow: hidden; }
 .seg button { font: inherit; font-size: 0.85rem; padding: 0.3rem 0.7rem; border: 0; background: var(--surface); color: var(--ink-2); cursor: pointer; border-right: 1px solid var(--axis); }
 .seg button:last-child { border-right: 0; }

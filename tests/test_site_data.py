@@ -63,7 +63,36 @@ def test_ladder_rungs_are_complete_with_n_and_uncertainty():
             assert (r.get("coverage_sd") is not None) or (r.get("coverage_ci") is not None), r
             assert r.get("wrong_non_empty") is not None and r["coverage"] + r["empty"] + r["wrong_non_empty"] <= 1 + 1e-9, r
     rungs = {(r["rung_id"], r["model"], r["variant"]) for r in h["ladder"]}
-    assert {("train_male_test_female", "k50", "marginal"), ("different_species", "k50", "floored")} <= rungs
+    assert {("train_male_test_female", "k50", "marginal"), ("different_species", "k50", "floored"),
+            ("train_control_test_trained", "k20", "marginal"), ("train_control_test_trained", "k50", "floored"), ("train_control_test_trained", "full", "mondrian")} <= rungs
+    # the training-state rung sits right after in-distribution: it is the mildest shift (same study, same laboratory)
+    assert h["rung_order"].index("train_control_test_trained") == 1, h["rung_order"]
+    # classes the source model knows: 18 on the held-out sex (one sex-specific tissue absent), all 19 on the training-state split
+    seen = {r["rung_id"]: r["n_classes_seen"] for r in h["ladder"] if r["rung_id"].startswith("train_")}
+    assert seen == {"train_male_test_female": 18, "train_female_test_male": 18, "train_control_test_trained": 19}, seen
+    tr = next(r for r in h["ladder"] if r["rung_id"] == "train_control_test_trained" and r["model"] == "k20" and r["variant"] == "marginal")
+    assert tr["n_individuals"] == 40 and tr["n_source_animals"] == 10 and tr["n_calibration_animals"] == 3, tr
+    assert tr.get("unseen") is None and tr["n_samples_coverage"] == tr["n_samples"], tr
+
+
+def test_qc_only_baseline_uses_balanced_accuracy():
+    """The QC-only baseline is set beside the gene model's balanced accuracy, so it must be balanced accuracy too."""
+    prov = _load("provenance.json")
+    byid = {e["id"]: e for e in prov["entries"]}
+    for k in ("qc_technical", "qc_composition", "qc_all"):
+        assert byid[k]["column"] == "bal_acc_mean", (k, byid[k]["column"])
+        assert byid[k + "_sd"]["column"] == "bal_acc_sd", (k, byid[k + "_sd"]["column"])
+
+
+def test_bodymap_age_curve_carries_n_and_interval():
+    """Every point of the BodyMap age curve carries its n (samples, animals) and a bootstrap interval that brackets the estimate."""
+    b = _load("bodymap.json")
+    assert len(b["age_accuracy"]) == 4
+    for r in b["age_accuracy"]:
+        assert r["n_samples"] > 0 and r["n_animals"] > 0, r
+        for m in ("k20", "k50", "full"):
+            lo, hi = r[f"{m}_ci"]
+            assert 0 <= lo <= r[m] <= hi <= 1, (r["stage_weeks"], m, lo, r[m], hi)
 
 
 @pytest.mark.skipif(not (RES / "06_conformal").exists(), reason="results/ absent")
@@ -172,7 +201,7 @@ def test_manifest_lists_the_site_data_files():
 def test_held_out_sex_rungs_carry_both_denominators():
     """accuracy_all counts the unseen-class vials (never right); coverage is over seen-class vials: both n's are shown."""
     h = _load("headline.json")
-    rows = [r for r in h["ladder"] if r["rung_id"].startswith("train_") and not r.get("pending")]
+    rows = [r for r in h["ladder"] if r["rung_id"] in ("train_male_test_female", "train_female_test_male") and not r.get("pending")]
     assert rows
     for r in rows:
         assert r["n_samples_coverage"] < r["n_samples"], r

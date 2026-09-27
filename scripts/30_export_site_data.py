@@ -440,6 +440,15 @@ def export_aggregates(w: Writer, prov: Prov, rec: pd.DataFrame | None):
         ("recalibration", "recalibration.csv"), ("coverage_by_organ", "coverage_by_organ.csv"), ("ood_sets", "ood_sets.csv"),
         ("panel_survival", "panel_survival.csv"), ("gene_check", "panel_gene_check.csv"), ("accuracy_by_organ", "accuracy_by_organ.csv"),
         ("native", "native_panel.csv"), ("gene_overlap", "gene_overlap.csv"), ("juvenile_markers", "juvenile_marker_check.csv"))}
+    # the age curve: n (samples, animals) and a 95 % cluster-bootstrap interval over animals per point, from the exported per-sample calls
+    if (REGEN / "12_bodymap" / "scores_target_probs.csv").exists():
+        for row in bm["age_accuracy"]:
+            for m in MODELS:
+                st = transfer_rung_stats("12_bodymap", m, "stage_weeks", row["stage_weeks"], "animal_id")
+                assert abs(st["accuracy"] - row[m]) < 1e-9, ("accuracy from the exported calls disagrees with age_shift_accuracy.csv", m, row["stage_weeks"])
+                row[f"{m}_ci"] = P.recomputed(f"bodymap_acc_{row['stage_weeks']}wk_{m}_ci", st["accuracy_ci"], ["31_site_regen/12_bodymap/scores_target_probs.csv"],
+                                              f"95 % cluster bootstrap over the {st['n_individuals']} BodyMap animals at {row['stage_weeks']} weeks ({m})")
+                row["n_samples"], row["n_animals"] = st["n_samples"], st["n_individuals"]
     for m in MODELS:
         df = P.read(f"12_bodymap/confusion_{m}_adult.csv")
         mat = df.set_index(df.columns[0])
@@ -631,7 +640,8 @@ def export_headline(w: Writer, prov: Prov, rec: pd.DataFrame | None):
         f = REGEN / f"08_shift_{kk}" / "scores_target_vials.csv"
         if f.exists():
             vials[kk] = pd.read_csv(f, dtype={"viallabel": str, "pid": str})
-    for split, label in (("train_male_test_female", "held-out sex: trained on males, tested on females"), ("train_female_test_male", "held-out sex: trained on females, tested on males")):
+    for split, label in (("train_control_test_trained", "training state: fit on sedentary control animals, tested on trained animals"),
+                         ("train_male_test_female", "held-out sex: trained on males, tested on females"), ("train_female_test_male", "held-out sex: trained on females, tested on males")):
         for model in MODELS:
             arm = {"k20": "panel_k20", "k50": "panel_k50", "full": "full"}[model]
             tfile = k50_file if model == "k50" else "08_shift/TRNSCRPT/shift_table.csv"
@@ -643,6 +653,15 @@ def export_headline(w: Writer, prov: Prov, rec: pd.DataFrame | None):
             vdf = vials.get("k50" if model == "k50" else "k20")
             v = vdf[(vdf["split"] == split) & (vdf["arm"] == arm)] if vdf is not None else None
             seen = v[v["seen"]] if v is not None else None
+            srow0 = P.read(tfile)
+            srow0 = srow0[(srow0["split"] == split) & (srow0["arm"] == arm)].iloc[0]
+            # classes the source model knows: 19 minus the tissues absent from the source (one sex-specific tissue on the held-out sex,
+            # none on the training-state split); the per-vial export carries one filled p_ column per model class, which must agree
+            n_unseen = 0 if pd.isna(srow0["unseen_classes"]) else len([c for c in str(srow0["unseen_classes"]).replace(";", ",").split(",") if c.strip()])
+            n_model_classes = 19 - n_unseen
+            if v is not None and len(v):
+                pcols = [c for c in v.columns if c.startswith("p_")]
+                assert int(v[pcols].notna().all().sum()) == n_model_classes, ("model classes in the per-vial export disagree with unseen_classes", split, model)
             for variant in VARIANTS:
                 col = {"marginal": "coverage_target_seen", "mondrian": "coverage_target_seen_mondrian", "floored": "coverage_target_seen_floored"}[variant]
                 where = {"split": split, "arm": arm}
@@ -668,12 +687,13 @@ def export_headline(w: Writer, prov: Prov, rec: pd.DataFrame | None):
                 rung(rung_id=split, label=label, model=model, variant=variant, calibration="pooled",
                      accuracy=P.val(f"acc_{split}_{model}", tfile, "accuracy_all", where=where) if variant == "marginal" else acc_cache[(split, model)],
                      accuracy_seen=P.val(f"accseen_{split}_{model}", tfile, "bal_acc_seen", where=where, note="balanced accuracy over the seen classes") if variant == "marginal" else accseen_cache[(split, model)],
-                     n_classes_seen=18, accuracy_sd=None, coverage=cov, coverage_sd=None,
+                     n_classes_seen=n_model_classes, accuracy_sd=None, coverage=cov, coverage_sd=None,
                      set_size=P.val(f"size_{split}_{model}_{variant}", tfile, size_col, where=where),
                      coverage_source=P.val(f"covsrc_{split}_{model}", tfile, "coverage_source_id", where=where) if variant == "marginal" else None,
                      recal_n3=P.val(f"recal3_{split}_{model}", tfile, "cov_target_recal_N3", where=where) if variant == "marginal" else None,
-                     unseen=P.val(f"unseen_{split}_{model}", tfile, "unseen_classes", where=where) if variant == "marginal" else None,
+                     unseen=P.val(f"unseen_{split}_{model}", tfile, "unseen_classes", where=where) if (variant == "marginal" and n_unseen) else None,
                      n_samples=int(srow["n_test"]), n_individuals=int(srow["n_test_animals"]), n_calibration_animals=int(srow["n_cal_animals"]),
+                     n_source_animals=int(srow["n_train_animals"]),
                      source=[f"results/{tfile}"] + ([f"results/31_site_regen/08_shift_{'k50' if model == 'k50' else 'k20'}/scores_target_vials.csv"] if seen is not None else []),
                      **extra)
                 if variant == "marginal":
@@ -742,12 +762,12 @@ def export_headline(w: Writer, prov: Prov, rec: pd.DataFrame | None):
         "orthologs_in_gtex": P.val("orthologs_in_gtex", "13_gtex/gene_overlap.csv", "orthologs_present_in_gtex"),
         "gtex_samples": P.val("gtex_samples", "13_gtex/gene_overlap.csv", "gtex_samples"),
         "gtex_donors": P.val("gtex_donors", "13_gtex/gene_overlap.csv", "gtex_donors"),
-        "qc_technical": P.val("qc_technical", "16_identifiability/qc_only_summary.csv", "acc_mean", where={"features": "technical"}),
-        "qc_technical_sd": P.val("qc_technical_sd", "16_identifiability/qc_only_summary.csv", "acc_sd", where={"features": "technical"}),
-        "qc_composition": P.val("qc_composition", "16_identifiability/qc_only_summary.csv", "acc_mean", where={"features": "composition"}),
-        "qc_composition_sd": P.val("qc_composition_sd", "16_identifiability/qc_only_summary.csv", "acc_sd", where={"features": "composition"}),
-        "qc_all": P.val("qc_all", "16_identifiability/qc_only_summary.csv", "acc_mean", where={"features": "all"}),
-        "qc_all_sd": P.val("qc_all_sd", "16_identifiability/qc_only_summary.csv", "acc_sd", where={"features": "all"}),
+        "qc_technical": P.val("qc_technical", "16_identifiability/qc_only_summary.csv", "bal_acc_mean", where={"features": "technical"}, note="balanced accuracy, the metric of every other accuracy on the site"),
+        "qc_technical_sd": P.val("qc_technical_sd", "16_identifiability/qc_only_summary.csv", "bal_acc_sd", where={"features": "technical"}),
+        "qc_composition": P.val("qc_composition", "16_identifiability/qc_only_summary.csv", "bal_acc_mean", where={"features": "composition"}, note="balanced accuracy, the metric of every other accuracy on the site"),
+        "qc_composition_sd": P.val("qc_composition_sd", "16_identifiability/qc_only_summary.csv", "bal_acc_sd", where={"features": "composition"}),
+        "qc_all": P.val("qc_all", "16_identifiability/qc_only_summary.csv", "bal_acc_mean", where={"features": "all"}, note="balanced accuracy, the metric of every other accuracy on the site"),
+        "qc_all_sd": P.val("qc_all_sd", "16_identifiability/qc_only_summary.csv", "bal_acc_sd", where={"features": "all"}),
         "n_plates": P.val("n_plates", "16_identifiability/batch_counts.csv", "n_levels", where={"assay": "TRNSCRPT", "variable": "RNA_extr_plate_ID"}),
         "n_lib_batches": P.val("n_lib_batches", "16_identifiability/batch_counts.csv", "n_levels", where={"assay": "TRNSCRPT", "variable": "Lib_batch_ID"}),
         "n_flowcells": P.val("n_flowcells", "16_identifiability/batch_counts.csv", "n_levels", where={"assay": "TRNSCRPT", "variable": "Seq_flowcell_ID"}),
@@ -790,7 +810,7 @@ def export_headline(w: Writer, prov: Prov, rec: pd.DataFrame | None):
         extras["gtex_recal_k20_n3_frac_inf"] = P.pending("gtex_recal_k20_n3_frac_inf", "per-draw thresholds not regenerated")
     w.write("headline.json", {"question": "Can a molecular signature identify a tissue reliably?",
                               "tiles": tiles, "accuracy": {m: {"mean": a[0], "sd": a[1]} for m, a in acc.items()}, "ladder": ladder, "extras": extras,
-                              "rung_order": ["in_distribution", "train_male_test_female", "train_female_test_male", "different_lab", "different_species"]},
+                              "rung_order": ["in_distribution", "train_control_test_trained", "train_male_test_female", "train_female_test_male", "different_lab", "different_species"]},
             sorted(prov.sources))
 
 
@@ -1084,8 +1104,9 @@ ANCHORS = [  # (id in provenance, spec value, tolerance)
     ("gtex_native_k20", 0.979, 0.0005), ("gtex_heart_k20", 0.033, 0.0005), ("gtex_heart_k20_to_skm_frac", 0.907, 0.0005), ("gtex_ovary_k20", 0.0, 1e-9),
     ("gtex_ovary_k20_top_frac", 0.953, 0.0005), ("cov_gtex_k20_marginal", 0.364, 0.0005), ("empty_gtex_k20_marginal", 0.616, 0.0005),
     ("cov_gtex_full_marginal", 0.062, 0.0005), ("empty_gtex_full_marginal", 0.938, 0.0005), ("recal3_gtex_k20", 0.954, 0.0005),
-    ("recal3size_gtex_k20", 11.70, 0.005), ("gtex_recal_k20_n3_frac_inf", 0.45, 0.005), ("qc_technical", 0.873, 0.0005), ("qc_technical_sd", 0.027, 0.0005),
-    ("qc_composition", 0.949, 0.0005), ("qc_composition_sd", 0.011, 0.0005), ("qc_all", 0.975, 0.0005), ("qc_all_sd", 0.020, 0.0005),
+    ("recal3size_gtex_k20", 11.70, 0.005), ("gtex_recal_k20_n3_frac_inf", 0.45, 0.005), # QC-only baseline as balanced accuracy since 2026-09-27 (the brief's 0.873 / 0.949 / 0.975 were plain accuracy; bal_acc_mean in the same file)
+    ("qc_technical", 0.874, 0.0005), ("qc_technical_sd", 0.025, 0.0005),
+    ("qc_composition", 0.952, 0.0005), ("qc_composition_sd", 0.010, 0.0005), ("qc_all", 0.976, 0.0005), ("qc_all_sd", 0.020, 0.0005),
     ("n_plates", 17, 0), ("n_lib_batches", 17, 0), ("n_flowcells", 4, 0), ("shared_genes_bodymap", 21040, 0), ("motrpac_genes", 21193, 0),
     ("orthologs_1to1", 14609, 0), ("orthologs_in_gtex", 14569, 0), ("tile_estimable", 1, 0), ("tile_estimable_total", 171, 0), ("cov_id_full_marginal_one_per_animal", 0.916, 0.0005), ("cov_id_full_marginal_pooled", 0.908, 0.0005),
     ("bridge_sum_ratio_all_genes_pool99", 0.017, 0.002),   # the brief's "~1.7 % of the variance that separates tissues"
@@ -1218,12 +1239,13 @@ def readme_table(prov_entries: list[dict]) -> str:
         ("50-gene panel / all genes", f"{f('acc_k50')} / {f('acc_full')}", "results/05_panels/TRNSCRPT/panel_curve.csv, results/04_baselines/TRNSCRPT/summary.csv"),
         ("F-test selector at k = 20 (why the selector matters)", f('acc_fclassif_k20'), "results/05_panels/TRNSCRPT/panel_curve_fclassif.csv"),
         ("Coverage of 90 % sets in-distribution (pooled / one vial per animal)", f"{f('cov_id_full_marginal_pooled')} / {f('cov_id_full_marginal_one_per_animal')}", "results/06_conformal/TRNSCRPT/coverage.csv"),
+        ("Trained animals, panel fit on the sedentary controls only: accuracy k20 / coverage", f"{f('acc_train_control_test_trained_k20')} / {f('cov_train_control_test_trained_k20_marginal')}", "results/08_shift/TRNSCRPT/shift_table.csv"),
         ("BodyMap adults (another lab): accuracy k20 / coverage / empty sets", f"{f('acc_bodymap_k20')} / {f('cov_bodymap_k20_marginal')} / {f('empty_bodymap_k20_marginal')}", "results/12_bodymap/"),
         ("BodyMap recalibrated on 3 animals: coverage at set size", f"{f('recal3_bodymap_k20')} at {f('recal3size_bodymap_k20', 2)}", "results/12_bodymap/recalibration.csv"),
         ("GTEx (human): accuracy k20 / k50 / full", f"{f('acc_gtex_k20')} / {f('acc_gtex_k50')} / {f('acc_gtex_full')}", "results/13_gtex/accuracy_overall.csv"),
         ("GTEx coverage k20 / empty; recalibrated on 3 donors: coverage at set size", f"{f('cov_gtex_k20_marginal')} / {f('empty_gtex_k20_marginal')}; {f('recal3_gtex_k20')} at {f('recal3size_gtex_k20', 2)}", "results/13_gtex/"),
         ("Estimable tissue pairs within study (RNA-seq)", f"{f('tile_estimable')} of {f('tile_estimable_total')} ({' and '.join(t.lower() for t in str(byid.get('tile_estimable_pairs', '')).split('|'))})", "results/16_identifiability/estimable_pairs.csv"),
-        ("QC covariates alone: technical / composition / all", f"{f('qc_technical')} / {f('qc_composition')} / {f('qc_all')}", "results/16_identifiability/qc_only_summary.csv"),
+        ("QC covariates alone, balanced accuracy: technical / composition / all", f"{f('qc_technical')} / {f('qc_composition')} / {f('qc_all')}", "results/16_identifiability/qc_only_summary.csv"),
     ]
     return "\n".join(["| result | value | source |", "|---|---|---|"] + [f"| {a} | {b} | `{c}` |" for a, b, c in rows])
 

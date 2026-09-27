@@ -37,8 +37,8 @@ def main():
         ax.set_axisbelow(True)
 
     # (a) transfer ladder, k20 marginal pooled
-    rungs = [("in_distribution", "in-distribution\n(held-out\nanimals)"), ("train_male_test_female", "held-out sex\n(M → F)"),
-             ("different_lab", "other lab\n(rat BodyMap)"), ("different_species", "other species\n(human GTEx)")]
+    rungs = [("in_distribution", "held-out\nanimals"), ("train_control_test_trained", "trained\n(fit on\ncontrols)"), ("train_male_test_female", "held-out\nsex\n(M → F)"),
+             ("different_lab", "other lab\n(rat\nBodyMap)"), ("different_species", "other\nspecies\n(GTEx)")]
     rows = [next(r for r in H["ladder"] if r["rung_id"] == rid and r["model"] == "k20" and r["variant"] == "marginal" and r.get("calibration", "pooled") == "pooled") for rid, _ in rungs]
     ax = axes[0]
     x = np.arange(len(rungs))
@@ -52,13 +52,13 @@ def main():
         ax.text(i + w / 2, c + 0.015, f"{c:.3f}", ha="center", va="bottom", fontsize=8, color=T["ink2"])
     ax.axhline(0.9, color=T["ink2"], linewidth=1, linestyle="--")
     ax.text(len(rungs) - 0.55, 0.905, "1 − α = 0.90", ha="right", va="bottom", fontsize=8, color=T["ink2"])
-    ax.set_xticks(x, [lab for _, lab in rungs], fontsize=7.5)
+    ax.set_xticks(x, [lab for _, lab in rungs], fontsize=7)
     ax.set_ylim(0, 1.1)
     ax.set_ylabel("fraction")
     ax.grid(axis="x", visible=False)
     ax.grid(axis="y", color=T["grid"], linewidth=0.8)
     ax.legend(frameon=False, loc="upper center", fontsize=8, ncol=2, bbox_to_anchor=(0.5, -0.3))
-    ax.set_title("a  Accuracy survives every shift; the guarantee does not\n    (20-gene panel, α = 0.10, source calibration)", loc="left", fontsize=9.5)
+    ax.set_title("a  Accuracy survives every shift; the guarantee survives only\n    the training-state one (20-gene panel, α = 0.10, source calibration)", loc="left", fontsize=9.5)
 
     # (b) stable core: effect size per gene
     core = sorted(SC["core"], key=lambda r: r["effect_size"])

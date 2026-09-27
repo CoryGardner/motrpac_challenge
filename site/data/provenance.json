@@ -1,7 +1,7 @@
 {
 "_meta": {
-"generated": "2026-09-27 01:29 UTC",
-"git_hash": "69e92de",
+"generated": "2026-09-27 02:03 UTC",
+"git_hash": "208ef60",
 "sources": [
 "results/03_eda/batch_partition_METAB.csv",
 "results/03_eda/batch_partition_PROT.csv",
@@ -95,12 +95,168 @@
 "results/31_site_regen/13_gtex/scores_target_probs.csv"
 ],
 "reconciliation": {
-"changed": 99,
-"comparable": 183,
+"changed": 113,
+"comparable": 203,
 "document": "docs/NUMBERS_RECONCILIATION.md"
 }
 },
 "entries": [
+{
+"id": "bodymap_acc_2wk_k20_ci",
+"value": [
+0.676056338028169,
+0.8461538461538461
+],
+"file": null,
+"files": [
+"results/31_site_regen/12_bodymap/scores_target_probs.csv"
+],
+"agg": "recomputed",
+"note": "95 % cluster bootstrap over the 8 BodyMap animals at 2 weeks (k20)"
+},
+{
+"id": "bodymap_acc_2wk_k50_ci",
+"value": [
+0.7887323943661971,
+0.8615384615384616
+],
+"file": null,
+"files": [
+"results/31_site_regen/12_bodymap/scores_target_probs.csv"
+],
+"agg": "recomputed",
+"note": "95 % cluster bootstrap over the 8 BodyMap animals at 2 weeks (k50)"
+},
+{
+"id": "bodymap_acc_2wk_full_ci",
+"value": [
+0.9014084507042254,
+0.9846153846153847
+],
+"file": null,
+"files": [
+"results/31_site_regen/12_bodymap/scores_target_probs.csv"
+],
+"agg": "recomputed",
+"note": "95 % cluster bootstrap over the 8 BodyMap animals at 2 weeks (full)"
+},
+{
+"id": "bodymap_acc_6wk_k20_ci",
+"value": [
+0.9264705882352942,
+1.0
+],
+"file": null,
+"files": [
+"results/31_site_regen/12_bodymap/scores_target_probs.csv"
+],
+"agg": "recomputed",
+"note": "95 % cluster bootstrap over the 8 BodyMap animals at 6 weeks (k20)"
+},
+{
+"id": "bodymap_acc_6wk_k50_ci",
+"value": [
+0.9264705882352942,
+1.0
+],
+"file": null,
+"files": [
+"results/31_site_regen/12_bodymap/scores_target_probs.csv"
+],
+"agg": "recomputed",
+"note": "95 % cluster bootstrap over the 8 BodyMap animals at 6 weeks (k50)"
+},
+{
+"id": "bodymap_acc_6wk_full_ci",
+"value": [
+0.6305833524471807,
+1.0
+],
+"file": null,
+"files": [
+"results/31_site_regen/12_bodymap/scores_target_probs.csv"
+],
+"agg": "recomputed",
+"note": "95 % cluster bootstrap over the 8 BodyMap animals at 6 weeks (full)"
+},
+{
+"id": "bodymap_acc_21wk_k20_ci",
+"value": [
+0.6305833524471807,
+1.0
+],
+"file": null,
+"files": [
+"results/31_site_regen/12_bodymap/scores_target_probs.csv"
+],
+"agg": "recomputed",
+"note": "95 % cluster bootstrap over the 8 BodyMap animals at 21 weeks (k20)"
+},
+{
+"id": "bodymap_acc_21wk_k50_ci",
+"value": [
+0.9558823529411765,
+1.0
+],
+"file": null,
+"files": [
+"results/31_site_regen/12_bodymap/scores_target_probs.csv"
+],
+"agg": "recomputed",
+"note": "95 % cluster bootstrap over the 8 BodyMap animals at 21 weeks (k50)"
+},
+{
+"id": "bodymap_acc_21wk_full_ci",
+"value": [
+0.6305833524471807,
+1.0
+],
+"file": null,
+"files": [
+"results/31_site_regen/12_bodymap/scores_target_probs.csv"
+],
+"agg": "recomputed",
+"note": "95 % cluster bootstrap over the 8 BodyMap animals at 21 weeks (full)"
+},
+{
+"id": "bodymap_acc_104wk_k20_ci",
+"value": [
+0.8461538461538461,
+0.967741935483871
+],
+"file": null,
+"files": [
+"results/31_site_regen/12_bodymap/scores_target_probs.csv"
+],
+"agg": "recomputed",
+"note": "95 % cluster bootstrap over the 8 BodyMap animals at 104 weeks (k20)"
+},
+{
+"id": "bodymap_acc_104wk_k50_ci",
+"value": [
+0.8888888888888888,
+0.96875
+],
+"file": null,
+"files": [
+"results/31_site_regen/12_bodymap/scores_target_probs.csv"
+],
+"agg": "recomputed",
+"note": "95 % cluster bootstrap over the 8 BodyMap animals at 104 weeks (k50)"
+},
+{
+"id": "bodymap_acc_104wk_full_ci",
+"value": [
+0.8970588235294118,
+0.9841269841269841
+],
+"file": null,
+"files": [
+"results/31_site_regen/12_bodymap/scores_target_probs.csv"
+],
+"agg": "recomputed",
+"note": "95 % cluster bootstrap over the 8 BodyMap animals at 104 weeks (full)"
+},
 {
 "id": "gtex_recal_infinite_draws",
 "value": {
@@ -1072,6 +1228,399 @@
 ],
 "agg": "recomputed",
 "note": "mean over 5 folds of the coverage recomputed from the phase-06 design scores (full, floored, one_per_animal)"
+},
+{
+"id": "cov_train_control_test_trained_k20_marginal",
+"value": 0.9026425591098748,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_control_test_trained",
+"arm": "panel_k20"
+},
+"column": "coverage_target_seen",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "empty_seen_train_control_test_trained_k20",
+"value": 0.08066759388038942,
+"file": null,
+"files": [
+"results/31_site_regen/08_shift_k20/scores_target_vials.csv"
+],
+"agg": "recomputed",
+"note": "empty-set rate over the target vials of seen classes (the unseen sex-specific tissue's vials excluded)"
+},
+{
+"id": "acc_train_control_test_trained_k20",
+"value": 0.96105702364395,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_control_test_trained",
+"arm": "panel_k20"
+},
+"column": "accuracy_all",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "accseen_train_control_test_trained_k20",
+"value": 0.963157894736842,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_control_test_trained",
+"arm": "panel_k20"
+},
+"column": "bal_acc_seen",
+"agg": "value",
+"tol": 1e-06,
+"note": "balanced accuracy over the seen classes"
+},
+{
+"id": "size_train_control_test_trained_k20_marginal",
+"value": 0.9193324061196104,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_control_test_trained",
+"arm": "panel_k20"
+},
+"column": "avg_set_size_target",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "covsrc_train_control_test_trained_k20",
+"value": 0.9444444444444444,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_control_test_trained",
+"arm": "panel_k20"
+},
+"column": "coverage_source_id",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "recal3_train_control_test_trained_k20",
+"value": 0.9242534263586896,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_control_test_trained",
+"arm": "panel_k20"
+},
+"column": "cov_target_recal_N3",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_train_control_test_trained_k20_mondrian",
+"value": 1.0,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_control_test_trained",
+"arm": "panel_k20"
+},
+"column": "coverage_target_seen_mondrian",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "size_train_control_test_trained_k20_mondrian",
+"value": 19.0,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_control_test_trained",
+"arm": "panel_k20"
+},
+"column": "avg_set_size_target_mondrian",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_train_control_test_trained_k20_floored",
+"value": 1.0,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_control_test_trained",
+"arm": "panel_k20"
+},
+"column": "coverage_target_seen_floored",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "size_train_control_test_trained_k20_floored",
+"value": 19.0,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_control_test_trained",
+"arm": "panel_k20"
+},
+"column": "avg_set_size_target_floored",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_train_control_test_trained_k50_marginal",
+"value": 0.8789986091794159,
+"file": "results/31_site_regen/08_shift_k50/shift_table.csv",
+"where": {
+"split": "train_control_test_trained",
+"arm": "panel_k50"
+},
+"column": "coverage_target_seen",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "empty_seen_train_control_test_trained_k50",
+"value": 0.1043115438108484,
+"file": null,
+"files": [
+"results/31_site_regen/08_shift_k50/scores_target_vials.csv"
+],
+"agg": "recomputed",
+"note": "empty-set rate over the target vials of seen classes (the unseen sex-specific tissue's vials excluded)"
+},
+{
+"id": "acc_train_control_test_trained_k50",
+"value": 0.9680111265646733,
+"file": "results/31_site_regen/08_shift_k50/shift_table.csv",
+"where": {
+"split": "train_control_test_trained",
+"arm": "panel_k50"
+},
+"column": "accuracy_all",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "accseen_train_control_test_trained_k50",
+"value": 0.9697368421052632,
+"file": "results/31_site_regen/08_shift_k50/shift_table.csv",
+"where": {
+"split": "train_control_test_trained",
+"arm": "panel_k50"
+},
+"column": "bal_acc_seen",
+"agg": "value",
+"tol": 1e-06,
+"note": "balanced accuracy over the seen classes"
+},
+{
+"id": "size_train_control_test_trained_k50_marginal",
+"value": 0.8956884561891516,
+"file": "results/31_site_regen/08_shift_k50/shift_table.csv",
+"where": {
+"split": "train_control_test_trained",
+"arm": "panel_k50"
+},
+"column": "avg_set_size_target",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "covsrc_train_control_test_trained_k50",
+"value": 1.0,
+"file": "results/31_site_regen/08_shift_k50/shift_table.csv",
+"where": {
+"split": "train_control_test_trained",
+"arm": "panel_k50"
+},
+"column": "coverage_source_id",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "recal3_train_control_test_trained_k50",
+"value": 0.9248445437919122,
+"file": "results/31_site_regen/08_shift_k50/shift_table.csv",
+"where": {
+"split": "train_control_test_trained",
+"arm": "panel_k50"
+},
+"column": "cov_target_recal_N3",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_train_control_test_trained_k50_mondrian",
+"value": 1.0,
+"file": "results/31_site_regen/08_shift_k50/shift_table.csv",
+"where": {
+"split": "train_control_test_trained",
+"arm": "panel_k50"
+},
+"column": "coverage_target_seen_mondrian",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "size_train_control_test_trained_k50_mondrian",
+"value": 19.0,
+"file": "results/31_site_regen/08_shift_k50/shift_table.csv",
+"where": {
+"split": "train_control_test_trained",
+"arm": "panel_k50"
+},
+"column": "avg_set_size_target_mondrian",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_train_control_test_trained_k50_floored",
+"value": 1.0,
+"file": "results/31_site_regen/08_shift_k50/shift_table.csv",
+"where": {
+"split": "train_control_test_trained",
+"arm": "panel_k50"
+},
+"column": "coverage_target_seen_floored",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "size_train_control_test_trained_k50_floored",
+"value": 19.0,
+"file": "results/31_site_regen/08_shift_k50/shift_table.csv",
+"where": {
+"split": "train_control_test_trained",
+"arm": "panel_k50"
+},
+"column": "avg_set_size_target_floored",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_train_control_test_trained_full_marginal",
+"value": 0.8803894297635605,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_control_test_trained",
+"arm": "full"
+},
+"column": "coverage_target_seen",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "empty_seen_train_control_test_trained_full",
+"value": 0.10987482614742698,
+"file": null,
+"files": [
+"results/31_site_regen/08_shift_k20/scores_target_vials.csv"
+],
+"agg": "recomputed",
+"note": "empty-set rate over the target vials of seen classes (the unseen sex-specific tissue's vials excluded)"
+},
+{
+"id": "acc_train_control_test_trained_full",
+"value": 0.9791376912378305,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_control_test_trained",
+"arm": "full"
+},
+"column": "accuracy_all",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "accseen_train_control_test_trained_full",
+"value": 0.9802631578947368,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_control_test_trained",
+"arm": "full"
+},
+"column": "bal_acc_seen",
+"agg": "value",
+"tol": 1e-06,
+"note": "balanced accuracy over the seen classes"
+},
+{
+"id": "size_train_control_test_trained_full_marginal",
+"value": 0.8901251738525731,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_control_test_trained",
+"arm": "full"
+},
+"column": "avg_set_size_target",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "covsrc_train_control_test_trained_full",
+"value": 0.9444444444444444,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_control_test_trained",
+"arm": "full"
+},
+"column": "coverage_source_id",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "recal3_train_control_test_trained_full",
+"value": 0.9183878615457562,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_control_test_trained",
+"arm": "full"
+},
+"column": "cov_target_recal_N3",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_train_control_test_trained_full_mondrian",
+"value": 1.0,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_control_test_trained",
+"arm": "full"
+},
+"column": "coverage_target_seen_mondrian",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "size_train_control_test_trained_full_mondrian",
+"value": 19.0,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_control_test_trained",
+"arm": "full"
+},
+"column": "avg_set_size_target_mondrian",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_train_control_test_trained_full_floored",
+"value": 1.0,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_control_test_trained",
+"arm": "full"
+},
+"column": "coverage_target_seen_floored",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "size_train_control_test_trained_full_floored",
+"value": 19.0,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_control_test_trained",
+"arm": "full"
+},
+"column": "avg_set_size_target_floored",
+"agg": "value",
+"tol": 1e-06
 },
 {
 "id": "cov_train_male_test_female_k20_marginal",
@@ -3356,67 +3905,70 @@
 },
 {
 "id": "qc_technical",
-"value": 0.8731533209186841,
+"value": 0.8742105263157894,
 "file": "results/16_identifiability/qc_only_summary.csv",
 "where": {
 "features": "technical"
 },
-"column": "acc_mean",
+"column": "bal_acc_mean",
 "agg": "value",
-"tol": 1e-06
+"tol": 1e-06,
+"note": "balanced accuracy, the metric of every other accuracy on the site"
 },
 {
 "id": "qc_technical_sd",
-"value": 0.026763414866885,
+"value": 0.024854145164458,
 "file": "results/16_identifiability/qc_only_summary.csv",
 "where": {
 "features": "technical"
 },
-"column": "acc_sd",
+"column": "bal_acc_sd",
 "agg": "value",
 "tol": 1e-06
 },
 {
 "id": "qc_composition",
-"value": 0.9488268156424582,
+"value": 0.951578947368421,
 "file": "results/16_identifiability/qc_only_summary.csv",
 "where": {
 "features": "composition"
 },
-"column": "acc_mean",
+"column": "bal_acc_mean",
 "agg": "value",
-"tol": 1e-06
+"tol": 1e-06,
+"note": "balanced accuracy, the metric of every other accuracy on the site"
 },
 {
 "id": "qc_composition_sd",
-"value": 0.0107194449036286,
+"value": 0.010123886348248,
 "file": "results/16_identifiability/qc_only_summary.csv",
 "where": {
 "features": "composition"
 },
-"column": "acc_sd",
+"column": "bal_acc_sd",
 "agg": "value",
 "tol": 1e-06
 },
 {
 "id": "qc_all",
-"value": 0.9754934823091248,
+"value": 0.9757894736842104,
 "file": "results/16_identifiability/qc_only_summary.csv",
 "where": {
 "features": "all"
 },
-"column": "acc_mean",
+"column": "bal_acc_mean",
 "agg": "value",
-"tol": 1e-06
+"tol": 1e-06,
+"note": "balanced accuracy, the metric of every other accuracy on the site"
 },
 {
 "id": "qc_all_sd",
-"value": 0.0203799168734061,
+"value": 0.0199028109486201,
 "file": "results/16_identifiability/qc_only_summary.csv",
 "where": {
 "features": "all"
 },
-"column": "acc_sd",
+"column": "bal_acc_sd",
 "agg": "value",
 "tol": 1e-06
 },

@@ -94,7 +94,7 @@ async function main() {
   document.getElementById("p-identifiability").replaceChildren(
     `Each tissue sits entirely inside one RNA extraction plate, one library batch and one flowcell: ${ex.n_plates} plates and ${ex.n_lib_batches} library batches holding at most ${Math.max(nest.RNA_extr_plate_ID.max_tissues_per_level, nest.Lib_batch_ID.max_tissues_per_level)} tissues each, ${ex.n_flowcells} flowcells holding up to ${nest.Seq_flowcell_ID.max_tissues_per_level}. `,
     `Only ${est.n_pairs_estimable} of ${est.n_pairs_total} tissue pairs share a level of all three (${est.estimable_pairs.replace("|", " and ").toLowerCase()}, which is also the sex contrast). `,
-    `Library QC numbers alone, with no gene, classify the tissue at ${fmt(qc.all.acc_mean)} ± ${fmt(qc.all.acc_sd)} (technical numbers ${fmt(qc.technical.acc_mean)}, composition fractions ${fmt(qc.composition.acc_mean)}). `,
+    `Library QC numbers alone, with no gene, classify the tissue at ${fmt(qc.all.bal_acc_mean)} ± ${fmt(qc.all.bal_acc_sd)} (technical numbers ${fmt(qc.technical.bal_acc_mean)}, composition fractions ${fmt(qc.composition.bal_acc_mean)}). `,
     "So within-study accuracy is not evidence that the signature is biology. The evidence is external: the panel transfers to a laboratory where none of these batches exist. ",
     ...(typeof ex.bridge_sum_ratio_all_genes_pool99 === "number"
       ? [`And where batch could be measured directly, on a reference RNA pool run on ${ex.bridge_n_plates_pool99} plates at both sites, it was ${(100 * ex.bridge_sum_ratio_all_genes_pool99).toFixed(1)} % of the variance that separates tissues.`]

@@ -59,23 +59,23 @@ async function main() {
   const pf = Q.per_fold;
   const geneBase = PC.baselines.find((r) => r.model === "logreg_l2");
   document.getElementById("p-qc").replaceChildren(
-    `A multinomial logistic regression that never sees a gene, only the consortium's per-library QC numbers, identifies the tissue on the same animal-grouped folds as the fingerprint: ${fmt(qs.technical.acc_mean)} ± ${fmt(qs.technical.acc_sd)} from ${qs.technical.n_features} purely technical numbers (RIN, adapter and duplication rates, GC, read depth), ${fmt(qs.composition.acc_mean)} ± ${fmt(qs.composition.acc_sd)} from ${qs.composition.n_features} composition fractions, ${fmt(qs.all.acc_mean)} ± ${fmt(qs.all.acc_sd)} from both, against ${fmt(Q.info.chance)} by chance and ${fmt(geneBase.balanced_accuracy_mean)} for the gene-based model. `,
+    `A multinomial logistic regression that never sees a gene, only the consortium's per-library QC numbers, identifies the tissue on the same animal-grouped folds as the fingerprint (balanced accuracy, like every other accuracy on this site): ${fmt(qs.technical.bal_acc_mean)} ± ${fmt(qs.technical.bal_acc_sd)} from ${qs.technical.n_features} purely technical numbers (RIN, adapter and duplication rates, GC, read depth), ${fmt(qs.composition.bal_acc_mean)} ± ${fmt(qs.composition.bal_acc_sd)} from ${qs.composition.n_features} composition fractions, ${fmt(qs.all.bal_acc_mean)} ± ${fmt(qs.all.bal_acc_sd)} from both, against ${fmt(Q.info.chance)} by chance and ${fmt(geneBase.balanced_accuracy_mean)} for the gene-based model. `,
     "The consortium's QC table is, in effect, a tissue label.",
   );
   await figure(document.getElementById("fig-qc"), {
     title: "With no gene at all, library QC numbers identify the tissue almost as well as the fingerprint",
-    subtitle: "Accuracy per fold (dots) and mean ± sd (bars) of a QC-only classifier on the phase-04 animal-grouped folds, by feature set; chance and the all-gene logistic regression for reference.",
+    subtitle: "Balanced accuracy per fold (dots) and mean ± sd (bars) of a QC-only classifier on the phase-04 animal-grouped folds, by feature set; chance and the all-gene logistic regression for reference.",
     build: () => {
       const t = tokens(); const p = palette();
       const sets = ["technical", "composition", "all"];
       const x = [...sets.map((s) => `${s} (${qs[s].n_features})`), "gene-based model"];
       const y = [...sets.map((s) => qs[s].acc_mean), geneBase.balanced_accuracy_mean];
       const sdv = [...sets.map((s) => qs[s].acc_sd), geneBase.balanced_accuracy_std];
-      const dots = strip(pf.map((r) => sets.indexOf(r.features) + (r.fold - 2) * 0.05), pf.map((r) => r.accuracy), { color: t.ink2, size: 7, name: "per fold", hover: "%{customdata}<extra></extra>" });
-      dots.customdata = pf.map((r) => `${r.features}, fold ${r.fold}: ${fmt(r.accuracy)} (${r.n_test_animals} test animals, ${r.n_test_vials} vials)`);
+      const dots = strip(pf.map((r) => sets.indexOf(r.features) + (r.fold - 2) * 0.05), pf.map((r) => r.balanced_accuracy), { color: t.ink2, size: 7, name: "per fold", hover: "%{customdata}<extra></extra>" });
+      dots.customdata = pf.map((r) => `${r.features}, fold ${r.fold}: ${fmt(r.balanced_accuracy)} (${r.n_test_animals} test animals, ${r.n_test_vials} vials)`);
       dots.x = pf.map((r) => r.features === "technical" ? 0 + (r.fold - 2) * 0.06 : r.features === "composition" ? 1 + (r.fold - 2) * 0.06 : 2 + (r.fold - 2) * 0.06);
-      return { traces: [{ ...bar(x, y, { name: "mean accuracy", slot: 1, sd: sdv, text: y.map((v) => fmt(v)), hover: "%{x}: %{y:.3f}<extra>mean</extra>" }), marker: { color: [p[0], p[0], p[0], t.axis], line: { color: t.surface, width: 2 }, cornerradius: 4 } }, { ...dots, xaxis: "x", x: dots.x.map((v) => x[Math.round(v)]) }],
-               layout: { yaxis: { range: [0, 1.08], title: { text: "accuracy" } }, shapes: [{ type: "line", xref: "paper", x0: 0, x1: 1, yref: "y", y0: Q.info.chance, y1: Q.info.chance, line: { color: t.ink2, width: 1, dash: "dash" } }],
+      return { traces: [{ ...bar(x, y, { name: "mean balanced accuracy", slot: 1, sd: sdv, text: y.map((v) => fmt(v)), hover: "%{x}: %{y:.3f}<extra>mean</extra>" }), marker: { color: [p[0], p[0], p[0], t.axis], line: { color: t.surface, width: 2 }, cornerradius: 4 } }, { ...dots, xaxis: "x", x: dots.x.map((v) => x[Math.round(v)]) }],
+               layout: { yaxis: { range: [0, 1.08], title: { text: "balanced accuracy" } }, shapes: [{ type: "line", xref: "paper", x0: 0, x1: 1, yref: "y", y0: Q.info.chance, y1: Q.info.chance, line: { color: t.ink2, width: 1, dash: "dash" } }],
                          annotations: [{ xref: "paper", x: 1, xanchor: "right", yref: "y", y: Q.info.chance, yanchor: "bottom", text: "chance (1/19)", showarrow: false, font: { color: t.ink2, size: 11 } }], margin: { t: 40 }, legend: { y: 1.12 } },
                table: { columns: ["features", "n_features", "acc_mean", "acc_sd", "bal_acc_mean", "bal_acc_sd", "n_folds", "n_test_animals_mean"], rows: Q.summary } };
     },

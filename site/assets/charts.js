@@ -29,11 +29,19 @@ export function sequential() {
   return [1, 2, 3, 4, 5, 6, 7].map((i) => cssVar(`--s${i}`));
 }
 
+function isDarkSurface(hex) {
+  const c = String(hex).trim().replace("#", "");
+  if (c.length !== 6) return false;
+  const r = parseInt(c.slice(0, 2), 16), g = parseInt(c.slice(2, 4), 16), b = parseInt(c.slice(4, 6), 16);
+  return 0.299 * r + 0.587 * g + 0.114 * b < 128;
+}
+
 export function sequentialScale() {
-  const s = sequential();
   const t = tokens();
+  // one hue, monotonic in lightness away from the surface: light → dark blue on a light surface, dark → light blue on a dark one;
+  // zero sits on the surface itself so empty cells read as "nothing"
+  const s = isDarkSurface(t.surface) ? sequential().reverse() : sequential();
   const n = s.length;
-  // the lightest step sits just above the surface so zero cells read as "nothing"
   return [[0, t.surface], ...s.map((c, i) => [(i + 1) / n, c])];
 }
 
@@ -248,7 +256,7 @@ export function heatmap(z, x, y, opts = {}) {
     type: "heatmap", z, x, y, colorscale: opts.diverging ? divergingScale() : sequentialScale(), zmin: opts.zmin, zmax: opts.zmax, zmid: opts.zmid,
     xgap: 2, ygap: 2, hoverongaps: false, showscale: opts.showscale !== false,
     colorbar: { thickness: 10, len: 0.8, outlinewidth: 0, tickfont: { color: t.ink2, size: 11 }, title: { text: opts.ztitle || "", font: { color: t.ink2, size: 11 } } },
-    text: opts.text, texttemplate: opts.texttemplate, textfont: { color: t.ink, size: 10 },
+    text: opts.text, texttemplate: opts.texttemplate, textfont: { color: opts.textColor || "auto", size: 10 },
     hovertemplate: opts.hover || "%{y} → %{x}: %{z}<extra></extra>",
   };
 }

@@ -2,11 +2,19 @@ cff-version: 1.2.0
 message: "If you use this code or site, please cite it as below, and cite the data sources listed in the README."
 title: "Molecular Tissue Fingerprints: a 20-gene panel, its conformal guarantee, and what a within-study fingerprint can identify"
 type: software
-version: "1.0.0"
+version: "1.2.0"
 date-released: "2026-09-26"
 license: MIT
+# team "The Rat Pack"; members in no particular order
 authors:
-  - name: "[team name — edit CITATION.cff and site/about.html]"
+  - given-names: Samuel
+    family-names: Montalvo
+  - given-names: Manasa
+    family-names: Rapuru
+  - given-names: Erol
+    family-names: Evangelista
+  - given-names: Cory
+    family-names: Gardner
 keywords:
   - MoTrPAC
   - tissue classification

@@ -24,4 +24,4 @@ Fingerprints — Can molecular signatures identify a tissue reliably?**
 
 ## Team
 
-See `site/about.html` (placeholder block) and `CITATION.cff`.
+The Rat Pack: Samuel Montalvo, Manasa Rapuru, Erol Evangelista and Cory Gardner (in no particular order); see `site/about.html` and `CITATION.cff`.

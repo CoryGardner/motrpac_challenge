@@ -13,8 +13,10 @@ async function main() {
   ]);
   const ex = H.extras;
   const bm20 = pick(H.ladder, "different_lab", "k20", "marginal"), gt20 = pick(H.ladder, "different_species", "k20", "marginal"), gtfull = pick(H.ladder, "different_species", "full", "marginal");
+  const tr20 = pick(H.ladder, "train_control_test_trained", "k20", "marginal"), trFull = pick(H.ladder, "train_control_test_trained", "full", "marginal");
   document.getElementById("lede").replaceChildren(
-    `Fit on MoTrPAC, the 20-gene panel names ${fmt(bm20.accuracy)} of adult BodyMap organs and ${fmt(gt20.accuracy)} of human GTEx samples (${fmt(gtfull.accuracy)} with all genes). `,
+    `Fit on the ${tr20.n_source_animals} sedentary control animals alone, the 20-gene panel names the tissue of the ${tr20.n_individuals} trained animals at ${fmt(tr20.accuracy)} with coverage ${fmt(tr20.coverage)}: training state is not a shift the panel notices (the all-gene model reaches ${fmt(trFull.accuracy)} but its coverage slips to ${fmt(trFull.coverage)}). `,
+    `Fit on MoTrPAC, it names ${fmt(bm20.accuracy)} of adult BodyMap organs and ${fmt(gt20.accuracy)} of human GTEx samples (${fmt(gtfull.accuracy)} with all genes). `,
     `The 90 % guarantee delivers ${fmt(bm20.coverage)} and ${fmt(gt20.coverage)} with the source calibration. Three target animals repair it within species; three donors do not repair it across species.`,
   );
 
@@ -83,7 +85,7 @@ async function main() {
       traces.forEach((tr) => { tr.mode = "markers"; tr.text = undefined; });
       const g3 = rg.filter((r) => r.n_recal === 3), g5 = rg.filter((r) => r.n_recal === 5);
       const clusterNotes = [
-        { x: mean(rb.map((r) => r.set_size_recalibrated)), y: Math.min(...rb.map((r) => r.coverage_recalibrated)) - 0.012, text: `BodyMap, 3 or 5 animals:<br>${fmt(Math.min(...rb.map((r) => r.set_size_recalibrated)), 2)}–${fmt(Math.max(...rb.map((r) => r.set_size_recalibrated)), 2)} tissues per set`, yanchor: "top" },
+        { x: Math.max(...rb.map((r) => r.set_size_recalibrated)) + 0.55, xanchor: "left", y: mean(rb.map((r) => r.coverage_recalibrated)), yanchor: "middle", align: "left", text: `BodyMap, 3 or 5 animals:<br>${fmt(Math.min(...rb.map((r) => r.set_size_recalibrated)), 2)}–${fmt(Math.max(...rb.map((r) => r.set_size_recalibrated)), 2)} tissues per set` },
         { x: mean(g3.map((r) => r.set_size_recalibrated)), y: Math.max(...g3.map((r) => r.coverage_recalibrated)) + 0.012, text: `GTEx, 3 donors:<br>${fmt(Math.min(...g3.map((r) => r.set_size_recalibrated)), 1)}–${fmt(Math.max(...g3.map((r) => r.set_size_recalibrated)), 1)} tissues per set`, yanchor: "bottom" },
         { x: mean(g5.map((r) => r.set_size_recalibrated)), y: Math.min(...g5.map((r) => r.coverage_recalibrated)) - 0.012, text: "GTEx, 5 donors", yanchor: "top" },
       ].map((a) => ({ ...a, xref: "x", yref: "y", showarrow: false, font: { color: t.ink2, size: 11 } }));
@@ -109,13 +111,19 @@ async function main() {
   );
   await figure(document.getElementById("fig-age"), {
     title: "Accuracy dips in juveniles and old animals; the full model is more robust than the panel",
-    subtitle: "Accuracy on the 9 mapped BodyMap organs by age (sample-weighted; super-class scoring for muscle and brain), per model.",
+    subtitle: "Accuracy on the 9 mapped BodyMap organs by age (sample-weighted; super-class scoring for muscle and brain), per model. Whiskers: 95 % intervals over the animals of each age (cluster bootstrap; exact binomial where every animal is perfect); n in the hover.",
     build: () => ({
-      traces: MODELS.map((m, i) => line(ages.map((r) => String(r.stage_weeks)), ages.map((r) => r[m]), { name: MODEL_LABEL[m], slot: i + 1, hover: "%{x} weeks: %{y:.3f}<extra>" + MODEL_LABEL[m] + "</extra>" })),
-      layout: { xaxis: { title: { text: "age (weeks)" }, type: "category" }, yaxis: { range: [0.7, 1.02], title: { text: "accuracy" } }, margin: { t: 40 } },
-      table: { columns: ["stage_weeks", "k20", "k50", "full"], rows: ages },
+      traces: MODELS.map((m, i) => {
+        const tr = line(ages.map((r) => String(r.stage_weeks)), ages.map((r) => r[m]), { name: MODEL_LABEL[m], slot: i + 1, hover: "%{customdata}<extra>" + MODEL_LABEL[m] + "</extra>" });
+        tr.customdata = ages.map((r) => `${r.stage_weeks} weeks: ${fmt(r[m])}${r[`${m}_ci`] ? ` [${fmt(r[`${m}_ci`][0])}, ${fmt(r[`${m}_ci`][1])}]` : ""}<br>n = ${r.n_samples ?? "—"} samples, ${r.n_animals ?? "—"} animals`);
+        if (ages.every((r) => r[`${m}_ci`])) tr.error_y = { type: "data", symmetric: false, array: ages.map((r) => r[`${m}_ci`][1] - r[m]), arrayminus: ages.map((r) => r[m] - r[`${m}_ci`][0]), visible: true, thickness: 1.2, width: 3 };
+        return tr;
+      }),
+      layout: { xaxis: { title: { text: "age (weeks)" }, type: "category" }, yaxis: { range: [0.5, 1.02], title: { text: "accuracy" } }, margin: { t: 40 } },
+      table: { columns: ["stage_weeks", "n_samples", "n_animals", "k20", "k20_ci", "k50", "k50_ci", "full", "full_ci"],
+               rows: ages.map((r) => ({ stage_weeks: r.stage_weeks, n_samples: r.n_samples, n_animals: r.n_animals, ...Object.fromEntries(MODELS.flatMap((m) => [[m, r[m]], [`${m}_ci`, r[`${m}_ci`] ? r[`${m}_ci`].map((v) => v.toFixed(3)).join(" – ") : ""]])) })) },
     }),
-    source: "results/12_bodymap/age_shift_accuracy.csv",
+    source: "results/12_bodymap/age_shift_accuracy.csv; intervals and n recomputed from results/31_site_regen/12_bodymap/scores_target_probs.csv",
     notShow: "per-organ detail (results/12_bodymap/accuracy_by_organ.csv): at 2 weeks the panel calls testes SKM-VL and spleen BLOOD in every sample.",
     height: "short",
   });

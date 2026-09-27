@@ -129,14 +129,22 @@ function tissueCard(exprP) {
 
   function buildControls() {
     ctl.replaceChildren();
-    const a = slider(0.05, 0.30, 0.01, state.alpha, (v) => { state.alpha = v; render(); }, (v) => `α = ${v.toFixed(2)} (target coverage ${((1 - v) * 100).toFixed(0)} %)`);
-    ctl.append(control("Error level α", a.input, a.out));
+    // in recalibrated mode the set uses the draw's own threshold (α = 0.10, marginal), so the α and variant controls are switched off
+    const off = state.source !== "motrpac" && state.calib === "recal";
+    const a = slider(0.05, 0.30, 0.01, off ? 0.10 : state.alpha, (v) => { state.alpha = v; render(); }, (v) => `α = ${v.toFixed(2)} (target coverage ${((1 - v) * 100).toFixed(0)} %)`);
+    a.input.disabled = off;
+    const alphaCtl = control(off ? "Error level α (fixed at 0.10 by the recalibration draw)" : "Error level α", a.input, a.out);
+    alphaCtl.classList.toggle("is-off", off);
+    ctl.append(alphaCtl);
     ctl.append(control("Model", segmented([["k20", "20 genes"], ["k50", "50 genes"], ["full", "all genes"]], state.model, (v) => { state.model = v; render(); }, "model")));
-    ctl.append(control("Prediction set", segmented([["marginal", "marginal"], ["mondrian", "Mondrian"], ["floored", "floored Mondrian"]], state.variant, (v) => { state.variant = v; render(); }, "conformal variant")));
+    const variantCtl = control(off ? "Prediction set (marginal in recalibrated mode)" : "Prediction set", segmented([["marginal", "marginal"], ["mondrian", "Mondrian"], ["floored", "floored Mondrian"]], state.variant, (v) => { state.variant = v; render(); }, "conformal variant"));
+    variantCtl.classList.toggle("is-off", off);
+    if (off) variantCtl.querySelectorAll("button").forEach((b) => { b.disabled = true; });
+    ctl.append(variantCtl);
     if (state.source === "motrpac") {
       ctl.append(control("Calibration (22 held-out animals)", segmented([["pooled", "pooled vials"], ["one_per_animal", "one vial per animal"]], state.mcal, (v) => { state.mcal = v; render(); }, "calibration")));
     } else {
-      ctl.append(control("Calibration", segmented([["source", "15 MoTrPAC animals (source)"], ["recal", "recalibrated on target individuals"]], state.calib, (v) => { state.calib = v; render(); }, "calibration")));
+      ctl.append(control("Calibration", segmented([["source", "15 MoTrPAC animals (source)"], ["recal", "recalibrated on target individuals"]], state.calib, (v) => { state.calib = v; buildControls(); render(); }, "calibration")));
       ctl.append(control("Recalibration n (draw 0 of 20)", segmented([["3", "3"], ["5", "5"]], state.recalN, (v) => { state.recalN = v; render(); }, "recalibration size")));
     }
   }

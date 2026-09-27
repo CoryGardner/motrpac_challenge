@@ -50,13 +50,13 @@ async function main() {
     `They cover ${new Set(core.map((r) => r.marker_tissue)).size} tissues with single markers such as Umod (kidney), Cyp21a1 (adrenal) and Pmch (hypothalamus). ${core.filter((r) => r.risk_T7_regulated).length} carry a training-regulated flag and ${core.filter((r) => r.risk_qc_correlated).length} a QC-correlation flag: annotations, not exclusions.`,
   );
   const coreRows = core.map((r) => { const g = gi[r.feature_ID] || {}; return {
-    gene: r.gene_symbol, tissue: tissueLabel(r.marker_tissue), selection_frequency: r.selection_frequency, effect_size_log2cpm: r.effect_size, next_highest_tissue: r.next_highest_tissue, ovr_score: r.ovr_score,
-    r_pct_mrna: r.r_pct_mrna_in_marker_tissue, training_regulated: r.risk_T7_regulated ? "yes" : "no", qc_correlated: r.risk_qc_correlated ? "yes" : "no",
-    bodymap: g.fails_bodymap === null || g.fails_bodymap === undefined ? "no organ" : g.fails_bodymap ? "fails" : g.weakened_bodymap ? "weakened" : "holds",
-    gtex: g.fails_gtex === null || g.fails_gtex === undefined ? "not testable" : g.fails_gtex ? "fails" : g.weakened_gtex ? "weakened" : "holds" }; });
+    gene: r.gene_symbol, tissue: tissueLabel(r.marker_tissue).split(" · ").pop(), freq: r.selection_frequency, effect: r.effect_size, "runner-up": r.next_highest_tissue, OvR: r.ovr_score,
+    "r mRNA": r.r_pct_mrna_in_marker_tissue, regulated: r.risk_T7_regulated ? "yes" : "no", "QC flag": r.risk_qc_correlated ? "yes" : "no",
+    BodyMap: g.fails_bodymap === null || g.fails_bodymap === undefined ? "no organ" : g.fails_bodymap ? "fails" : g.weakened_bodymap ? "weakened" : "holds",
+    GTEx: g.fails_gtex === null || g.fails_gtex === undefined ? "not testable" : g.fails_gtex ? "fails" : g.weakened_gtex ? "weakened" : "holds" }; });
   const f2 = (v) => v.toFixed(2);
-  document.getElementById("tbl-core").replaceChildren(tableFrom({ columns: Object.keys(coreRows[0]), rows: coreRows, format: { selection_frequency: f2, effect_size_log2cpm: f2, ovr_score: f2, r_pct_mrna: f2 } }),
-    el("p", { class: "small" }, "Sources: results/05_panels/TRNSCRPT/candidate_panel_annotated.csv (selection frequency, effect size, one-vs-rest score, QC correlation, flags); results/12_bodymap/panel_gene_check.csv and results/13_gtex/panel_gene_check.csv (holds / weakened / fails on the external targets; the GTEx panel is re-selected in ortholog space, so a core gene can be untested there)."));
+  document.getElementById("tbl-core").replaceChildren(tableFrom({ columns: Object.keys(coreRows[0]), rows: coreRows, format: { freq: f2, effect: f2, OvR: f2, "r mRNA": f2 } }),
+    el("p", { class: "small" }, "Columns: freq = selection frequency over the 50 bootstraps; effect = log2 CPM above the runner-up tissue; OvR = one-vs-rest score; r mRNA = correlation with the library mRNA fraction in the marker tissue; regulated = training-regulated in the marker tissue; QC flag = QC-correlated. Sources: results/05_panels/TRNSCRPT/candidate_panel_annotated.csv (selection frequency, effect size, one-vs-rest score, QC correlation, flags); results/12_bodymap/panel_gene_check.csv and results/13_gtex/panel_gene_check.csv (holds / weakened / fails on the external targets; the GTEx panel is re-selected in ortholog space, so a core gene can be untested there)."));
 
   // ---- per-tissue accuracy and confusion --------------------------------------------------------------
   const pt20 = CM.confusion.k20.per_tissue_accuracy, ptFull = CM.confusion.full.per_tissue_accuracy;
