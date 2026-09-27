@@ -68,8 +68,8 @@ export function mountOverview(container, nodes, { alt, desc, prefix = "ov" } = {
       nodes.forEach((nd, i) => {
         const y = 4 + i * step, x = 20;
         root.appendChild(svg("rect", { class: nd.verdict ? "node verdict" : "node", x, y, width: w, height: h, rx: 8 }));
-        const lines = wrap(nd.label, nd.num ? 22 : 34).slice(0, 2);
-        lines.forEach((l, j) => root.appendChild(text(x + 12, y + 22 + j * 15, l, { "font-size": 13 })));
+        const lines = wrap(nd.label, nd.num ? 22 : 34).slice(0, 3);
+        lines.forEach((l, j) => root.appendChild(text(x + 12, y + (lines.length > 2 ? 18 : 22) + j * (lines.length > 2 ? 14 : 15), l, { "font-size": lines.length > 2 ? 12 : 13 })));
         if (nd.num !== null && nd.num !== undefined) {
           root.appendChild(text(x + w - 12, y + 26, nd.num, { class: "num", "text-anchor": "end", "font-size": 17 }));
           if (nd.unit) wrap(nd.unit, 24).slice(0, 2).forEach((u, j) => root.appendChild(text(x + w - 12, y + 42 + j * 12, u, { class: "note", "text-anchor": "end", "font-size": 10.5 })));
