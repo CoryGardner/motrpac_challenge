@@ -1227,6 +1227,11 @@ def main():
     export_genes(w, prov, args.skip_expr)
     (SITE / "provenance.json").write_text(json.dumps(jsonable({"_meta": {"generated": generated, "git_hash": ghash, "sources": sorted(prov.sources)},
                                                               "entries": prov.entries, "tables": prov.tables}), indent=0))
+    # the manifest lists the site data files last, once they all exist
+    mpath = SITE / "manifest.json"
+    mdata = json.loads(mpath.read_text())
+    mdata["site_data_files"] = [{"name": p.name, "bytes": p.stat().st_size} for p in sorted(SITE.glob("*.json"))]
+    mpath.write_text(json.dumps(mdata, indent=1))
     total = sum(p.stat().st_size for p in SITE.glob("*.json"))
     print(f"== {len(prov.entries)} provenance entries, {len(prov.tables)} tables; site/data total {total / 1e6:.2f} MB; largest "
           f"{max(SITE.glob('*.json'), key=lambda p: p.stat().st_size).name}")

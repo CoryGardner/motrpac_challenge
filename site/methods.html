@@ -21,7 +21,7 @@
   <section class="section prose" id="pipeline">
     <h2>The pipeline, all of it inside the fold</h2>
     <p>Each outer fold holds out whole animals. Everything that learns from data — median imputation, the variance prefilter, z-scoring, the panel selector and the classifier — is fitted on the training animals of that fold only, as one scikit-learn <code>Pipeline</code>, so leakage is impossible by construction rather than by care.</p>
-    <svg class="svg-diagram" viewBox="0 0 960 250" role="img" aria-labelledby="diag-title">
+    <svg class="svg-diagram wide" viewBox="0 0 960 250" role="img" aria-labelledby="diag-title">
       <title id="diag-title">Pipeline diagram: median imputation, variance prefilter, z-score, round-robin selector and classifier, all inside the training fold; test animals are scored only.</title>
       <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="currentColor"/></marker></defs>
       <rect class="fold" x="18" y="52" width="740" height="150" rx="10"/>
@@ -76,7 +76,7 @@
 
   <section class="section prose" id="rules">
     <h2>The frozen evaluation rules and the self-check scheme</h2>
-    <p>The rules are in <a href="https://github.com/">docs/EVALUATION_RULES.md</a> in the repository (frozen). Two self-contained notebooks, <code>01_replication.ipynb</code> and <code>02_transfer.ipynb</code>, paste the library in verbatim, recompute the headline numbers and compare them with <code>notebooks/expected_values.csv</code> (288 keys; the file records both the pre-fix published value and the post-fix reference value with its tolerance). A drift check inside each notebook fails if the inline library differs from <code>src/</code>. The site adds a third layer: <code>tests/test_site_data.py</code> checks every provenance entry against its results file, and <code>tests/test_site_conformal.js</code> checks the browser's conformal port against Python-computed sets, including infinite thresholds.</p>
+    <p>The rules are in <code>docs/EVALUATION_RULES.md</code> in the repository (frozen; the repository link is in the footer). Two self-contained notebooks, <code>01_replication.ipynb</code> and <code>02_transfer.ipynb</code>, paste the library in verbatim, recompute the headline numbers and compare them with <code>notebooks/expected_values.csv</code> (288 keys; the file records both the pre-fix published value and the post-fix reference value with its tolerance). A drift check inside each notebook fails if the inline library differs from <code>src/</code>. The site adds a third layer: <code>tests/test_site_data.py</code> checks every provenance entry against its results file, and <code>tests/test_site_conformal.js</code> checks the browser's conformal port against Python-computed sets, including infinite thresholds.</p>
   </section>
 
   <section class="section prose" id="software">

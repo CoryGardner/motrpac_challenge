@@ -199,6 +199,7 @@ table.data td .swatch { display: inline-block; width: 10px; height: 10px; border
 .legend-inline .key.rect { height: 10px; border-radius: 2px; }
 img.shot { max-width: 100%; height: auto; border: 1px solid var(--grid); border-radius: var(--radius); }
 .svg-diagram { width: 100%; height: auto; }
+.prose .svg-diagram.wide { max-width: none; width: min(100%, 960px); display: block; margin: 1rem 0; }
 .svg-diagram text { font-family: var(--font); fill: var(--ink); }
 .svg-diagram .box { fill: var(--surface); stroke: var(--axis); }
 .svg-diagram .arrow { stroke: var(--ink-2); fill: none; }

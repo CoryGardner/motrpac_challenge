@@ -1,6 +1,6 @@
 {
- "generated": "2026-09-27 00:21 UTC",
- "git_hash": "4541299",
+ "generated": "2026-09-27 00:23 UTC",
+ "git_hash": "3a751bb",
  "results_dir": "results",
  "phases": {
   "02_inventory": {
@@ -2177,5 +2177,115 @@
   "motrpac": "MotrpacRatTraining6moData 2.0.0 (= portal release c1.0, rn6)",
   "bodymap": "rat BodyMap GSE53960 via bodymapRat (316 samples)",
   "gtex": "GTEx v8 (2017-06-05) open-access expression"
- }
+ },
+ "site_data_files": [
+  {
+   "name": "batch_verdict.json",
+   "bytes": 42755
+  },
+  {
+   "name": "beyond.json",
+   "bytes": 561
+  },
+  {
+   "name": "bodymap.json",
+   "bytes": 190713
+  },
+  {
+   "name": "certificate.json",
+   "bytes": 137989
+  },
+  {
+   "name": "conformal_fixtures.json",
+   "bytes": 1198388
+  },
+  {
+   "name": "confusion_motrpac.json",
+   "bytes": 5458
+  },
+  {
+   "name": "discordance.json",
+   "bytes": 16590
+  },
+  {
+   "name": "eda.json",
+   "bytes": 17067
+  },
+  {
+   "name": "expr_bodymap.json",
+   "bytes": 156328
+  },
+  {
+   "name": "expr_gtex.json",
+   "bytes": 995893
+  },
+  {
+   "name": "expr_motrpac.json",
+   "bytes": 391269
+  },
+  {
+   "name": "fusion.json",
+   "bytes": 13019
+  },
+  {
+   "name": "genes.json",
+   "bytes": 47220
+  },
+  {
+   "name": "gtex.json",
+   "bytes": 50915
+  },
+  {
+   "name": "headline.json",
+   "bytes": 33067
+  },
+  {
+   "name": "inventory.json",
+   "bytes": 25718
+  },
+  {
+   "name": "manifest.json",
+   "bytes": 75688
+  },
+  {
+   "name": "nesting.json",
+   "bytes": 70200
+  },
+  {
+   "name": "panel_curve.json",
+   "bytes": 44002
+  },
+  {
+   "name": "provenance.json",
+   "bytes": 83378
+  },
+  {
+   "name": "qc_baseline.json",
+   "bytes": 4106
+  },
+  {
+   "name": "representations.json",
+   "bytes": 112100
+  },
+  {
+   "name": "samples_bodymap.json",
+   "bytes": 230176
+  },
+  {
+   "name": "samples_gtex.json",
+   "bytes": 1706217
+  },
+  {
+   "name": "samples_motrpac.json",
+   "bytes": 648916
+  },
+  {
+   "name": "shift.json",
+   "bytes": 49312
+  },
+  {
+   "name": "stable_core.json",
+   "bytes": 39046
+  }
+ ]
 }
