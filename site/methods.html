@@ -54,6 +54,7 @@
     and +∞ (every tissue in every set) when that rank exceeds n.</pre>
     <p>A tissue enters a test sample's set when p̂(tissue) ≥ 1 − q̂. With one vial per animal, n = 22, and at α = 0.10 the rank is 21 of 22; at α = 0.05 the rank is 22, the largest score; with n ≤ 18 the rank exceeds n and the set is full. Mondrian sets use one threshold per true class from that class's calibration scores, falling back to the marginal threshold for a class with no score; the floored variant never lets a class threshold fall below the marginal one, so its sets contain both the marginal and the Mondrian sets. Pooled-vial calibration uses all vials of the calibration animals (n ≈ 396); it sits closer to 1 − α but treats vials of one animal as exchangeable, which they are not. Every prediction set on <a href="explore.html">the Explorer</a> is computed in your browser from the exported class probabilities and calibration scores, with the same quantile rule as the pipeline.</p>
     <p id="p-coverage"></p>
+    <p id="p-recal-note"></p>
   </section>
 
   <section class="section prose" id="certificate">

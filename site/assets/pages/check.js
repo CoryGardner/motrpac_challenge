@@ -5,6 +5,7 @@
 import { mountChrome, loadJSON, el, fmt, pct, callout, tableFrom, control, slider, select, badge } from "../site.js";
 import { figure, tokens, palette, organSystem, template, CONFIG } from "../charts.js";
 import { exampleRows, recalibrate, minLabelled } from "../score.js";
+import { compositionNote } from "../notes.js";
 import { parseUpload, runCheck, resultsToCsv, exampleTable, acceptedList, CLASS_NAMES, contrast, explainSentence, project, referenceStats,
          WITHIN_MIN_SAMPLES, WITHIN_MIN_TISSUES } from "../check-core.js";
 
@@ -347,7 +348,7 @@ function recalFor() {
 }
 function calibrateSection() {
   const nLab = Object.keys(labelledMap()).length, need = minLabelled(state.alpha);
-  document.getElementById("cal-intro").textContent = `The 90 % guarantee holds for samples like the MoTrPAC calibration animals. For a new lab, recalibrate the threshold on your own samples with verified labels: here, the samples whose claimed label names exactly one of the 19 tissues (${nLab} in this upload). At α = ${state.alpha.toFixed(2)} this needs at least ${need}. Recalibrate only on labels you trust: a swapped label enlarges every set.`;
+  document.getElementById("cal-intro").textContent = `The 90 % guarantee holds for samples like the MoTrPAC calibration animals. For a new lab, recalibrate the threshold on your own samples with verified labels: here, the samples whose claimed label names exactly one of the ${state.model.classes.length} tissues (${nLab} in this upload). At α = ${state.alpha.toFixed(2)} this needs at least ${need} labelled samples. The recalibrated coverage is observed on your labelled samples, not guaranteed for new samples. When the labelled samples come from a few animals (several tissues each), the coverage is pooled within those animals and is not a guarantee for new ones. Recalibrate only on labels you trust: a swapped label enlarges every set.`;
   const b = el("button", { class: "btn", type: "button" }, state.recal ? "Recalibrate again" : "Recalibrate on my labelled samples");
   if (nLab < need) b.setAttribute("disabled", "");
   b.addEventListener("click", () => { state.recal = recalFor(); analyse(); });
@@ -373,7 +374,8 @@ function expectNote() {
     tableFrom({ columns: ["scaling", "organs named correctly", "90 % sets that hold the organ", "empty sets"],
                 rows: [row("the whole mixed set together (the pipeline)", "within_all"), row("MoTrPAC reference means and scales", "reference"), row("each organ alone (a single-tissue upload)", "within_organ_alone")] }),
     el("p", {}, `So the page never scales a small or single-tissue upload within itself: with fewer than ${WITHIN_MIN_SAMPLES} samples or fewer than ${WITHIN_MIN_TISSUES} tissues it switches to reference scaling and says so. Reference scaling held up in this test, better than within-set scaling on coverage, but it does not fail safe on organs the model never saw: thymus got an empty set in ${pct(K["adult_21wk.reference.Thymus.frac_empty"])} of samples under reference scaling and ${pct(K["adult_21wk.within_all.Thymus.frac_empty"])} under within-set scaling. Across all four BodyMap ages the pattern is the same (reference ${pct(K["all_ages.reference.accuracy"])} correct, within-set ${pct(K["all_ages.within_all.accuracy"])}, each organ alone ${pct(K["all_ages.within_organ_alone.accuracy"])}).`),
-    el("p", { class: "small" }, "Source: results_product/40_product/scaling.csv (scripts/40_product_validation.py; the whole-set scaling reproduces the pipeline's BodyMap probabilities to machine precision). Provenance: pv_scaling_* in site/data/provenance.json."),
+    el("p", {}, `Within-set scaling also depends on what else you upload. ${compositionNote(D.PR)}`),
+    el("p", { class: "small" }, "Source: results_product/40_product/scaling.csv and composition.csv (scripts/40_product_validation.py; the whole-set scaling reproduces the pipeline's BodyMap probabilities to machine precision). Provenance: pv_scaling_* in site/data/provenance.json."),
   );
 }
 

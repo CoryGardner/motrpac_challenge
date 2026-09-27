@@ -8,7 +8,8 @@ const pairsText = (s) => s.split(";").map((p) => p.split("|").map((t) => t.toLow
 
 async function main() {
   await mountChrome("identifiability.html");
-  const [H, N, Q, E, PC] = await Promise.all([loadJSON("data/headline.json"), loadJSON("data/nesting.json"), loadJSON("data/qc_baseline.json"), loadJSON("data/eda.json"), loadJSON("data/panel_curve.json")]);
+  const [H, N, Q, E, PC, PR] = await Promise.all([loadJSON("data/headline.json"), loadJSON("data/nesting.json"), loadJSON("data/qc_baseline.json"), loadJSON("data/eda.json"), loadJSON("data/panel_curve.json"), loadJSON("data/product.json")]);
+  const RB3 = PR.recal_draws["bodymap.3"];
   const ex = H.extras;
   document.getElementById("tiles").replaceChildren(...(H.tiles_identifiability || []).map((t) => statTile(t)));
   const est = Object.fromEntries(N.estimable_pairs.map((r) => [r.assay, r]));
@@ -182,7 +183,7 @@ async function main() {
   document.getElementById("p-resolution").replaceChildren(
     "Within MoTrPAC a classifier at the fingerprint's accuracy could in principle be reading the batch; the rat BodyMap was collected, extracted and sequenced by another laboratory, with none of the MoTrPAC plates, batches or flowcells, and the MoTrPAC-trained 20-gene panel still names ",
     el("b", {}, fmt(bm.value)), " of its mapped adult organs. Only tissue biology can do that; what stays study-specific, as a batch-influenced quantity would, is the confidence scale: with MoTrPAC thresholds the 90 % sets cover ", el("b", {}, fmt(cov.value)),
-    ` of the same adults, the shortfall almost all empty sets, and three target animals restore it (${fmt(bm20?.recal_n3)}). `,
+    ` of the same adults, the shortfall almost all empty sets, and three target animals restore observed coverage (${fmt(bm20?.recal_n3)}; per draw ${fmt(RB3.min_coverage, 2)}–${fmt(RB3.max_coverage, 2)}). `,
     el("a", { href: "transfer.html" }, "The Transfer page has the full ladder →"),
   );
 }

@@ -67,6 +67,16 @@ export const LABEL_KEY = /^(true[ _]?tissue|claimed[ _]?tissue|tissue|claimed|la
 const ENS = /^ENS([A-Z]{0,4})G\d{6,}/i;
 const splitterFor = (line) => (line.includes("\t") ? "\t" : line.includes(";") && !line.includes(",") ? ";" : ",");
 const clean = (c) => c.trim().replace(/^"|"$/g, "");
+const MISSING = /^(|na|n\/a|nan|null|none|-|\.)$/i;
+/** One numeric cell: "", whitespace, NA, NaN, null, "-" and anything non-numeric (or a cell past the end of a short row)
+ *  → null; never 0. (Number("") is 0, which would read an empty cell as "not expressed".) */
+export function parseCell(raw) {
+  if (raw === undefined || raw === null) return null;
+  const c = clean(String(raw));
+  if (MISSING.test(c)) return null;
+  const v = Number(c);
+  return Number.isFinite(v) ? v : null;
+}
 const geneKey = (s) => String(s).trim().toLowerCase().replace(/\.\d+$/, "");
 
 /** Species from gene identifiers: Ensembl prefixes first, then symbol case (rat/mouse: Capitalised; human: UPPER). */
@@ -131,7 +141,8 @@ export function parseUpload(text, model, { format = "auto", orientation = "auto"
     const panelCol = {};
     for (const i of geneCols) { const g = panelKeys.get(geneKey(header[i])); if (g && panelCol[g] === undefined) panelCol[g] = i; }
     const samples = [];
-    let nonInt = 0, neg = 0, htseq = 0;
+    let nonInt = 0, neg = 0, htseq = 0, nMissing = 0;
+    const shortRows = [];
     const htseqCol = new Set(geneCols.filter((i) => header[i].startsWith("__")));
     body.forEach((li, k) => {
       const cells = lines[li].split(sep);
@@ -139,31 +150,33 @@ export function parseUpload(text, model, { format = "auto", orientation = "auto"
       if (!id) return;
       let lib = 0;
       const raw = {};
+      if (cells.length < header.length) shortRows.push(id);
       if (fmt === "counts") {
         for (const i of geneCols) {
           if (htseqCol.has(i)) continue;
-          const v = Number(clean(cells[i] ?? ""));
-          if (Number.isFinite(v)) { lib += v; if (v < 0) neg += 1; else if (v !== Math.floor(v)) nonInt += 1; }
+          const v = parseCell(cells[i]);
+          if (v === null) { nMissing += 1; continue; }
+          lib += v; if (v < 0) neg += 1; else if (v !== Math.floor(v)) nonInt += 1;
         }
       }
       for (const g of model.genes) {
         const i = panelCol[g.id];
-        const v = i === undefined ? NaN : Number(clean(cells[i] ?? ""));
-        raw[g.id] = Number.isFinite(v) ? v : null;
+        raw[g.id] = i === undefined ? null : parseCell(cells[i]);
       }
       const label = labelCol > 0 ? clean(cells[labelCol] ?? "") || null : null;
       samples.push({ id, label, raw, libSize: fmt === "counts" ? lib : null });
       if (onProgress && k % 200 === 0) onProgress(k / body.length);
     });
     htseq = htseqCol.size;
-    Object.assign(out, { format: fmt, nFeatures, samples, geneIds: geneCols.map((i) => header[i]), nonInt, neg, htseq });
+    Object.assign(out, { format: fmt, nFeatures, samples, geneIds: geneCols.map((i) => header[i]), nonInt, neg, htseq, nMissing, shortRows });
   } else {
     const sampleCols = header.map((c, i) => i).filter((i) => i > 0);
     const nFeatures = body.length;
     const fmt = format === "auto" ? (nFeatures >= minFeaturesForCounts ? "counts" : "log2cpm") : format;
     const lib = new Array(sampleCols.length).fill(0);
     const raw = sampleCols.map(() => ({}));
-    let labels = null, nonInt = 0, neg = 0, htseq = 0;
+    let labels = null, nonInt = 0, neg = 0, htseq = 0, nMissing = 0;
+    const shortRows = [];
     const geneIds = [];
     body.forEach((li, k) => {
       const cells = lines[li].split(sep);
@@ -171,17 +184,19 @@ export function parseUpload(text, model, { format = "auto", orientation = "auto"
       if (LABEL_KEY.test(key)) { labels = sampleCols.map((i) => clean(cells[i] ?? "") || null); return; }
       if (key.startsWith("__")) { htseq += 1; return; }
       geneIds.push(key);
+      if (cells.length < header.length) shortRows.push(key);
       const g = panelKeys.get(geneKey(key));
       for (let s = 0; s < sampleCols.length; s++) {
-        const v = Number(clean(cells[sampleCols[s]] ?? ""));
-        if (fmt === "counts" && Number.isFinite(v)) { lib[s] += v; if (v < 0) neg += 1; else if (v !== Math.floor(v)) nonInt += 1; }
-        if (g && raw[s][g] === undefined) raw[s][g] = Number.isFinite(v) ? v : null;
+        const v = parseCell(cells[sampleCols[s]]);
+        if (v === null) { if (fmt === "counts") nMissing += 1; }
+        else if (fmt === "counts") { lib[s] += v; if (v < 0) neg += 1; else if (v !== Math.floor(v)) nonInt += 1; }
+        if (g && raw[s][g] === undefined) raw[s][g] = v;
       }
       if (onProgress && k % 500 === 0) onProgress(k / body.length);
     });
     const samples = sampleCols.map((i, s) => ({ id: header[i], label: labels ? labels[s] : null,
       raw: Object.fromEntries(model.genes.map((g) => [g.id, raw[s][g.id] ?? null])), libSize: fmt === "counts" ? lib[s] : null }));
-    Object.assign(out, { format: fmt, nFeatures, samples, geneIds, nonInt, neg, htseq });
+    Object.assign(out, { format: fmt, nFeatures, samples, geneIds, nonInt, neg, htseq, nMissing, shortRows });
   }
   if (onProgress) onProgress(1);
   // values: log2 CPM of the panel genes
@@ -190,7 +205,17 @@ export function parseUpload(text, model, { format = "auto", orientation = "auto"
   }
   out.missing = model.genes.filter((g) => out.samples.every((s) => s.values[g.id] === null));
   out.species = guessSpecies(out.geneIds);
+  if (out.shortRows.length) {
+    const names = out.shortRows.slice(0, 5).join(", ") + (out.shortRows.length > 5 ? ` and ${out.shortRows.length - 5} more` : "");
+    warnings.push(`${out.shortRows.length} row${out.shortRows.length === 1 ? " is" : "s are"} shorter than the header (${names}); the missing cells are treated as missing values, not zeros.`);
+  }
+  if (out.format === "log2cpm") {
+    const vals = out.samples.flatMap((s) => Object.values(s.values)).filter((v) => v !== null);
+    const lo = vals.length ? Math.min(...vals) : 0, hi = vals.length ? Math.max(...vals) : 0;
+    if (lo < LOG2CPM_MIN || hi > LOG2CPM_MAX) warnings.push(`values from ${lo.toFixed(2)} to ${hi.toFixed(2)} are impossible for log2(CPM + 1) (expected ${LOG2CPM_MIN} to ${LOG2CPM_MAX}): these look like linear or TPM values; take log2(x + 1) of CPM, or upload raw counts.`);
+  }
   if (out.format === "counts") {
+    if (out.nMissing) warnings.push(`${out.nMissing} empty or non-numeric cells in the count matrix were left out of the library size.`);
     if (out.nonInt) warnings.push(`${out.nonInt} non-integer values in what looks like a count matrix; the page treats them as counts. If these are TPM or normalised values the calls are not comparable.`);
     if (out.neg) warnings.push(`${out.neg} negative values: a count matrix has none. Check the file.`);
     if (out.htseq) warnings.push(`${out.htseq} HTSeq summary rows or columns (names starting with "__") were left out of the library size.`);
@@ -208,6 +233,8 @@ export function countsToLog2Cpm(raw, libSize) {
 }
 
 // ---- guards and status rules -------------------------------------------------------------------------------------------
+/** Plausible range of log2(CPM + 1): ≥ 0 by construction (−0.5 allows rounding), ≤ 20 (2^20 CPM exceeds a whole library). */
+export const LOG2CPM_MIN = -0.5, LOG2CPM_MAX = 20;
 export const WITHIN_MIN_SAMPLES = 8;
 export const WITHIN_MIN_TISSUES = 3;
 

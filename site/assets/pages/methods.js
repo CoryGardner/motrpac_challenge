@@ -1,4 +1,6 @@
 import { mountChrome, loadJSON, fmt } from "../site.js";
+import { minLabelled } from "../score.js";
+import { recalNote } from "../notes.js";
 import { mountPipeline } from "../overview.js";
 
 async function main() {
@@ -15,6 +17,8 @@ async function main() {
 }
 
 async function multiomic() {
+  const PR = await loadJSON("data/product.json"), HH = await loadJSON("data/headline.json");
+  document.getElementById("p-recal-note").textContent = "Recalibration. " + recalNote(PR, HH.design, minLabelled(HH.design.alpha));
   const M = await loadJSON("data/multiomic.json");
   const H = M.how, S = M.scales;
   const mw = M.metabolites.find((m) => m.leg === "deep_mw");

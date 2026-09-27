@@ -1,4 +1,6 @@
 import { mountChrome, loadJSON } from "../site.js";
+import { minLabelled } from "../score.js";
+import { recalNote, compositionNote } from "../notes.js";
 
 async function main() {
   await mountChrome("limitations.html");
@@ -7,6 +9,13 @@ async function main() {
     const ex = H.extras;
     document.getElementById("n-orth").textContent = `${ex.orthologs_in_gtex.toLocaleString()} of ${ex.motrpac_genes.toLocaleString()}`;
     document.getElementById("n-inf").textContent = typeof ex.gtex_recal_k20_n3_frac_inf === "number" ? `${(100 * ex.gtex_recal_k20_n3_frac_inf).toFixed(0)} %` : "pending";
+  } catch (e) {
+    console.error(e);
+  }
+  try {
+    const [PR, H] = await Promise.all([loadJSON("data/product.json"), loadJSON("data/headline.json")]);
+    document.getElementById("lim-recal").textContent = recalNote(PR, H.design, minLabelled(H.design.alpha));
+    document.getElementById("lim-comp").textContent = compositionNote(PR);
   } catch (e) {
     console.error(e);
   }

@@ -131,8 +131,8 @@
 "document": "docs/NUMBERS_RECONCILIATION.md"
 },
 "multiomic": {
-"generated": "2026-09-27 16:27 UTC",
-"git_hash": "e615c95",
+"generated": "2026-09-27 17:25 UTC",
+"git_hash": "a484c7f",
 "n_entries": 244,
 "n_tables": 13,
 "sources": [
@@ -177,16 +177,18 @@
 ]
 },
 "product": {
-"generated": "2026-09-27 16:27 UTC",
-"git_hash": "e615c95",
-"n_entries": 101,
+"generated": "2026-09-27 17:25 UTC",
+"git_hash": "a484c7f",
+"n_entries": 178,
 "n_tables": 5,
 "sources": [
 "results_frozen/12_bodymap/ood_sets.csv",
+"results_product/40_product/composition_summary.csv",
 "results_product/40_product/flag_rates.csv",
 "results_product/40_product/pca_loadings.csv",
 "results_product/40_product/pca_reference_coords.csv",
 "results_product/40_product/pca_summary.csv",
+"results_product/40_product/recal_draws_summary.csv",
 "results_product/40_product/scaling.csv",
 "results_product/40_product/venacv_cases.csv"
 ]
@@ -8871,6 +8873,986 @@
 "organ": "Uterus"
 },
 "column": "frac_empty",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_comp_within_accuracy_p05",
+"value": 0.75,
+"file": "results_product/40_product/composition_summary.csv",
+"where": {
+"mode": "within",
+"metric": "accuracy"
+},
+"column": "p05",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_comp_within_accuracy_p50",
+"value": 0.9642857142857144,
+"file": "results_product/40_product/composition_summary.csv",
+"where": {
+"mode": "within",
+"metric": "accuracy"
+},
+"column": "p50",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_comp_within_accuracy_p95",
+"value": 1.0,
+"file": "results_product/40_product/composition_summary.csv",
+"where": {
+"mode": "within",
+"metric": "accuracy"
+},
+"column": "p95",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_comp_within_coverage_p05",
+"value": 0.1423809523809523,
+"file": "results_product/40_product/composition_summary.csv",
+"where": {
+"mode": "within",
+"metric": "coverage"
+},
+"column": "p05",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_comp_within_coverage_p50",
+"value": 0.3571428571428571,
+"file": "results_product/40_product/composition_summary.csv",
+"where": {
+"mode": "within",
+"metric": "coverage"
+},
+"column": "p50",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_comp_within_coverage_p95",
+"value": 0.4761904761904761,
+"file": "results_product/40_product/composition_summary.csv",
+"where": {
+"mode": "within",
+"metric": "coverage"
+},
+"column": "p95",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_comp_within_frac_empty_p05",
+"value": 0.5235449735449735,
+"file": "results_product/40_product/composition_summary.csv",
+"where": {
+"mode": "within",
+"metric": "frac_empty"
+},
+"column": "p05",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_comp_within_frac_empty_p50",
+"value": 0.6416502393691917,
+"file": "results_product/40_product/composition_summary.csv",
+"where": {
+"mode": "within",
+"metric": "frac_empty"
+},
+"column": "p50",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_comp_within_frac_empty_p95",
+"value": 0.8576190476190474,
+"file": "results_product/40_product/composition_summary.csv",
+"where": {
+"mode": "within",
+"metric": "frac_empty"
+},
+"column": "p95",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_comp_reference_accuracy_p05",
+"value": 0.9563146997929608,
+"file": "results_product/40_product/composition_summary.csv",
+"where": {
+"mode": "reference",
+"metric": "accuracy"
+},
+"column": "p05",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_comp_reference_accuracy_p50",
+"value": 0.9848484848484848,
+"file": "results_product/40_product/composition_summary.csv",
+"where": {
+"mode": "reference",
+"metric": "accuracy"
+},
+"column": "p50",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_comp_reference_accuracy_p95",
+"value": 1.0,
+"file": "results_product/40_product/composition_summary.csv",
+"where": {
+"mode": "reference",
+"metric": "accuracy"
+},
+"column": "p95",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_comp_reference_coverage_p05",
+"value": 0.75,
+"file": "results_product/40_product/composition_summary.csv",
+"where": {
+"mode": "reference",
+"metric": "coverage"
+},
+"column": "p05",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_comp_reference_coverage_p50",
+"value": 0.8527000964320154,
+"file": "results_product/40_product/composition_summary.csv",
+"where": {
+"mode": "reference",
+"metric": "coverage"
+},
+"column": "p50",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_comp_reference_coverage_p95",
+"value": 0.9703124999999996,
+"file": "results_product/40_product/composition_summary.csv",
+"where": {
+"mode": "reference",
+"metric": "coverage"
+},
+"column": "p95",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_comp_reference_frac_empty_p05",
+"value": 0.0296875,
+"file": "results_product/40_product/composition_summary.csv",
+"where": {
+"mode": "reference",
+"metric": "frac_empty"
+},
+"column": "p05",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_comp_reference_frac_empty_p50",
+"value": 0.1472999035679845,
+"file": "results_product/40_product/composition_summary.csv",
+"where": {
+"mode": "reference",
+"metric": "frac_empty"
+},
+"column": "p50",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_comp_reference_frac_empty_p95",
+"value": 0.25,
+"file": "results_product/40_product/composition_summary.csv",
+"where": {
+"mode": "reference",
+"metric": "frac_empty"
+},
+"column": "p95",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_comp_n_subsets",
+"value": 200,
+"file": "results_product/40_product/composition_summary.csv",
+"where": {
+"mode": "within",
+"metric": "coverage"
+},
+"column": "n_subsets",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_comp_size_min",
+"value": 8,
+"file": "results_product/40_product/composition_summary.csv",
+"where": {
+"mode": "within",
+"metric": "coverage"
+},
+"column": "subset_size_min",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_comp_size_max",
+"value": 80,
+"file": "results_product/40_product/composition_summary.csv",
+"where": {
+"mode": "within",
+"metric": "coverage"
+},
+"column": "subset_size_max",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_bodymap_3_n_recal",
+"value": 3,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "bodymap",
+"model": "k20",
+"n_recal": 3
+},
+"column": "n_recal",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_bodymap_3_draws",
+"value": 20,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "bodymap",
+"model": "k20",
+"n_recal": 3
+},
+"column": "draws",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_bodymap_3_mean_coverage_all_draws",
+"value": 0.9426243330313098,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "bodymap",
+"model": "k20",
+"n_recal": 3
+},
+"column": "mean_coverage_all_draws",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_bodymap_3_min_coverage",
+"value": 0.8636363636363636,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "bodymap",
+"model": "k20",
+"n_recal": 3
+},
+"column": "min_coverage",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_bodymap_3_max_coverage",
+"value": 1.0,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "bodymap",
+"model": "k20",
+"n_recal": 3
+},
+"column": "max_coverage",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_bodymap_3_n_draws_below_0.90",
+"value": 3,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "bodymap",
+"model": "k20",
+"n_recal": 3
+},
+"column": "n_draws_below_0.90",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_bodymap_3_n_finite",
+"value": 20,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "bodymap",
+"model": "k20",
+"n_recal": 3
+},
+"column": "n_finite",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_bodymap_3_n_infinite",
+"value": 0,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "bodymap",
+"model": "k20",
+"n_recal": 3
+},
+"column": "n_infinite",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_bodymap_3_mean_coverage_finite",
+"value": 0.9426243330313098,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "bodymap",
+"model": "k20",
+"n_recal": 3
+},
+"column": "mean_coverage_finite",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_bodymap_3_min_coverage_finite",
+"value": 0.8636363636363636,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "bodymap",
+"model": "k20",
+"n_recal": 3
+},
+"column": "min_coverage_finite",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_bodymap_3_mean_set_size_finite",
+"value": 0.997912262156448,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "bodymap",
+"model": "k20",
+"n_recal": 3
+},
+"column": "mean_set_size_finite",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_bodymap_3_min_cal_scores",
+"value": 24,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "bodymap",
+"model": "k20",
+"n_recal": 3
+},
+"column": "min_cal_scores",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_bodymap_3_max_cal_scores",
+"value": 26,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "bodymap",
+"model": "k20",
+"n_recal": 3
+},
+"column": "max_cal_scores",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_bodymap_3_n_classes",
+"value": 19,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "bodymap",
+"model": "k20",
+"n_recal": 3
+},
+"column": "n_classes",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_bodymap_5_n_recal",
+"value": 5,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "bodymap",
+"model": "k20",
+"n_recal": 5
+},
+"column": "n_recal",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_bodymap_5_draws",
+"value": 20,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "bodymap",
+"model": "k20",
+"n_recal": 5
+},
+"column": "draws",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_bodymap_5_mean_coverage_all_draws",
+"value": 0.9139707977207978,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "bodymap",
+"model": "k20",
+"n_recal": 5
+},
+"column": "mean_coverage_all_draws",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_bodymap_5_min_coverage",
+"value": 0.84,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "bodymap",
+"model": "k20",
+"n_recal": 5
+},
+"column": "min_coverage",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_bodymap_5_max_coverage",
+"value": 1.0,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "bodymap",
+"model": "k20",
+"n_recal": 5
+},
+"column": "max_coverage",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_bodymap_5_n_draws_below_0.90",
+"value": 8,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "bodymap",
+"model": "k20",
+"n_recal": 5
+},
+"column": "n_draws_below_0.90",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_bodymap_5_n_finite",
+"value": 20,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "bodymap",
+"model": "k20",
+"n_recal": 5
+},
+"column": "n_finite",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_bodymap_5_n_infinite",
+"value": 0,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "bodymap",
+"model": "k20",
+"n_recal": 5
+},
+"column": "n_infinite",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_bodymap_5_mean_coverage_finite",
+"value": 0.9139707977207978,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "bodymap",
+"model": "k20",
+"n_recal": 5
+},
+"column": "mean_coverage_finite",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_bodymap_5_min_coverage_finite",
+"value": 0.84,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "bodymap",
+"model": "k20",
+"n_recal": 5
+},
+"column": "min_coverage_finite",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_bodymap_5_mean_set_size_finite",
+"value": 0.9200541310541308,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "bodymap",
+"model": "k20",
+"n_recal": 5
+},
+"column": "mean_set_size_finite",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_bodymap_5_min_cal_scores",
+"value": 41,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "bodymap",
+"model": "k20",
+"n_recal": 5
+},
+"column": "min_cal_scores",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_bodymap_5_max_cal_scores",
+"value": 44,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "bodymap",
+"model": "k20",
+"n_recal": 5
+},
+"column": "max_cal_scores",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_bodymap_5_n_classes",
+"value": 19,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "bodymap",
+"model": "k20",
+"n_recal": 5
+},
+"column": "n_classes",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_gtex_3_n_recal",
+"value": 3,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "gtex",
+"model": "k20",
+"n_recal": 3
+},
+"column": "n_recal",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_gtex_3_draws",
+"value": 20,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "gtex",
+"model": "k20",
+"n_recal": 3
+},
+"column": "draws",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_gtex_3_mean_coverage_all_draws",
+"value": 0.9544042733273792,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "gtex",
+"model": "k20",
+"n_recal": 3
+},
+"column": "mean_coverage_all_draws",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_gtex_3_min_coverage",
+"value": 0.7316087308003234,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "gtex",
+"model": "k20",
+"n_recal": 3
+},
+"column": "min_coverage",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_gtex_3_max_coverage",
+"value": 1.0,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "gtex",
+"model": "k20",
+"n_recal": 3
+},
+"column": "max_coverage",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_gtex_3_n_draws_below_0.90",
+"value": 3,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "gtex",
+"model": "k20",
+"n_recal": 3
+},
+"column": "n_draws_below_0.90",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_gtex_3_n_finite",
+"value": 11,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "gtex",
+"model": "k20",
+"n_recal": 3
+},
+"column": "n_finite",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_gtex_3_n_infinite",
+"value": 9,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "gtex",
+"model": "k20",
+"n_recal": 3
+},
+"column": "n_infinite",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_gtex_3_mean_coverage_finite",
+"value": 0.9170986787770532,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "gtex",
+"model": "k20",
+"n_recal": 3
+},
+"column": "mean_coverage_finite",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_gtex_3_min_coverage_finite",
+"value": 0.7316087308003234,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "gtex",
+"model": "k20",
+"n_recal": 3
+},
+"column": "min_coverage_finite",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_gtex_3_mean_set_size_finite",
+"value": 5.721139904945964,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "gtex",
+"model": "k20",
+"n_recal": 3
+},
+"column": "mean_set_size_finite",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_gtex_3_min_cal_scores",
+"value": 4,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "gtex",
+"model": "k20",
+"n_recal": 3
+},
+"column": "min_cal_scores",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_gtex_3_max_cal_scores",
+"value": 15,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "gtex",
+"model": "k20",
+"n_recal": 3
+},
+"column": "max_cal_scores",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_gtex_3_n_classes",
+"value": 19,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "gtex",
+"model": "k20",
+"n_recal": 3
+},
+"column": "n_classes",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_gtex_5_n_recal",
+"value": 5,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "gtex",
+"model": "k20",
+"n_recal": 5
+},
+"column": "n_recal",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_gtex_5_draws",
+"value": 20,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "gtex",
+"model": "k20",
+"n_recal": 5
+},
+"column": "draws",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_gtex_5_mean_coverage_all_draws",
+"value": 0.9328742780196038,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "gtex",
+"model": "k20",
+"n_recal": 5
+},
+"column": "mean_coverage_all_draws",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_gtex_5_min_coverage",
+"value": 0.6678802588996764,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "gtex",
+"model": "k20",
+"n_recal": 5
+},
+"column": "min_coverage",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_gtex_5_max_coverage",
+"value": 0.9991909385113268,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "gtex",
+"model": "k20",
+"n_recal": 5
+},
+"column": "max_coverage",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_gtex_5_n_draws_below_0.90",
+"value": 2,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "gtex",
+"model": "k20",
+"n_recal": 5
+},
+"column": "n_draws_below_0.90",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_gtex_5_n_finite",
+"value": 20,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "gtex",
+"model": "k20",
+"n_recal": 5
+},
+"column": "n_finite",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_gtex_5_n_infinite",
+"value": 0,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "gtex",
+"model": "k20",
+"n_recal": 5
+},
+"column": "n_infinite",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_gtex_5_mean_coverage_finite",
+"value": 0.9328742780196038,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "gtex",
+"model": "k20",
+"n_recal": 5
+},
+"column": "mean_coverage_finite",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_gtex_5_min_coverage_finite",
+"value": 0.6678802588996764,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "gtex",
+"model": "k20",
+"n_recal": 5
+},
+"column": "min_coverage_finite",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_gtex_5_mean_set_size_finite",
+"value": 6.281691250243343,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "gtex",
+"model": "k20",
+"n_recal": 5
+},
+"column": "mean_set_size_finite",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_gtex_5_min_cal_scores",
+"value": 9,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "gtex",
+"model": "k20",
+"n_recal": 5
+},
+"column": "min_cal_scores",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_gtex_5_max_cal_scores",
+"value": 23,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "gtex",
+"model": "k20",
+"n_recal": 5
+},
+"column": "max_cal_scores",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_recal_gtex_5_n_classes",
+"value": 19,
+"file": "results_product/40_product/recal_draws_summary.csv",
+"where": {
+"dataset": "gtex",
+"model": "k20",
+"n_recal": 5
+},
+"column": "n_classes",
 "agg": "value",
 "tol": 1e-09
 },

@@ -124,4 +124,41 @@ const csv = K.resultsToCsv(res, model);
 check(csv.split("\n")[0].startsWith("sample,claimed,") && csv.trim().split("\n").length === res.results.length + 1, "results CSV shape");
 check(typeof K.explainSentence(res.results[0], model) === "string" && K.explainSentence(res.results[0], model).startsWith("Called "), "explanation sentence");
 
+// ---- missing values: blank, whitespace, NA and a short row are all missing, never zero -------------------------------
+check(K.parseCell("") === null && K.parseCell("  ") === null && K.parseCell("NA") === null && K.parseCell("NaN") === null && K.parseCell("null") === null
+      && K.parseCell("-") === null && K.parseCell("abc") === null && K.parseCell(undefined) === null && K.parseCell("0") === 0 && K.parseCell(" 2.5 ") === 2.5, "parseCell");
+{
+  const lines = ex.csv.trim().split("\n");
+  const head = lines[0].split(",");
+  let same = 0, cases = 0, named = 0;
+  const base = lines.slice(1).map((l) => l.split(","));
+  for (let i = 0; i < base.length; i++) {
+    for (let j = 1; j <= model.genes.length; j++) {
+      const mk = (val) => [lines[0], ...base.map((c, k) => (k === i ? c.map((x, jj) => (jj === j ? val : x)) : c).join(","))].join("\n");
+      const rb = K.runCheck(model, K.parseUpload(mk(""), model).samples, { alpha: 0.1 });
+      const rn = K.runCheck(model, K.parseUpload(mk("NA"), model).samples, { alpha: 0.1 });
+      cases += 1;
+      if (rb.results.every((r, k) => r.call === rn.results[k].call && r.set.join() === rn.results[k].set.join() && r.p.every((v, c) => Math.abs(v - rn.results[k].p[c]) < 1e-12))) same += 1;
+      if (rb.results[i].missingGenes.includes(head[j])) named += 1;
+    }
+  }
+  check(cases === base.length * model.genes.length && same === cases, `blank and NA give identical probabilities, calls and sets in ${same} of ${cases} single-cell cases`);
+  check(named === cases, `the blanked gene is named in the sample's missing-gene list in ${named} of ${cases} cases`);
+  // a truncated row: its last cells are missing (null), with a warning naming the row
+  const trunc = [lines[0], ...base.map((c, k) => (k === 3 ? c.slice(0, 10) : c).join(","))].join("\n");
+  const pt = K.parseUpload(trunc, model);
+  const s3 = pt.samples[3];
+  check(model.genes.slice(9).every((g) => s3.values[g.id] === null) && model.genes.slice(0, 9).every((g) => s3.values[g.id] !== null), "a truncated row gives nulls for its missing cells");
+  check(pt.warnings.some((w) => w.includes(base[3][0]) && w.includes("shorter than the header")), "a truncated row is named in a warning");
+  // a linear-scale table (2^x − 1 of the example) warns; the example itself does not
+  const lin = [lines[0], ...base.map((c) => c.map((x, jj) => (jj >= 1 && jj <= model.genes.length && x !== "" ? String(2 ** Number(x) - 1) : x)).join(","))].join("\n");
+  check(K.parseUpload(lin, model).warnings.some((w) => w.includes("linear or TPM")), "a linear-scale table warns");
+  check(!K.parseUpload(ex.csv, model).warnings.some((w) => w.includes("linear or TPM")), "the log2 CPM example does not warn");
+  // a count matrix with an empty cell leaves it out of the library size and says so
+  const gl = gxs.trim().split("\n");
+  const holed = [gl[0], gl[1].split(",").map((x, jj) => (jj === 1 ? "" : x)).join(","), ...gl.slice(2)].join("\n");
+  const ph = K.parseUpload(holed, model);
+  check(ph.nMissing === 1 && ph.warnings.some((w) => w.includes("left out of the library size")), "an empty count cell is left out of the library size, with a warning");
+}
+
 console.log(`ok: ${n} assertions (count → CPM max |Δ| ${maxD.toExponential(1)}, projection max |Δ| ${maxP.toExponential(1)}, ${res.results.length} example samples)`);

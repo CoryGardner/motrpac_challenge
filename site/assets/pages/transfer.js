@@ -11,16 +11,22 @@ const perSet = (v, d = 2) => `${fmt(v, d)} tissue${Number(fmt(v, d)) === 1 ? "" 
 
 async function main() {
   await mountChrome("transfer.html");
-  const [H, S, BM, GT, REP, GENES] = await Promise.all([
+  const [H, S, BM, GT, REP, GENES, PR] = await Promise.all([
     loadJSON("data/headline.json"), loadJSON("data/shift.json"), loadJSON("data/bodymap.json"), loadJSON("data/gtex.json"),
-    loadJSON("data/representations.json"), loadJSON("data/genes.json"),
+    loadJSON("data/representations.json"), loadJSON("data/genes.json"), loadJSON("data/product.json"),
   ]);
+  const RD = PR.recal_draws;
+  const drawRange = (r) => `per draw ${fmt(r.min_coverage, 2)}–${fmt(r.max_coverage, 2)}, ${r["n_draws_below_0.90"]} of ${r.draws} draws below 0.90`;
+
   const ex = H.extras;
   const bm20 = pick(H.ladder, "different_lab", "k20", "marginal"), gt20 = pick(H.ladder, "different_species", "k20", "marginal"), gtfull = pick(H.ladder, "different_species", "full", "marginal");
   const tr20 = pick(H.ladder, "train_control_test_trained", "k20", "marginal"), trFull = pick(H.ladder, "train_control_test_trained", "full", "marginal");
   document.getElementById("lede").replaceChildren(
     `Fit on the ${tr20.n_source_animals} sedentary control animals alone, the 20-gene panel names the tissue of the ${tr20.n_individuals} trained animals at ${fmt(tr20.accuracy)} with coverage ${fmt(tr20.coverage)} (the all-gene model reaches ${fmt(trFull.accuracy)}, coverage ${fmt(trFull.coverage)}), and fit on MoTrPAC it names ${fmt(bm20.accuracy)} of adult BodyMap organs and ${fmt(gt20.accuracy)} of human GTEx samples (${fmt(gtfull.accuracy)} with all genes). `,
-    `With the source calibration the 90 % guarantee delivers ${fmt(bm20.coverage)} and ${fmt(gt20.coverage)}; three target animals restore it within species at one tissue per set, and across species three donors restore the number, at ${fmt(gt20.recal_n3_size, 1)} tissues per set.`,
+    `With the source calibration the 90 % sets cover ${fmt(bm20.coverage)} and ${fmt(gt20.coverage)}. Three target animals restore observed coverage within species (${fmt(RD["bodymap.3"].mean_coverage_all_draws)} at one tissue per set; ${drawRange(RD["bodymap.3"])}). `,
+    `Across species, five donors restore observed coverage of ${fmt(RD["gtex.5"].mean_coverage_all_draws)} at ${fmt(RD["gtex.5"].mean_set_size_finite, 1)} of ${RD["gtex.5"].n_classes} tissues per set (every draw finite; ${drawRange(RD["gtex.5"])}); with three donors ${RD["gtex.3"].n_infinite} of ${RD["gtex.3"].draws} draws have no finite threshold, so every set holds all ${RD["gtex.3"].n_classes} tissues, and the ${RD["gtex.3"].n_finite} finite draws cover ${fmt(RD["gtex.3"].mean_coverage_finite)} at ${fmt(RD["gtex.3"].mean_set_size_finite, 1)} tissues per set (minimum ${fmt(RD["gtex.3"].min_coverage_finite, 2)}). `,
+    "These are observed coverages across draws, not a guarantee for new animals or donors (",
+    el("a", { href: "limitations.html#recalibration" }, "why"), ").",
   );
 
   // ---- ladder --------------------------------------------------------------------------------------
@@ -66,8 +72,8 @@ async function main() {
   const infK20n3 = inf && inf.k20_n3 ? inf.k20_n3.frac_infinite : null;
   const rb3 = rb.find((r) => r.model === "k20" && r.n_recal === 3), rg3 = rg.find((r) => r.model === "k20" && r.n_recal === 3), rg5 = rg.find((r) => r.model === "k20" && r.n_recal === 5);
   document.getElementById("p-recal").replaceChildren(
-    `Recalibrating the threshold on a few target individuals is the standard repair: on BodyMap adults, three animals lift coverage of the 20-gene sets from ${fmt(rb3.coverage_source_cal_same_test)} to ${fmt(rb3.coverage_recalibrated)} at ${perSet(rb3.set_size_recalibrated)}, so the guarantee is back and the sets are still singletons. `,
-    `On GTEx, three donors lift coverage to ${fmt(rg3.coverage_recalibrated)} with sets of ${fmt(rg3.set_size_recalibrated, 1)} of 19 tissues, and five donors bring ${fmt(rg5.coverage_recalibrated)} at ${perSet(rg5.set_size_recalibrated)}: the number is restored before the information is.`,
+    `Recalibrating the threshold on a few target individuals is the standard repair: on BodyMap adults, three animals lift coverage of the 20-gene sets from ${fmt(rb3.coverage_source_cal_same_test)} to ${fmt(rb3.coverage_recalibrated)} at ${perSet(rb3.set_size_recalibrated)} (${drawRange(RD["bodymap.3"])}), so observed coverage is back and the sets are still singletons. `,
+    `On GTEx, five donors bring observed coverage to ${fmt(rg5.coverage_recalibrated)} at ${perSet(rg5.set_size_recalibrated)} with every draw finite (${drawRange(RD["gtex.5"])}); three donors give ${fmt(rg3.coverage_recalibrated)} with sets of ${fmt(rg3.set_size_recalibrated, 1)} of ${RD["gtex.3"].n_classes} tissues, because ${RD["gtex.3"].n_infinite} of ${RD["gtex.3"].draws} draws have no finite threshold and hold every tissue: the number is restored before the information is.`,
   );
   document.getElementById("callout-recal").replaceChildren(callout("caveat", "Across species, three donors restore the number, not the information", [
     `The recalibrated GTEx coverage of ${fmt(rg3.coverage_recalibrated)} is a full-set effect: three donors contribute few mapped samples, so in ${infK20n3 === null ? "pending" : (100 * infK20n3).toFixed(0) + " %"} of the ${inf?.k20_n3?.draws ?? 20} draws the rank ⌈(n + 1)(1 − α)⌉ exceeds n, the threshold is +∞ and every set holds all 19 tissues. `

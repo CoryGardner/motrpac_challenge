@@ -100,6 +100,27 @@ def main():
             for organ in ("Thymus", "Uterus"):
                 key[f"{sub}.{mode}.{organ}.frac_empty"] = P.val(f"pv_scaling_{sub}_{mode}_{organ}_frac_empty", sc, "frac_empty", {"subset": sub, "mode": mode, "organ": organ})
     out["scaling_key"] = key
+    # ---- composition sensitivity (200 random subsets of the 21-week adults) ------------------------------------------
+    cs = PV / "composition_summary.csv"
+    comp = {}
+    for mode in ("within", "reference"):
+        for metric in ("accuracy", "coverage", "frac_empty"):
+            for col in ("p05", "p50", "p95"):
+                comp[f"{mode}.{metric}.{col}"] = P.val(f"pv_comp_{mode}_{metric}_{col}", cs, col, {"mode": mode, "metric": metric})
+    comp["n_subsets"] = P.val("pv_comp_n_subsets", cs, "n_subsets", {"mode": "within", "metric": "coverage"})
+    comp["size_min"] = P.val("pv_comp_size_min", cs, "subset_size_min", {"mode": "within", "metric": "coverage"})
+    comp["size_max"] = P.val("pv_comp_size_max", cs, "subset_size_max", {"mode": "within", "metric": "coverage"})
+    out["composition"] = comp
+    # ---- per-draw recalibration coverage (replayed from results_frozen) ----------------------------------------------------
+    rds = PV / "recal_draws_summary.csv"
+    rd = {}
+    for ds in ("bodymap", "gtex"):
+        for n in (3, 5):
+            w = {"dataset": ds, "model": "k20", "n_recal": n}
+            rd[f"{ds}.{n}"] = {c: P.val(f"pv_recal_{ds}_{n}_{c}", rds, c, w) for c in
+                              ("n_recal", "draws", "mean_coverage_all_draws", "min_coverage", "max_coverage", "n_draws_below_0.90", "n_finite", "n_infinite",
+                               "mean_coverage_finite", "min_coverage_finite", "mean_set_size_finite", "min_cal_scores", "max_cal_scores", "n_classes")}
+    out["recal_draws"] = rd
     # ---- the flag ---------------------------------------------------------------------------------------------------
     fr = PV / "flag_rates.csv"
     fdf = P.read(fr)

@@ -10,7 +10,7 @@ of processing effects on the consortium's bridging standards, an exercise-specif
 every number carries provenance and whose Explorer scores new samples with the panel in the browser.
 
 [![tests](https://github.com/CoryGardner/motrpac_challenge/actions/workflows/tests.yml/badge.svg)](https://github.com/CoryGardner/motrpac_challenge/actions/workflows/tests.yml)
-**Live site:** https://corygardner.github.io/motrpac_challenge/ · **Release:** tag `hackathon-submission-v10.1` (version 2.0.1) · **Licence:** MIT
+**Live site:** https://corygardner.github.io/motrpac_challenge/ · **Release:** tag `hackathon-submission-v10.2` (version 2.0.2) · **Licence:** MIT
 
 ## Use it
 
@@ -55,8 +55,11 @@ MoTrPAC counterpart; 68 samples from 8 animals).
 the 10 sedentary controls alone, the panel names the tissue of all 40 trained animals at 0.961 with coverage 0.903).
 Beyond the study it abstains rather than errs: calibrated on MoTrPAC it covers 0.618 of the BodyMap adults and 0.364 of
 human GTEx samples, and the shortfall is empty sets, not confident error. Three animals from the new laboratory restore
-it (0.943 coverage at one tissue per set); three human donors restore the number, not the information (0.954 at 11.7
-tissues per set), which marks the species boundary honestly.
+observed coverage (0.943 at one tissue per set; 0.86–1.00 per draw, 3 of 20 draws below 0.90). Across species five
+donors restore observed coverage of 0.933 at 6.3 tissues per set (every draw finite; 0.67–1.00 per draw); with three
+donors 9 of 20 draws have no finite threshold, and the 11 finite draws cover 0.917 at 5.7 tissues per set: the number
+returns before the information does, which marks the species boundary honestly. Recalibrated coverage is observed
+across draws, not a guarantee for new animals (`results_product/40_product/recal_draws_summary.csv`; Limitations page).
 
 **It is biology, not processing.** Like every large multi-tissue design, this study processed each tissue as a unit, so
 within-study accuracy alone cannot say how much of a fingerprint is biology. Two things can: the external replicate,
@@ -289,7 +292,7 @@ Known failure modes and limits (details on the site's Limitations page):
 ## Reuse
 
 - **Licence:** MIT for code, site and derived tables (`LICENSE`); the data keep their own terms (table above).
-- **Cite:** `CITATION.cff` (version 2.0.1, tag `hackathon-submission-v10.1`), the three data papers, and the multiomic sources in the Data section.
+- **Cite:** `CITATION.cff` (version 2.0.2, tag `hackathon-submission-v10.2`), the three data papers, and the multiomic sources in the Data section.
 - **Score your samples:** the Explorer's *Score your own samples* tool takes a CSV of log2 CPM for the 20 panel genes
   (a template is provided) and returns tissue calls and 90 % prediction sets in the browser, with optional recalibration
   on labelled samples; the panel card (`site/data/panel_card.csv`, `.json`) lists the genes with their mean expression per

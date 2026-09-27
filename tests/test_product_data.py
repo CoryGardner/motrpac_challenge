@@ -78,3 +78,33 @@ def test_reference_map_rederives():
     assert np.abs(C[:, 1] - np.array(p["pca"]["reference"]["y"])).max() < 1e-5
     L = np.array(p["pca"]["loadings"])
     assert np.allclose(L @ L.T, np.eye(2), atol=1e-9)
+
+
+def test_recalibration_draws_reproduce_the_published_means():
+    """Per-draw recalibrated coverage (replayed from results_frozen) averages to recalibration.csv; the draws that have no
+    finite threshold are counted; every value the pages read has a pv_ entry."""
+    d = pd.read_csv(PV / "recal_draws.csv")
+    s = pd.read_csv(PV / "recal_draws_summary.csv")
+    for ds, sub in (("bodymap", "12_bodymap"), ("gtex", "13_gtex")):
+        rc = pd.read_csv(ROOT / "results_frozen" / sub / "recalibration.csv")
+        for n in (3, 5):
+            g = d[(d["dataset"] == ds) & (d["model"] == "k20") & (d["n_recal"] == n)]
+            pub = rc[(rc["model"] == "k20") & (rc["n_recal"] == n)]["coverage_recalibrated"].iloc[0]
+            assert len(g) == 20 and math.isclose(g["coverage"].mean(), pub, abs_tol=1e-9), (ds, n)
+            r = s[(s["dataset"] == ds) & (s["n_recal"] == n)].iloc[0]
+            assert r["n_infinite"] == int((~g["finite"]).sum()) and r["n_draws_below_0.90"] == int((g["coverage"] < 0.9).sum())
+            assert (g.loc[~g["finite"], "avg_set_size"] == g["n_classes"].iloc[0]).all()      # an infinite threshold puts every class in the set
+    p = _load("product.json")["recal_draws"]
+    byid = {e["id"]: e["value"] for e in _load("provenance.json")["entries"]}
+    assert p["bodymap.3"]["min_coverage"] == byid["pv_recal_bodymap_3_min_coverage"] and p["gtex.3"]["n_infinite"] == byid["pv_recal_gtex_3_n_infinite"]
+
+
+def test_composition_sensitivity():
+    c = pd.read_csv(PV / "composition.csv")
+    s = pd.read_csv(PV / "composition_summary.csv")
+    assert len(c) == 200 and c["n"].between(8, 80).all() and (c["n_organs"] >= 3).all() and (c["n_mapped"] >= 1).all()
+    for _, r in s.iterrows():
+        v = c[f"{r['mode']}_{r['metric']}"]
+        assert math.isclose(r["p05"], v.quantile(0.05), abs_tol=1e-12) and math.isclose(r["p95"], v.quantile(0.95), abs_tol=1e-12)
+    comp = _load("product.json")["composition"]
+    assert comp["within.coverage.p05"] == float(s[(s["mode"] == "within") & (s["metric"] == "coverage")]["p05"].iloc[0])

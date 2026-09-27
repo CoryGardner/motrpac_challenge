@@ -6,7 +6,10 @@ import { mountLadder, pick } from "../ladder.js";
 // Every number on this page is read from site/data/*.json; nothing below is typed by hand.
 async function main() {
   await mountChrome("science.html");
-  const [H, PC, N, G] = await Promise.all([loadJSON("data/headline.json"), loadJSON("data/panel_curve.json"), loadJSON("data/nesting.json"), loadJSON("data/genes.json")]);
+  const [H, PC, N, G, PR] = await Promise.all([loadJSON("data/headline.json"), loadJSON("data/panel_curve.json"), loadJSON("data/nesting.json"), loadJSON("data/genes.json"), loadJSON("data/product.json")]);
+  const RD = PR.recal_draws;
+  const drawRange = (r) => `per draw ${fmt(r.min_coverage, 2)}–${fmt(r.max_coverage, 2)}, ${r["n_draws_below_0.90"]} of ${r.draws} draws below 0.90`;
+
   const ex = H.extras, d = H.design, acc = H.accuracy;
   const tile = Object.fromEntries(H.tiles.map((t) => [t.id, t]));
   const idk = pick(H.ladder, "in_distribution", "k20", "marginal", "pooled");
@@ -25,7 +28,7 @@ async function main() {
   document.getElementById("lede").replaceChildren(
     el("b", {}, "Yes."),
     ` ${d.k_panel === 20 ? "Twenty" : String(d.k_panel)} genes identify ${ex.n_tissues} rat tissues at ${fmt(tile.tile_acc_k20.value)} balanced accuracy and name ${bmAcc === 1 ? "every mapped organ" : fmt(bmAcc) + " of the mapped organs"} in another laboratory's rats. `,
-    `Its ${guarantee} guarantee holds within the study, abstains rather than guesses beyond it, and three animals from the new laboratory restore it.`,
+    `Its ${guarantee} guarantee holds within the study, abstains rather than guesses beyond it, and three animals from the new laboratory restore observed coverage (${fmt(RD["bodymap.3"].mean_coverage_all_draws)}, ${drawRange(RD["bodymap.3"])}).`,
   );
 
   // ---- tiles --------------------------------------------------------------------------------------------------
@@ -58,7 +61,7 @@ async function main() {
   const point = (text) => el("li", { style: "max-width: none" }, text);
   document.getElementById("key-points").replaceChildren(
     point(`A class-aware round-robin selector makes ${d.k_panel} genes sufficient (${fmt(acc.k20.mean)} ± ${fmt(acc.k20.sd)} on ${ex.n_tissues} tissues); a univariate F-test reaches ${fmt(ex.acc_fclassif_k20)}.`),
-    point(`The ${guarantee} guarantee holds in the study, abstains rather than guesses beyond it; three same-species animals restore it (${fmt(bm.recal_n3)}).`),
+    point(`The ${guarantee} guarantee holds in the study, abstains rather than guesses beyond it; three same-species animals restore observed coverage (${fmt(bm.recal_n3)}; ${drawRange(RD["bodymap.3"])}).`),
     point(`MoTrPAC's design makes the check possible: reference RNA pools on every extraction plate let batch be measured directly, and the answer (${pct(bridge, 1)}) supports the biology reading.`),
   );
 
@@ -100,7 +103,7 @@ async function main() {
     el("a", { href: "exercise.html" }, "trained animals"),
     " with the panel fit on sedentary controls only. ",
     `Beyond the study they abstain rather than guess: coverage ${fmt(bm?.coverage)} in another laboratory and ${fmt(gt?.coverage)} in human, with wrong non-empty sets at ${fmt(bm?.wrong_non_empty)} and ${fmt(gt?.wrong_non_empty)}. `,
-    `Three target animals restore ${fmt(bm?.recal_n3)} within species at ${perSet(bm?.recal_n3_size)}.`,
+    `Three target animals restore observed coverage of ${fmt(bm?.recal_n3)} within species at ${perSet(bm?.recal_n3_size)} (${drawRange(RD["bodymap.3"])}; an observed coverage over draws, not a guarantee for new animals: see `, el("a", { href: "limitations.html#recalibration" }, "Limitations"), ").",
   );
   await figure(document.getElementById("fig-empty"), {
     title: "Under shift the sets abstain rather than guess: the shortfall is empty sets; wrong confident sets stay rare",

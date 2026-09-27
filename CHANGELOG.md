@@ -4,6 +4,33 @@ All notable changes to this repository. The format follows [Keep a Changelog](ht
 dates are UTC. Each section is a `hackathon-submission-v<n>` git tag; the version numbers are those of `CITATION.cff`
 and `pyproject.toml`.
 
+## [2.0.2] — 2026-09-27 (tag `hackathon-submission-v10.2`)
+
+### Fixed
+- Check samples read an empty cell, a whitespace-only cell and every cell past the end of a short row as 0 ("not
+  expressed") instead of missing (`Number("")` is 0), and did not list the gene as missing. One cell parser
+  (`parseCell` in `site/assets/check-core.js`) now reads "", whitespace, NA, NaN, null, "-" and anything non-numeric as
+  missing in both input formats; short rows are named in a warning; empty cells of a count matrix are left out of the
+  library size and counted; a 20-gene table with values impossible for log2(CPM + 1) (< −0.5 or > 20) warns that it
+  looks linear or TPM. Tests: blank and NA give identical probabilities, calls and sets in all 1,600 single-cell cases of
+  the example, and the blanked gene is named each time; truncated-row, linear-scale and empty-count-cell cases.
+
+### Added
+- Composition sensitivity of within-set scaling: 200 random subsets (fixed seed; 8–80 samples, ≥ 3 organs) of the
+  BodyMap 21-week adults, scored within-set and with reference scaling (`results_product/40_product/composition*.csv`);
+  the 5th–95th percentile ranges on Check samples ("What to expect") and the Limitations page. Reference scaling is
+  asserted per-sample (identical probabilities whatever else is uploaded). The automatic rule is unchanged.
+- Per-draw recalibration coverage replayed from the frozen thresholds (`recal_draws.csv`, `recal_draws_summary.csv`;
+  no rerun; the means reproduce `recalibration.csv`), exported as `pv_recal_*`.
+
+### Changed
+- "Restores the guarantee" after recalibration now reads "restores observed coverage", with the per-draw range, on The
+  science, Transfer and Identifiability pages and in the README; for GTEx the text leads with five donors (every draw
+  finite) and gives the three-donor split. Methods and Limitations explain why (exchangeability, the ≥ 9-animal
+  arithmetic, inferred BodyMap animal IDs); "Calibrate to my lab" says the recalibrated coverage is observed, not
+  guaranteed, and pooled within animals.
+- LICENSE: the copyright holder is the Stanford Bioinformatics Center. The organizers' repository history is merged.
+
 ## [2.0.1] — 2026-09-27 (tag `hackathon-submission-v10.1`)
 
 ### Added

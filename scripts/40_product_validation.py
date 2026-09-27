@@ -167,6 +167,81 @@ def main():
     scaling = pd.DataFrame(rows)
     scaling.to_csv(out / "scaling.csv", index=False)
 
+    # ---- composition sensitivity of within-set scaling (the 21-week adults, the example's samples) ----------------------
+    ad = np.where(subsets["adult_21wk"])[0]
+    rng_c = np.random.default_rng(SEED)
+    P_ref_full = probs(z_reference(X, model), model)
+    crow = []
+    while len(crow) < 200:
+        size = int(rng_c.integers(8, len(ad) + 1))
+        idx = np.sort(rng_c.choice(ad, size=size, replace=False))
+        orgs = organs[idx]
+        mapped = np.array([organ_map.get(o) is not None for o in orgs])
+        if len(set(orgs)) < 3 or not mapped.any():
+            continue
+        r = {"subset": len(crow), "seed": SEED, "n": size, "n_organs": len(set(orgs)), "n_mapped": int(mapped.sum())}
+        P_ref = probs(z_reference(X[idx], model), model)
+        assert np.abs(P_ref - P_ref_full[idx]).max() < 1e-12, "reference scaling depends on the other samples"
+        for mode, P in (("within", probs(z_within(X[idx]), model)), ("reference", P_ref)):
+            S = P >= 1 - q10
+            mi = np.where(mapped)[0]
+            ts = [[ci[c] for c in organ_map[o]] for o in orgs[mi]]
+            r[f"{mode}_accuracy"] = float(np.mean([P[i].argmax() in t for i, t in zip(mi, ts)]))
+            r[f"{mode}_coverage"] = float(np.mean([S[i, t].any() for i, t in zip(mi, ts)]))
+            r[f"{mode}_frac_empty"] = float((~S[mi].any(axis=1)).mean())
+        crow.append(r)
+    comp = pd.DataFrame(crow)
+    comp.to_csv(out / "composition.csv", index=False)
+    summ = []
+    for mode in ("within", "reference"):
+        for col in ("accuracy", "coverage", "frac_empty"):
+            v = comp[f"{mode}_{col}"]
+            summ.append({"mode": mode, "metric": col, "n_subsets": len(comp), "p05": float(v.quantile(0.05)), "p50": float(v.median()), "p95": float(v.quantile(0.95)),
+                         "min": float(v.min()), "max": float(v.max()), "subset_size_min": int(comp["n"].min()), "subset_size_max": int(comp["n"].max())})
+    pd.DataFrame(summ).to_csv(out / "composition_summary.csv", index=False)
+
+    # ---- per-draw recalibration coverage, replayed from the frozen thresholds (no rerun) ------------------------------------
+    drows = []
+    for dname, grp, stage_col, primary in (("bodymap", "animal_id", "stage_weeks", "21"), ("gtex", "donor", "stage", None)):
+        d = FZ / "31_site_regen" / ("12_bodymap" if dname == "bodymap" else "13_gtex")
+        th = pd.read_csv(d / "recal_thresholds.csv")
+        sp_t = pd.read_csv(d / "scores_target_probs.csv", dtype=str)
+        om = json.loads((d / "organ_map.json").read_text())
+        cls_t = json.loads((d / "classes.json").read_text())
+        cls_t = cls_t["classes"] if isinstance(cls_t, dict) else cls_t
+        for m in ("k20",):
+            sm = sp_t[sp_t["model"] == m]
+            if primary is not None:
+                sm = sm[sm[stage_col].astype(str) == primary]
+            elif stage_col in sm.columns and sm[stage_col].nunique() > 1:
+                raise AssertionError(f"{dname}: several stages {sorted(sm[stage_col].unique())}")
+            sm = sm[sm["organ"].map(lambda o: bool(om.get(o)))].reset_index(drop=True)
+            Pm_t = sm[[f"p_{c}" for c in cls_t]].to_numpy(dtype=float)
+            for _, t in th[th["model"] == m].iterrows():
+                chosen = set(str(t["chosen"]).split(";"))
+                mt_ = ~sm[grp].isin(chosen).to_numpy()
+                q = float(t["q_t"])
+                S = Pm_t[mt_] >= 1 - q if np.isfinite(q) else np.ones_like(Pm_t[mt_], dtype=bool)
+                cov = [S[j, [cls_t.index(c) for c in om[o] if c in cls_t]].any() for j, o in enumerate(sm.loc[mt_, "organ"])]
+                drows.append({"dataset": dname, "model": m, "n_recal": int(t["n_recal"]), "draw": int(t["draw"]), "chosen": t["chosen"], "q_t": q,
+                              "finite": bool(np.isfinite(q)), "n_cal_scores": int(t["n_cal_scores"]), "n_test_samples": int(mt_.sum()),
+                              "n_test_individuals": int(sm.loc[mt_, grp].nunique()), "coverage": float(np.mean(cov)), "avg_set_size": float(S.sum(axis=1).mean()),
+                              "n_classes": len(cls_t)})
+    dd = pd.DataFrame(drows)
+    dd.to_csv(out / "recal_draws.csv", index=False)
+    rs = []
+    for (dname, m, nr), g in dd.groupby(["dataset", "model", "n_recal"]):
+        rc = pd.read_csv(FZ / ("12_bodymap" if dname == "bodymap" else "13_gtex") / "recalibration.csv")
+        pub = float(rc[(rc["model"] == m) & (rc["n_recal"] == nr)]["coverage_recalibrated"].iloc[0])
+        assert abs(g["coverage"].mean() - pub) < 1e-9, f"{dname} {m} n={nr}: replayed mean {g['coverage'].mean()} vs recalibration.csv {pub}"
+        f = g[g["finite"]]
+        rs.append({"dataset": dname, "model": m, "n_recal": nr, "draws": len(g), "mean_coverage_all_draws": float(g["coverage"].mean()), "published_mean": pub,
+                   "min_coverage": float(g["coverage"].min()), "max_coverage": float(g["coverage"].max()), "n_draws_below_0.90": int((g["coverage"] < 0.9).sum()),
+                   "n_finite": int(len(f)), "n_infinite": int((~g["finite"]).sum()), "mean_coverage_finite": float(f["coverage"].mean()) if len(f) else np.nan,
+                   "min_coverage_finite": float(f["coverage"].min()) if len(f) else np.nan, "mean_set_size_finite": float(f["avg_set_size"].mean()) if len(f) else np.nan,
+                   "min_cal_scores": int(g["n_cal_scores"].min()), "max_cal_scores": int(g["n_cal_scores"].max()), "n_classes": int(g["n_classes"].iloc[0])})
+    pd.DataFrame(rs).to_csv(out / "recal_draws_summary.csv", index=False)
+
     # ---- flag rates ---------------------------------------------------------------------------------------------------
     fr = []
     sp = pd.read_csv(FZ / "31_site_regen" / "06_conformal" / "TRNSCRPT" / "scores_test_probs.csv", dtype={"viallabel": str, "pid": str})
