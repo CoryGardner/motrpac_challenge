@@ -24,7 +24,7 @@ export MOTRPAC_PORTAL
 SMOKE_ENV := MOTRPAC_RAW=$(SYN) MOTRPAC_RESULTS=results_smoke MOTRPAC_NO_REPORT=1
 
 .PHONY: help env synthetic smoke export check inventory eda eda-readout baselines prot-diagnostic panels annotate-panel panel-training conformal fusion batch-check shift time-course bodymap gtex transfer external test all clean-synthetic clean-results \
-        identifiability portal-check regen-scores freeze-results verify-frozen site-data site-test site screenshots linkcheck summary-figure home-figure figures brand
+        identifiability portal-check regen-scores panel-model freeze-results verify-frozen site-data site-test site screenshots linkcheck summary-figure home-figure figures brand
 
 help: ## list the targets
 	@grep -E '^[a-zA-Z0-9_-]+:.*?## ' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  %-18s %s\n", $$1, $$2}'
@@ -137,7 +137,7 @@ smoke: ## synthetic data → phases 02, 04, 05, 06 in --quick mode → results_s
 
 test: ## Python tests (results-dependent ones read results/ or results_frozen/), the JS conformal test, the snapshot check
 	$(PY) -m pytest -q
-	@command -v node >/dev/null 2>&1 && test -f site/data/conformal_fixtures.json && node tests/test_site_conformal.js || echo "(node or site/data absent: JS conformal test skipped)"
+	@command -v node >/dev/null 2>&1 && test -f site/data/conformal_fixtures.json && node tests/test_site_conformal.js && node tests/test_score_tool.js || echo "(node or site/data absent: JS conformal test skipped)"
 	$(MAKE) verify-frozen PY=$(PY)
 
 # ---- the site ------------------------------------------------------------------------------------------
@@ -152,6 +152,9 @@ regen-scores: ## per-sample score regenerations of phases 06, 08 (k = 20, 50), 1
 	MOTRPAC_NO_REPORT=1 $(PY) scripts/13_gtex_transfer.py --out $(REGEN)/13_gtex --save-scores
 	$(PY) -m pytest -q tests/test_regen_scores.py
 
+panel-model: ## phase 34: export the 20-gene transfer model for the Explorer's scoring tool (needs data/ and regen-scores)
+	MOTRPAC_NO_REPORT=1 $(PY) scripts/34_panel_model.py
+
 freeze-results: ## copy every result file the site reads into results_frozen/ (committed snapshot)
 	$(PY) scripts/33_freeze_results.py
 
@@ -164,6 +167,7 @@ site-data: ## export site/data with provenance from results/ (or RESULTS=<dir>, 
 site-test: ## the site tests: provenance, regeneration, JS conformal port, links
 	$(PY) -m pytest -q tests/test_site_data.py tests/test_regen_scores.py tests/test_frozen_results.py
 	node tests/test_site_conformal.js
+	node tests/test_score_tool.js
 	$(PY) tools/linkcheck.py
 
 site: site-data site-test ## export the site data and run the site tests
@@ -182,7 +186,7 @@ home-figure: ## figures/home.png: a render of the home page (needs Chrome + play
 	cd tools && npm install --no-audit --no-fund >/dev/null
 	@$(PY) -m http.server -d site $(SITE_PORT) >/dev/null 2>&1 & echo $$! > .server.pid; sleep 1; \
 	  node tools/screenshot.js --base http://localhost:$(SITE_PORT) --pages=index; status=$$?; kill $$(cat .server.pid); rm -f .server.pid; exit $$status
-	$(PY) -c "from PIL import Image; im = Image.open('site/_screenshots/index-light-desktop.png'); im.thumbnail((1200, 100000)); im.save('figures/home.png', optimize=True); print('wrote figures/home.png', im.size)"
+	$(PY) -c "from PIL import Image; im = Image.open('site/_screenshots/index-light-desktop.png'); im = im.crop((0, 0, im.width, min(im.height, 1800))); im.thumbnail((1000, 100000)); im.save('figures/home.png', optimize=True); print('wrote figures/home.png', im.size)"
 
 figures: summary-figure home-figure ## both README figures
 

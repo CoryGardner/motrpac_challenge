@@ -5,6 +5,7 @@ exports), never results/ directly, and uses the site's design tokens."""
 from __future__ import annotations
 
 import json
+import textwrap
 from pathlib import Path
 
 import matplotlib
@@ -26,9 +27,17 @@ def load(name):
     return json.loads((D / name).read_text())
 
 
+def title(ax, head, sub):
+    """A one-line panel title (≤ 60 characters) above a smaller wrapped subtitle; the title pad grows with the subtitle."""
+    assert len(head) <= 60, head
+    lines = textwrap.wrap(sub, 64)
+    ax.set_title(head, loc="left", fontsize=10, fontweight="bold", pad=10 + 11.5 * len(lines))
+    ax.text(0, 1.015, "\n".join(lines), transform=ax.transAxes, fontsize=8, color=T["ink2"], va="bottom", ha="left")
+
+
 def main():
-    H, SC, N = load("headline.json"), load("stable_core.json"), load("nesting.json")
-    fig, axes = plt.subplots(1, 3, figsize=(16, 5.6), facecolor=T["page"], gridspec_kw={"width_ratios": [1.45, 1, 1.1], "wspace": 0.55})
+    H, SC, N, G = load("headline.json"), load("stable_core.json"), load("nesting.json"), load("genes.json")
+    fig, axes = plt.subplots(1, 3, figsize=(16, 6.2), facecolor=T["page"], gridspec_kw={"width_ratios": [1.45, 1, 1.15], "wspace": 0.62})
     for ax in axes:
         ax.set_facecolor(T["surface"])
         for s in ("top", "right"):
@@ -58,7 +67,7 @@ def main():
     ax.grid(axis="x", visible=False)
     ax.grid(axis="y", color=T["grid"], linewidth=0.8)
     ax.legend(frameon=False, loc="upper center", fontsize=8, ncol=2, bbox_to_anchor=(0.5, -0.3))
-    ax.set_title("a  Accuracy stays well above chance at every rung; the 90 % guarantee holds\n    within the study and is restored by three animals (20-gene panel, α = 0.10)", loc="left", fontsize=9.5)
+    title(ax, "a  Accuracy holds at every rung of the shift ladder", "The 90 % guarantee holds within the study and is restored by three animals from a new laboratory (20-gene panel, α = 0.10, calibrated on the source)")
 
     # (b) stable core: effect size per gene
     core = sorted(SC["core"], key=lambda r: r["effect_size"])
@@ -70,32 +79,30 @@ def main():
         ax.text(r["effect_size"] + 0.15, i, f"{r['effect_size']:.1f}  (freq {r['selection_frequency']:.2f})", va="center", fontsize=7.5, color=T["ink2"])
     ax.set_xlim(0, max(r["effect_size"] for r in core) * 1.55)
     ax.set_xlabel("log2 CPM above the next-highest tissue")
-    ax.set_title("b  The ten-gene stable core (≥ 80 % of 50\n    animal bootstraps): single markers, mostly textbook", loc="left", fontsize=9.5)
+    title(ax, "b  The ten-gene stable core", "Chosen in ≥ 80 % of 50 animal bootstraps: single markers, mostly textbook; bar = log2 CPM above the next-highest tissue")
 
-    # (c) identifiability heatmap: Cramér's V and fraction of pairs sharing a level, RNA-seq variables + one row per other layer
-    keep = [("TRNSCRPT", "RNA_extr_plate_ID", "RNA-seq · extraction plate"), ("TRNSCRPT", "Lib_batch_ID", "RNA-seq · library batch"), ("TRNSCRPT", "Seq_flowcell_ID", "RNA-seq · flowcell"),
-            ("TRNSCRPT", "Seq_flowcell_lane", "RNA-seq · lane"), ("METHYL", "DNA_extr_plate_ID", "RRBS · extraction plate"), ("METHYL", "Seq_flowcell_ID", "RRBS · flowcell"),
-            ("ATAC", "Seq_flowcell_ID", "ATAC · flowcell"), ("PROT", "plex_id", "proteomics · TMT plex"), ("PROT", "tmt11_channel", "proteomics · TMT channel"), ("IMMUNO", "plate_id", "immunoassay · plate")]
-    rows_c = []
-    for assay, var, label in keep:
-        r = next((x for x in N["nesting"].get(assay, []) if x["variable"] == var), None)
-        if r:
-            rows_c.append((label, r["cramers_v"], r["n_pairs_sharing_level"] / r["n_pairs_total"], f"{r['n_pairs_sharing_level']}/{r['n_pairs_total']}"))
+    # (c) batch measured directly on the bridging reference pools: V_batch / V_tissue per panel gene, pools 99 and 88
     ax = axes[2]
-    z = np.array([[v, f] for _, v, f, _ in rows_c])
-    cmap = LinearSegmentedColormap.from_list("seq", [T["surface"]] + T["seq"])
-    ax.imshow(z, cmap=cmap, vmin=0, vmax=1, aspect="auto")
-    ax.set_xticks([0, 1], ["Cramér's V\nwith tissue", "tissue pairs\nsharing a level"], fontsize=8)
-    ax.set_yticks(range(len(rows_c)), [r[0] for r in rows_c], fontsize=8)
-    for i, (_, v, f, txt) in enumerate(rows_c):
-        ax.text(0, i, f"{v:.2f}", ha="center", va="center", fontsize=8, color="white" if v > 0.6 else T["ink"])
-        ax.text(1, i, txt, ha="center", va="center", fontsize=8, color="white" if f > 0.6 else T["ink"])
-    ax.grid(False)
-    for s in ("top", "right", "left", "bottom"):
-        ax.spines[s].set_visible(False)
-    est = next(r for r in N["estimable_pairs"] if r["assay"] == "TRNSCRPT")
-    pair = " and ".join(t.lower() for t in est["estimable_pairs"].split("|"))
-    ax.set_title(f"c  Batch is nested in tissue: {est['n_pairs_estimable']} of {est['n_pairs_total']} RNA-seq tissue pairs\n    ({pair}) share a plate, library batch and flowcell", loc="left", fontsize=9.5)
+    per_gene = N["bridge"]["per_gene"] if N.get("bridge") and N["bridge"].get("per_gene") else []
+    k20 = list(G["sets"]["k20"])
+    marker = {g["id"]: g.get("marker_tissue") for g in G["genes"]}
+    rows99 = {r["feature_ID"]: r for r in per_gene if r["pool_bid"] == 80001 and r["feature_ID"] in k20}
+    rows88 = {r["feature_ID"]: r for r in per_gene if r["pool_bid"] == 80000 and r["feature_ID"] in k20}
+    ids = sorted(rows99, key=lambda i: rows99[i]["ratio_batch_over_tissue"])
+    y = np.arange(len(ids))
+    hgt = 0.38
+    for k, (rows, off, col, lab) in enumerate(((rows99, +hgt / 2, T["c1"], "pool 99"), (rows88, -hgt / 2, T["c2"], "pool 88"))):
+        vals = [rows[i]["ratio_batch_over_tissue"] if i in rows else 0 for i in ids]
+        expressed = [bool(rows[i]["expressed_in_pool"]) if i in rows else False for i in ids]
+        ax.barh(y + off, vals, height=hgt, color=[col if e else "none"] if False else [col if e else T["surface"] for e in expressed],
+                edgecolor=[col for _ in ids], linewidth=1.2, label=lab)
+    ax.set_yticks(y, [f"{rows99[i]['gene_symbol']} · {marker.get(i) or ''}".rstrip(" ·") for i in ids], fontsize=7.5)
+    ax.set_xlabel("V_batch / V_tissue (hollow: not expressed in the pool)")
+    ax.legend(frameon=False, loc="lower right", fontsize=8)
+    bridge = H["extras"].get("bridge_sum_ratio_all_genes_pool99")
+    title(ax, "c  Batch measured on MoTrPAC's bridging pools",
+          (f"~{100 * bridge:.1f} % of the tissue-separating variance over all genes (pool 99); per panel gene the between-plate variance of the "
+           "reference pool over the variance of the 19 tissue means") if isinstance(bridge, (int, float)) else "per panel gene: the between-plate variance of the reference pool over the variance of the 19 tissue means")
     fig.text(0.01, 0.01, "Sources: results/05_panels, 06_conformal, 08_shift, 12_bodymap, 13_gtex, 16_identifiability via site/data/*.json (provenance in site/data/provenance.json)", fontsize=7, color=T["muted"])
     OUT.parent.mkdir(exist_ok=True)
     fig.savefig(OUT, dpi=300, bbox_inches="tight", facecolor=T["page"])

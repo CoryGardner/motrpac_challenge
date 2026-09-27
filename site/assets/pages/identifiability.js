@@ -1,4 +1,4 @@
-import { mountChrome, loadJSON, el, fmt, tableFrom, callout, pendingBlock } from "../site.js";
+import { mountChrome, loadJSON, el, fmt, tableFrom, callout, pendingBlock, statTile } from "../site.js";
 import { figure, bar, heatmap, strip, tokens, palette, tissueLabel, hexAlpha } from "../charts.js";
 import { pick } from "../ladder.js";
 
@@ -10,6 +10,7 @@ async function main() {
   await mountChrome("identifiability.html");
   const [H, N, Q, E, PC] = await Promise.all([loadJSON("data/headline.json"), loadJSON("data/nesting.json"), loadJSON("data/qc_baseline.json"), loadJSON("data/eda.json"), loadJSON("data/panel_curve.json")]);
   const ex = H.extras;
+  document.getElementById("tiles").replaceChildren(...(H.tiles_identifiability || []).map((t) => statTile(t)));
   const est = Object.fromEntries(N.estimable_pairs.map((r) => [r.assay, r]));
   const rna = est.TRNSCRPT;
   const immunoMax = Math.max(...N.nesting.IMMUNO.filter((r) => r.variable === "plate_id").map((r) => r.max_tissues_per_level));
@@ -22,7 +23,9 @@ async function main() {
   // nesting heatmap: rows layer · variable, columns: Cramér's V, fraction of pairs sharing a level, levels per tissue, tissues per level
   const rows = [];
   for (const [assay, tab] of Object.entries(N.nesting)) for (const r of tab) rows.push({ assay, ...r });
-  await figure(document.getElementById("fig-nesting"), {
+  // every processing variable (one heatmap row each) sits behind a toggle; the estimable-pairs chart below carries the section
+  const nestingFig = document.getElementById("fig-nesting");
+  const nestingSpec = {
     title: "Each processing variable tracks tissue almost one-to-one, as in any multi-tissue design; the immunoassay plates mix tissues",
     subtitle: "Per layer and processing variable: Cramér's V with tissue (1 = determined), fraction of tissue pairs sharing a level, median levels per tissue, most tissues in one level.",
     build: () => {
@@ -36,7 +39,19 @@ async function main() {
     },
     source: "results/16_identifiability/nesting_<ASSAY>.csv (recomputed from data/raw/meta/*.csv, study vials only)",
     notShow: "metabolomics (its tables carry no batch variable) or the reference-standard vials; colour is a value scale per column, the printed numbers are the data.", height: "tall",
+  };
+  let nestingState = null;
+  const nestingBtn = el("button", { class: "btn", type: "button", "aria-pressed": "false", "aria-controls": "fig-nesting" }, "Show every processing variable");
+  nestingBtn.addEventListener("click", async () => {
+    const show = nestingBtn.getAttribute("aria-pressed") !== "true";
+    nestingBtn.setAttribute("aria-pressed", String(show));
+    nestingBtn.textContent = show ? "Hide the processing variables" : "Show every processing variable";
+    nestingFig.hidden = !show;
+    if (!show) return;
+    if (!nestingState) nestingState = await figure(nestingFig, nestingSpec);   // first click: render, now that the container has a width
+    if (window.Plotly) await window.Plotly.Plots.resize(nestingState.chart);   // a chart laid out while hidden (theme re-render) has none
   });
+  document.getElementById("nesting-toggle").replaceChildren(nestingBtn);
   await figure(document.getElementById("fig-estimable"), {
     title: `Tissue pairs contrastable inside a batch, per layer: ${est.TRNSCRPT.n_pairs_estimable} in RNA-seq (${pairsText(est.TRNSCRPT.estimable_pairs)}), ${est.METHYL.n_pairs_estimable + est.ATAC.n_pairs_estimable + est.PROT.n_pairs_estimable + est.PHOSPHO.n_pairs_estimable} in the epigenome and TMT layers, ${est.IMMUNO.n_pairs_estimable} in the immunoassays`,
     subtitle: "Tissue pairs sharing a level of every processing variable of the layer (variables in the hover), out of all pairs.",
@@ -60,10 +75,10 @@ async function main() {
   const geneBase = PC.baselines.find((r) => r.model === "logreg_l2");
   document.getElementById("p-qc").replaceChildren(
     `A multinomial logistic regression that sees only the per-library QC numbers, never a gene, identifies the tissue on the fingerprint's animal-grouped folds (balanced accuracy): ${fmt(qs.technical.bal_acc_mean)} ± ${fmt(qs.technical.bal_acc_sd)} from ${qs.technical.n_features} technical numbers (RIN, adapter and duplication rates, GC, depth), ${fmt(qs.composition.bal_acc_mean)} ± ${fmt(qs.composition.bal_acc_sd)} from ${qs.composition.n_features} composition fractions and ${fmt(qs.all.bal_acc_mean)} ± ${fmt(qs.all.bal_acc_sd)} from both, against ${fmt(Q.info.chance)} by chance and ${fmt(geneBase.balanced_accuracy_mean)} for the all-gene model. `,
-    "The QC table is, in effect, a tissue label: the design, not the genes, sets that ceiling.",
+    `Library QC numbers alone identify the tissue at ${fmt(ex.qc_all)} — partly because tissues genuinely differ in composition (see the note below).`,
   );
   await figure(document.getElementById("fig-qc"), {
-    title: `Library QC numbers alone identify the tissue at ${fmt(qs.all.bal_acc_mean)}: the design, not the genes, sets that ceiling`,
+    title: `Library QC numbers alone identify the tissue at ${fmt(qs.all.bal_acc_mean)}: technical numbers, composition fractions, and both together`,
     subtitle: "Balanced accuracy per fold (dots) and mean ± sd (bars) by feature set; chance and the all-gene model for reference.",
     build: () => {
       const t = tokens(); const p = palette();
@@ -113,10 +128,24 @@ async function main() {
       build: () => {
         const t = tokens(); const p = palette();
         const genes = [...new Set(pg.map((r) => r.gene_symbol))].sort((a, b) => (pg.find((r) => r.gene_symbol === a && r.pool_bid === 80001)?.ratio_batch_over_tissue ?? 0) - (pg.find((r) => r.gene_symbol === b && r.pool_bid === 80001)?.ratio_batch_over_tissue ?? 0));
-        const tr = (bid, name, slot) => { const rows = genes.map((g) => pg.find((r) => r.gene_symbol === g && r.pool_bid === bid)); return { ...bar(rows.map((r) => (r ? r.ratio_batch_over_tissue : null)), genes, { horizontal: true, name, slot, hover: "%{customdata}<extra></extra>" }),
-          customdata: rows.map((r) => (r ? `${r.gene_symbol} (${name}): batch/tissue ${fmt(r.ratio_batch_over_tissue, 4)}<br>V_batch ${fmt(r.v_batch, 4)}, V_tissue ${fmt(r.v_tissue, 2)}, within-tissue ${fmt(r.v_within_tissue, 3)}<br>mean log2 CPM in pool ${fmt(r.mean_log2cpm_in_pool, 2)}${r.expressed_in_pool ? "" : " (not expressed)"}` : "")),
-          marker: { color: rows.map((r) => (r && r.expressed_in_pool ? p[slot - 1] : t.surface)), line: { color: rows.map((r) => (r && r.expressed_in_pool ? t.surface : p[slot - 1])), width: 2 }, cornerradius: 4 } }; };
-        return { traces: [tr(80001, "pool 99", 1), tr(80000, "pool 88", 2)], layout: { barmode: "group", xaxis: { title: { text: "V_batch / V_tissue" }, rangemode: "tozero" }, yaxis: { automargin: true, tickfont: { size: 10 } }, margin: { t: 40, l: 10 }, legend: { y: 1.1 }, bargap: 0.25 },
+        // one filled trace (expressed in the pool) and one hollow trace (not expressed) per pool, so the legend shows both
+        const traces = [];
+        [[80001, "pool 99", 1], [80000, "pool 88", 2]].forEach(([bid, name, slot]) => {
+          const color = p[slot - 1];
+          for (const expressed of [true, false]) {
+            const rows = genes.map((g) => pg.find((r) => r.gene_symbol === g && r.pool_bid === bid)).filter((r) => r && Boolean(r.expressed_in_pool) === expressed);
+            if (!rows.length) continue;
+            traces.push({
+              type: "bar", orientation: "h", name: `${name}${expressed ? "" : ", not expressed (hollow)"}`,
+              y: rows.map((r) => r.gene_symbol), x: rows.map((r) => r.ratio_batch_over_tissue),
+              offsetgroup: name, alignmentgroup: "pools", legendgroup: name,
+              marker: expressed ? { color, line: { color: t.surface, width: 2 }, cornerradius: 4 } : { color: "rgba(0,0,0,0)", line: { color, width: 1.5 }, cornerradius: 4 },
+              customdata: rows.map((r) => `${r.gene_symbol} (${name}): batch/tissue ${fmt(r.ratio_batch_over_tissue, 4)}<br>V_batch ${fmt(r.v_batch, 4)}, V_tissue ${fmt(r.v_tissue, 2)}, within-tissue ${fmt(r.v_within_tissue, 3)}<br>mean log2 CPM in pool ${fmt(r.mean_log2cpm_in_pool, 2)}${expressed ? "" : " (not expressed)"}`),
+              hovertemplate: "%{customdata}<extra></extra>",
+            });
+          }
+        });
+        return { traces, layout: { barmode: "group", xaxis: { title: { text: "V_batch / V_tissue" }, rangemode: "tozero" }, yaxis: { automargin: true, tickfont: { size: 10 }, categoryorder: "array", categoryarray: genes }, margin: { t: 40, l: 10 }, legend: { y: 1.1 }, bargap: 0.25 },
                  table: { columns: ["gene_symbol", "pool_bid", "pool_type", "expressed_in_pool", "mean_log2cpm_in_pool", "v_batch", "v_tissue", "v_within_tissue", "ratio_batch_over_tissue", "n_plates"], rows: pg } };
       },
       source: "results/16_identifiability/bridge_variance_per_gene.csv (reference vials from the portal per-tissue RSEM count files; study-vial tissue means from the pipeline's stacked matrix). Definition: " + br.info.definition + "; study vials and reference vials use the same unit, log2(CPM + 1) on the total library (scripts/16_identifiability.py --bridge).",

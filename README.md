@@ -7,36 +7,39 @@
 A leakage-safe, calibrated evaluation of compact tissue fingerprints in the MoTrPAC rat multi-tissue transcriptomes,
 replicated in an independent laboratory's rats (rat BodyMap) and across species (human GTEx), with a direct measurement
 of processing effects on the consortium's bridging standards, an exercise-specific follow-up, and a static site on which
-every number carries provenance.
+every number carries provenance and whose Explorer scores new samples with the panel in the browser.
 
 [![tests](https://github.com/CoryGardner/motrpac_challenge/actions/workflows/tests.yml/badge.svg)](https://github.com/CoryGardner/motrpac_challenge/actions/workflows/tests.yml)
-**Live site:** https://corygardner.github.io/motrpac_challenge/ · **Release:** tag `hackathon-submission-v4` (version 1.3.0) · **Licence:** MIT
+**Live site:** https://corygardner.github.io/motrpac_challenge/ · **Release:** tag `hackathon-submission-v5` (version 1.4.0) · **Licence:** MIT
+
+![The home page: the question, the tiles, the one-picture diagram and the transfer ladder](figures/home.png)
 
 | | |
 |---|---|
-| **Team** | The Rat PAC — Samuel Montalvo, Manasa Rapuru, Erol Evangelista, Cory Gardner (in no particular order) |
+| **Team** | The Rat PAC — Erol Evangelista, Cory Gardner, Samuel Montalvo, Manasa Rapuru |
 | **Event** | Stanford Bioinformatics Center / MoTrPAC Hackathon, 25–27 September 2026, track *Molecular Tissue Fingerprints* |
 | **Intended users** | judges and reviewers; MoTrPAC and CFDE analysts who need a tested harness for tissue classifiers, conformal prediction sets and shift tests; anyone reusing the panels or the evaluation rules |
 | **Why it matters** | a signature that transfers to independently processed data, with a calibrated guarantee, is the check that a molecular signature reads biology rather than the processing design of the study it was learned in |
 
 ## The answer
 
-**Yes — twenty genes are enough, and the fingerprint holds outside the study it was learned in.** Selected inside each
-animal-grouped fold by a class-aware round-robin rule, a 20-gene panel identifies 19 rat tissues at 0.976 ± 0.008
-balanced accuracy (50 genes 0.993, all genes 0.995), and the panel fit on all animals names every mapped adult organ
-correctly in another laboratory's rats (rat BodyMap: 9 of 11 organs have a MoTrPAC counterpart; 68 samples from 8
-animals). Its 90 % conformal guarantee holds within the study, survives a change of training state (fit on the 10
-sedentary controls alone, the panel names the tissue of the 40 trained animals at 0.961 with coverage 0.903), and
-behaves as a guarantee should under shift: calibrated on MoTrPAC it covers 0.618 of the BodyMap adults and 0.364 of
-human GTEx samples, and the shortfall is abstention (empty sets), not confident error. Three animals from the new
-laboratory restore it (0.943 coverage at one tissue per set); three human donors restore the number, not the
-information (0.954 at 11.7 tissues per set), which marks the species boundary honestly.
+**Twenty genes are enough.** Selected inside each animal-grouped fold by a class-aware round-robin rule, a 20-gene
+panel identifies 19 rat tissues at 0.976 ± 0.008 balanced accuracy (50 genes 0.993, all genes 0.995). The panel fit on
+all animals names every mapped adult organ correctly in another laboratory's rats (rat BodyMap: 9 of 11 organs have a
+MoTrPAC counterpart; 68 samples from 8 animals).
 
-Like every large multi-tissue design, this study processed each tissue as a unit: 1 of 171 RNA-seq tissue pairs shares
-its extraction plate, library batch and flowcell, and library-QC covariates alone reach 0.976. Two things settle what a
-within-study accuracy cannot: the external replicate, and MoTrPAC's bridging reference pools, on which batch measured
-directly is about 1.6 % of the variance that separates tissues. Training itself barely moves the fingerprint: it is a
-within-tissue, minor-axis signal, smaller than the tissue contrast on every panel gene (see the Exercise page).
+**The guarantee travels honestly.** Its 90 % conformal guarantee holds within the study and on trained animals (fit on
+the 10 sedentary controls alone, the panel names the tissue of all 40 trained animals at 0.961 with coverage 0.903).
+Beyond the study it abstains rather than errs: calibrated on MoTrPAC it covers 0.618 of the BodyMap adults and 0.364 of
+human GTEx samples, and the shortfall is empty sets, not confident error. Three animals from the new laboratory restore
+it (0.943 coverage at one tissue per set); three human donors restore the number, not the information (0.954 at 11.7
+tissues per set), which marks the species boundary honestly.
+
+**It is biology, not processing.** Like every large multi-tissue design, this study processed each tissue as a unit, so
+within-study accuracy alone cannot say how much of a fingerprint is biology. Two things can: the external replicate,
+and MoTrPAC's bridging reference pools, on which batch measured directly is about 1.6 % of the variance that separates
+tissues. Training itself barely moves the fingerprint: it is a within-tissue, minor-axis signal, smaller than the tissue
+contrast on every panel gene (see the Exercise page).
 
 ## Key results
 
@@ -56,13 +59,12 @@ Every number below is read from `results/` by `scripts/30_export_site_data.py` a
 | GTEx coverage k20 / empty; recalibrated on 3 donors: coverage at set size | 0.364 / 0.616; 0.954 at 11.70 | `results/13_gtex/` |
 | Estimable tissue pairs within study (RNA-seq) | 1 of 171 (ovary and testes) | `results/16_identifiability/estimable_pairs.csv` |
 | Sedentary vs 8-week-trained within tissue: mean best single-omic AUROC / fusion beats single / attributable to training | 0.994 / 0 of 7 / 4 of 7 | `results/07_fusion/` |
-| Panel fit on sedentary controls, tested per training duration: accuracy 1w / 8w, coverage 8w | 0.944 / 0.972, 0.917 | `results/31_site_regen/08_shift_k20/scores_target_vials.csv` |
+| Trained animals, 8-week group only (cohort-matched with the controls): accuracy k20 / coverage | 0.972 / 0.917 | `results/31_site_regen/08_shift_k20/scores_target_vials.csv` |
 | Batch measured on a bridging reference pool run on 6 plates (Σ V_batch / Σ V_tissue, all genes) | 0.016 | `results/16_identifiability/bridge_variance.csv` |
 | QC covariates alone, balanced accuracy: technical / composition / all | 0.874 / 0.952 / 0.976 | `results/16_identifiability/qc_only_summary.csv` |
 
 ![Summary figure: the transfer ladder, the ten-gene stable core, and batch nested in tissue](figures/summary_figure.png)
 
-![The home page: the question, the one-picture overview, the tiles and the transfer ladder](figures/home.png)
 
 ## Research question
 
@@ -197,6 +199,7 @@ were verified by the team.
 |---|---|---|
 | unit, leakage and I/O tests; snapshot; site provenance | `make test` | every test passed; `verify-frozen` prints `ok` |
 | JS conformal port against Python | `node tests/test_site_conformal.js` | `ok: 2713 assertions, 2700 fixture cases (540 with infinite threshold)` |
+| the browser scoring tool against the pipeline's BodyMap scores | `node tests/test_score_tool.js` | `ok: 976 assertions over 316 BodyMap samples; max \|Δp\| = 2.59e-4` |
 | every site number against the result files | `PYTHONPATH=src pytest -q tests/test_site_data.py` | passed (runs from `results/` or `results_frozen/`) |
 | regeneration reproduces the published tables cell for cell | `PYTHONPATH=src pytest -q tests/test_regen_scores.py` | passed |
 | sanity anchors of the headline numbers | `make site-data` | `all anchors ok` |
@@ -218,7 +221,11 @@ Known failure modes and limits (details on the site's Limitations page):
 ## Reuse
 
 - **Licence:** MIT for code, site and derived tables (`LICENSE`); the data keep their own terms (table above).
-- **Cite:** `CITATION.cff` (version 1.3.0, tag `hackathon-submission-v4`) and the three data papers.
+- **Cite:** `CITATION.cff` (version 1.4.0, tag `hackathon-submission-v5`) and the three data papers.
+- **Score your samples:** the Explorer's *Score your own samples* tool takes a CSV of log2 CPM for the 20 panel genes
+  (a template is provided) and returns tissue calls and 90 % prediction sets in the browser, with optional recalibration
+  on labelled samples; the panel card (`site/data/panel_card.csv`, `.json`) lists the genes with their mean expression per
+  tissue, and `site/data/panel_model.json` holds the coefficients (`scripts/34_panel_model.py`, `make panel-model`).
 - **Extend:** the library is `src/tfp/`; a new phase is a numbered script with a Makefile target; if the site shows its
   numbers, add provenance entries in `scripts/30_export_site_data.py` and re-freeze (`make freeze-results`).
 - **Extras:** `extras/` holds analyses outside the submission path (discordance, the report builder, the GEO fallback,

@@ -3,9 +3,9 @@
 
 export const REPO_URL = "https://github.com/CoryGardner/motrpac_challenge";
 const PAGES = [
-  ["index.html", "Home"], ["explore.html", "Explorer"], ["transfer.html", "Transfer"], ["exercise.html", "Exercise"],
-  ["fingerprint.html", "Signature"], ["identifiability.html", "Identifiability"], ["methods.html", "Methods"],
-  ["limitations.html", "Limitations"], ["about.html", "About"],
+  ["index.html", "Home"], ["explore.html", "Explorer"], ["fingerprint.html", "Panel"], ["transfer.html", "Transfer"],
+  ["identifiability.html", "Identifiability"], ["exercise.html", "Exercise"], ["methods.html", "Methods"], ["limitations.html", "Limitations"],
+  ["about.html", "About"],
 ];
 const cache = new Map();
 
@@ -116,11 +116,14 @@ export function statTile(t) {
   } else if (t.format === "of") {
     value.append(document.createTextNode(String(t.value)), el("span", { class: "of" }, `of ${t.total}`));
   } else {
-    value.textContent = fmt(t.value, Number(t.format || 3));
-    if (t.sd !== undefined && t.sd !== null) value.append(el("span", { class: "of" }, `± ${fmt(t.sd, 3)}`));
-    else if (t.ci) value.append(el("span", { class: "of" }, `[${fmt(t.ci[0], 2)}, ${fmt(t.ci[1], 2)}]`));
+    value.textContent = t.format === "pct1" ? pct(t.value, 1) : fmt(t.value, Number(t.format || 3));
   }
-  tile.append(value, el("div", { class: "label" }, t.label), el("div", { class: "sub" }, t.sub || ""),
+  tile.append(value);
+  if (t.value !== null && t.value !== undefined && t.format !== "of") {
+    if (t.sd !== undefined && t.sd !== null) tile.append(el("div", { class: "ci" }, `± ${fmt(t.sd, 3)} sd over folds`));
+    else if (t.ci) tile.append(el("div", { class: "ci" }, `95 % interval [${fmt(t.ci[0], 2)}, ${fmt(t.ci[1], 2)}]`));
+  }
+  tile.append(el("div", { class: "label" }, t.label), el("div", { class: "sub" }, t.sub || ""),
     el("details", { class: "tile-src" }, [el("summary", {}, "Source"), el("div", {}, t.source || "pending")]));
   return tile;
 }

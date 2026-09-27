@@ -642,6 +642,20 @@ def export_headline(w: Writer, prov: Prov, rec: pd.DataFrame | None):
            "full": (P.val("acc_full", "04_baselines/TRNSCRPT/summary.csv", "balanced_accuracy_mean", where={"model": "logreg_l2"}),
                     P.val("acc_full_sd", "04_baselines/TRNSCRPT/summary.csv", "balanced_accuracy_std", where={"model": "logreg_l2"}))}
     acc_fclassif_k20 = P.val("acc_fclassif_k20", "05_panels/TRNSCRPT/panel_curve_fclassif.csv", "balanced_accuracy", where={"k": 20}, agg="mean", note="F-test selector at the same k")
+    # the "1 of 171" tile belongs to the Identifiability page; the home page shows the bridge measurement instead
+    tiles_identifiability = [t for t in tiles if t["id"] == "tile_estimable"]
+    tiles = [t for t in tiles if t["id"] != "tile_estimable"]
+    bridge_file = "16_identifiability/bridge_variance.csv"
+    if (RES / bridge_file).exists():
+        tiles.append({"id": "tile_bridge",
+                      "value": P.val("tile_bridge", bridge_file, "sum_ratio_batch_over_tissue", where={"gene_set": "all_genes", "pool_bid": 80001},
+                                     note="batch as a share of the tissue-separating variance: Σ V_batch / Σ V_tissue over all genes, reference pool 99 run on 6 plates at both sites"),
+                      "label": "batch, measured on MoTrPAC's bridging reference pools", "format": "pct1",
+                      "sub": "share of the variance that separates tissues: reference RNA pool 99, sequenced on 6 extraction plates at both sites, all genes",
+                      "source": "results/16_identifiability/bridge_variance.csv (gene_set all_genes, pool 80001, Σ V_batch / Σ V_tissue)"})
+    else:
+        tiles.append({"id": "tile_bridge", "label": "batch, measured on MoTrPAC's bridging reference pools", "format": "pct1",
+                      **P.pending("tile_bridge", "bridge measurement not computed (scripts/16_identifiability.py --bridge with the portal files)")})
     ladder = []
 
     def rung(**kw):
@@ -877,9 +891,28 @@ def export_headline(w: Writer, prov: Prov, rec: pd.DataFrame | None):
               "source": "results/05_panels/TRNSCRPT/panel_curve.csv (folds, animals), results/06_conformal/TRNSCRPT/coverage.csv (fit / calibration animals), src/tfp/models.py (prefilter, C grid, inner splits)"}
     assert design["n_train_animals"] + design["n_test_animals"] == n_animals, design
     extras["n_vials"], extras["n_animals"] = int(n_vials), int(n_animals)
+    # vena cava → brown fat calls of the in-distribution 20-gene model, and how many of those vials the consortium flagged
+    sp = REGEN / "06_conformal" / "TRNSCRPT" / "scores_test_probs.csv"
+    flf = "15_time_course/design/flagged_vials.csv"
+    if sp.exists() and (RES / flf).exists():
+        sc = pd.read_csv(sp, dtype={"viallabel": str, "pid": str})
+        sc = sc[sc["model"] == "k20"]
+        pcols_ = [c for c in sc.columns if c.startswith("p_")]
+        sc = sc.assign(y_pred=sc[pcols_].idxmax(axis=1).str[2:])
+        vb = sc[(sc["tissue"] == "VENACV") & (sc["y_pred"] == "BAT")]
+        flagged = set(P.read(flf)["viallabel"].astype(str))
+        srcs = ["31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv", flf]
+        extras["venacv_bat_calls"] = P.recomputed("venacv_bat_calls", int(len(vb)), srcs[:1], "held-out vena cava vials the 20-gene model calls brown fat (phase-06 design, all folds)")
+        extras["venacv_bat_calls_flagged"] = P.recomputed("venacv_bat_calls_flagged", int(vb["viallabel"].isin(flagged).sum()), srcs, "of those, vials the consortium flagged as brown-fat contaminated")
+        extras["venacv_flagged_total"] = P.val("venacv_flagged_total", flf, "viallabel", agg="count", note="vena cava vials flagged as brown-fat contaminated by the consortium (all female, 1 and 2 weeks)")
+        extras["venacv_vials"] = P.recomputed("venacv_vials", int((sc["tissue"] == "VENACV").sum()), srcs[:1], "vena cava vials scored in the phase-06 design")
+    else:
+        for k in ("venacv_bat_calls", "venacv_bat_calls_flagged", "venacv_flagged_total", "venacv_vials"):
+            extras[k] = None
+            P.pending(k, "phase 15 design table flagged_vials.csv or the phase-06 regeneration missing")
     extras["n_tissues"] = int(P.val("n_tissues", "16_identifiability/estimable_pairs.csv", "n_tissues", where={"assay": "TRNSCRPT"}))
     w.write("headline.json", {"question": "Can a molecular signature identify a tissue reliably?",
-                              "tiles": tiles, "accuracy": {m: {"mean": a[0], "sd": a[1]} for m, a in acc.items()}, "ladder": ladder, "extras": extras, "design": design,
+                              "tiles": tiles, "tiles_identifiability": tiles_identifiability, "accuracy": {m: {"mean": a[0], "sd": a[1]} for m, a in acc.items()}, "ladder": ladder, "extras": extras, "design": design,
                               "rung_order": ["in_distribution", "train_control_test_trained", "train_male_test_female", "train_female_test_male", "different_lab", "different_species"]},
             sorted(prov.sources))
 
@@ -1017,6 +1050,10 @@ def export_genes(w: Writer, prov: Prov, skip_expr: bool):
     om = io.stack_tissues("TRNSCRPT", source="counts", pheno=pheno, verbose=False)
     sym = io.map_to_gene_symbols(om.X.columns, f2g)
     genes, sets, aux = gene_set(P, sym, f2g)
+    if (RES / "34_panel_model" / "genes.csv").exists():        # the scoring tool's model (35-animal refit) may select genes outside the all-animal panel
+        extra = P.read("34_panel_model/genes.csv")["feature_ID"].astype(str).tolist()
+        sets["scoring_model"] = extra
+        genes = list(dict.fromkeys(list(genes) + extra))
     sym_all = io.map_to_gene_symbols(genes, f2g)
     rows = []
     for g in genes:
@@ -1055,7 +1092,7 @@ def export_genes(w: Writer, prov: Prov, skip_expr: bool):
     w.write("expr_motrpac.json", {"unit": "log2 CPM (total library size), stacked-filter matrix of the pipeline", "genes": present,
                                   "symbols": [rows[genes.index(g)]["symbol"] for g in present],
                                   "samples": [{"id": v, "tissue": t, "sex": s, "group": gr} for v, t, s, gr in zip(om.X.index, om.meta["tissue"], om.meta["sex"], om.meta["group"])],
-                                  "values": [[round(float(x), 2) for x in Xm[g].to_numpy()] for g in present],
+                                  "values": [[round(float(x), 4) for x in Xm[g].to_numpy()] for g in present],
                                   "absent": [g for g in genes if g not in om.X.columns]},
             ["data/raw/counts/TRNSCRPT__*.csv via io.stack_tissues"])
     # BodyMap log2 CPM
@@ -1070,7 +1107,7 @@ def export_genes(w: Writer, prov: Prov, skip_expr: bool):
                                   "symbols": [rows[genes.index(g)]["symbol"] for g in present_b],
                                   "samples": [{"id": s, "organ": o, "age_weeks": int(a), "sex": sexmap.get(x, x), "animal": f"{sexmap.get(x, x)[0]}_{a}_{ri}"}
                                               for s, o, a, x, ri in zip(mb.index, mb["organ"], mb["stage_weeks"], mb["sex"], mb["replicate_index"])],
-                                  "values": [[round(float(x), 2) for x in lb[g].to_numpy()] for g in present_b],
+                                  "values": [[round(float(x), 4) for x in lb[g].to_numpy()] for g in present_b],
                                   "absent": [g for g in genes if g not in lb.columns]},
             ["data/external/bodymap_counts.csv", "data/external/bodymap_meta.csv"])
     # GTEx log2 TPM through 1:1 orthologs
@@ -1164,6 +1201,79 @@ def export_fixtures(w: Writer, motrpac: tuple, bodymap: tuple, gtex: tuple):
 
 # ---------------------------------------------------------------------------------------------
 # anchors, reconciliation, readme table, abstract
+
+# ---------------------------------------------------------------------------------------------
+# the scoring tool: the 20-gene transfer model, and the panel card
+# ---------------------------------------------------------------------------------------------
+def export_panel_model(w: Writer, prov: Prov):
+    """site/data/panel_model.json — the transfer model that carries the guarantee (phase 34): genes in feature order,
+    multinomial logistic coefficients and intercepts, the MoTrPAC z-scoring statistics (fallback for small uploads),
+    the 15-animal calibration scores, the all-animal call model, and the validation against the regeneration."""
+    P = prov
+    before = set(P.sources)
+    d = "34_panel_model"
+    if not (RES / d / "coefficients.csv").exists():
+        print("  panel model: results/34_panel_model absent (scripts/34_panel_model.py); skipped")
+        return
+    def block(prefix):
+        genes = P.table(f"panel_model_{prefix}genes", f"{d}/{prefix}genes.csv", "panel_model.json", f"{prefix or 'scoring.'}genes")
+        coef = P.table(f"panel_model_{prefix}coefficients", f"{d}/{prefix}coefficients.csv", "panel_model.json", f"{prefix or 'scoring.'}coefficients")
+        sz = P.table(f"panel_model_{prefix}source_z", f"{d}/{prefix}source_z.csv", "panel_model.json", f"{prefix or 'scoring.'}source_z")
+        ids = [str(g["feature_ID"]) for g in genes]
+        return {"classes": [str(r["class"]) for r in coef],
+                "genes": [{"id": str(g["feature_ID"]), "symbol": g["symbol"], "in_all_animal_panel": bool(g["in_all_animal_panel"])} for g in genes],
+                "coef": [[float(r[g]) for g in ids] for r in coef], "intercept": [float(r["intercept"]) for r in coef],
+                "source_z": {"mean": [float(r["mean"]) for r in sz], "scale": [float(r["scale"]) for r in sz]}}
+    model = block("")
+    call = block("call_model_")
+    cal = P.read("31_site_regen/12_bodymap/scores_calibration.csv")
+    cal = cal[cal["model"] == "k20"]
+    classes = model["classes"]
+    calibration = {"scores": [float(v) for v in cal["score_lac"]], "y_idx": [classes.index(t) for t in cal["tissue"].astype(str)],
+                   "n_animals": int(cal["pid"].nunique()), "n_vials": int(len(cal)), "alpha_default": 0.1,
+                   "source": "results/31_site_regen/12_bodymap/scores_calibration.csv (model k20; the 15 calibration animals, one vial per tissue)"}
+    val = P.table("panel_model_validation", f"{d}/validation.csv", "panel_model.json", "validation")
+    n_shared = P.val("panel_model_genes_shared", f"{d}/genes.csv", "feature_ID", where={"in_all_animal_panel": True}, agg="count",
+                     note="genes of the scoring model (35-animal refit) that are also in the all-animal 20-gene panel")
+    w.write("panel_model.json", {**model, "calibration": calibration, "alpha_default": 0.1, "call_model": call, "validation": val,
+                                 "n_genes_shared_with_all_animal_panel": n_shared,
+                                 "design": "PanelModels (scripts/12_bodymap_validate.py): z-score representation, multinomial logistic regression C = 0.1, "
+                                           "fit on the 35 MoTrPAC animals outside the calibration split; sets calibrated on the other 15 animals; a new "
+                                           "sample is z-scored per gene within its own dataset (population sd) and scored by softmax(z · coefᵀ + intercept)"},
+            sorted(P.sources - before))
+    return n_shared
+
+
+def export_panel_card(w: Writer):
+    """site/data/panel_card.json and .csv — the all-animal 20-gene panel: ids, symbols, human orthologs, marker tissue,
+    effect size, bootstrap frequency, risk flags, BodyMap / GTEx status, and the mean log2 CPM per tissue (the reference
+    profiles), from the site's own gene and expression exports."""
+    G = json.loads((SITE / "genes.json").read_text())
+    Ex = json.loads((SITE / "expr_motrpac.json").read_text())
+    k20 = list(G["sets"]["k20"])
+    tissues = sorted({s["tissue"] for s in Ex["samples"]})
+    gi = {g: i for i, g in enumerate(Ex["genes"])}
+    by_t = {t: [j for j, s in enumerate(Ex["samples"]) if s["tissue"] == t] for t in tissues}
+    def status(fail, weak):
+        return "not tested" if fail is None else ("lost" if fail else ("weakened" if weak else "holds"))
+    rows = []
+    for g in (x for x in G["genes"] if x["id"] in k20):
+        prof = {t: (float(np.mean([Ex["values"][gi[g["id"]]][j] for j in by_t[t]])) if g["id"] in gi else None) for t in tissues}
+        rows.append({"id": g["id"], "symbol": g["symbol"], "human_gene": g.get("human_gene"), "marker_tissue": g.get("marker_tissue"),
+                     "effect_size_log2cpm": g.get("effect_size"), "bootstrap_frequency": g.get("freq"), "training_regulated": g.get("regulated"),
+                     "qc_correlated": g.get("qc_flag"), "bodymap": status(g.get("fails_bodymap"), g.get("weakened_bodymap")),
+                     "gtex": status(g.get("fails_gtex"), g.get("weakened_gtex")), "profile_mean_log2cpm": prof})
+    sources = ["site/data/genes.json (results/05_panels/TRNSCRPT/stability_k20_annotated.csv, candidate_panel_annotated.csv, results/12_bodymap/panel_gene_check.csv, results/13_gtex/panel_gene_check.csv)",
+               "site/data/expr_motrpac.json (data/raw/counts, log2 CPM)"]
+    w.write("panel_card.json", {"panel": rows, "tissues": tissues, "unit": Ex["unit"], "n_samples_per_tissue": {t: len(v) for t, v in by_t.items()}}, sources)
+    flat = []
+    for r in rows:
+        f = {k: v for k, v in r.items() if k != "profile_mean_log2cpm"}
+        f.update({f"mean_log2cpm_{t}": (None if r["profile_mean_log2cpm"][t] is None else round(r["profile_mean_log2cpm"][t], 3)) for t in tissues})
+        flat.append(f)
+    pd.DataFrame(flat).to_csv(SITE / "panel_card.csv", index=False)
+    print(f"  wrote panel_card.csv ({len(flat)} genes × {len(tissues)} tissues)")
+
 
 # ---------------------------------------------------------------------------------------------
 # the Exercise page: what training does and does not do to the fingerprint
@@ -1507,7 +1617,7 @@ def readme_table(prov_entries: list[dict]) -> str:
         ("GTEx coverage k20 / empty; recalibrated on 3 donors: coverage at set size", f"{f('cov_gtex_k20_marginal')} / {f('empty_gtex_k20_marginal')}; {f('recal3_gtex_k20')} at {f('recal3size_gtex_k20', 2)}", "results/13_gtex/"),
         ("Estimable tissue pairs within study (RNA-seq)", f"{f('tile_estimable')} of {f('tile_estimable_total')} ({' and '.join(t.lower() for t in str(byid.get('tile_estimable_pairs', '')).split('|'))})", "results/16_identifiability/estimable_pairs.csv"),
         ("Sedentary vs 8-week-trained within tissue: mean best single-omic AUROC / fusion beats single / attributable to training", f"{f('taskB_mean_auroc_8w')} / {f('fusion_n_beats_single', 0)} of {f('fusion_n_tissues', 0)} / {f('verdict_n_training', 0)} of {f('verdict_n_tissues', 0)}", "results/07_fusion/"),
-        ("Panel fit on sedentary controls, tested per training duration: accuracy 1w / 8w, coverage 8w", f"{f('fbd_acc_k20_1w')} / {f('fbd_acc_k20_8w')}, {f('fbd_cov_k20_8w')}", "results/31_site_regen/08_shift_k20/scores_target_vials.csv"),
+        ("Trained animals, 8-week group only (cohort-matched with the controls): accuracy k20 / coverage", f"{f('fbd_acc_k20_8w')} / {f('fbd_cov_k20_8w')}", "results/31_site_regen/08_shift_k20/scores_target_vials.csv"),
         ("Batch measured on a bridging reference pool run on 6 plates (Σ V_batch / Σ V_tissue, all genes)", f('bridge_sum_ratio_all_genes_pool99'), "results/16_identifiability/bridge_variance.csv"),
         ("QC covariates alone, balanced accuracy: technical / composition / all", f"{f('qc_technical')} / {f('qc_composition')} / {f('qc_all')}", "results/16_identifiability/qc_only_summary.csv"),
     ]
@@ -1608,6 +1718,9 @@ def main():
                     (SITE / name).write_bytes((committed / name).read_bytes())
                 kept.append(name)
         print(f"== genes: data/raw absent; kept the committed exports ({', '.join(kept)})")
+    print("== panel model and card")
+    export_panel_model(w, prov)
+    export_panel_card(w)
     (SITE / "provenance.json").write_text(json.dumps(jsonable({"_meta": {"generated": generated, "git_hash": ghash, "sources": sorted(prov.sources)},
                                                               "entries": prov.entries, "tables": prov.tables}), indent=0))
     print("== manifest")

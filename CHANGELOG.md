@@ -4,6 +4,33 @@ All notable changes to this repository. The format follows [Keep a Changelog](ht
 dates are UTC. Each section is a `hackathon-submission-v<n>` git tag; the version numbers are those of `CITATION.cff`
 and `pyproject.toml`.
 
+## [1.4.0] — 2026-09-26 (tag `hackathon-submission-v5`)
+
+### Added
+- "Score your own samples" on the Explorer: paste or upload log2 CPM for the 20 panel genes (template provided) and
+  read each sample's tissue call and 90 % conformal set, download the results, and recalibrate on labelled samples.
+  Everything runs in the browser (`site/assets/score.js`); `scripts/34_panel_model.py` exports the transfer model
+  (`site/data/panel_model.json`) and validates that the 20-gene arithmetic reproduces the pipeline; the panel card
+  (`site/data/panel_card.csv`, `.json`) lists the genes with their mean expression per tissue.
+  `tests/test_score_tool.js` checks that the 316 rat BodyMap samples come out with the pipeline's calls and sets.
+- Home page rebuilt around the answer: the lede, four tiles (including the 1.6 % bridge measurement), the one-picture
+  diagram, the ladder, three points, and three sections (the panel curve, the empty-set stack, the per-gene bridge
+  chart); tour stop 6 for the scoring tool.
+- `scripts/15_time_course_design.py` writes the consortium's flagged vials; the Panel page reports how many of the
+  vena cava calls that read as brown adipose were flagged for brown-fat contamination.
+
+### Changed
+- Exercise page reordered: the training response first (VO2max, body fat), training visible in every omic layer, the
+  fingerprint invariant to it, training a minor axis within a tissue, the design note, then the covariate check.
+- Trained-animal results harmonised: the headline is the panel fit on sedentary controls scoring all 40 trained
+  animals (0.961, coverage 0.903); the cohort-matched 8-week group (0.972 / 0.917) is labelled as such.
+- Summary figure: one-line titles with subtitles; panel c is the per-gene bridge chart.
+- Stat tiles show the interval on its own line; the overview boxes are sized to their content; the About versions
+  and the identifiability nesting heatmap sit behind toggles; the Methods rules section and the compliance section
+  are removed; the footer is one line.
+- README: the answer in three paragraphs, the home figure, the 8-week-only row, the scoring tool.
+- `Makefile`: `panel-model`; `make test` runs `tests/test_score_tool.js`; CI likewise.
+
 ## [1.3.0] — 2026-09-27 (tag `hackathon-submission-v4`)
 
 ### Added

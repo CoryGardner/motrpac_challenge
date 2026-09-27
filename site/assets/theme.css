@@ -103,6 +103,7 @@ nav.primary a:hover { color: var(--ink); }
 .tile { background: var(--surface); border: 1px solid var(--grid); border-radius: var(--radius); padding: 1rem 1.1rem 0.9rem; min-height: 132px; display: flex; flex-direction: column; }
 .tile .value { font-family: var(--font); font-size: clamp(2rem, 4vw, 2.6rem); font-weight: 600; line-height: 1.05; color: var(--ink); letter-spacing: -0.02em; }
 .tile .value .of { font-size: 0.5em; font-weight: 500; color: var(--ink-2); margin-left: 0.2em; }
+.tile .ci { margin-top: 0.15rem; font-size: 0.8rem; color: var(--ink-2); white-space: nowrap; font-variant-numeric: tabular-nums; }
 .tile .label { margin-top: 0.4rem; font-weight: 500; color: var(--ink); max-width: none; }
 .tile .sub { margin-top: 0.25rem; color: var(--ink-2); font-size: 0.85rem; max-width: none; }
 .tile .source { margin-top: auto; padding-top: 0.5rem; color: var(--muted); font-size: 0.75rem; word-break: break-word; max-width: none; }
@@ -256,3 +257,11 @@ img.shot { max-width: 100%; height: auto; border: 1px solid var(--grid); border-
 }
 
 .answer-hidden select { filter: blur(5px); pointer-events: none; }
+
+/* score your own samples */
+.score-input textarea { width: 100%; box-sizing: border-box; font: 0.85rem var(--mono); color: var(--ink); background: var(--surface); border: 1px solid var(--axis); border-radius: var(--radius); padding: 0.5rem 0.6rem; resize: vertical; }
+.score-input .control { max-width: none; }
+.score-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr)); gap: 0.6rem; margin: 0.8rem 0; }
+.score-cards .sample-card { padding: 0.7rem 0.8rem; font-size: 0.9rem; }
+.score-cards .sample-card .who { margin-bottom: 0.3rem; }
+#score-results .data td select { font: inherit; font-size: 0.8rem; }

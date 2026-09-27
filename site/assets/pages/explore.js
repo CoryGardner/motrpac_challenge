@@ -1,6 +1,7 @@
 import { mountChrome, loadJSON, el, fmt, segmented, control, select, slider, badge, callout, tableFrom } from "../site.js";
 import { figure, bar, strip, line, tokens, palette, organSystem, tissueLabel, TISSUE_NAMES, jitter, median, mean, sd, template, CONFIG } from "../charts.js";
 import { setsFor, conformalQuantile, predictSet, animalsNeeded } from "../conformal.js";
+import { parseTable, scoreSamples, recalibrate, templateCsv, resultsCsv, MIN_SAMPLES_FOR_WITHIN_Z } from "../score.js";
 
 const AGE_ORDER = [2, 6, 21, 104];
 let DATA = {};
@@ -16,8 +17,96 @@ async function main() {
   const exprP = Promise.all([loadJSON("data/expr_motrpac.json"), loadJSON("data/expr_bodymap.json"), loadJSON("data/expr_gtex.json")]).then(([em, eb, eg]) => { DATA.EM = em; DATA.EB = eb; DATA.EG = eg; return DATA; });
   tissueCard(exprP);
   geneExplorer(exprP);
+  scoreTool(exprP);
   panelBuilder();
   calculator();
+}
+
+// ---- score your own samples ---------------------------------------------------------------------------
+function download(name, text, type = "text/csv") {
+  const a = el("a", { href: URL.createObjectURL(new Blob([text], { type })), download: name });
+  document.body.appendChild(a); a.click(); a.remove();
+}
+
+async function scoreTool(exprP) {
+  const model = await loadJSON("data/panel_model.json");
+  const intro = document.getElementById("score-intro");
+  const ctl = document.getElementById("score-controls");
+  const status = document.getElementById("score-status");
+  const out = document.getElementById("score-results");
+  const ta = document.getElementById("score-text");
+  const nGenes = model.genes.length, nShared = model.n_genes_shared_with_all_animal_panel, cal = model.calibration;
+  intro.replaceChildren(
+    `Score any rat RNA-seq samples with the transfer model that carries the guarantee: the ${nGenes}-gene panel fit on ${cal.n_animals ? 50 - cal.n_animals : "the fit"} MoTrPAC animals, its sets calibrated on the other ${cal.n_animals} (${nShared} of its ${nGenes} genes are in the all-animal panel of the `,
+    el("a", { href: "fingerprint.html" }, "Panel page"), "). ",
+    `Genes are matched by symbol or Ensembl ID; a missing gene is reported and scored at the MoTrPAC mean. With at least ${MIN_SAMPLES_FOR_WITHIN_Z} samples the genes are z-scored within your set, as the pipeline does for a new dataset; with fewer, the MoTrPAC statistics are used and the calls are less reliable. Everything runs in your browser; nothing is uploaded.`,
+  );
+  const state = { alpha: 0.10, labels: {}, res: null, q: null };
+  const a = slider(0.05, 0.30, 0.01, state.alpha, (v) => { state.alpha = v; if (state.res) run(); }, (v) => `α = ${v.toFixed(2)}`);
+  const file = el("input", { type: "file", accept: ".csv,.tsv,.txt,text/csv,text/tab-separated-values" });
+  file.addEventListener("change", () => { const f = file.files[0]; if (f) f.text().then((t) => { ta.value = t; run(); }); });
+  const btnScore = el("button", { class: "btn primary", type: "button" }, "Score");
+  const btnTemplate = el("button", { class: "btn", type: "button" }, "Download the template");
+  const btnCard = el("button", { class: "btn", type: "button" }, "Download the panel card (CSV)");
+  const linkCardJson = el("span", { class: "note" }, ["or as ", el("a", { href: "data/panel_card.json", download: "panel_card.json" }, "JSON")]);
+  btnScore.addEventListener("click", run);
+  btnTemplate.addEventListener("click", async () => {
+    const D = await exprP;
+    const gi = Object.fromEntries(D.EB.genes.map((g, i) => [g, i]));
+    const adults = D.EB.samples.map((smp, j) => ({ smp, j })).filter(({ smp }) => smp.age_weeks === 21);
+    const pick = [adults.find(({ smp }) => smp.organ === "Adrenal"), adults.find(({ smp }) => smp.organ === "Heart")].filter(Boolean).slice(0, 2);
+    const examples = pick.map(({ smp, j }) => ({ id: `example_${smp.organ.toLowerCase()}_${smp.id}`, values: Object.fromEntries(model.genes.map((g) => [g.id, gi[g.id] !== undefined ? D.EB.values[gi[g.id]][j] : null])) }));
+    download("panel_template.csv", templateCsv(model, examples));
+  });
+  btnCard.addEventListener("click", () => { const l = el("a", { href: "data/panel_card.csv", download: "panel_card.csv" }); document.body.appendChild(l); l.click(); l.remove(); });
+  ctl.append(control("Error level α", a.input, a.out), control("Or upload a file", file), btnScore, btnTemplate, btnCard, linkCardJson);
+
+  function run() {
+    state.q = null;
+    const parsed = parseTable(ta.value);
+    if (parsed.error) { status.replaceChildren(callout("caveat", "Nothing to score", parsed.error)); out.replaceChildren(); return; }
+    const res = scoreSamples(model, parsed.rows, { alpha: state.alpha });
+    state.res = res;
+    render(res, null);
+  }
+  function render(res, recal) {
+    const bits = [`${res.results.length} samples scored; ${res.matched} of ${nGenes} panel genes matched; ${res.note}.`];
+    if (res.missing.length) bits.push(` Missing (scored at the MoTrPAC mean): ${res.missing.map((g) => g.symbol).join(", ")}.`);
+    if (recal) { let need = 1; while (Math.ceil((need + 1) * (1 - res.alpha)) > need) need += 1;
+      bits.push(` Recalibrated on ${recal.n} labelled samples: threshold ${recal.q === Infinity ? `+∞ (every set holds all tissues; at α = ${res.alpha.toFixed(2)} a finite threshold needs at least ${need} labelled samples)` : fmt(recal.q)}, coverage on the labelled samples ${fmt(recal.coverage)}.`); }
+    status.replaceChildren(callout(res.missing.length || res.mode === "source" ? "caveat" : "note", "Scoring", bits.join("")));
+    const rows = res.results.map((r) => ({ sample: r.id, call: r.call, p_call: r.callProb, set: r.set.join(", ") || "∅", set_size: r.setSize, kind: r.kind }));
+    const table = tableFrom({ columns: ["sample", "call", "p_call", "set", "set_size", "kind", "true tissue (optional)"], rows: rows.map((r) => ({ ...r, "true tissue (optional)": "" })), format: { p_call: (v) => fmt(v, 3) } });
+    // a tissue picker per row for the optional recalibration
+    table.querySelectorAll("tbody tr").forEach((tr, i) => {
+      const cell = tr.lastElementChild;
+      const sel = select([["", "—"], ...model.classes.map((c) => [c, c])], state.labels[res.results[i].id] || "", (v) => { if (v) state.labels[res.results[i].id] = v; else delete state.labels[res.results[i].id]; });
+      cell.replaceChildren(sel);
+    });
+    const cards = el("div", { class: "score-cards" }, res.results.slice(0, 24).map((r) => el("div", { class: "sample-card" }, [
+      el("div", { class: "who" }, [el("b", {}, r.id)]),
+      badge(r.kind, r.kind === "confident" ? "●" : r.kind === "ambiguous" ? "◐" : "∅", r.kind[0].toUpperCase() + r.kind.slice(1)),
+      el("div", { class: "answer" }, r.set.length ? r.set.map((t) => tissueLabel(t)).join("; ") : "no tissue clears the threshold"),
+      el("div", { class: "explain" }, `top call ${tissueLabel(r.call)} (p = ${fmt(r.callProb)})`),
+    ])));
+    const btnCsv = el("button", { class: "btn", type: "button" }, "Download the results (CSV)");
+    btnCsv.addEventListener("click", () => download("scored_samples.csv", resultsCsv(res, model)));
+    const btnRecal = el("button", { class: "btn", type: "button" }, "Recalibrate on the labelled samples (≥ 3)");
+    btnRecal.addEventListener("click", () => {
+      const rc = recalibrate(model, state.res.results, state.labels, state.alpha);
+      if (rc.error) { status.replaceChildren(callout("caveat", "Recalibration", rc.error)); return; }
+      const res2 = scoreSamples(model, parseTable(ta.value).rows, { alpha: state.alpha, q: rc.q });
+      state.res = res2; state.q = rc.q;
+      render(res2, rc);
+    });
+    out.replaceChildren(
+      res.results.length > 24 ? el("p", { class: "small" }, `Cards for the first 24 samples; the table and the CSV hold all ${res.results.length}.`) : el("span"),
+      cards, table, el("div", { class: "controls" }, [btnCsv, btnRecal]),
+      el("details", { class: "fig-notes" }, [el("summary", {}, "Source and caveats"),
+        el("p", {}, [el("b", {}, "Source: "), "site/data/panel_model.json (results/34_panel_model: the phase-12 transfer model re-fit with the same seed; validated against results/31_site_regen/12_bodymap/scores_target_probs.csv), calibration scores from results/31_site_regen/12_bodymap/scores_calibration.csv; sets by the same rule as the pipeline (assets/conformal.js)."]),
+        el("p", {}, [el("b", {}, "What it does not show: "), "the guarantee is nominal for samples from a new laboratory or species until you recalibrate on labelled samples of your own; z-scoring within your set assumes it spans several tissues; a gene missing from your table is scored at the MoTrPAC mean, which weakens its tissue."])]),
+    );
+  }
 }
 
 // ---- helpers ----------------------------------------------------------------------------------------

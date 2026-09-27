@@ -49,16 +49,23 @@ export function mountOverview(container, nodes, { alt, desc, prefix = "ov" } = {
     root.appendChild(svg("desc", { id: `${prefix}-desc` }, [desc || ""]));
     root.appendChild(arrowDefs(prefix));
     if (!narrow) {
-      const W = 960, H = 150, w = 118, h = 118, gap = (W - 2 * 12 - n * w) / (n - 1), y0 = 16;
-      root.setAttribute("viewBox", `0 0 ${W} ${H}`);
+      // every box reads in full: the label wraps at 17 characters (up to 4 lines), the unit at 19 (up to 2), and all
+      // boxes take the height of the tallest content
+      const W = 960, w = 118, gap = (W - 2 * 12 - n * w) / (n - 1), y0 = 12;
+      const parts = nodes.map((nd) => ({ lines: wrap(nd.label, 17).slice(0, 4), units: nd.num !== null && nd.num !== undefined && nd.unit ? wrap(nd.unit, 19).slice(0, 2) : [] }));
+      const labelH = Math.max(...parts.map((p) => p.lines.length)) * 15;
+      const unitH = Math.max(...parts.map((p) => p.units.length)) * 12;
+      const hasNum = nodes.some((nd) => nd.num !== null && nd.num !== undefined);
+      const h = 18 + labelH + (hasNum ? 30 : 0) + unitH + 10;
+      root.setAttribute("viewBox", `0 0 ${W} ${h + 2 * y0}`);
       nodes.forEach((nd, i) => {
         const x = 12 + i * (w + gap);
         root.appendChild(svg("rect", { class: nd.verdict ? "node verdict" : "node", x, y: y0, width: w, height: h, rx: 8 }));
-        const lines = wrap(nd.label, 16).slice(0, 3);
-        lines.forEach((l, j) => root.appendChild(text(x + w / 2, y0 + 22 + j * 15, l, { "text-anchor": "middle", "font-size": 12 })));
+        parts[i].lines.forEach((l, j) => root.appendChild(text(x + w / 2, y0 + 20 + j * 15, l, { "text-anchor": "middle", "font-size": 12 })));
         if (nd.num !== null && nd.num !== undefined) {
-          root.appendChild(text(x + w / 2, y0 + 84, nd.num, { class: "num", "text-anchor": "middle", "font-size": 18 }));
-          if (nd.unit) wrap(nd.unit, 18).slice(0, 2).forEach((u, j) => root.appendChild(text(x + w / 2, y0 + 101 + j * 12, u, { class: "note", "text-anchor": "middle", "font-size": 11 })));
+          const yNum = y0 + 18 + labelH + 22;
+          root.appendChild(text(x + w / 2, yNum, nd.num, { class: "num", "text-anchor": "middle", "font-size": 18 }));
+          parts[i].units.forEach((u, j) => root.appendChild(text(x + w / 2, yNum + 15 + j * 12, u, { class: "note", "text-anchor": "middle", "font-size": 11 })));
         }
         if (i < n - 1) root.appendChild(arrow(prefix, x + w + 2, y0 + h / 2, x + w + gap - 3, y0 + h / 2));
       });

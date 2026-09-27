@@ -1,0 +1,4 @@
+model,compared_to,n_samples,max_abs_p_diff,call_agreement
+scoring (35 fit / 15 calibration animals),results/31_site_regen/12_bodymap/scores_target_probs.csv,316,1.1102230246251565e-16,1.0
+all-animal call,results/31_site_regen/12_bodymap/scores_target_probs.csv (pred_all_animals),316,,1.0
+"scoring, per-gene z-score + softmax on the 20 genes only (the browser's arithmetic)",PanelModels.proba,316,0.0,1.0

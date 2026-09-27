@@ -1,7 +1,7 @@
 {
 "_meta": {
-"generated": "2026-09-27 03:49 UTC",
-"git_hash": "7b4c09c",
+"generated": "2026-09-27 04:45 UTC",
+"git_hash": "7d4502a",
 "sources": [
 "results/03_eda/batch_partition_METAB.csv",
 "results/03_eda/batch_partition_PROT.csv",
@@ -86,6 +86,7 @@
 "results/14_transfer_cpm/target_summary.csv",
 "results/15_time_course/design/design_by_group_sex.csv",
 "results/15_time_course/design/design_contrasts.csv",
+"results/15_time_course/design/flagged_vials.csv",
 "results/15_time_course/fingerprint_by_duration/calibration_info.csv",
 "results/15_time_course/fingerprint_by_duration/differences.csv",
 "results/15_time_course/fingerprint_by_duration/part5_by_duration.csv",
@@ -111,9 +112,17 @@
 "results/31_site_regen/08_shift_k20/scores_target_vials.csv",
 "results/31_site_regen/08_shift_k50/scores_target_vials.csv",
 "results/31_site_regen/08_shift_k50/shift_table.csv",
+"results/31_site_regen/12_bodymap/scores_calibration.csv",
 "results/31_site_regen/12_bodymap/scores_target_probs.csv",
 "results/31_site_regen/13_gtex/recal_thresholds.csv",
-"results/31_site_regen/13_gtex/scores_target_probs.csv"
+"results/31_site_regen/13_gtex/scores_target_probs.csv",
+"results/34_panel_model/call_model_coefficients.csv",
+"results/34_panel_model/call_model_genes.csv",
+"results/34_panel_model/call_model_source_z.csv",
+"results/34_panel_model/coefficients.csv",
+"results/34_panel_model/genes.csv",
+"results/34_panel_model/source_z.csv",
+"results/34_panel_model/validation.csv"
 ],
 "reconciliation": {
 "changed": 113,
@@ -841,6 +850,19 @@
 "agg": "mean",
 "tol": 1e-06,
 "note": "F-test selector at the same k"
+},
+{
+"id": "tile_bridge",
+"value": 0.0164901614097426,
+"file": "results/16_identifiability/bridge_variance.csv",
+"where": {
+"gene_set": "all_genes",
+"pool_bid": 80001
+},
+"column": "sum_ratio_batch_over_tissue",
+"agg": "value",
+"tol": 1e-06,
+"note": "batch as a share of the tissue-separating variance: \u03a3 V_batch / \u03a3 V_tissue over all genes, reference pool 99 run on 6 plates at both sites"
 },
 {
 "id": "acc06_k20",
@@ -4169,6 +4191,47 @@
 "note": "fraction of the 20 three-donor recalibration draws (k20) whose threshold is +\u221e"
 },
 {
+"id": "venacv_bat_calls",
+"value": 7,
+"file": null,
+"files": [
+"results/31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv"
+],
+"agg": "recomputed",
+"note": "held-out vena cava vials the 20-gene model calls brown fat (phase-06 design, all folds)"
+},
+{
+"id": "venacv_bat_calls_flagged",
+"value": 7,
+"file": null,
+"files": [
+"results/31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv",
+"results/15_time_course/design/flagged_vials.csv"
+],
+"agg": "recomputed",
+"note": "of those, vials the consortium flagged as brown-fat contaminated"
+},
+{
+"id": "venacv_flagged_total",
+"value": 30,
+"file": "results/15_time_course/design/flagged_vials.csv",
+"where": {},
+"column": "viallabel",
+"agg": "count",
+"tol": 1e-06,
+"note": "vena cava vials flagged as brown-fat contaminated by the consortium (all female, 1 and 2 weeks)"
+},
+{
+"id": "venacv_vials",
+"value": 50,
+"file": null,
+"files": [
+"results/31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv"
+],
+"agg": "recomputed",
+"note": "vena cava vials scored in the phase-06 design"
+},
+{
 "id": "n_tissues",
 "value": 19,
 "file": "results/16_identifiability/estimable_pairs.csv",
@@ -5418,6 +5481,18 @@
 "column": "min_ratio_tissue_over_training",
 "agg": "value",
 "tol": 1e-06
+},
+{
+"id": "panel_model_genes_shared",
+"value": 14,
+"file": "results/34_panel_model/genes.csv",
+"where": {
+"in_all_animal_panel": true
+},
+"column": "feature_ID",
+"agg": "count",
+"tol": 1e-06,
+"note": "genes of the scoring model (35-animal refit) that are also in the all-animal 20-gene panel"
 }
 ],
 "tables": [
@@ -6098,6 +6173,55 @@
 "json_path": "samples",
 "n_rows": 2485,
 "quantised": 6
+},
+{
+"id": "panel_model_genes",
+"file": "results/34_panel_model/genes.csv",
+"json_file": "panel_model.json",
+"json_path": "scoring.genes",
+"n_rows": 20
+},
+{
+"id": "panel_model_coefficients",
+"file": "results/34_panel_model/coefficients.csv",
+"json_file": "panel_model.json",
+"json_path": "scoring.coefficients",
+"n_rows": 19
+},
+{
+"id": "panel_model_source_z",
+"file": "results/34_panel_model/source_z.csv",
+"json_file": "panel_model.json",
+"json_path": "scoring.source_z",
+"n_rows": 20
+},
+{
+"id": "panel_model_call_model_genes",
+"file": "results/34_panel_model/call_model_genes.csv",
+"json_file": "panel_model.json",
+"json_path": "call_model_genes",
+"n_rows": 20
+},
+{
+"id": "panel_model_call_model_coefficients",
+"file": "results/34_panel_model/call_model_coefficients.csv",
+"json_file": "panel_model.json",
+"json_path": "call_model_coefficients",
+"n_rows": 19
+},
+{
+"id": "panel_model_call_model_source_z",
+"file": "results/34_panel_model/call_model_source_z.csv",
+"json_file": "panel_model.json",
+"json_path": "call_model_source_z",
+"n_rows": 20
+},
+{
+"id": "panel_model_validation",
+"file": "results/34_panel_model/validation.csv",
+"json_file": "panel_model.json",
+"json_path": "validation",
+"n_rows": 3
 }
 ]
 }

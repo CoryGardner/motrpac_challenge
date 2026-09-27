@@ -235,6 +235,13 @@ def main() -> None:
     body = notes(a, tab, contrasts, tests, out_design, out_phys)
     report.add_section("15a · Study-design dates and physiology", body.split("\n", 1)[1],
                        params={"n_animals": len(a)})
+    # the consortium's outlier flags (metadata): the vena-cava vials marked brown-fat contaminated, for the confusion note
+    ol = io.load_outliers()
+    fl = ol[(ol["tissue"].astype(str) == "VENACV") & ol["reason"].astype(str).str.contains("BAT contamination")].copy()
+    fl = fl[["viallabel", "pid", "group", "reason"]].drop_duplicates("viallabel")
+    fl.insert(2, "sex", fl["group"].astype(str).str.split("_").str[0])
+    fl.to_csv(out_design / "flagged_vials.csv", index=False)
+    print(f"flagged vena-cava vials (brown-fat contamination): {len(fl)} vials, {fl['pid'].nunique()} animals")
     print(f"wrote {out_design} and {out_phys}")
 
 

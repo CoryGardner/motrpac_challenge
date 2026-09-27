@@ -225,7 +225,7 @@ def test_manifest_lists_only_phases_the_site_reads():
     """The manifest describes the results the export read, not every directory under results/."""
     m = _load("manifest.json")
     allowed = {"03_eda", "04_baselines", "05_panels", "06_conformal", "07_fusion", "08_shift", "12_bodymap", "13_gtex",
-               "14_transfer", "14_transfer_cpm", "15_time_course", "16_identifiability"}
+               "14_transfer", "14_transfer_cpm", "15_time_course", "16_identifiability", "34_panel_model"}
     assert set(m["phases"]) <= allowed, sorted(set(m["phases"]) - allowed)
     assert "09_discordance" not in m["phases"] and "absent_phases" not in m
     assert m["phases_used"] and set(m["phases_used"]) >= {"05_panels", "06_conformal", "31_site_regen"}

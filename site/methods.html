@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Methods — Tissue Fingerprints</title>
-<meta name="description" content="How every number was produced: animal-grouped splits, the in-fold pipeline, the round-robin selector, split-conformal sets and the quantile rule, the certificate, the transfer protocol and the self-check scheme.">
+<meta name="description" content="How every number was produced: animal-grouped splits, the in-fold pipeline, the round-robin selector, split-conformal sets and the quantile rule, the certificate and the transfer protocol.">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/brand/badge-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="assets/brand/badge-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/brand/badge-180.png">
@@ -12,7 +12,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Tissue Fingerprints — The Rat PAC">
 <meta property="og:title" content="Methods">
-<meta property="og:description" content="How every number was produced: animal-grouped splits, the in-fold pipeline, the round-robin selector, split-conformal sets and the quantile rule, the certificate, the transfer protocol and the self-check scheme.">
+<meta property="og:description" content="How every number was produced: animal-grouped splits, the in-fold pipeline, the round-robin selector, split-conformal sets and the quantile rule, the certificate and the transfer protocol.">
 <meta property="og:url" content="https://corygardner.github.io/motrpac_challenge/methods.html">
 <meta property="og:image" content="https://corygardner.github.io/motrpac_challenge/assets/brand/badge-og.png">
 <meta property="og:image:width" content="1200">
@@ -29,7 +29,6 @@
 <header class="site-header"></header>
 <main id="main" class="wrap">
   <h1>Methods</h1>
-  <p class="lede">Every number on this site was produced by the pipeline under the frozen rules in <code>docs/EVALUATION_RULES.md</code>; nothing is typed by hand.</p>
 
   <section class="section" id="pipeline">
     <h2>The pipeline, all of it inside the fold</h2>
@@ -53,7 +52,7 @@
     <p>Split conformal. Inside each fold the training animals are divided again into fit animals (18) and calibration animals (22); test animals are never used for either. The nonconformity score of a calibration vial is 1 − p̂(true tissue) (LAC). The threshold is</p>
     <pre>q̂ = the ⌈(n + 1)(1 − α)⌉-th smallest of the n calibration scores,
     and +∞ (every tissue in every set) when that rank exceeds n.</pre>
-    <p>A tissue enters a test sample's set when p̂(tissue) ≥ 1 − q̂. With one vial per animal, n = 22, and at α = 0.10 the rank is 21 of 22; at α = 0.05 the rank is 22, the largest score; with n ≤ 18 the rank exceeds n and the set is full. Mondrian sets use one threshold per true class from that class's calibration scores, falling back to the marginal threshold for a class with no score; the floored variant never lets a class threshold fall below the marginal one, so its sets contain both the marginal and the Mondrian sets. Pooled-vial calibration uses all vials of the calibration animals (n ≈ 396); it sits closer to 1 − α but treats vials of one animal as exchangeable, which they are not.</p>
+    <p>A tissue enters a test sample's set when p̂(tissue) ≥ 1 − q̂. With one vial per animal, n = 22, and at α = 0.10 the rank is 21 of 22; at α = 0.05 the rank is 22, the largest score; with n ≤ 18 the rank exceeds n and the set is full. Mondrian sets use one threshold per true class from that class's calibration scores, falling back to the marginal threshold for a class with no score; the floored variant never lets a class threshold fall below the marginal one, so its sets contain both the marginal and the Mondrian sets. Pooled-vial calibration uses all vials of the calibration animals (n ≈ 396); it sits closer to 1 − α but treats vials of one animal as exchangeable, which they are not. Every prediction set on <a href="explore.html">the Explorer</a> is computed in your browser from the exported class probabilities and calibration scores, with the same quantile rule as the pipeline.</p>
     <p id="p-coverage"></p>
   </section>
 
@@ -65,11 +64,6 @@
   <section class="section prose" id="transfer">
     <h2>The transfer protocol</h2>
     <p>Rat BodyMap (GSE53960, 316 samples, 11 organs, 4 ages) and GTEx v8 (2,485 samples, 862 donors, 17 tissues, ≤ 150 donors per tissue) are scored with panels fit on all 50 MoTrPAC animals: the same imputation and prefilter, every gene z-scored within its own dataset, the classifier's coefficients unchanged. Muscle and brain are super-classes (any of their rat tissues counts); thymus and uterus have no MoTrPAC tissue and are out-of-distribution; Artery – Aorta → vena cava is an imperfect mapping. GTEx uses 1:1 orthologs only (14,569 of 21,193 genes), and its panel is re-selected in that ortholog space. For conformal transfer the models are refit on 35 MoTrPAC animals and calibrated on the other 15; recalibration draws 3 or 5 target individuals (20 draws; all combinations where fewer) and tests on the rest. Every BodyMap split is grouped on the assumed animal, every GTEx split on the donor.</p>
-  </section>
-
-  <section class="section prose" id="rules">
-    <h2>The frozen evaluation rules and the self-check scheme</h2>
-    <p>The rules are in <code>docs/EVALUATION_RULES.md</code> in the repository (frozen; the repository link is in the footer). Two self-contained notebooks, <code>01_replication.ipynb</code> and <code>02_transfer.ipynb</code>, recompute the headline numbers and compare them with a file of expected values; <code>tests/test_site_data.py</code> checks every number on this site against its results file, and <code>tests/test_site_conformal.js</code> checks the browser's conformal sets against Python-computed ones, including infinite thresholds.</p>
   </section>
 </main>
 <footer class="site-footer"></footer>

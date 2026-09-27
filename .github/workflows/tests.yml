@@ -30,4 +30,4 @@ jobs:
         with:
           node-version: "20"
       # the browser's conformal port against the Python-computed fixtures committed in site/data
-      - run: node tests/test_site_conformal.js
+      - run: node tests/test_site_conformal.js && node tests/test_score_tool.js

@@ -1,6 +1,6 @@
 {
- "generated": "2026-09-27 03:49 UTC",
- "git_hash": "7b4c09c",
+ "generated": "2026-09-27 04:45 UTC",
+ "git_hash": "7d4502a",
  "results_dir": "results",
  "results_snapshot": null,
  "phases": {
@@ -482,6 +482,11 @@
      "sha256": "05f07dace65ab890230f1d06a5f97b0a20ea26bcdfded92572bd3e590ad99bab"
     },
     {
+     "path": "results/15_time_course/design/flagged_vials.csv",
+     "bytes": 1711,
+     "sha256": "a3b4571717f79b8c4c4ec3bd70e692cabbf5a15c4152e1e99b86973170a17657"
+    },
+    {
      "path": "results/15_time_course/fingerprint_by_duration/calibration_info.csv",
      "bytes": 2198,
      "sha256": "3c68953831218d12030dfcf7735892083ebaf1e4871f19cd26d53e0ab1010417"
@@ -512,8 +517,8 @@
      "sha256": "8e99375e9eaf7dd9e67cf89dbd3240a28200f6666a2c9200d7c8e8c2d6e01149"
     }
    ],
-   "n_files": 8,
-   "bytes": 33121
+   "n_files": 9,
+   "bytes": 34832
   },
   "16_identifiability": {
    "files": [
@@ -590,6 +595,47 @@
    ],
    "n_files": 14,
    "bytes": 27650
+  },
+  "34_panel_model": {
+   "files": [
+    {
+     "path": "results/34_panel_model/call_model_coefficients.csv",
+     "bytes": 8798,
+     "sha256": "6eeb7a7dcab9c84bbefab86e079e3aacfaba580ad0b65819fad969fac7bea666"
+    },
+    {
+     "path": "results/34_panel_model/call_model_genes.csv",
+     "bytes": 702,
+     "sha256": "08d9c228a3c68c01b4b043db41f20a3cbe4825963e51f034eb623c9e173bfb4a"
+    },
+    {
+     "path": "results/34_panel_model/call_model_source_z.csv",
+     "bytes": 1287,
+     "sha256": "62eb4a12fcd16fcfc2d9d49440f0a70bb5854a99c50019854a26f4f1152d9608"
+    },
+    {
+     "path": "results/34_panel_model/coefficients.csv",
+     "bytes": 8813,
+     "sha256": "ebb4d07f3f16f5291cacd113e416ca2aff34fdea0d8198152d1fc38727689df7"
+    },
+    {
+     "path": "results/34_panel_model/genes.csv",
+     "bytes": 707,
+     "sha256": "fe074b94b75c69874125a9272430322f447be8a47cc730d34ec9dcd70552505a"
+    },
+    {
+     "path": "results/34_panel_model/source_z.csv",
+     "bytes": 1282,
+     "sha256": "4232e2b144ea9595d4087d26bc942b4cee126f5c4745af26c9b30c123523e58b"
+    },
+    {
+     "path": "results/34_panel_model/validation.csv",
+     "bytes": 405,
+     "sha256": "0882934265516460542580fa582bb09195dd576dbb8c34069538f73f647a6f5d"
+    }
+   ],
+   "n_files": 7,
+   "bytes": 21994
   }
  },
  "regeneration_runs": {
@@ -626,6 +672,11 @@
   ],
   "12_bodymap": [
    {
+    "path": "results/31_site_regen/12_bodymap/scores_calibration.csv",
+    "bytes": 42326,
+    "sha256": "8cf54033b1ed703152378e9a4a31b25396e4367640c1882b86c6074be47076c6"
+   },
+   {
     "path": "results/31_site_regen/12_bodymap/scores_target_probs.csv",
     "bytes": 436645,
     "sha256": "0150f5da3d2c76e35e75b641f089f769caee1972a319aeac95d9a882960ee852"
@@ -657,7 +708,8 @@
   "14_transfer_cpm",
   "15_time_course",
   "16_identifiability",
-  "31_site_regen"
+  "31_site_regen",
+  "34_panel_model"
  ],
  "versions": {
   "python": "3.12.14",
@@ -725,22 +777,22 @@
   },
   {
    "name": "expr_bodymap.json",
-   "bytes": 156328,
-   "regenerated": false
+   "bytes": 198719,
+   "regenerated": true
   },
   {
    "name": "expr_gtex.json",
    "bytes": 995893,
-   "regenerated": false
+   "regenerated": true
   },
   {
    "name": "expr_motrpac.json",
-   "bytes": 391269,
-   "regenerated": false
+   "bytes": 463184,
+   "regenerated": true
   },
   {
    "name": "genes.json",
-   "bytes": 47220,
+   "bytes": 47658,
    "regenerated": true
   },
   {
@@ -750,7 +802,7 @@
   },
   {
    "name": "headline.json",
-   "bytes": 52523,
+   "bytes": 53073,
    "regenerated": true
   },
   {
@@ -759,13 +811,23 @@
    "regenerated": true
   },
   {
+   "name": "panel_card.json",
+   "bytes": 14178,
+   "regenerated": true
+  },
+  {
    "name": "panel_curve.json",
    "bytes": 44002,
    "regenerated": true
   },
   {
+   "name": "panel_model.json",
+   "bytes": 28050,
+   "regenerated": true
+  },
+  {
    "name": "provenance.json",
-   "bytes": 136823,
+   "bytes": 140185,
    "regenerated": true
   },
   {

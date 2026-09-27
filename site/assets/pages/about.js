@@ -15,6 +15,8 @@ function accessValue(a) {
 
 async function main() {
   await mountChrome("about.html");
+  const details = document.getElementById("versions-details");
+  if (details && location.hash === "#versions") details.open = true;   // a deep link shows the list
   const dl = document.getElementById("versions-kv");
   if (!dl) return;
   try {

@@ -1,6 +1,14 @@
 import { mountChrome, loadJSON, el, fmt, segmented, control, tableFrom, callout } from "../site.js";
 import { figure, bar, line, band, heatmap, strip, tokens, palette, organSystem, tissueLabel, template, CONFIG, jitter } from "../charts.js";
 
+/** One sentence on the vena cava → brown fat calls, from headline.json extras; empty when the extras are missing. */
+function batSentence(ex) {
+  const calls = ex.venacv_bat_calls, flagged = ex.venacv_bat_calls_flagged, total = ex.venacv_flagged_total;
+  if ([calls, flagged, total].some((v) => v === null || v === undefined)) return [];
+  const who = flagged === calls ? `all ${calls}` : `${flagged} of the ${calls}`;
+  return [`The fingerprint flags the same vials the consortium flagged: in the conformal design's held-out folds, ${who} vena-cava vials the panel calls brown fat are among the ${total} vials MoTrPAC marked as brown-fat contaminated (the 1- and 2-week females).`];
+}
+
 async function main() {
   await mountChrome("fingerprint.html");
   const [H, PC, SC, CM, GENES] = await Promise.all([loadJSON("data/headline.json"), loadJSON("data/panel_curve.json"), loadJSON("data/stable_core.json"), loadJSON("data/confusion_motrpac.json"), loadJSON("data/genes.json")]);
@@ -63,7 +71,8 @@ async function main() {
   const tissues = Object.keys(pt20).sort((a, b) => pt20[a] - pt20[b]);
   document.getElementById("p-tissue").replaceChildren(
     `Pooled over the five folds, the 20-gene panel is right on every vial of ${Object.values(pt20).filter((v) => v === 1).length} tissues and drops below 0.9 on ${tissues.filter((t) => pt20[t] < 0.9).map((t) => tissueLabel(t)).join(", ") || "none"}. `,
-    `Its ${CM.confusable_k20.reduce((a, r) => a + r.count, 0)} errors are mostly ${CM.confusable_k20[0].true} → ${CM.confusable_k20[0].predicted} (${CM.confusable_k20[0].count}) and the two skeletal muscles for each other. With all genes the same folds leave ${CM.confusable_full.reduce((a, r) => a + r.count, 0)} errors.`,
+    `Its ${CM.confusable_k20.reduce((a, r) => a + r.count, 0)} errors are mostly ${CM.confusable_k20[0].true} → ${CM.confusable_k20[0].predicted} (${CM.confusable_k20[0].count}) and the two skeletal muscles for each other. With all genes the same folds leave ${CM.confusable_full.reduce((a, r) => a + r.count, 0)} errors. `,
+    ...(batSentence(ex)),
   );
   await figure(document.getElementById("fig-tissue"), {
     title: "Accuracy per tissue: brown fat, the two skeletal muscles and vena cava are the closest neighbours",
@@ -90,7 +99,7 @@ async function main() {
   const cf = await figure(document.getElementById("fig-confusion"), {
     title: "The confusions are anatomical neighbours: vena cava → brown fat, gastrocnemius ↔ vastus lateralis",
     subtitle: "Row-normalised confusion matrix over the pooled out-of-fold vials; off-diagonal fractions labelled.",
-    build: confBuild, toolbar: ctl, source: "results/05_panels/TRNSCRPT/confusion_k20.csv, confusion_k30.csv, results/04_baselines/TRNSCRPT/confusion_logreg_l2.csv", notShow: "counts (the data table holds them).", height: "tall",
+    build: confBuild, toolbar: ctl, source: "results/05_panels/TRNSCRPT/confusion_k20.csv, confusion_k30.csv, results/04_baselines/TRNSCRPT/confusion_logreg_l2.csv; the flagged-vial sentence: results/31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv, results/15_time_course/design/flagged_vials.csv", notShow: "counts (the data table holds them).", height: "tall",
   });
   cf.rerender = async () => { const b = confBuild(); cf.traces = b.traces; cf.table = b.table; await window.Plotly.react(cf.chart, b.traces, { ...template(), ...b.layout }, CONFIG); };
 
