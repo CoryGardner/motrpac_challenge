@@ -1,7 +1,7 @@
 // Shared chrome and components: nav, footer, theme toggle, data loader, stat tile, callouts, tables.
 // All text goes through textContent (never innerHTML with data).
 
-export const REPO_URL = "https://github.com/"; // set to the repository URL before deploying (see README)
+export const REPO_URL = "https://github.com/CoryGardner/motrpac_challenge";
 const PAGES = [
   ["index.html", "Home"], ["explore.html", "Explore"], ["transfer.html", "Transfer"], ["fingerprint.html", "Fingerprint"],
   ["identifiability.html", "Identifiability"], ["methods.html", "Methods"], ["limitations.html", "Limitations"],

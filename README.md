@@ -22,13 +22,15 @@ variance that separates tissues.
 
 ## View the site
 
+Live: **https://corygardner.github.io/motrpac_challenge/** (GitHub Pages, published from `site/` by
+`.github/workflows/pages.yml`). Locally:
+
 ```bash
 python -m http.server -d site 8000        # then open http://localhost:8000
 ```
 
 No build step. `site/` is plain HTML, CSS and ES-module JavaScript with Plotly.js 2.35.2 (CDN, with a vendored copy for
-offline use), and deploys unchanged to GitHub Pages (`.github/workflows/pages.yml`; set the repository URL in
-`site/assets/site.js`). Every prediction set in the Explorer is computed in the browser from exported class
+offline use). Every prediction set in the Explorer is computed in the browser from exported class
 probabilities and calibration scores, with the pipeline's own quantile rule.
 
 ## Key results
