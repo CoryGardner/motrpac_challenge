@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tissue Fingerprints — can a molecular signature identify a tissue reliably?</title>
+<meta name="description" content="A 20-gene panel identifies 19 rat tissues; the conformal guarantee does not travel; within one study the tissue axis is confounded with processing. MoTrPAC × rat BodyMap × GTEx.">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/theme.css">
+<script>
+  // theme before first paint (no flash): ?theme=, then the stored choice, else the system setting
+  (function () { try { var p = new URLSearchParams(location.search).get("theme") || localStorage.getItem("tfp-theme"); if (p === "dark" || p === "light") document.documentElement.setAttribute("data-theme", p); } catch (e) {} })();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/plotly.js-cartesian-dist-min@2.35.2/plotly-cartesian.min.js" crossorigin="anonymous"
+        onerror="this.onerror=null;var s=document.createElement('script');s.src='vendor/plotly-cartesian-2.35.2.min.js';document.head.appendChild(s);"></script>
+<script type="module" src="assets/pages/home.js"></script>
+</head>
+<body>
+<header class="site-header"></header>
+<main id="main" class="wrap">
+  <h1>Can a molecular signature identify a tissue reliably?</h1>
+  <p class="lede" id="lede">Loading the numbers from <code>site/data</code>…</p>
+
+  <div class="tiles" id="tiles"></div>
+
+  <div id="fig-ladder"></div>
+
+  <section class="section" id="sec-accuracy">
+    <h2>1. Accuracy: a compact signature is sufficient</h2>
+    <p id="p-accuracy"></p>
+    <div id="fig-curve"></div>
+    <p><a href="fingerprint.html">The signature: panel curve, stable core, hard tissues →</a></p>
+  </section>
+
+  <section class="section" id="sec-guarantee">
+    <h2>2. The guarantee: it collapses by abstaining, not by confident mistakes</h2>
+    <p id="p-guarantee"></p>
+    <div id="fig-empty"></div>
+    <p><a href="transfer.html">Does it transfer? Lab, species, age, recalibration →</a></p>
+  </section>
+
+  <section class="section" id="sec-identifiability">
+    <h2>3. Identifiability: within one study, tissue and processing are the same axis</h2>
+    <p id="p-identifiability"></p>
+    <div id="fig-nesting"></div>
+    <p><a href="identifiability.html">What is the fingerprint identifying? →</a></p>
+  </section>
+
+  <section class="section" id="sec-tour">
+    <h2>The five-minute tour</h2>
+    <ol class="tour">
+      <li><a href="explore.html#tissue-card">Open the Explorer</a> and pick a <b>BodyMap thymus</b> sample: an organ the fingerprint has never seen. Watch it abstain (an empty set) instead of guessing, then move the α slider.</li>
+      <li>Still in the Explorer, choose a <b>GTEx heart</b> sample with the 20-gene panel: the human heart is called skeletal muscle. Switch to the full model and see the call change.</li>
+      <li><a href="explore.html#gene-explorer">Open the gene explorer</a> on <b>Pgk2</b>: the testis marker is absent in 2-week-old rats (no spermatids yet), which is why juvenile testes are mislabelled.</li>
+      <li><a href="transfer.html#recalibration">On the Transfer page</a>, look at the recalibration-cost scatter: three BodyMap animals repair the guarantee at one tissue per set; three GTEx donors do not.</li>
+      <li><a href="identifiability.html">On the Identifiability page</a>, read the nesting heatmap: every RNA plate, library batch and flowcell holds whole tissues, so within-study accuracy cannot separate biology from processing. The evidence is the transfer.</li>
+    </ol>
+  </section>
+</main>
+<footer class="site-footer"></footer>
+</body>
+</html>
