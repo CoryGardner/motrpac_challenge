@@ -1326,6 +1326,22 @@
 "consortium_flagged": true
 }
 ],
+"venacv_all": {
+"flagged": {
+"n_vials": 10,
+"n_called_bat": 7,
+"n_consistent": 1,
+"n_mismatch": 4,
+"n_cant_confirm": 5
+},
+"unflagged": {
+"n_vials": 40,
+"n_called_bat": 0,
+"n_consistent": 34,
+"n_mismatch": 0,
+"n_cant_confirm": 6
+}
+},
 "pca": {
 "genes": [
 "ENSRNOG00000000428",
@@ -5039,8 +5055,8 @@
 }
 },
 "_meta": {
-"generated": "2026-09-27 17:25 UTC",
-"git_hash": "a484c7f",
+"generated": "2026-09-27 18:32 UTC",
+"git_hash": "14d8244",
 "sources": [
 "results_frozen/12_bodymap/ood_sets.csv",
 "results_product/40_product/composition_summary.csv",
@@ -5050,7 +5066,8 @@
 "results_product/40_product/pca_summary.csv",
 "results_product/40_product/recal_draws_summary.csv",
 "results_product/40_product/scaling.csv",
-"results_product/40_product/venacv_cases.csv"
+"results_product/40_product/venacv_cases.csv",
+"results_product/40_product/venacv_summary.csv"
 ],
 "note": "every value traces to results_product/40_product/ or results_frozen/ through the pv_* entries of provenance.json"
 }

@@ -652,7 +652,7 @@ def export_headline(w: Writer, prov: Prov, rec: pd.DataFrame | None):
         {"id": "tile_bodymap_recal_k20", "value": P.val("tile_bodymap_recal_k20", "12_bodymap/recalibration.csv", "coverage_recalibrated", where=recal_where,
                                                         note="coverage of the α = 0.10 sets on the 21-week BodyMap mapped organs after recalibrating the threshold on 3 of its animals; mean over the draws"),
          "line": f"mean of {int(recal_draws)} draws · {recal_size:.2f} tissue per set",
-         "label": "coverage of the 90 % guarantee in another lab after recalibrating on three of its animals",
+         "label": "observed coverage in another lab after recalibrating on three of its animals",
          "sub": f"sets calibrated on MoTrPAC animals cover {cov_tile['value']:.3f} there{ci_txt}, the shortfall empty sets; 3 calibration animals (≈ {round(recal_n_samples)} samples), {int(recal_n_test)} test animals, α = 0.10",
          "format": "3", "source": "results/12_bodymap/recalibration.csv (k20, n_recal 3: coverage_recalibrated, set_size_recalibrated, draws)"},
         {"id": "tile_estimable", "value": P.val("tile_estimable", "16_identifiability/estimable_pairs.csv", "n_pairs_estimable", where={"assay": "TRNSCRPT"}),

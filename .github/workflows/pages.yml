@@ -13,6 +13,10 @@ concurrency:
   cancel-in-progress: true
 jobs:
   publish:
+    # Publish only from the personal repository, whose Pages site is the live one. The team repository
+    # (Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3) does not have Pages enabled yet, so the job
+    # would fail there on every push; remove this line once Pages is enabled on the team repository.
+    if: github.repository == 'CoryGardner/motrpac_challenge'
     runs-on: ubuntu-latest
     environment:
       name: github-pages

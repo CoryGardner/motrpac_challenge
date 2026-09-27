@@ -322,6 +322,13 @@ dl.glossary dt { font-weight: 650; margin-top: 0.8rem; color: var(--ink); }
 dl.glossary dd { margin: 0.15rem 0 0; color: var(--ink-2); max-width: var(--measure); }
 
 /* Check samples results table: wrap long cells so every column fits at 1024–1440 px */
-table.results th, table.results td { white-space: normal; }
-table.results td:first-child { overflow-wrap: anywhere; min-width: 9rem; }
-table.results td .badge, table.results .missing-mark { white-space: nowrap; }
+table.results th, table.results td { white-space: nowrap; }
+table.results td.wrap { white-space: normal; min-width: 4.5rem; }
+table.results th button.sort { white-space: nowrap; }
+@media (max-width: 1100px) { table.results th, table.results td { padding: 0.3rem 0.3rem; } table.results .badge { padding: 0.1rem 0.4rem; } }
+.table-wrap.wrap-last td:last-child { white-space: normal; min-width: 14rem; }
+
+/* phones: the header scrolls away instead of taking a quarter of the screen */
+@media (max-width: 700px) {
+  .site-header { position: static; }
+}

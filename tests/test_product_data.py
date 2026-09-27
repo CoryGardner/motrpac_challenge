@@ -108,3 +108,22 @@ def test_composition_sensitivity():
         assert math.isclose(r["p05"], v.quantile(0.05), abs_tol=1e-12) and math.isclose(r["p95"], v.quantile(0.95), abs_tol=1e-12)
     comp = _load("product.json")["composition"]
     assert comp["within.coverage.p05"] == float(s[(s["mode"] == "within") & (s["metric"] == "coverage")]["p05"].iloc[0])
+
+
+def test_venacv_both_directions():
+    """All held-out vena cava vials, split by the consortium's brown-fat flag, reproduce from venacv_all.csv, and the
+    page's copy equals the ledger."""
+    a = pd.read_csv(PV / "venacv_all.csv", dtype={"viallabel": str})
+    s = pd.read_csv(PV / "venacv_summary.csv")
+    h = _load("headline.json")["extras"]
+    flagged = set(pd.read_csv(ROOT / "results_frozen" / "15_time_course" / "design" / "flagged_vials.csv", dtype=str)["viallabel"])
+    assert len(a) == h["venacv_vials"] and int(a["consortium_flagged"].sum()) == len(set(a["viallabel"]) & flagged)
+    for fl, g in a.groupby("consortium_flagged"):
+        r = s[s["consortium_flagged"] == fl].iloc[0]
+        assert r["n_vials"] == len(g) and r["n_called_bat"] == int((g["call"] == "BAT").sum())
+        assert r["n_consistent"] + r["n_mismatch"] + r["n_cant_confirm"] == len(g)
+    v = pd.read_csv(PV / "venacv_cases.csv", dtype={"viallabel": str})
+    assert set(v["viallabel"]) == set(a[(a["call"] == "BAT")]["viallabel"])      # the 7 cases are the BAT calls among all vena cava vials
+    p = _load("product.json")["venacv_all"]
+    byid = {e["id"]: e["value"] for e in _load("provenance.json")["entries"]}
+    assert p["flagged"]["n_mismatch"] == byid["pv_venacv_flagged_n_mismatch"] and p["unflagged"]["n_consistent"] == byid["pv_venacv_unflagged_n_consistent"]
