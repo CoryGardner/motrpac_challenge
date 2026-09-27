@@ -282,6 +282,23 @@ def main():
                       "p_BAT": float(p[ci["BAT"]]), "p_VENACV": float(p[ci["VENACV"]]), "alpha": 0.10, "q": q, "set": ";".join(s),
                       "status_claimed_venacv": st, "consortium_flagged": r["viallabel"] in flagged})
     pd.DataFrame(vrows).to_csv(out / "venacv_cases.csv", index=False)
+    # the other direction: every held-out vena cava vial, split by the consortium's brown-fat flag
+    va = sp[sp["tissue"] == "VENACV"]
+    arows = []
+    for _, r in va.iterrows():
+        p = r[[f"p_{c}" for c in classes]].to_numpy(dtype=float)
+        q = q10f[r["fold"]]
+        s_ = [c for c, v in zip(classes, p) if v >= 1 - q]
+        arows.append({"viallabel": r["viallabel"], "fold": int(r["fold"]), "consortium_flagged": r["viallabel"] in flagged, "call": classes[int(p.argmax())],
+                      "set": ";".join(s_), "status_claimed_venacv": "cant_confirm" if not s_ else ("consistent" if "VENACV" in s_ else "mismatch")})
+    vall = pd.DataFrame(arows)
+    vall.to_csv(out / "venacv_all.csv", index=False)
+    vsum = []
+    for fl, g in vall.groupby("consortium_flagged"):
+        vsum.append({"consortium_flagged": bool(fl), "n_vials": len(g), "n_called_bat": int((g["call"] == "BAT").sum()),
+                     "n_consistent": int((g["status_claimed_venacv"] == "consistent").sum()), "n_mismatch": int((g["status_claimed_venacv"] == "mismatch").sum()),
+                     "n_cant_confirm": int((g["status_claimed_venacv"] == "cant_confirm").sum()), "alpha": 0.10})
+    pd.DataFrame(vsum).to_csv(out / "venacv_summary.csv", index=False)
 
     # ---- reference PCA of the 20-gene z-space ------------------------------------------------------------------------
     em = json.loads((SITE / "expr_motrpac.json").read_text())
@@ -303,8 +320,8 @@ def main():
     # ---- parity fixtures: real counts, every gene, a few samples ------------------------------------------------------
     pick = [meta.index[(meta["organ"] == o) & (meta["stage_weeks"] == 21)][0] for o in ("Liver", "Brain", "Testes", "Thymus")]
     sub = counts[pick]
-    with gzip.open(fx / "bodymap_counts_subset.csv.gz", "wt", compresslevel=9) as f:
-        sub.to_csv(f)
+    with open(fx / "bodymap_counts_subset.csv.gz", "wb") as raw, gzip.GzipFile(fileobj=raw, mode="wb", compresslevel=9, mtime=0) as gz:   # mtime=0: byte-reproducible
+        gz.write(sub.to_csv().encode("utf-8"))
     lsub = io.log_cpm(sub.T, log=True)
     (fx / "product_parity.json").write_text(json.dumps({
         "note": "tests/fixtures/bodymap_counts_subset.csv.gz (genes × samples, real rat BodyMap counts, every gene) → io.log_cpm (total library, log2(CPM + 1)); expected values for the 20 panel genes. Written by scripts/40_product_validation.py.",

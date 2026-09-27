@@ -1,0 +1,3 @@
+consortium_flagged,n_vials,n_called_bat,n_consistent,n_mismatch,n_cant_confirm,alpha
+False,40,0,34,0,6,0.1
+True,10,7,1,4,5,0.1

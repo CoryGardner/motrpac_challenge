@@ -10,7 +10,8 @@ of processing effects on the consortium's bridging standards, an exercise-specif
 every number carries provenance and whose Check samples page scores new samples in the browser.
 
 [![tests](https://github.com/CoryGardner/motrpac_challenge/actions/workflows/tests.yml/badge.svg)](https://github.com/CoryGardner/motrpac_challenge/actions/workflows/tests.yml)
-**Live site:** https://corygardner.github.io/motrpac_challenge/ · **Release:** tag `hackathon-submission-v10.2.1` (version 2.0.3) · **Licence:** MIT
+**Team repository:** https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3 · **Public mirror:** https://github.com/CoryGardner/motrpac_challenge
+**Live site:** https://corygardner.github.io/motrpac_challenge/ · **Release:** tag `hackathon-submission-v10.2.2` (version 2.0.4) · **Licence:** MIT
 
 ## Use it
 
@@ -27,7 +28,7 @@ How good the flag is, measured on existing held-out scores at α = 0.10 (`result
 | data | samples | correct labels flagged Mismatch | correct labels Can't confirm | swapped labels flagged Mismatch | swaps with ≥ 1 of the pair flagged |
 |---|---|---|---|---|---|
 | MoTrPAC held-out animals | 899 | 0.9 % | 9.1 % | 91.5 % | 99.8 % |
-| rat BodyMap 21-week adults (another lab) | 68 | 0 % | 38.2 % | 62.7 % | 89.2 % |
+| rat BodyMap 21-week adults (another lab) | 68 | 0.0 % | 38.2 % | 62.6 % | 89.2 % |
 
 The scaling guard, measured on the same BodyMap adults (`results_product/40_product/scaling.csv`): the whole mixed set
 z-scored together names 100 % of mapped organs (coverage 61.8 %); MoTrPAC reference scaling 98.5 % (coverage 85.3 %, but
@@ -151,7 +152,7 @@ first-class. The rules every phase follows are frozen in `docs/EVALUATION_RULES.
 ## Quick start (no data needed)
 
 ```bash
-git clone https://github.com/CoryGardner/motrpac_challenge && cd motrpac_challenge
+git clone https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3 tfp && cd tfp   # the team repository; or the public mirror: https://github.com/CoryGardner/motrpac_challenge
 conda env create -f environment.yml && conda activate tfp      # or: pip install -r requirements.txt
 make test          # Python tests (the results-dependent ones read results_frozen/), the JS conformal test, snapshot checksums
 make site          # export site/data from results_frozen/, check the sanity anchors, run the site tests
@@ -298,7 +299,7 @@ Known failure modes and limits (details on the site's Limitations page):
 ## Reuse
 
 - **Licence:** MIT for code, site and derived tables (`LICENSE`); the data keep their own terms (table above).
-- **Cite:** `CITATION.cff` (version 2.0.3, tag `hackathon-submission-v10.2.1`), the three data papers, and the multiomic sources in the Data section.
+- **Cite:** `CITATION.cff` (version 2.0.4, tag `hackathon-submission-v10.2.2`), the three data papers, and the multiomic sources in the Data section.
 - **Score your samples:** the Check samples page (`site/index.html`) takes a table of log2 CPM for the 20 panel genes or a
   full raw-count matrix and returns tissue calls, 90 % conformal prediction sets and claimed-label checks in the browser,
   with optional recalibration on labelled samples; the panel card (`site/data/panel_card.csv`, `.json`) lists the genes with their mean expression per

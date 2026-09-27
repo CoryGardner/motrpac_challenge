@@ -135,6 +135,9 @@ def main():
     vc = PV / "venacv_cases.csv"
     vdf = P.read(vc)
     out["venacv"] = P.table("pv_venacv_cases", vc, "venacv", records(vdf.astype({"viallabel": str})))
+    vs = PV / "venacv_summary.csv"
+    out["venacv_all"] = {("flagged" if fl else "unflagged"): {c: P.val(f"pv_venacv_{'flagged' if fl else 'unflagged'}_{c}", vs, c, {"consortium_flagged": fl})
+                                                             for c in ("n_vials", "n_called_bat", "n_consistent", "n_mismatch", "n_cant_confirm")} for fl in (True, False)}
     # ---- reference map ---------------------------------------------------------------------------------------------
     ld = P.read(PV / "pca_loadings.csv")
     rc = P.read(PV / "pca_reference_coords.csv")

@@ -4,6 +4,33 @@ All notable changes to this repository. The format follows [Keep a Changelog](ht
 dates are UTC. Each section is a `hackathon-submission-v<n>` git tag; the version numbers are those of `CITATION.cff`
 and `pyproject.toml`.
 
+## [2.0.4] — 2026-09-27 (tag `hackathon-submission-v10.2.2`)
+
+### Fixed
+- Check samples: the explanation sentence names a gene only if its contribution is at least max(0.1, 0.1 × the largest),
+  written as the chart writes it ("Umod (+2.9 sd)"), or says that no single gene dominates (the swapped kidney no longer
+  cites Trim29 at z = +0.02).
+- The example no longer recalibrates on its two deliberately swapped labels (at α = 0.05 that had made every set
+  ambiguous and passed the swapped kidney as Consistent); the "Start here" note and "Calibrate to my lab" say so. Tests:
+  both swaps stay Mismatch after recalibration at α = 0.05, 0.10 and 0.20.
+- Set labels follow α (table header, summary tile, status key, drawer, charts, report); the CSV column is `set`.
+- A forced scaling mode is described as the mode used, with the automatic rule's choice beside it; forcing within-set
+  scaling on fewer than 8 samples or 3 tissues is a caveat.
+
+### Changed
+- Results table: sample IDs on one line, set and runner-up cells wrap, the "missing" column only when needed; the
+  accepted-names table wraps its last column. The header is not sticky on phones (below 700 px).
+- The science overview's recalibration tile reads "observed coverage in another lab after recalibrating on three of its
+  animals".
+- The vena cava case in both directions (`results_product/40_product/venacv_all.csv`, `venacv_summary.csv`, `pv_venacv_*`):
+  of the held-out vena cava vials, the consortium flagged 10; the model calls 7 of them brown fat and none of the 40
+  unflagged ones; one sentence on Check samples.
+- README: the team repository beside the public mirror (top block, quick start), the site's rounding in the flag table;
+  `CITATION.cff` repository-code is the team repository. `LICENSE` lists the multiomic sources and the BodyMap test
+  fixture's CC BY 4.0 terms. `src/tfp/rii.py` defaults to `data/quant-id/rat-training-06` (the environment variable
+  still overrides). The Pages workflow publishes only from the personal repository (Pages is not enabled on the team
+  repository yet). `figures/home.png` re-rendered. The BodyMap fixture archive is written byte-reproducibly.
+
 ## [2.0.3] — 2026-09-27 (tag `hackathon-submission-v10.2.1`)
 
 ### Changed (audit fixes)
@@ -322,6 +349,13 @@ through `bodymapRat` (2026-09-17); the GTEx v8 downloads (TPM and sample attribu
 were rerun — its effect on every headline number is in `docs/NUMBERS_RECONCILIATION.md`. `results/` and `data/`
 are not versioned; the results are reproducible with `make all`, `make external` and `make identifiability`.
 
+[2.0.4]: https://github.com/CoryGardner/motrpac_challenge/compare/hackathon-submission-v10.2.1...hackathon-submission-v10.2.2
+[2.0.3]: https://github.com/CoryGardner/motrpac_challenge/compare/hackathon-submission-v10.2...hackathon-submission-v10.2.1
+[2.0.2]: https://github.com/CoryGardner/motrpac_challenge/compare/hackathon-submission-v10.1...hackathon-submission-v10.2
+[2.0.1]: https://github.com/CoryGardner/motrpac_challenge/compare/hackathon-submission-v10...hackathon-submission-v10.1
+[2.0.0]: https://github.com/CoryGardner/motrpac_challenge/compare/hackathon-submission-v9.1...hackathon-submission-v10
+[1.8.1]: https://github.com/CoryGardner/motrpac_challenge/compare/hackathon-submission-v9...hackathon-submission-v9.1
+[1.8.0]: https://github.com/CoryGardner/motrpac_challenge/compare/hackathon-submission-v8...hackathon-submission-v9
 [1.7.0]: https://github.com/CoryGardner/motrpac_challenge/compare/hackathon-submission-v7...hackathon-submission-v8
 [1.6.0]: https://github.com/CoryGardner/motrpac_challenge/compare/hackathon-submission-v6...hackathon-submission-v7
 [1.5.0]: https://github.com/CoryGardner/motrpac_challenge/compare/hackathon-submission-v5...hackathon-submission-v6

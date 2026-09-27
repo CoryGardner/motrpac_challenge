@@ -21,8 +21,9 @@ import pandas as pd
 
 from . import config as C, io
 
-QUANT_ID = Path(os.environ.get("MOTRPAC_QUANT_ID",
-                               "/home/cory/projects/MoTrPAC_back_to_transcriptome/data/quant-id/rat-training-06"))
+# the portal's quant-id tree for rat-training-06 (the folder that holds c1.0/ and c2.0/); set MOTRPAC_QUANT_ID when it
+# lives outside the repository's data/ directory
+QUANT_ID = Path(os.environ.get("MOTRPAC_QUANT_ID", C.DATA_DIR / "quant-id" / "rat-training-06"))
 
 # tissue code → portal tissue directory (the 7 proteomics tissues)
 TISSUE_DIRS = {"CORTEX": "t53-cortex", "SKM-GN": "t55-gastrocnemius", "HEART": "t58-heart", "KIDNEY": "t59-kidney",

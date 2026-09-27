@@ -6,10 +6,11 @@ import { mountChrome, loadJSON, el, fmt, pct, callout, tableFrom, control, slide
 import { figure, tokens, palette, organSystem, template, CONFIG } from "../charts.js";
 import { exampleRows, recalibrate, minLabelled, templateCsv } from "../score.js";
 import { compositionNote, modelNote } from "../notes.js";
-import { parseUpload, runCheck, resultsToCsv, exampleTable, acceptedList, CLASS_NAMES, contrast, explainSentence, project, referenceStats, orderByPriority,
+import { parseUpload, runCheck, resultsToCsv, exampleTable, acceptedList, CLASS_NAMES, contrast, explainSentence, project, referenceStats, orderByPriority, labelledForRecal, setLabel, sdLabel,
          WITHIN_MIN_SAMPLES, WITHIN_MIN_TISSUES } from "../check-core.js";
 
 const nm = (c) => CLASS_NAMES[c] || c;
+const pctA = () => `${Math.round(100 * (1 - state.alpha))} %`;   // 1 − α as a percentage, e.g. "90 %"
 const state = { model: null, samples: null, parsed: null, check: null, alpha: 0.1, scaling: "auto", recal: null, filterFlagged: false, sort: { key: null, dir: 1 }, selected: null, source: null, swapped: [] };
 let D = {};
 
@@ -59,7 +60,7 @@ function trustStrip() {
 
 function acceptedNames() {
   document.getElementById("accepted-list").replaceChildren(
-    tableFrom({ columns: ["code", "tissue", "also accepted"], rows: acceptedList().map((a) => ({ code: a.code, tissue: a.name, "also accepted": a.also.join(", ") })) }),
+    (() => { const t = tableFrom({ columns: ["code", "tissue", "also accepted"], rows: acceptedList().map((a) => ({ code: a.code, tissue: a.name, "also accepted": a.also.join(", ") })) }); t.classList.add("wrap-last"); return t; })(),
     el("p", { class: "small" }, "Also accepted: brain (cortex, hippocampus or hypothalamus), skeletal muscle or muscle (either muscle), adipose or fat (brown or white), intestine (colon or small intestine). Any other name is reported as “tissue not in reference”."));
 }
 
@@ -144,11 +145,11 @@ function banners() {
   const s = C.scaling;
   if (s.mode === "reference") {
     out.push(callout("caveat", "Reference scaling", [
-      `${s.reason}. `,
+      `${s.reason.replace(/^./, (c) => c.toUpperCase())}${s.forced ? " (chosen by you; the automatic rule would scale within your set)" : ""}. `,
       `Measured on rat BodyMap adults from another laboratory, reference scaling named ${pct(K["adult_21wk.reference.accuracy"])} of mapped organs correctly with ${pct(K["adult_21wk.reference.coverage"])} coverage, but gave sets to unseen thymus that within-set scaling left empty. It assumes your log2 CPM is on the pipeline's scale (log2 CPM on the total library of bulk RNA-seq counts, as the pipeline computes it). For the most reliable calls, upload a set that mixes at least ${WITHIN_MIN_TISSUES} tissues and ${WITHIN_MIN_SAMPLES} samples.`,
     ]));
   } else {
-    out.push(callout("note", "Within-set scaling", `${s.reason}.${s.forced ? " (Chosen by you; the automatic rule would use reference scaling.)" : ""}`));
+    out.push(callout(s.caveat ? "caveat" : "note", "Within-set scaling", `${s.reason.replace(/^./, (c) => c.toUpperCase())}.${s.forced ? " Chosen by you; the automatic rule would use reference scaling." : ""}${s.caveat ? ` Caution: ${s.caveat}.` : ""}`));
   }
   if (state.recal) out.push(callout("note", "Calibrated to your lab", state.recal.error ? state.recal.error : `The prediction sets use a threshold recalibrated on ${state.recal.n} of your labelled samples (see “Calibrate to my lab”).`));
   document.getElementById("banners").replaceChildren(...out);
@@ -185,7 +186,7 @@ function guide() {
     b.addEventListener("click", () => { state.recal = recalFor(); analyse(); document.getElementById("results").scrollIntoView({ behavior: "smooth" }); });
     out.push(el("p", {}, [el("b", {}, `${c.Unknown} of ${c.total} prediction sets are empty.`),
       " That is the expected first result for samples from another laboratory: the threshold was calibrated on MoTrPAC animals, so the model abstains rather than guess. ",
-      nLab >= need ? `Recalibrating on your ${nLab} labelled samples adapts the threshold to your lab (see “Calibrate to my lab” below). ` : `Label at least ${need} samples to recalibrate to your lab. `]), b);
+      nLab >= need ? `Recalibrating on your ${nLab} labelled samples adapts the threshold to your lab (see “Calibrate to my lab” below)${state.swapped.length ? `; the ${state.swapped.length} deliberately swapped samples are left out, since their labels are wrong on purpose` : ""}. ` : `Label at least ${need} samples to recalibrate to your lab. `]), b);
   } else if (state.recal && !state.recal.error) {
     out.push(el("p", {}, `Recalibrated on ${state.recal.n} of your labelled samples: the flags below use your lab's threshold (observed coverage ${fmt(state.recal.coverage, 3)} on those samples, not a guarantee for new ones).`));
   }
@@ -197,7 +198,7 @@ function summary() {
   const tile = (value, label, sub) => el("div", { class: "tile" }, [el("div", { class: "value" }, String(value)), el("div", { class: "label" }, label), sub ? el("div", { class: "sub" }, sub) : null]);
   const tiles = [tile(c.total, "samples checked", `${state.check.scaling.mode === "within" ? "within-set" : "reference"} scaling · α = ${state.alpha.toFixed(2)}`),
                  tile(c.flagged, "flagged", "mismatch, can't confirm, unknown tissue or not in reference"),
-                 tile(`${c.Confident} · ${c.Ambiguous} · ${c.Unknown}`, "confident · ambiguous · unknown", "one tissue · several · none in the 90 % set")];
+                 tile(`${c.Confident} · ${c.Ambiguous} · ${c.Unknown}`, "confident · ambiguous · unknown", `one tissue · several · none in the ${setLabel(state.alpha)}`)];
   if (c.claimed) tiles.push(tile(`${c.Consistent} · ${c.Mismatch} · ${c["Can't confirm"]}`, "consistent · mismatch · can't confirm", `of ${c.claimed} claimed labels${c["Not in reference"] ? `; ${c["Not in reference"]} not in the reference` : ""}`));
   document.getElementById("summary").replaceChildren(...tiles);
 }
@@ -212,7 +213,8 @@ function table() {
   const rp = el("button", { class: "btn", type: "button" }, "Download report");
   rp.addEventListener("click", () => download("tissue_check_report.html", reportHtml(), "text/html"));
   document.getElementById("table-controls").replaceChildren(el("label", { class: "control inline", for: "flagged-only" }, [onlyFlag, el("span", {}, "Flagged only")]), dl, rp);
-  const cols = [["id", "sample"], ["label", "claimed"], ["call", "call"], ["set", "90 % prediction set"], ["status", "status"], ["claimStatus", "claim"], ["callProb", "top p"], ["runnerUp", "runner-up"], ["missing", "missing"]];
+  const cols = [["id", "sample"], ["label", "claimed"], ["call", "call"], ["set", setLabel(state.alpha)], ["status", "status"], ["claimStatus", "claim"], ["callProb", "top p"], ["runnerUp", "runner-up"], ...(C.results.some((r) => r.missingGenes.length) ? [["missing", "missing"]] : [])];
+  const hasMissing = cols.some(([k]) => k === "missing");
   let rows = orderByPriority(C.results.filter((r) => !state.filterFlagged || r.flagged));
   if (state.sort.key) {
     const k = state.sort.key, d = state.sort.dir;
@@ -229,11 +231,11 @@ function table() {
   const tbody = el("tbody");
   for (const r of rows) {
     const tr = el("tr", { tabindex: "0", class: "clickable" + (r.flagged ? " flagged" : "") + (state.selected === r.id ? " selected" : ""), "aria-label": `${r.id}: ${r.status}${r.claimStatus ? ", " + r.claimStatus : ""}. Open details.` }, [
-      el("td", {}, r.id), el("td", {}, r.label ?? ""), el("td", {}, nm(r.call)),
-      el("td", {}, r.set.length ? r.set.map(nm).join("; ") : "none"),
+      el("td", {}, r.id), el("td", { class: "wrap" }, r.label ?? ""), el("td", { class: "wrap" }, nm(r.call)),
+      el("td", { class: "wrap" }, r.set.length ? r.set.map(nm).join("; ") : "none"),
       el("td", {}, sBadge(r.status)), el("td", {}, cBadge(r.claimStatus)),
-      el("td", { class: "num" }, fmt(r.callProb, 2)), el("td", {}, `${nm(r.runnerUp)} (${fmt(r.runnerUpProb, 2)})`),
-      el("td", {}, r.missingGenes.length ? el("span", { class: "missing-mark", title: `missing: ${r.missingGenes.join(", ")}` }, `⚠ ${r.missingGenes.length} gene${r.missingGenes.length === 1 ? "" : "s"}`) : ""),
+      el("td", { class: "num" }, fmt(r.callProb, 2)), el("td", { class: "wrap" }, `${nm(r.runnerUp)} (${fmt(r.runnerUpProb, 2)})`),
+      hasMissing ? el("td", {}, r.missingGenes.length ? el("span", { class: "missing-mark", title: `missing: ${r.missingGenes.join(", ")}` }, `⚠ ${r.missingGenes.length} gene${r.missingGenes.length === 1 ? "" : "s"}`) : "") : null,
     ]);
     const open = () => openDrawer(r.id, true);
     tr.addEventListener("click", open);
@@ -242,7 +244,7 @@ function table() {
   }
   const wrap = el("div", { class: "table-wrap" }, el("table", { class: "data results" }, [thead, tbody]));
   document.getElementById("tbl-results").replaceChildren(rows.length ? wrap : el("p", {}, "No flagged samples."));
-  document.getElementById("status-key").textContent = "Rows are ordered with the most actionable first (Mismatch, Can't confirm, not in reference, Unknown); click a column header to sort. The 90 % prediction set is a conformal prediction set: every tissue whose probability clears a threshold calibrated on held-out MoTrPAC animals (see the glossary on The science page). Status: Confident = one tissue in the 90 % set; Ambiguous = several; Unknown = none (the model abstains). Claim: Consistent = your label is in the set; Mismatch = the set is not empty and your label is not in it; Can't confirm = empty set. Select a row (click, or Enter) for the explanation.";
+  document.getElementById("status-key").textContent = `Rows are ordered with the most actionable first (Mismatch, Can't confirm, not in reference, Unknown); click a column header to sort. The ${setLabel(state.alpha)} is a conformal prediction set: every tissue whose probability clears a threshold calibrated on held-out MoTrPAC animals (see the glossary on The science page). Status: Confident = one tissue in the set; Ambiguous = several; Unknown = none (the model abstains). Claim: Consistent = your label is in the set; Mismatch = the set is not empty and your label is not in it; Can't confirm = empty set. Select a row (click, or Enter) for the explanation.`;
 }
 
 // ---- reference map ------------------------------------------------------------------------------------------------------
@@ -290,7 +292,7 @@ async function openDrawer(id, focus) {
   const other = claimCls.length && !claimCls.includes(r.call) ? claimCls[0] : r.runnerUp;
   document.getElementById("drawer-body").replaceChildren(...[
     el("div", { class: "drawer-badges" }, [sBadge(r.status), cBadge(r.claimStatus)]),
-    el("p", {}, [el("b", {}, "Claimed: "), r.label ? `${r.label}${claimCls.length ? ` (${claimCls.map(nm).join(" or ")})` : " (not one of the 19 reference tissues)"}` : "none", " · ", el("b", {}, "Call: "), `${nm(r.call)} (p = ${fmt(r.callProb, 2)})`, " · ", el("b", {}, "90 % set: "), r.set.length ? r.set.map(nm).join("; ") : "empty"]),
+    el("p", {}, [el("b", {}, "Claimed: "), r.label ? `${r.label}${claimCls.length ? ` (${claimCls.map(nm).join(" or ")})` : ` (not one of the ${state.model.classes.length} reference tissues)`}` : "none", " · ", el("b", {}, "Call: "), `${nm(r.call)} (p = ${fmt(r.callProb, 2)})`, " · ", el("b", {}, `${setLabel(state.alpha).replace(/^./, (c) => c.toUpperCase())}: `), r.set.length ? r.set.map(nm).join("; ") : "empty"]),
     el("p", { class: "explain" }, explainSentence(r, state.model)),
     r.missingGenes.length ? el("p", { class: "small" }, `Missing genes (scored at the reference mean): ${r.missingGenes.join(", ")}.`) : null,
   ].filter(Boolean));
@@ -301,7 +303,7 @@ async function openDrawer(id, focus) {
   for (const c of claimCls) { const k = classes.indexOf(c); if (!order.includes(k)) order.push(k); }
   await figure(document.getElementById("fig-probs"), {
     title: "Probabilities and the calibrated threshold",
-    subtitle: "Top five tissues (and the claimed one); a tissue enters the 90 % set when its bar crosses the line.",
+    subtitle: `Top five tissues (and the claimed one); a tissue enters the ${setLabel(state.alpha)} when its bar crosses the line.`,
     build: () => {
       const t = tokens(), p = palette();
       const ys = order.map((k) => nm(classes[k])).reverse(), xs = order.map((k) => r.p[k]).reverse();
@@ -314,7 +316,7 @@ async function openDrawer(id, focus) {
                table: { columns: ["tissue", "probability", "in_set"], rows: order.map((k) => ({ tissue: classes[k], probability: r.p[k], in_set: r.set.includes(classes[k]) ? "yes" : "no" })) } };
     },
     source: "site/data/panel_model.json (the 20-gene transfer model and its 15-animal calibration scores), scored in the browser; the threshold is 1 − q̂ at your α" + (state.recal ? ", recalibrated on your labelled samples" : ""),
-    notShow: "classes outside the top five unless claimed; the set is a 90 % guarantee over samples like the calibration animals, not a per-sample probability.",
+    notShow: `classes outside the top five unless claimed; the set is a ${pctA()} guarantee over samples like the calibration animals, not a per-sample probability.`,
     height: "short",
   });
   // why X, not Y
@@ -370,9 +372,7 @@ function closeDrawer() {
 
 // ---- calibrate to my lab -------------------------------------------------------------------------------------------------
 function labelledMap() {
-  const m = {};
-  for (const r of state.check.results) if (r.claim && r.claim.kind === "class") m[r.id] = r.claim.classes[0];
-  return m;
+  return labelledForRecal(state.check.results, state.swapped);   // the example's two swapped labels are wrong on purpose
 }
 function recalFor() {
   // thresholds come from the samples scored with the MoTrPAC calibration (q override off)
@@ -383,7 +383,7 @@ function recalFor() {
 }
 function calibrateSection() {
   const nLab = Object.keys(labelledMap()).length, need = minLabelled(state.alpha);
-  document.getElementById("cal-intro").textContent = `The 90 % guarantee holds for samples like the MoTrPAC calibration animals. For a new lab, recalibrate the threshold on your own samples with verified labels: here, the samples whose claimed label names exactly one of the ${state.model.classes.length} tissues (${nLab} in this upload). At α = ${state.alpha.toFixed(2)} this needs at least ${need} labelled samples. The recalibrated coverage is observed on your labelled samples, not guaranteed for new samples. When the labelled samples come from a few animals (several tissues each), the coverage is pooled within those animals and is not a guarantee for new ones. Recalibrate only on labels you trust: a swapped label enlarges every set.`;
+  document.getElementById("cal-intro").textContent = `The ${pctA()} guarantee holds for samples like the MoTrPAC calibration animals. For a new lab, recalibrate the threshold on your own samples with verified labels: here, the samples whose claimed label names exactly one of the ${state.model.classes.length} tissues (${nLab} in this upload). At α = ${state.alpha.toFixed(2)} this needs at least ${need} labelled samples. The recalibrated coverage is observed on your labelled samples, not guaranteed for new samples. When the labelled samples come from a few animals (several tissues each), the coverage is pooled within those animals and is not a guarantee for new ones. Recalibrate only on labels you trust: a swapped label enlarges every set.${state.swapped.length ? ` In the example the ${state.swapped.length} deliberately swapped samples (${state.swapped.join(", ")}) are left out of the recalibration.` : ""}`;
   const b = el("button", { class: "btn", type: "button" }, state.recal ? "Recalibrate again" : "Recalibrate on my labelled samples");
   if (nLab < need) b.setAttribute("disabled", "");
   b.addEventListener("click", () => { state.recal = recalFor(); analyse(); });
@@ -426,7 +426,9 @@ function flagNote() {
     (() => { const t = tableFrom({ columns: ["data", "α", "samples", "false Mismatch (correct label)", "Can't confirm (correct label)", "swapped labels flagged Mismatch", "swaps with ≥ 1 of the pair flagged"], rows }); t.classList.add("wrap-head"); return t; })(),
     el("p", {}, `${maxMiss === 0 ? "A swapped label is never called Consistent in these data" : `At most ${pct(maxMiss, 2)} of swapped labels are called Consistent in any row`}; the swaps that are not flagged Mismatch mostly get an empty set (Can't confirm), so they are still not confirmed. In another laboratory the price is more Can't confirm on correct labels; recalibrating on a few of your own labelled samples raises coverage (see the Transfer page).`),
     el("p", {}, `A real case: of the ${D.H.extras.venacv_vials} held-out MoTrPAC vena cava vials, the model calls ${nV} brown fat, and the consortium had flagged ${nFl} of those ${nV} as contaminated with brown fat. Checked with the claimed label “vena cava” at α = 0.10, ${nMis} are flagged Mismatch and ${nCc} Can't confirm${nMis + nCc === nV ? ": none is passed as consistent" : ""}.`),
-    el("p", { class: "small" }, "Source: results_product/40_product/flag_rates.csv and venacv_cases.csv (scripts/40_product_validation.py). MoTrPAC rows use the pipeline's held-out 20-gene models (panel re-selected in each animal-grouped fold, each fold's own calibration scores; results_frozen/31_site_regen/06_conformal/TRNSCRPT/scores_*.csv): the same method as the model on this page, not the identical fit. BodyMap rows use this page's model exactly. Provenance: pv_flag_*, pv_venacv_cases."),
+    (() => { const VA = D.PR.venacv_all, f = VA.flagged, u = VA.unflagged;
+      return el("p", {}, `The other direction: of all ${f.n_vials + u.n_vials} held-out vena cava vials, the consortium flagged ${f.n_vials}; the model calls ${f.n_called_bat} of those ${f.n_vials} brown fat and ${u.n_called_bat} of the ${u.n_vials} unflagged. Claimed as vena cava, ${f.n_consistent} of the ${f.n_vials} flagged vials passes as Consistent (${f.n_mismatch} Mismatch, ${f.n_cant_confirm} Can't confirm), and ${u.n_mismatch} of the ${u.n_vials} unflagged is flagged Mismatch (${u.n_consistent} Consistent, ${u.n_cant_confirm} Can't confirm).`); })(),
+    el("p", { class: "small" }, "Source: results_product/40_product/flag_rates.csv, venacv_cases.csv and venacv_summary.csv (scripts/40_product_validation.py). MoTrPAC rows use the pipeline's held-out 20-gene models (panel re-selected in each animal-grouped fold, each fold's own calibration scores; results_frozen/31_site_regen/06_conformal/TRNSCRPT/scores_*.csv): the same method as the model on this page, not the identical fit. BodyMap rows use this page's model exactly. Provenance: pv_flag_*, pv_venacv_cases."),
   );
 }
 
@@ -448,7 +450,7 @@ function reportHtml() {
 <p class="meta">Generated ${esc(when)} UTC from ${esc(state.source)} by https://corygardner.github.io/motrpac_challenge/ (Tissue Fingerprints, The Rat PAC). Model: the 20-gene transfer model (site/data/panel_model.json, generated ${esc(m._meta.generated)}, git ${esc(m._meta.git_hash)}). α = ${C.alpha.toFixed(2)}; ${esc(C.scaling.mode === "within" ? "within-set" : "MoTrPAC reference")} scaling (${esc(C.scaling.reason)})${state.recal && !state.recal.error ? `; threshold recalibrated on ${state.recal.n} labelled samples` : `; MoTrPAC calibration (${m.calibration.n_animals} animals)`}.</p>
 <p><b>${c.total}</b> samples; <b>${c.flagged}</b> flagged. Confident ${c.Confident}, ambiguous ${c.Ambiguous}, unknown ${c.Unknown}.${c.claimed ? ` Of ${c.claimed} claimed labels: consistent ${c.Consistent}, mismatch ${c.Mismatch}, can't confirm ${c["Can't confirm"]}, not in reference ${c["Not in reference"]}.` : ""}</p>
 ${flagged ? `<h2>Flagged samples</h2><ul>${flagged}</ul>` : ""}
-<h2>All samples</h2><table><thead><tr><th>sample</th><th>claimed</th><th>call</th><th>90 % set</th><th>status</th><th>claim</th><th>top p</th><th>runner-up</th></tr></thead><tbody>
+<h2>All samples</h2><table><thead><tr><th>sample</th><th>claimed</th><th>call</th><th>${esc(setLabel(C.alpha))}</th><th>status</th><th>claim</th><th>top p</th><th>runner-up</th></tr></thead><tbody>
 ${rows}
 </tbody></table>
 <p class="meta">Status: Confident = one tissue in the set; Ambiguous = several; Unknown = none. Claim: Consistent = the claimed tissue is in the set; Mismatch = the set is not empty and does not hold it; Can't confirm = empty set. The 90 % guarantee holds for samples like the MoTrPAC calibration animals; in another laboratory recalibrate on your own labelled samples. Rat model; ${m.classes.length} reference tissues.</p>

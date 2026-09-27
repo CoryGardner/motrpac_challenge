@@ -1,8 +1,12 @@
 {
- "generated": "2026-09-27 06:22 UTC",
- "git_hash": "35acb4c",
- "results_dir": "results",
- "results_snapshot": null,
+ "generated": "2026-09-27 18:31 UTC",
+ "git_hash": "14d8244",
+ "results_dir": "results_frozen",
+ "results_snapshot": {
+  "snapshot_date": "2026-09-26",
+  "frozen_from_commit": "7d4502a",
+  "n_files": 179
+ },
  "phases": {
   "03_eda": {
    "files": [
@@ -807,8 +811,13 @@
   },
   {
    "name": "headline.json",
-   "bytes": 53953,
+   "bytes": 53940,
    "regenerated": true
+  },
+  {
+   "name": "multiomic.json",
+   "bytes": 126786,
+   "regenerated": false
   },
   {
    "name": "nesting.json",
@@ -829,6 +838,11 @@
    "name": "panel_model.json",
    "bytes": 28194,
    "regenerated": true
+  },
+  {
+   "name": "product.json",
+   "bytes": 73766,
+   "regenerated": false
   },
   {
    "name": "provenance.json",

@@ -181,4 +181,39 @@ check(K.parseUpload("a,b\n1,2", model).error && K.parseUpload("a,b\n1,2", model)
   check(same.every((v, i) => i === 0 || same[i - 1] < v), "upload order kept within a priority group");
 }
 
+// ---- the explanation names only genes that matter; the example never recalibrates on its swapped labels ----------------
+{
+  const kid = res.results.find((r) => r.id === ex.swapped[1]);            // really kidney, claimed liver
+  check(kid.call === "KIDNEY" && kid.claimStatus === "Mismatch", "the swapped kidney is called kidney and flagged");
+  const other = kid.claim.classes[0];
+  const d = K.drivers(K.contrast(kid.z, model, kid.call, other).terms).map((t) => t.symbol);
+  check(d.join() === "Umod,Cfhr1", `the swapped kidney's drivers are exactly Umod and Cfhr1 (got ${d.join(", ")})`);
+  const sent = K.explainSentence(kid, model);
+  check(sent.includes("Umod (+") && sent.includes("Cfhr1 (") && !sent.includes("Trim29") && sent.includes(" sd)"), `the sentence names Umod and Cfhr1 in sd units only: ${sent}`);
+  for (const r of res.results) {
+    const ds = K.drivers(K.contrast(r.z, model, r.call, r.runnerUp).terms);
+    if (ds.length) check(ds.every((t) => t.diff >= Math.max(K.DRIVER_MIN, K.DRIVER_REL * ds[0].diff) - 1e-12), `driver floor (${r.id})`);
+  }
+  check(K.explainSentence({ ...kid, z: kid.z.map(() => 0) }, model).includes("no single gene dominates"), "no qualifying driver → no single gene dominates");
+  check(K.setLabel(0.1) === "90 % prediction set" && K.setLabel(0.2) === "80 % prediction set" && K.setLabel(0.05) === "95 % prediction set", "set label follows α");
+  for (const a of [0.05, 0.1, 0.2]) {
+    const base = K.runCheck(model, pe.samples, { alpha: a });
+    const lab = K.labelledForRecal(base.results, ex.swapped);
+    check(ex.swapped.every((id) => !(id in lab)), `α = ${a}: the swapped samples are left out of the recalibration`);
+    const rc = S.recalibrate(model, base.results, lab, a);
+    const after = K.runCheck(model, pe.samples, { alpha: a, q: rc.q });
+    for (const id of ex.swapped) check(after.results.find((r) => r.id === id).claimStatus === "Mismatch", `α = ${a}: ${id} stays Mismatch after recalibration (q = ${rc.q})`);
+  }
+}
+
+// ---- the scaling report describes the mode actually used -------------------------------------------------------------
+{
+  const fr = K.runCheck(model, pe.samples, { alpha: 0.1, scaling: "reference" }).scaling;
+  check(fr.mode === "reference" && fr.auto === "within" && fr.forced && fr.reason.includes("MoTrPAC reference") && !fr.reason.includes("within your") && fr.caveat === null, "forced reference: its own reason, the automatic choice reported");
+  const fw = K.runCheck(model, pe.samples.slice(0, 5), { alpha: 0.1, scaling: "within" }).scaling;
+  check(fw.mode === "within" && fw.auto === "reference" && fw.forced && fw.caveat && fw.reason.includes("within your"), "forced within on 5 samples: a caveat");
+  const au = K.runCheck(model, pe.samples, { alpha: 0.1 }).scaling;
+  check(!au.forced && au.caveat === null && au.mode === "within" && au.reason.includes("within your"), "automatic within: no caveat");
+}
+
 console.log(`ok: ${n} assertions (count → CPM max |Δ| ${maxD.toExponential(1)}, projection max |Δ| ${maxP.toExponential(1)}, ${res.results.length} example samples)`);

@@ -1,7 +1,7 @@
 {
 "_meta": {
-"generated": "2026-09-27 06:22 UTC",
-"git_hash": "35acb4c",
+"generated": "2026-09-27 18:31 UTC",
+"git_hash": "14d8244",
 "sources": [
 "results/03_eda/batch_partition_METAB.csv",
 "results/03_eda/batch_partition_PROT.csv",
@@ -131,8 +131,8 @@
 "document": "docs/NUMBERS_RECONCILIATION.md"
 },
 "multiomic": {
-"generated": "2026-09-27 17:25 UTC",
-"git_hash": "a484c7f",
+"generated": "2026-09-27 18:32 UTC",
+"git_hash": "14d8244",
 "n_entries": 244,
 "n_tables": 13,
 "sources": [
@@ -177,9 +177,9 @@
 ]
 },
 "product": {
-"generated": "2026-09-27 17:25 UTC",
-"git_hash": "a484c7f",
-"n_entries": 178,
+"generated": "2026-09-27 18:32 UTC",
+"git_hash": "14d8244",
+"n_entries": 188,
 "n_tables": 5,
 "sources": [
 "results_frozen/12_bodymap/ood_sets.csv",
@@ -190,7 +190,8 @@
 "results_product/40_product/pca_summary.csv",
 "results_product/40_product/recal_draws_summary.csv",
 "results_product/40_product/scaling.csv",
-"results_product/40_product/venacv_cases.csv"
+"results_product/40_product/venacv_cases.csv",
+"results_product/40_product/venacv_summary.csv"
 ]
 }
 },
@@ -10609,6 +10610,116 @@
 "alpha": 0.2
 },
 "column": "n_swaps",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_venacv_flagged_n_vials",
+"value": 10,
+"file": "results_product/40_product/venacv_summary.csv",
+"where": {
+"consortium_flagged": true
+},
+"column": "n_vials",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_venacv_flagged_n_called_bat",
+"value": 7,
+"file": "results_product/40_product/venacv_summary.csv",
+"where": {
+"consortium_flagged": true
+},
+"column": "n_called_bat",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_venacv_flagged_n_consistent",
+"value": 1,
+"file": "results_product/40_product/venacv_summary.csv",
+"where": {
+"consortium_flagged": true
+},
+"column": "n_consistent",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_venacv_flagged_n_mismatch",
+"value": 4,
+"file": "results_product/40_product/venacv_summary.csv",
+"where": {
+"consortium_flagged": true
+},
+"column": "n_mismatch",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_venacv_flagged_n_cant_confirm",
+"value": 5,
+"file": "results_product/40_product/venacv_summary.csv",
+"where": {
+"consortium_flagged": true
+},
+"column": "n_cant_confirm",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_venacv_unflagged_n_vials",
+"value": 40,
+"file": "results_product/40_product/venacv_summary.csv",
+"where": {
+"consortium_flagged": false
+},
+"column": "n_vials",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_venacv_unflagged_n_called_bat",
+"value": 0,
+"file": "results_product/40_product/venacv_summary.csv",
+"where": {
+"consortium_flagged": false
+},
+"column": "n_called_bat",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_venacv_unflagged_n_consistent",
+"value": 34,
+"file": "results_product/40_product/venacv_summary.csv",
+"where": {
+"consortium_flagged": false
+},
+"column": "n_consistent",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_venacv_unflagged_n_mismatch",
+"value": 0,
+"file": "results_product/40_product/venacv_summary.csv",
+"where": {
+"consortium_flagged": false
+},
+"column": "n_mismatch",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_venacv_unflagged_n_cant_confirm",
+"value": 6,
+"file": "results_product/40_product/venacv_summary.csv",
+"where": {
+"consortium_flagged": false
+},
+"column": "n_cant_confirm",
 "agg": "value",
 "tol": 1e-09
 },

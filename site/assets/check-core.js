@@ -261,6 +261,22 @@ export function chooseScaling(nSamples, nClaimedTissues, nPredictedTissues) {
                       : `${nSamples} sample${nSamples === 1 ? "" : "s"} spanning ${tissues} tissue${tissues === 1 ? "" : "s"} (within-set scaling needs ≥ ${WITHIN_MIN_SAMPLES} samples and ≥ ${WITHIN_MIN_TISSUES} tissues): genes z-scored with the MoTrPAC reference means and scales` };
 }
 
+/** The scaling actually used, with a reason that describes it, and what the automatic rule would have chosen.
+ *  { mode, auto, forced, reason, autoReason, caveat } — caveat is set when within-set scaling is forced on a set too
+ *  small or too uniform for it. */
+export function scalingReport(auto, mode) {
+  const n = auto.nSamples, t = auto.tissues;
+  const nS = `${n} sample${n === 1 ? "" : "s"} spanning ${t} tissue${t === 1 ? "" : "s"}`;
+  const reason = mode === "within"
+    ? `genes z-scored within your ${nS}, as the pipeline does for a new mixed dataset`
+    : `genes z-scored with the MoTrPAC reference means and scales (${nS})`;
+  const forced = mode !== auto.mode;
+  const caveat = forced && mode === "within"
+    ? `within-set scaling needs at least ${WITHIN_MIN_SAMPLES} samples spanning at least ${WITHIN_MIN_TISSUES} tissues; on a smaller or more uniform set it erases the differences the model reads (on BodyMap, scaling each organ alone named almost no organ correctly)`
+    : null;
+  return { ...auto, mode, auto: auto.mode, forced, reason, autoReason: auto.reason, caveat };
+}
+
 /** Sample status from the prediction set: Confident (1 class), Ambiguous (≥ 2), Unknown (empty). */
 export function sampleStatus(setSize) {
   return setSize === 0 ? "Unknown" : setSize === 1 ? "Confident" : "Ambiguous";
@@ -313,18 +329,42 @@ export function contrast(z, model, a, b) {
 }
 
 /** One plain-language sentence naming the genes that drive the call (and, with a claim, why not the claim). */
+/** "90 % prediction set" at α = 0.10: every label of the sets derives from α. */
+export function setLabel(alpha) {
+  return `${Math.round(100 * (1 - alpha))} % prediction set`;
+}
+
+/** A gene is named as a driver only if its contribution to "why X, not Y" is at least max(DRIVER_MIN, DRIVER_REL × the
+ *  largest); written as the chart writes it, "Umod (+2.9 sd)". */
+export const DRIVER_MIN = 0.1, DRIVER_REL = 0.1;
+export function drivers(terms, key = "diff", n = 3) {
+  const pos = [...terms].filter((t) => t[key] > 0).sort((x, y) => y[key] - x[key]);
+  if (!pos.length) return [];
+  const floor = Math.max(DRIVER_MIN, DRIVER_REL * pos[0][key]);
+  return pos.filter((t) => t[key] >= floor).slice(0, n);
+}
+export const sdLabel = (t) => `${t.symbol} (${t.z >= 0 ? "+" : ""}${t.z.toFixed(1)} sd)`;
+
+/** One plain-language sentence naming the genes that drive the call (and, with a claim, why not the claim). */
 export function explainSentence(r, model, names = CLASS_NAMES) {
   const nm = (c) => names[c] || c;
-  const top = (terms, key, n = 3) => [...terms].sort((x, y) => y[key] - x[key]).filter((t) => t[key] > 0).slice(0, n);
-  const hl = (t) => `${t.symbol} (${t.z >= 0 ? "high" : "low"})`;
   const list = (xs) => (xs.length > 1 ? `${xs.slice(0, -1).join(", ")} and ${xs[xs.length - 1]}` : xs.join(""));
   const other = r.claim && r.claim.classes.length && !r.claim.classes.includes(r.call) ? r.claim.classes[0] : r.runnerUp;
   const ct = contrast(r.z, model, r.call, other);
-  const drivers = top(ct.terms, "diff");
+  const d = drivers(ct.terms);
   const base = `Called ${nm(r.call)} (p = ${r.callProb.toFixed(2)})`;
-  const why = drivers.length ? ` mainly because of ${list(drivers.map(hl))}, which favour ${nm(r.call)} over ${nm(other)}` : "";
-  const setTxt = r.set.length === 0 ? "; no tissue reaches the calibrated threshold, so the set is empty" : r.set.length > 1 ? `; the 90 % set keeps ${list(r.set.map(nm))}` : "";
+  const why = d.length ? ` mainly because of ${list(d.map(sdLabel))}, which favour${d.length === 1 ? "s" : ""} ${nm(r.call)} over ${nm(other)}` : `; no single gene dominates the call over ${nm(other)}`;
+  const lab = setLabel(r.alpha ?? model.alpha_default ?? 0.1);
+  const setTxt = r.set.length === 0 ? `; no tissue reaches the calibrated threshold, so the ${lab} is empty` : r.set.length > 1 ? `; the ${lab} keeps ${list(r.set.map(nm))}` : "";
   return `${base}${why}${setTxt}.`;
+}
+
+/** The samples a recalibration may use: a claim naming exactly one reference tissue, minus `exclude` (the example's
+ *  deliberately swapped samples, whose labels are wrong on purpose). Returns { id: class }. */
+export function labelledForRecal(results, exclude = []) {
+  const skip = new Set(exclude), m = {};
+  for (const r of results) if (!skip.has(r.id) && r.claim && r.claim.kind === "class") m[r.id] = r.claim.classes[0];
+  return m;
 }
 
 // ---- reference map -----------------------------------------------------------------------------------------------------
@@ -371,7 +411,7 @@ export function runCheck(model, samples, opts = {}) {
     const r = opts.q !== undefined && opts.q !== null ? { set: p.map((v) => v >= 1 - opts.q), q: opts.q } : setsFor(cal, p, "marginal", alpha);
     const set = model.classes.filter((_, k) => r.set[k]);
     const order = p.map((v, k) => [v, k]).sort((a, b) => b[0] - a[0]);
-    const res = { id: samples[i].id, label: samples[i].label, claim: claims[i], z: Z[i], p, q: r.q, threshold: 1 - r.q,
+    const res = { id: samples[i].id, label: samples[i].label, claim: claims[i], z: Z[i], p, q: r.q, threshold: 1 - r.q, alpha,
                   call: model.classes[order[0][1]], callProb: order[0][0], runnerUp: model.classes[order[1][1]], runnerUpProb: order[1][0],
                   set, setSize: set.length, missingGenes: model.genes.filter((g, j) => X[i][j] === null).map((g) => g.symbol) };
     res.status = sampleStatus(set.length);
@@ -381,7 +421,7 @@ export function runCheck(model, samples, opts = {}) {
   });
   const counts = { total: results.length, Confident: 0, Ambiguous: 0, Unknown: 0, Consistent: 0, Mismatch: 0, "Can't confirm": 0, "Not in reference": 0, flagged: 0, claimed: 0 };
   for (const r of results) { counts[r.status] += 1; if (r.claimStatus) { counts[r.claimStatus] += 1; counts.claimed += 1; } if (r.flagged) counts.flagged += 1; }
-  return { scaling: { ...auto, mode, forced: mode !== auto.mode }, alpha, q: results[0]?.q, results, counts };
+  return { scaling: scalingReport(auto, mode), alpha, q: results[0]?.q, results, counts };
 }
 
 // ---- CSV ---------------------------------------------------------------------------------------------------------------
@@ -394,7 +434,7 @@ export function csvCell(v) {
 }
 
 export function resultsToCsv(check, model) {
-  const head = ["sample", "claimed", "claimed_classes", "call", "p_call", "runner_up", "p_runner_up", "set_90", "set_size", "status", "claim_status", "flagged", "alpha", "threshold", "scaling", ...model.classes.map((c) => `p_${c}`)];
+  const head = ["sample", "claimed", "claimed_classes", "call", "p_call", "runner_up", "p_runner_up", "set", "set_size", "status", "claim_status", "flagged", "alpha", "threshold", "scaling", ...model.classes.map((c) => `p_${c}`)];
   const lines = check.results.map((r) => [r.id, r.label ?? "", r.claim.classes.join(";"), r.call, r.callProb.toFixed(4), r.runnerUp, r.runnerUpProb.toFixed(4), r.set.join(";"), r.setSize, r.status, r.claimStatus ?? "", r.flagged ? "yes" : "no", check.alpha, Number.isFinite(r.threshold) ? r.threshold.toFixed(4) : "-inf", check.scaling.mode, ...r.p.map((v) => v.toFixed(5))].map(csvCell).join(","));
   return [head.join(","), ...lines].join("\n") + "\n";
 }
