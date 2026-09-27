@@ -137,3 +137,11 @@ donors, with an exact animal-level interval where the bootstrap is degenerate (B
 lower bound 0.63). Removed as not challenge-relevant: the Beyond page, the training-vs-batch verdict section, the
 fusion / discordance / batch-verdict / inventory exports, and every reference to parallel phases or "this copy".
 51 tests, all anchors, clean render pass.
+
+## 2026-09-27 01:15–01:30 — published
+Repository https://github.com/CoryGardner/motrpac_challenge (public); site https://corygardner.github.io/motrpac_challenge/,
+published from `main` by `.github/workflows/pages.yml`. Pages was first served from a temporary `gh-pages` branch (the token
+lacked the `workflow` scope; the SSH key was passphrase-locked until unlocked); the environment `github-pages` that GitHub
+created then only allowed that branch, so the first two workflow deployments were rejected ("Branch main is not allowed to
+deploy"); the branch policy was removed, the workflow deployed, and `gh-pages` was deleted. Tags `hackathon-submission-v1`
+and `-v2` are pushed. CI (`tests.yml`: pytest without data, JS fixture test, link check) passes on GitHub.
