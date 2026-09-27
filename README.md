@@ -12,7 +12,8 @@ with the panel does not travel: calibrated on MoTrPAC it covers 0.618 of the Bod
 samples, failing by *abstaining* (empty sets) rather than by confident mistakes; three target animals repair it within
 species at one tissue per set, three donors do not repair it across species (11.7 tissues per set). And within a single
 multi-tissue study the tissue axis cannot be separated from processing: each tissue sits entirely inside one RNA
-extraction plate, one library batch and one flowcell (1 of 171 tissue pairs shares all three, and it is the sex contrast),
+extraction plate, one library batch and one flowcell (1 of 171 tissue pairs, ovary and testes, shares all three, and it is
+also the sex contrast),
 so library QC numbers alone classify tissue at 0.975 (0.873 from purely technical ones). Within-study accuracy is
 therefore not evidence that the signature is biology; the transfer to an independently processed cohort is, and where
 batch could be measured directly, on a reference RNA pool run on six plates at both sites, it was about 1.6 % of the
@@ -48,7 +49,7 @@ All numbers below are read from `results/` by `scripts/30_export_site_data.py`; 
 | BodyMap recalibrated on 3 animals: coverage at set size | 0.943 at 1.00 | `results/12_bodymap/recalibration.csv` |
 | GTEx (human): accuracy k20 / k50 / full | 0.654 / 0.781 / 0.855 | `results/13_gtex/accuracy_overall.csv` |
 | GTEx coverage k20 / empty; recalibrated on 3 donors: coverage at set size | 0.364 / 0.616; 0.954 at 11.70 | `results/13_gtex/` |
-| Estimable tissue pairs within study (RNA-seq) | 1 of 171 | `results/16_identifiability/estimable_pairs.csv` |
+| Estimable tissue pairs within study (RNA-seq) | 1 of 171 (ovary and testes) | `results/16_identifiability/estimable_pairs.csv` |
 | QC covariates alone: technical / composition / all | 0.873 / 0.949 / 0.975 | `results/16_identifiability/qc_only_summary.csv` |
 
 `figures/summary_figure.png` is the three-panel composite for slides (transfer ladder · stable core · identifiability).

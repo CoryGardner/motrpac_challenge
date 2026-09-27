@@ -565,7 +565,9 @@ def export_headline(w: Writer, prov: Prov, rec: pd.DataFrame | None):
         {"id": "tile_estimable", "value": P.val("tile_estimable", "16_identifiability/estimable_pairs.csv", "n_pairs_estimable", where={"assay": "TRNSCRPT"}),
          "total": P.val("tile_estimable_total", "16_identifiability/estimable_pairs.csv", "n_pairs_total", where={"assay": "TRNSCRPT"}),
          "pairs": P.val("tile_estimable_pairs", "16_identifiability/estimable_pairs.csv", "estimable_pairs", where={"assay": "TRNSCRPT"}),
-         "label": "tissue pairs whose contrast exists inside one processing batch", "sub": "RNA-seq: extraction plate, library batch and flowcell; the one pair is ovary vs testes, the sex contrast", "format": "of",
+         "pair_text": " and ".join(t.lower() for t in str(P.val("tile_estimable_pairs_text", "16_identifiability/estimable_pairs.csv", "estimable_pairs", where={"assay": "TRNSCRPT"})).split("|")),
+         "label": "tissue pairs whose contrast exists inside one processing batch (" + " and ".join(t.lower() for t in str(P.entries[-1]["value"]).split("|")) + ")",
+         "sub": "RNA-seq: extraction plate, library batch and flowcell; the one estimable pair is also the sex contrast", "format": "of",
          "source": "results/16_identifiability/estimable_pairs.csv (TRNSCRPT)"},
     ]
     # in-distribution accuracy per model
@@ -1220,7 +1222,7 @@ def readme_table(prov_entries: list[dict]) -> str:
         ("BodyMap recalibrated on 3 animals: coverage at set size", f"{f('recal3_bodymap_k20')} at {f('recal3size_bodymap_k20', 2)}", "results/12_bodymap/recalibration.csv"),
         ("GTEx (human): accuracy k20 / k50 / full", f"{f('acc_gtex_k20')} / {f('acc_gtex_k50')} / {f('acc_gtex_full')}", "results/13_gtex/accuracy_overall.csv"),
         ("GTEx coverage k20 / empty; recalibrated on 3 donors: coverage at set size", f"{f('cov_gtex_k20_marginal')} / {f('empty_gtex_k20_marginal')}; {f('recal3_gtex_k20')} at {f('recal3size_gtex_k20', 2)}", "results/13_gtex/"),
-        ("Estimable tissue pairs within study (RNA-seq)", f"{f('tile_estimable')} of {f('tile_estimable_total')}", "results/16_identifiability/estimable_pairs.csv"),
+        ("Estimable tissue pairs within study (RNA-seq)", f"{f('tile_estimable')} of {f('tile_estimable_total')} ({' and '.join(t.lower() for t in str(byid.get('tile_estimable_pairs', '')).split('|'))})", "results/16_identifiability/estimable_pairs.csv"),
         ("QC covariates alone: technical / composition / all", f"{f('qc_technical')} / {f('qc_composition')} / {f('qc_all')}", "results/16_identifiability/qc_only_summary.csv"),
     ]
     return "\n".join(["| result | value | source |", "|---|---|---|"] + [f"| {a} | {b} | `{c}` |" for a, b, c in rows])
@@ -1241,7 +1243,7 @@ def abstract(prov_entries: list[dict]) -> str:
         f"species ({g('recal3_bodymap_k20')} at {g('recal3size_bodymap_k20', 2)} tissues per set); three donors do not across species "
         f"({g('recal3_gtex_k20')} at {g('recal3size_gtex_k20', 1)} tissues per set). Within one multi-tissue study the tissue axis is "
         f"confounded with processing: each tissue sits inside one extraction plate, library batch and flowcell, only {g('tile_estimable')} of "
-        f"{g('tile_estimable_total')} tissue pairs shares all three, and library QC numbers alone classify tissue at {g('qc_all')} "
+        f"{g('tile_estimable_total')} tissue pairs ({' and '.join(t.lower() for t in str(byid.get('tile_estimable_pairs', '')).split('|'))}) shares all three, and library QC numbers alone classify tissue at {g('qc_all')} "
         f"({g('qc_technical')} from purely technical ones). Within-study accuracy is therefore not evidence of biology; transfer to an "
         f"independently processed cohort is."
     )

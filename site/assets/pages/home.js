@@ -93,7 +93,7 @@ async function main() {
   const qc = Object.fromEntries(Q.summary.map((r) => [r.features, r]));
   document.getElementById("p-identifiability").replaceChildren(
     `Each tissue sits entirely inside one RNA extraction plate, one library batch and one flowcell: ${ex.n_plates} plates and ${ex.n_lib_batches} library batches holding at most ${Math.max(nest.RNA_extr_plate_ID.max_tissues_per_level, nest.Lib_batch_ID.max_tissues_per_level)} tissues each, ${ex.n_flowcells} flowcells holding up to ${nest.Seq_flowcell_ID.max_tissues_per_level}. `,
-    `Only ${est.n_pairs_estimable} of ${est.n_pairs_total} tissue pairs share a level of all three (${est.estimable_pairs.replace("|", " vs ").toLowerCase()}, which is also the sex contrast). `,
+    `Only ${est.n_pairs_estimable} of ${est.n_pairs_total} tissue pairs share a level of all three (${est.estimable_pairs.replace("|", " and ").toLowerCase()}, which is also the sex contrast). `,
     `Library QC numbers alone, with no gene, classify the tissue at ${fmt(qc.all.acc_mean)} ± ${fmt(qc.all.acc_sd)} (technical numbers ${fmt(qc.technical.acc_mean)}, composition fractions ${fmt(qc.composition.acc_mean)}). `,
     "So within-study accuracy is not evidence that the signature is biology. The evidence is external: the panel transfers to a laboratory where none of these batches exist. ",
     ...(typeof ex.bridge_sum_ratio_all_genes_pool99 === "number"
@@ -101,11 +101,11 @@ async function main() {
       : []),
   );
   await figure(document.getElementById("fig-nesting"), {
-    title: `${est.n_pairs_estimable} tissue pair${est.n_pairs_estimable === 1 ? "" : "s"} in ${est.n_pairs_total} can be contrasted inside a processing batch`,
+    title: `${est.n_pairs_estimable} tissue pair${est.n_pairs_estimable === 1 ? "" : "s"} in ${est.n_pairs_total} can be contrasted inside a processing batch (${est.estimable_pairs.split(";").map((p) => p.split("|").map((t) => t.toLowerCase()).join(" and ")).join("; ")})`,
     subtitle: `Number of the ${est.n_pairs_total} RNA-seq tissue pairs that share at least one level of each processing variable, and the pairs sharing a level of all three.`,
     build: () => {
       const vars = [["RNA_extr_plate_ID", "RNA extraction plate"], ["Lib_batch_ID", "library batch"], ["Seq_flowcell_ID", "flowcell"]];
-      const y = [...vars.map(([, l]) => l), "all three (estimable)"];
+      const y = [...vars.map(([, l]) => l), `all three (estimable: ${est.estimable_pairs.split(";").map((p) => p.split("|").map((t) => t.toLowerCase()).join(" and ")).join("; ")})`];
       const x = [...vars.map(([v]) => nest[v].n_pairs_sharing_level), est.n_pairs_estimable];
       return {
         traces: [bar(x, y, { horizontal: true, name: "tissue pairs sharing a level", slot: 1, text: x.map((v) => `${v} of ${est.n_pairs_total}`), textposition: "outside", hover: "%{y}: %{x} of " + est.n_pairs_total + " pairs<extra></extra>" })],

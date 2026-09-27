@@ -1,7 +1,7 @@
 {
 "_meta": {
-"generated": "2026-09-27 01:12 UTC",
-"git_hash": "33b3733",
+"generated": "2026-09-27 01:29 UTC",
+"git_hash": "69e92de",
 "sources": [
 "results/03_eda/batch_partition_METAB.csv",
 "results/03_eda/batch_partition_PROT.csv",
@@ -567,6 +567,17 @@
 },
 {
 "id": "tile_estimable_pairs",
+"value": "OVARY|TESTES",
+"file": "results/16_identifiability/estimable_pairs.csv",
+"where": {
+"assay": "TRNSCRPT"
+},
+"column": "estimable_pairs",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "tile_estimable_pairs_text",
 "value": "OVARY|TESTES",
 "file": "results/16_identifiability/estimable_pairs.csv",
 "where": {

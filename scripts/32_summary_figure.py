@@ -94,7 +94,8 @@ def main():
     for s in ("top", "right", "left", "bottom"):
         ax.spines[s].set_visible(False)
     est = next(r for r in N["estimable_pairs"] if r["assay"] == "TRNSCRPT")
-    ax.set_title(f"c  Batch is nested in tissue: {est['n_pairs_estimable']} of {est['n_pairs_total']} RNA-seq tissue pairs\n    share a plate, library batch and flowcell", loc="left", fontsize=9.5)
+    pair = " and ".join(t.lower() for t in est["estimable_pairs"].split("|"))
+    ax.set_title(f"c  Batch is nested in tissue: {est['n_pairs_estimable']} of {est['n_pairs_total']} RNA-seq tissue pairs\n    ({pair}) share a plate, library batch and flowcell", loc="left", fontsize=9.5)
     fig.text(0.01, 0.01, "Sources: results/05_panels, 06_conformal, 08_shift, 12_bodymap, 13_gtex, 16_identifiability via site/data/*.json (provenance in site/data/provenance.json)", fontsize=7, color=T["muted"])
     OUT.parent.mkdir(exist_ok=True)
     fig.savefig(OUT, dpi=300, bbox_inches="tight", facecolor=T["page"])
