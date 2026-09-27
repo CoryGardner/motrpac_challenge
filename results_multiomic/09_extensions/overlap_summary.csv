@@ -1,0 +1,2 @@
+n_rna_candidates,n_rna_k20,n_protein_candidates,n_protein_k20,n_protein_stable_core_ge_0.8,k20_intersection,rna_k20_x_protein_core,genes_in_both_candidate_lists,genes_in_both_with_rna_marker_in_prot7,n_markers_agree,frac_markers_agree,prereg_B1_threshold,prereg_B1_pass,genes_in_both
+51,20,35,20,16,0,0,0,0,0,,0.7,False,

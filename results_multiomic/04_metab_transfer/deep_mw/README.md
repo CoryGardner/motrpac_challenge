@@ -1,6 +1,6 @@
 # Phase 4 — metabolite transfer, deep_mw
 
-Built by `scripts/multiomic/04_metab_transfer.py` on 2026-09-27 07:41 UTC; numbers from the CSVs here.
+Built by `scripts/multiomic/04_metab_transfer.py` on 2026-09-27 09:11 UTC; numbers from the CSVs here.
 
 - Source `deep`: 451 vials, 54 animals, 9 tissues, 340 RefMet-named metabolites present in every tissue (`../source_deep_tissues.csv`).
 - Target `mw`: 840 samples, 70 individuals, 12 tissues, 190 RefMet keys; matched 44 (`feature_overlap.csv`).

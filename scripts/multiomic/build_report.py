@@ -185,6 +185,11 @@ def main():
     else:
         out += ["_None yet._"]
     out.append("")
+    # run 2: verification and the two extensions, written by their scripts from their CSVs
+    for sub, title in (("08_verification", "Verification (run 2, part A)"), ("09_extensions", "What B found (run 2, part B)")):
+        p = R / sub / "REPORT_SECTION.md"
+        if p.exists():
+            out += [f"## {title}", "", p.read_text().rstrip(), ""]
     for ph, title in PHASES:
         out += [f"## {title}", ""]
         st = status(ph)
@@ -201,7 +206,8 @@ def main():
     # Phase 7 synthesis sections (written by scripts/multiomic/07_synthesis.py from the CSVs)
     syn = R / "07_synthesis"
     for fn, title in (("submission_changes.md", "What this changes in the submission, if anything"), ("for_the_talk.md", "For the talk"),
-                      ("not_done.md", "Not done / not possible"), ("site_draft_multiomic.md", "Draft for site/_drafts/multiomic.html (Markdown only; the site is untouched)")):
+                      ("not_done.md", "Not done / not possible"), ("merge_checklist.md", "Merge checklist"),
+                      ("site_draft_multiomic.md", "Site page (run 2 built it as site/multiomic.html; this is the run-1 draft it grew from)")):
         p = syn / fn
         if p.exists():
             out += [f"## {title}", "", p.read_text().rstrip(), ""]

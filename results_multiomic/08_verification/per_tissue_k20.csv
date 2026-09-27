@@ -1,0 +1,33 @@
+run,layer,jiang_tissue,rat_class,n_samples,n_donors,accuracy,top_prediction,note
+jiang_relative_k20,protein,Brain - Cortex,CORTEX,2,2,1.0,CORTEX,
+jiang_relative_k20,protein,Heart - Atrial Appendage,HEART,11,11,0.0,KIDNEY,
+jiang_relative_k20,protein,Heart - Left Ventricle,HEART,7,7,0.0,KIDNEY,
+jiang_relative_k20,protein,Liver,LIVER,5,5,0.8,LIVER,
+jiang_relative_k20,protein,Lung,LUNG,8,8,0.875,LUNG,
+jiang_relative_k20,protein,Muscle - Skeletal,SKM-GN,11,11,0.6363636363636364,SKM-GN,
+jiang_rawppm_k20,protein,Brain - Cortex,CORTEX,4,2,1.0,CORTEX,technical replicates kept as samples
+jiang_rawppm_k20,protein,Heart - Atrial Appendage,HEART,23,11,0.3478260869565217,KIDNEY,technical replicates kept as samples
+jiang_rawppm_k20,protein,Heart - Left Ventricle,HEART,15,7,0.7333333333333333,HEART,technical replicates kept as samples
+jiang_rawppm_k20,protein,Liver,LIVER,11,5,0.8181818181818182,LIVER,technical replicates kept as samples
+jiang_rawppm_k20,protein,Lung,LUNG,17,8,0.8823529411764706,LUNG,technical replicates kept as samples
+jiang_rawppm_k20,protein,Muscle - Skeletal,SKM-GN,24,11,0.9166666666666666,SKM-GN,technical replicates kept as samples
+same42_RNA_k20,RNA,Brain - Cortex,CORTEX,2,2,1.0,CORTEX,7-class fingerprint on the 42 Jiang samples with both layers (Phase 5)
+same42_RNA_k20,RNA,Heart - Atrial Appendage;Heart - Left Ventricle,HEART,17,11,1.0,HEART,7-class fingerprint on the 42 Jiang samples with both layers (Phase 5)
+same42_RNA_k20,RNA,Liver,LIVER,5,5,1.0,LIVER,7-class fingerprint on the 42 Jiang samples with both layers (Phase 5)
+same42_RNA_k20,RNA,Lung,LUNG,8,8,1.0,LUNG,7-class fingerprint on the 42 Jiang samples with both layers (Phase 5)
+same42_RNA_k20,RNA,Muscle - Skeletal,SKM-GN,10,10,1.0,SKM-GN,7-class fingerprint on the 42 Jiang samples with both layers (Phase 5)
+same42_protein_k20,protein,Brain - Cortex,CORTEX,2,2,1.0,CORTEX,7-class fingerprint on the 42 Jiang samples with both layers (Phase 5)
+same42_protein_k20,protein,Heart - Atrial Appendage;Heart - Left Ventricle,HEART,17,11,0.0,KIDNEY,7-class fingerprint on the 42 Jiang samples with both layers (Phase 5)
+same42_protein_k20,protein,Liver,LIVER,5,5,0.8,LIVER,7-class fingerprint on the 42 Jiang samples with both layers (Phase 5)
+same42_protein_k20,protein,Lung,LUNG,8,8,0.875,LUNG,7-class fingerprint on the 42 Jiang samples with both layers (Phase 5)
+same42_protein_k20,protein,Muscle - Skeletal,SKM-GN,10,10,0.7,SKM-GN,7-class fingerprint on the 42 Jiang samples with both layers (Phase 5)
+same42_late_mean_k20,late_mean,Brain - Cortex,CORTEX,2,2,1.0,CORTEX,7-class fingerprint on the 42 Jiang samples with both layers (Phase 5)
+same42_late_mean_k20,late_mean,Heart - Atrial Appendage;Heart - Left Ventricle,HEART,17,11,0.3529411764705882,KIDNEY,7-class fingerprint on the 42 Jiang samples with both layers (Phase 5)
+same42_late_mean_k20,late_mean,Liver,LIVER,5,5,1.0,LIVER,7-class fingerprint on the 42 Jiang samples with both layers (Phase 5)
+same42_late_mean_k20,late_mean,Lung,LUNG,8,8,1.0,LUNG,7-class fingerprint on the 42 Jiang samples with both layers (Phase 5)
+same42_late_mean_k20,late_mean,Muscle - Skeletal,SKM-GN,10,10,1.0,SKM-GN,7-class fingerprint on the 42 Jiang samples with both layers (Phase 5)
+same42_stacked_LR_k20,stacked_LR,Brain - Cortex,CORTEX,2,2,1.0,CORTEX,7-class fingerprint on the 42 Jiang samples with both layers (Phase 5)
+same42_stacked_LR_k20,stacked_LR,Heart - Atrial Appendage;Heart - Left Ventricle,HEART,17,11,0.3529411764705882,KIDNEY,7-class fingerprint on the 42 Jiang samples with both layers (Phase 5)
+same42_stacked_LR_k20,stacked_LR,Liver,LIVER,5,5,1.0,LIVER,7-class fingerprint on the 42 Jiang samples with both layers (Phase 5)
+same42_stacked_LR_k20,stacked_LR,Lung,LUNG,8,8,1.0,LUNG,7-class fingerprint on the 42 Jiang samples with both layers (Phase 5)
+same42_stacked_LR_k20,stacked_LR,Muscle - Skeletal,SKM-GN,10,10,1.0,SKM-GN,7-class fingerprint on the 42 Jiang samples with both layers (Phase 5)

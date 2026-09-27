@@ -1,6 +1,6 @@
 # Phase 4 — metabolite transfer, hilic_sato
 
-Built by `scripts/multiomic/04_metab_transfer.py` on 2026-09-27 07:41 UTC; numbers from the CSVs here.
+Built by `scripts/multiomic/04_metab_transfer.py` on 2026-09-27 09:11 UTC; numbers from the CSVs here.
 
 - Source `hilic`: 876 vials, 54 animals, 19 tissues, 129 RefMet-named metabolites present in every tissue (`../source_hilic_tissues.csv`).
 - Target `sato`: 191 samples, 24 individuals, 8 tissues, 237 RefMet keys; matched 58 (`feature_overlap.csv`).

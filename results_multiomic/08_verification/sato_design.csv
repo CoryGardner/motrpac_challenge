@@ -1,0 +1,9 @@
+tissue,n_samples,n_mice,n_sedentary_mice,n_exercised_mice,n_sedentary_samples,n_exercised_samples,time_after_exercise_h,zeitgeber_time_points
+BAT,24,24,12,12,12,12,0,4;16
+eWAT,24,24,12,12,12,12,0,4;16
+HEART,24,24,12,12,12,12,0,4;16
+HYPOTHALAMUS,24,24,12,12,12,12,0,4;16
+iWAT,23,23,12,11,12,11,0,4;16
+LIVER,24,24,12,12,12,12,0,4;16
+MUSCLE,24,24,12,12,12,12,,4;16
+SERUM,24,24,12,12,12,12,0,4;16

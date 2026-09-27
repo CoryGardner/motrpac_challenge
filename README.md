@@ -232,6 +232,16 @@ Known failure modes and limits (details on the site's Limitations page):
   the time-course investigations, the frozen replication notebooks); not covered by the tests.
 - **Roadmap:** rerun on portal release c2.0 (rn7); a cross-tissue proteomics fingerprint; MoTrPAC human tissues when
   released; exercise-response panels under the same rules; further independently processed rat cohorts.
+- **Follow-up on the branch `multiomic-overnight` (not merged; a human decision):** the proteome and metabolome carry the
+  fingerprint too, on the right scale. On the portal's reporter-ion intensities tissue explains R² 0.991 of PC1 against
+  0.0009 on the distributed ratios (`results_multiomic/01_rii/variance_partition.csv`, `variance_partition_ratio.csv`); a
+  20-protein panel selected there names the tissue of 0.455 of 44 human TMT samples from 13 GTEx donors (donor-bootstrap
+  95 % CI 0.36–0.55; 0.734 of 94 samples when both sides are processed the same way; `results_multiomic/03_prot_transfer/
+  accuracy_overall.csv`, `rawppm/accuracy_overall.csv`), with coverage 0.068 under MoTrPAC calibration and 0.917 after
+  recalibrating on five donors at 2.95 of 7 classes per set (`recalibration.csv`); and in Jiang 2020's TMT design 424 of
+  528 tissue pairs share a run (`results_multiomic/06_external_identifiability/design_comparison.csv`), the counterexample
+  the audit lacked. Page: `site/multiomic.html`; report: `docs/MULTIOMIC_REPORT.md`; pre-registration:
+  `docs/PREREGISTRATION_MULTIOMIC.md`. Within-study numbers there are context (plex is nested in tissue on that scale too).
 - **History:** `CHANGELOG.md`.
 
 ## Example runs

@@ -16,7 +16,10 @@ RES = C.results_root()          # results/ when a complete run is present, else 
 
 
 def _res(file: str) -> Path:
-    """A canonical provenance path (results/...) resolved against the results root in use."""
+    """A canonical provenance path (results/...) resolved against the results root in use; paths under
+    results_multiomic/ or results_frozen/ (the multiomic follow-up page) are repository-relative."""
+    if file.startswith("results_multiomic/") or file.startswith("results_frozen/"):
+        return ROOT / file
     return RES / Path(file).relative_to("results")
 
 # Without results/ (CI) there is nothing to check against; with results/ present, a missing export is a failure.
@@ -329,3 +332,77 @@ def test_exercise_covariate_scalars_use_the_logistic_rows():
     for k, e in prov.items():
         if k.startswith("cov_") and k.endswith(("_logreg", "_null95", "_p")):
             assert e["where"].get("model") == "logreg", (k, e["where"])
+
+
+# ---- the multiomic follow-up page (branch multiomic-overnight) --------------------------------------------------------
+MO = SITE / "multiomic.json"
+
+
+@pytest.mark.skipif(not MO.exists(), reason="site/data/multiomic.json absent")
+def test_multiomic_numbers_match_their_csvs():
+    """Every mo_* provenance entry reproduces from the results_multiomic/ or results_frozen/ CSV it names, and the
+    values the page reads from multiomic.json equal the provenance values."""
+    prov = _load("provenance.json")
+    entries = [e for e in prov["entries"] if str(e.get("id", "")).startswith("mo_")]
+    assert len(entries) >= 150, f"only {len(entries)} multiomic provenance entries"
+    checked = 0
+    for e in entries:
+        p = _res(e["file"])
+        assert p.exists(), f"{e['id']}: {e['file']} missing"
+        df = pd.read_csv(p)
+        sel = df
+        for k, v in (e.get("where") or {}).items():
+            sel = sel[sel[k].astype(str) == str(v)]
+        assert len(sel) == 1, f"{e['id']}: selector {e.get('where')} matched {len(sel)} rows in {e['file']}"
+        got = sel[e["column"]].iloc[0]
+        if e.get("pending"):
+            assert e.get("reason") and pd.isna(got), (e["id"], got)
+            checked += 1
+            continue
+        if isinstance(e["value"], bool):
+            assert bool(got) == e["value"], (e["id"], got, e["value"])
+        elif isinstance(e["value"], (int, float)):
+            assert math.isclose(float(got), float(e["value"]), abs_tol=e.get("tol", 1e-6)), (e["id"], got, e["value"])
+        elif e["value"] is None:
+            assert pd.isna(got), (e["id"], got)
+        else:
+            assert str(got) == str(e["value"]), (e["id"], got, e["value"])
+        checked += 1
+    assert checked == len(entries)
+    # the JSON the page reads carries the same values as the ledger, for the numbers the page quotes in its text and tiles
+    m = _load("multiomic.json")
+    byid = {e["id"]: e["value"] for e in entries}
+    pc1 = next(r for r in m["scales"]["rows"] if r["PC"] == "PC1")
+    assert pc1["r2_rii"] == byid["mo_r2_rii_PC1"] and pc1["r2_ratio"] == byid["mo_r2_ratio_PC1"]
+    jr = next(r for r in m["ladder_species"] if r["target"].startswith("protein → Jiang 2020 (cleaned") and r["model"] == "k20")
+    assert jr["accuracy"] == byid["mo_jiang_relative_k20_accuracy"] and jr["coverage"] == byid["mo_jiang_relative_k20_coverage"]
+    assert jr["accuracy_ci"] == [byid["mo_jiang_relative_k20_acc_lo"], byid["mo_jiang_relative_k20_acc_hi"]]
+    assert m["design_jiang"]["n_pairs_estimable"] == byid["mo_jiang_pairs_est"] and m["design_jiang"]["n_pairs_total"] == byid["mo_jiang_pairs_total"]
+    mw = next(x for x in m["metabolites"] if x["leg"] == "deep_mw")
+    assert mw["acc_k20"] == byid["mo_deep_mw_acc_k20"] and mw["n_mapped"] == byid["mo_deep_mw_n_mapped"]
+    assert m["sato"]["n_exercised_mice_union"] == byid["mo_sato_n_exercised_mice_union"]
+    # every recalibrated coverage on the page carries its set size and label-space size
+    for r in m["recalibration"]:
+        assert r["set_size_recalibrated"] is not None and r["n_classes_label_space"] in (7, 9, 19), r
+    # copied tables: row counts match the CSVs (subsets are flagged as quantised)
+    for t in prov["tables"]:
+        if not str(t["id"]).startswith("mo_"):
+            continue
+        p = _res(t["file"])
+        assert p.exists(), t
+        n = sum(1 for _ in open(p)) - 1
+        assert n == t["n_rows"] or t.get("quantised"), (t["id"], n, t["n_rows"])
+
+
+@pytest.mark.skipif(not MO.exists(), reason="site/data/multiomic.json absent")
+def test_multiomic_page_is_wired():
+    html = (ROOT / "site" / "multiomic.html").read_text()
+    assert 'src="assets/pages/multiomic.js"' in html and "vendor/plotly-cartesian-2.35.2.min.js" in html
+    js = (ROOT / "site" / "assets" / "site.js").read_text()
+    assert '"multiomic.html"' in js, "the page is not in the nav"
+    page_js = (ROOT / "site" / "assets" / "pages" / "multiomic.js").read_text()
+    assert "data/multiomic.json" in page_js
+    # the page never types a number: the only numeric literals in its script are formatting digits, chance denominators and layout
+    import re
+    literals = {float(x) for x in re.findall(r"(?<![\w.])(0\.\d+)(?![\w.])", page_js)}
+    assert not (literals - {0.9, 0.095, 0.08, 0.1, 0.3, 0.35}), f"numeric literals in multiomic.js that are not layout constants: {sorted(literals)}"

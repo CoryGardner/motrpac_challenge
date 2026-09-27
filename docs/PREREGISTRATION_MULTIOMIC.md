@@ -50,3 +50,12 @@ are both at least as high as the better single layer on the same target samples 
 
 Phases 3, 4, 5 depend on Phase 2. A dataset that cannot be matched (identifiers, units, tissues) is recorded as a
 negative result. Time boxes are those of the prompt. Phases 1, 6 and 7 must exist.
+
+## Run 2 pre-registration (2026-09-27T09:02Z, before B1/B2 are run)
+
+| # | Question | Prediction and pass rule | Where |
+|---|---|---|---|
+| B1 | Do the RNA and protein panels pick the same genes? | Prediction: little direct overlap — the RNA k20 panel was selected over 19 tissues, the protein k20 panel over 7, and the protein selector also takes negative markers. Pass rule for *agreement*: among genes present in both layers' candidate lists (RNA: the k20 all-animal panel ∪ the 51-gene stability list; protein: the k20 all-animal panel ∪ the proteins selected in ≥ 50 % of 50 animal-bootstraps), and whose RNA marker tissue is one of the 7 proteomics tissues, the marker tissues agree in ≥ 70 %. The direct k20 ∩ k20 overlap is reported as a count, with no pass rule (any value is informative). Protein stable core = selection frequency ≥ 0.80 over 50 animal-bootstraps, as for RNA. | `results_multiomic/09_extensions/panel_overlap.csv`, `overlap_summary.csv` |
+| B2 | Does the RII protein fingerprint survive the phase-08 shifts inside MoTrPAC, and does its guarantee? | Same design as phase 08 (`scripts/08_shift_tests.py` code path, k = 20 and the all-protein model, α = 0.10, calibration on 30 % of the source animals, recalibration on 3 and 5 target animals, 10 draws). Pass rules, k20: (i) held-out animals (5-fold, animal-grouped): accuracy ≥ 0.95 and coverage within 0.02 of 0.90; (ii) fit on the sedentary controls only, tested on the trained animals: accuracy ≥ 0.90 and coverage ≥ 0.85 (RNA: 0.961 / 0.903); (iii) held-out sex (either direction): accuracy ≥ 0.85 and coverage ≥ 0.80 (RNA: 0.893 / 0.833, 0.900 / 0.882). Within-study throughout (plex nested in tissue): context, not a finding; reported beside the RNA rungs from `results_frozen/08_shift/TRNSCRPT/shift_table.csv`. | `results_multiomic/09_extensions/protein_ladder.csv`, `ladder_side_by_side.csv` |
+
+Every recalibrated coverage in run 2 is reported with its mean set size and the number of classes in its label space.

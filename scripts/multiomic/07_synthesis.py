@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import json
 import re
+import subprocess
 import time
 from pathlib import Path
 
@@ -59,7 +60,7 @@ def main():
           f"metabolomics transferred to two external mouse metabolomes by RefMet name (deep-platform panel: k20 {f(mw['acc_k20'])} on {int(mw['n_mapped'])} samples / {int(mw['n_individuals_mapped'])} mice; `results_multiomic/04_metab_transfer/legs_summary.csv`). Within-study, tissue is still nested in plex for both.\"*", "",
           "2. `site/limitations.html`: *\"Proteomics is within-tissue only (ratios to per-tissue reference pools; missingness identifies the tissue), so no cross-tissue protein fingerprint is claimed.\"*",
           f"   → *\"The distributed proteomics (ratios to per-tissue reference pools) carries no cross-tissue axis; the portal reporter-ion intensities do (tissue R² of PC1 {f(r2)}, identical on the {int(js['n_proteins_inner_complete'])} proteins with no missing value), "
-          f"and a protein panel selected on them transfers to Jiang 2020 with the RNA pattern: accuracy above chance, coverage collapse ({f(cm3['coverage_mapped'])}) under MoTrPAC calibration, recovery to {f(rk5['coverage_recalibrated'])} after recalibration on 5 donors. "
+          f"and a protein panel selected on them transfers to Jiang 2020 with the RNA pattern: accuracy above chance, coverage collapse ({f(cm3['coverage_mapped'])}) under MoTrPAC calibration, recovery to {f(rk5['coverage_recalibrated'])} after recalibration on 5 donors at {f(rk5['set_size_recalibrated'], 2)} of 7 classes per set (the GTEx pattern, not the BodyMap one). "
           f"Missingness still identifies the tissue on that scale ({f(float(csv('01_rii/diagnostic_accuracy_summary.csv').set_index('quantity').loc['missingness_outer_acc', 'mean']))} accuracy from the NaN pattern alone), and plex is nested in tissue.\"*", "",
           "3. `README.md` (Roadmap): *\"a cross-tissue proteomics fingerprint;\"*",
           f"   → done on the RII scale (branch `multiomic-overnight`, `results_multiomic/01_rii/`, `03_prot_transfer/`); remaining: a rat multi-tissue proteome as the BodyMap-equivalent (none exists in PRIDE/ProteomeXchange, `results_multiomic/02_discovery/attempts.csv`).", "",
@@ -74,7 +75,7 @@ def main():
     # ---- 2. for the talk ---------------------------------------------------------------------------------------------
     talk = [f"1. Put MoTrPAC's proteomics back on the reporter-ion scale and tissue becomes its dominant axis (R² {f(r2)} of PC1 against {f(r2r, 4)} on the distributed ratios; permutation null {f(float(vp['R2_tissue_null95'].iloc[0]))}), so the layer we had to leave out of the fingerprint was a normalisation choice, not a property of the proteome (`results_multiomic/01_rii/variance_partition.csv`).",
             f"2. A 20-protein panel selected on those intensities names the tissue of {f(a3.loc['k20', 'accuracy_sample_weighted'], 2)} of {int(a3.loc['k20', 'n_samples_mapped'])} human TMT samples from {int(a3.loc['k20', 'n_donors_mapped'])} GTEx donors (chance {f(1 / 7, 2)}; {f(a3r.loc['k20', 'accuracy_sample_weighted'], 2)} when both sides are processed the same way), "
-            f"and its 90 % prediction sets cover only {f(cm3['coverage_mapped'], 2)} with MoTrPAC calibration but {f(rk5['coverage_recalibrated'], 2)} after recalibrating on five donors — exactly the RNA pattern (`results_multiomic/03_prot_transfer/`).",
+            f"and its 90 % prediction sets cover only {f(cm3['coverage_mapped'], 2)} with MoTrPAC calibration but {f(rk5['coverage_recalibrated'], 2)} after recalibrating on five donors, at {f(rk5['set_size_recalibrated'], 1)} of 7 tissues per set — the GTEx pattern: the number is restored, the information only partly (`results_multiomic/03_prot_transfer/`).",
             f"3. The audit's confound is a design choice, not the assay: in Jiang 2020 each TMT run holds up to {int(jj['max_tissues_per_level'])} tissues and {int(jj['n_pairs_estimable'])} of {int(jj['n_pairs_total'])} tissue pairs are estimable within a run, versus 0 of {int(pp['n_pairs_total'])} in MoTrPAC's one-tissue-per-plex design (`results_multiomic/06_external_identifiability/design_comparison.csv`)."]
     (OUT / "for_the_talk.md").write_text("\n".join(talk) + "\n")
 
@@ -111,6 +112,21 @@ def main():
           f"**Figure 8 — RNA markers at the protein level.** Distribution of the cross-tissue RNA–protein Spearman over {int(rp['n_genes'])} genes with the mismatched-pair null, and the marker-tissue agreement of the RNA panel genes ({int(rpp['n_same_marker'])} of {int(rpp['n_testable_c'])}). Source: `results_multiomic/01_rii/rna_protein_correlation.csv`, `rna_protein_panel_genes.csv`.", "",
           "**Caveats box.** Within-study accuracies are context: plex is nested in tissue on the reporter-ion scale too, and the NaN pattern alone identifies the tissue. Human atlases are adult, post-mortem and differently processed; kidney and adipose have no human protein target. RefMet name matches across platforms are name matches. Every number on this page is read from the CSV named beside it."]
     (OUT / "site_draft_multiomic.md").write_text("\n".join(sd) + "\n")
+    # ---- merge checklist: exactly which files a merge into main would change (git diff against main) ----------------------------
+    try:
+        diff = subprocess.check_output(["git", "diff", "--name-status", "main", "--", "."], cwd=ROOT, text=True).strip().splitlines()
+    except Exception as e:
+        diff = [f"?\t(git diff failed: {e})"]
+    groups: dict[str, list[str]] = {}
+    for ln in diff:
+        status, path = ln.split("\t", 1)
+        top = path.split("/")[0] if "/" in path else "(root)"
+        groups.setdefault(top, []).append(f"{status}\t{path}")
+    mc = [f"`git diff --name-status main` at build time: {len(diff)} paths. Protected in run 1 and edited in run 2 only where the run-2 prompt allowed it (`site/`, `README.md`, `docs/`); `results_frozen/`, `src/tfp/splits.py` and `docs/EVALUATION_RULES.md` are untouched.", ""]
+    for top in sorted(groups):
+        mc.append(f"- **{top}** ({len(groups[top])}): " + ", ".join(f"`{p.split(chr(9))[1]}` ({p.split(chr(9))[0]})" for p in groups[top][:40]) + (" …" if len(groups[top]) > 40 else ""))
+    mc += ["", "Before merging: run `make test` and `make site-test` on the branch (both pass at the final commit of run 2), regenerate `site/data/multiomic.json` with `scripts/multiomic/export_site_data.py` if any results_multiomic CSV changes, and decide whether the `results_multiomic/` CSVs (≈ 8 MB) belong in the main branch or in a release asset."]
+    (OUT / "merge_checklist.md").write_text("\n".join(mc) + "\n")
     passes = {"a": r2 > 0.5, "b": True, "c": bool(rpp["prereg_c_pass"]), "d": bool(a3.loc["k20", "accuracy_sample_weighted"] >= 3 / 7 and cm3["coverage_mapped"] < 0.90),
               "e": bool((L4.loc[["hilic_sato", "deep_sato", "deep_mw"], "acc_k20"] >= 2 * L4.loc[["hilic_sato", "deep_sato", "deep_mw"], "chance"]).all()), "f": bool(jj["cramers_v"] < 0.999 and jj["n_pairs_estimable"] > 0)}
     sec = ["- question · what survived, what it changes, what to say tomorrow, what was not done.",

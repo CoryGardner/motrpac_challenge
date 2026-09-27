@@ -129,6 +129,46 @@
 "changed": 113,
 "comparable": 204,
 "document": "docs/NUMBERS_RECONCILIATION.md"
+},
+"multiomic": {
+"generated": "2026-09-27 09:11 UTC",
+"git_hash": "ed32bbe",
+"n_entries": 228,
+"n_tables": 8,
+"sources": [
+"results_frozen/13_gtex/accuracy_overall.csv",
+"results_frozen/13_gtex/conformal_transfer.csv",
+"results_multiomic/01_rii/diagnostic_accuracy_summary.csv",
+"results_multiomic/01_rii/join_summary.csv",
+"results_multiomic/01_rii/panel_curve_summary.csv",
+"results_multiomic/01_rii/panel_null_k20.csv",
+"results_multiomic/01_rii/rna_protein_correlation.csv",
+"results_multiomic/01_rii/rna_protein_correlation_summary.csv",
+"results_multiomic/01_rii/rna_protein_panel_genes.csv",
+"results_multiomic/01_rii/rna_protein_panel_summary.csv",
+"results_multiomic/01_rii/stability_k20_summary.csv",
+"results_multiomic/01_rii/variance_partition.csv",
+"results_multiomic/01_rii/variance_partition_complete.csv",
+"results_multiomic/01_rii/variance_partition_ratio.csv",
+"results_multiomic/03_prot_transfer/accuracy_overall.csv",
+"results_multiomic/03_prot_transfer/conformal_transfer.csv",
+"results_multiomic/03_prot_transfer/coverage_ci.csv",
+"results_multiomic/03_prot_transfer/rawppm/accuracy_overall.csv",
+"results_multiomic/03_prot_transfer/rawppm/conformal_transfer.csv",
+"results_multiomic/03_prot_transfer/rawppm/coverage_ci.csv",
+"results_multiomic/04_metab_transfer/deep_mw/conformal_transfer.csv",
+"results_multiomic/04_metab_transfer/deep_sato/conformal_transfer.csv",
+"results_multiomic/04_metab_transfer/hilic_sato/conformal_transfer.csv",
+"results_multiomic/04_metab_transfer/legs_summary.csv",
+"results_multiomic/05_fusion_transfer/confusion_structure.csv",
+"results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"results_multiomic/06_external_identifiability/design_comparison.csv",
+"results_multiomic/08_verification/per_tissue_k20.csv",
+"results_multiomic/08_verification/recalibration_set_sizes.csv",
+"results_multiomic/08_verification/sato_invariance_design.csv",
+"results_multiomic/09_extensions/ladder_side_by_side.csv",
+"results_multiomic/09_extensions/overlap_summary.csv"
+]
 }
 },
 "entries": [
@@ -5616,6 +5656,2521 @@
 ],
 "agg": "recomputed",
 "note": "mean number of calibration samples over the three-animal BodyMap recalibration draws (model k20): what 'three animals' meant in the study"
+},
+{
+"id": "mo_rii_n_vials",
+"value": 420,
+"file": "results_multiomic/01_rii/join_summary.csv",
+"where": {
+"assay": "prot-pr"
+},
+"column": "n_vials",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_rii_n_animals",
+"value": 60,
+"file": "results_multiomic/01_rii/join_summary.csv",
+"where": {
+"assay": "prot-pr"
+},
+"column": "n_animals",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_rii_n_proteins_inner",
+"value": 3637,
+"file": "results_multiomic/01_rii/join_summary.csv",
+"where": {
+"assay": "prot-pr"
+},
+"column": "n_proteins_inner",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_rii_n_proteins_complete",
+"value": 2393,
+"file": "results_multiomic/01_rii/join_summary.csv",
+"where": {
+"assay": "prot-pr"
+},
+"column": "n_proteins_inner_complete",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_rii_n_proteins_union",
+"value": 17396,
+"file": "results_multiomic/01_rii/join_summary.csv",
+"where": {
+"assay": "prot-pr"
+},
+"column": "n_proteins_union",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_r2_rii_PC1",
+"value": 0.9909865511401912,
+"file": "results_multiomic/01_rii/variance_partition.csv",
+"where": {
+"PC": "PC1"
+},
+"column": "R2_tissue",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_r2_rii_null95_PC1",
+"value": 0.0294473483032565,
+"file": "results_multiomic/01_rii/variance_partition.csv",
+"where": {
+"PC": "PC1"
+},
+"column": "R2_tissue_null95",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_r2_ratio_PC1",
+"value": 0.000936019871198,
+"file": "results_multiomic/01_rii/variance_partition_ratio.csv",
+"where": {
+"PC": "PC1"
+},
+"column": "R2_tissue",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_r2_complete_PC1",
+"value": 0.9900446347572346,
+"file": "results_multiomic/01_rii/variance_partition_complete.csv",
+"where": {
+"PC": "PC1"
+},
+"column": "R2_tissue",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_explained_rii_PC1",
+"value": 0.4501109089859238,
+"file": "results_multiomic/01_rii/variance_partition.csv",
+"where": {
+"PC": "PC1"
+},
+"column": "explained",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_explained_ratio_PC1",
+"value": 0.1661484681016004,
+"file": "results_multiomic/01_rii/variance_partition_ratio.csv",
+"where": {
+"PC": "PC1"
+},
+"column": "explained",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_r2_rii_PC2",
+"value": 0.9983309929940458,
+"file": "results_multiomic/01_rii/variance_partition.csv",
+"where": {
+"PC": "PC2"
+},
+"column": "R2_tissue",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_r2_rii_null95_PC2",
+"value": 0.0275584857876834,
+"file": "results_multiomic/01_rii/variance_partition.csv",
+"where": {
+"PC": "PC2"
+},
+"column": "R2_tissue_null95",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_r2_ratio_PC2",
+"value": 0.0038524449531299,
+"file": "results_multiomic/01_rii/variance_partition_ratio.csv",
+"where": {
+"PC": "PC2"
+},
+"column": "R2_tissue",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_r2_complete_PC2",
+"value": 0.9958130650441028,
+"file": "results_multiomic/01_rii/variance_partition_complete.csv",
+"where": {
+"PC": "PC2"
+},
+"column": "R2_tissue",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_explained_rii_PC2",
+"value": 0.1158653807893784,
+"file": "results_multiomic/01_rii/variance_partition.csv",
+"where": {
+"PC": "PC2"
+},
+"column": "explained",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_explained_ratio_PC2",
+"value": 0.0579955745824577,
+"file": "results_multiomic/01_rii/variance_partition_ratio.csv",
+"where": {
+"PC": "PC2"
+},
+"column": "explained",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_r2_rii_PC3",
+"value": 0.9930889354503808,
+"file": "results_multiomic/01_rii/variance_partition.csv",
+"where": {
+"PC": "PC3"
+},
+"column": "R2_tissue",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_r2_rii_null95_PC3",
+"value": 0.0276273233196195,
+"file": "results_multiomic/01_rii/variance_partition.csv",
+"where": {
+"PC": "PC3"
+},
+"column": "R2_tissue_null95",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_r2_ratio_PC3",
+"value": 0.2183778447482343,
+"file": "results_multiomic/01_rii/variance_partition_ratio.csv",
+"where": {
+"PC": "PC3"
+},
+"column": "R2_tissue",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_r2_complete_PC3",
+"value": 0.9930623065723342,
+"file": "results_multiomic/01_rii/variance_partition_complete.csv",
+"where": {
+"PC": "PC3"
+},
+"column": "R2_tissue",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_explained_rii_PC3",
+"value": 0.1124805295302681,
+"file": "results_multiomic/01_rii/variance_partition.csv",
+"where": {
+"PC": "PC3"
+},
+"column": "explained",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_explained_ratio_PC3",
+"value": 0.040069949840749,
+"file": "results_multiomic/01_rii/variance_partition_ratio.csv",
+"where": {
+"PC": "PC3"
+},
+"column": "explained",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_missingness_outer_acc",
+"value": 1.0,
+"file": "results_multiomic/01_rii/diagnostic_accuracy_summary.csv",
+"where": {
+"quantity": "missingness_outer_acc"
+},
+"column": "mean",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_means_removed_acc",
+"value": 0.1428571428571428,
+"file": "results_multiomic/01_rii/diagnostic_accuracy_summary.csv",
+"where": {
+"quantity": "per_tissue_means_removed_acc"
+},
+"column": "mean",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_rii_panel_k20_bal_acc",
+"value": 1.0,
+"file": "results_multiomic/01_rii/panel_curve_summary.csv",
+"where": {
+"k": 20
+},
+"column": "bal_acc_mean",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_rii_panel_k20_null95",
+"value": 0.1560047523671473,
+"file": "results_multiomic/01_rii/panel_null_k20.csv",
+"where": {
+"k": 20
+},
+"column": "null_q95",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_rii_stability_ge08",
+"value": 16,
+"file": "results_multiomic/01_rii/stability_k20_summary.csv",
+"where": {
+"k": 20
+},
+"column": "n_selected_ge_0.8",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_relative_k20_accuracy",
+"value": 0.4545454545454545,
+"file": "results_multiomic/03_prot_transfer/accuracy_overall.csv",
+"where": {
+"model": "k20"
+},
+"column": "accuracy_sample_weighted",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_relative_k20_acc_lo",
+"value": 0.3571031746031746,
+"file": "results_multiomic/03_prot_transfer/accuracy_overall.csv",
+"where": {
+"model": "k20"
+},
+"column": "acc_ci95_low_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_relative_k20_acc_hi",
+"value": 0.5531914893617021,
+"file": "results_multiomic/03_prot_transfer/accuracy_overall.csv",
+"where": {
+"model": "k20"
+},
+"column": "acc_ci95_high_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_relative_k20_n",
+"value": 44,
+"file": "results_multiomic/03_prot_transfer/accuracy_overall.csv",
+"where": {
+"model": "k20"
+},
+"column": "n_samples_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_relative_k20_donors",
+"value": 13,
+"file": "results_multiomic/03_prot_transfer/accuracy_overall.csv",
+"where": {
+"model": "k20"
+},
+"column": "n_donors_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_relative_k20_coverage",
+"value": 0.0681818181818181,
+"file": "results_multiomic/03_prot_transfer/conformal_transfer.csv",
+"where": {
+"model": "k20",
+"conformal": "marginal"
+},
+"column": "coverage_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_relative_k20_cov_lo",
+"value": 0.0,
+"file": "results_multiomic/03_prot_transfer/coverage_ci.csv",
+"where": {
+"model": "k20"
+},
+"column": "ci95_low_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_relative_k20_cov_hi",
+"value": 0.1428571428571428,
+"file": "results_multiomic/03_prot_transfer/coverage_ci.csv",
+"where": {
+"model": "k20"
+},
+"column": "ci95_high_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_relative_k20_empty",
+"value": 0.9318181818181818,
+"file": "results_multiomic/03_prot_transfer/conformal_transfer.csv",
+"where": {
+"model": "k20",
+"conformal": "marginal"
+},
+"column": "frac_empty_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_relative_k20_setsize",
+"value": 0.0681818181818181,
+"file": "results_multiomic/03_prot_transfer/conformal_transfer.csv",
+"where": {
+"model": "k20",
+"conformal": "marginal"
+},
+"column": "avg_set_size_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_relative_k20_ood_empty",
+"value": 0.9745222929936306,
+"file": "results_multiomic/03_prot_transfer/conformal_transfer.csv",
+"where": {
+"model": "k20",
+"conformal": "marginal"
+},
+"column": "ood_frac_empty",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_relative_k50_accuracy",
+"value": 0.4772727272727273,
+"file": "results_multiomic/03_prot_transfer/accuracy_overall.csv",
+"where": {
+"model": "k50"
+},
+"column": "accuracy_sample_weighted",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_relative_k50_acc_lo",
+"value": 0.3953488372093023,
+"file": "results_multiomic/03_prot_transfer/accuracy_overall.csv",
+"where": {
+"model": "k50"
+},
+"column": "acc_ci95_low_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_relative_k50_acc_hi",
+"value": 0.5641304347826087,
+"file": "results_multiomic/03_prot_transfer/accuracy_overall.csv",
+"where": {
+"model": "k50"
+},
+"column": "acc_ci95_high_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_relative_k50_n",
+"value": 44,
+"file": "results_multiomic/03_prot_transfer/accuracy_overall.csv",
+"where": {
+"model": "k50"
+},
+"column": "n_samples_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_relative_k50_donors",
+"value": 13,
+"file": "results_multiomic/03_prot_transfer/accuracy_overall.csv",
+"where": {
+"model": "k50"
+},
+"column": "n_donors_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_relative_k50_coverage",
+"value": 0.0454545454545454,
+"file": "results_multiomic/03_prot_transfer/conformal_transfer.csv",
+"where": {
+"model": "k50",
+"conformal": "marginal"
+},
+"column": "coverage_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_relative_k50_cov_lo",
+"value": 0.0,
+"file": "results_multiomic/03_prot_transfer/coverage_ci.csv",
+"where": {
+"model": "k50"
+},
+"column": "ci95_low_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_relative_k50_cov_hi",
+"value": 0.1136363636363636,
+"file": "results_multiomic/03_prot_transfer/coverage_ci.csv",
+"where": {
+"model": "k50"
+},
+"column": "ci95_high_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_relative_k50_empty",
+"value": 0.9545454545454546,
+"file": "results_multiomic/03_prot_transfer/conformal_transfer.csv",
+"where": {
+"model": "k50",
+"conformal": "marginal"
+},
+"column": "frac_empty_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_relative_k50_setsize",
+"value": 0.0454545454545454,
+"file": "results_multiomic/03_prot_transfer/conformal_transfer.csv",
+"where": {
+"model": "k50",
+"conformal": "marginal"
+},
+"column": "avg_set_size_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_relative_k50_ood_empty",
+"value": 0.9808917197452228,
+"file": "results_multiomic/03_prot_transfer/conformal_transfer.csv",
+"where": {
+"model": "k50",
+"conformal": "marginal"
+},
+"column": "ood_frac_empty",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_relative_full_accuracy",
+"value": 0.5227272727272727,
+"file": "results_multiomic/03_prot_transfer/accuracy_overall.csv",
+"where": {
+"model": "full"
+},
+"column": "accuracy_sample_weighted",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_relative_full_acc_lo",
+"value": 0.3902439024390244,
+"file": "results_multiomic/03_prot_transfer/accuracy_overall.csv",
+"where": {
+"model": "full"
+},
+"column": "acc_ci95_low_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_relative_full_acc_hi",
+"value": 0.6304347826086957,
+"file": "results_multiomic/03_prot_transfer/accuracy_overall.csv",
+"where": {
+"model": "full"
+},
+"column": "acc_ci95_high_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_relative_full_n",
+"value": 44,
+"file": "results_multiomic/03_prot_transfer/accuracy_overall.csv",
+"where": {
+"model": "full"
+},
+"column": "n_samples_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_relative_full_donors",
+"value": 13,
+"file": "results_multiomic/03_prot_transfer/accuracy_overall.csv",
+"where": {
+"model": "full"
+},
+"column": "n_donors_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_relative_full_coverage",
+"value": 0.0454545454545454,
+"file": "results_multiomic/03_prot_transfer/conformal_transfer.csv",
+"where": {
+"model": "full",
+"conformal": "marginal"
+},
+"column": "coverage_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_relative_full_cov_lo",
+"value": 0.0,
+"file": "results_multiomic/03_prot_transfer/coverage_ci.csv",
+"where": {
+"model": "full"
+},
+"column": "ci95_low_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_relative_full_cov_hi",
+"value": 0.1136363636363636,
+"file": "results_multiomic/03_prot_transfer/coverage_ci.csv",
+"where": {
+"model": "full"
+},
+"column": "ci95_high_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_relative_full_empty",
+"value": 0.9545454545454546,
+"file": "results_multiomic/03_prot_transfer/conformal_transfer.csv",
+"where": {
+"model": "full",
+"conformal": "marginal"
+},
+"column": "frac_empty_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_relative_full_setsize",
+"value": 0.0454545454545454,
+"file": "results_multiomic/03_prot_transfer/conformal_transfer.csv",
+"where": {
+"model": "full",
+"conformal": "marginal"
+},
+"column": "avg_set_size_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_relative_full_ood_empty",
+"value": 1.0,
+"file": "results_multiomic/03_prot_transfer/conformal_transfer.csv",
+"where": {
+"model": "full",
+"conformal": "marginal"
+},
+"column": "ood_frac_empty",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_rawppm_k20_accuracy",
+"value": 0.7340425531914894,
+"file": "results_multiomic/03_prot_transfer/rawppm/accuracy_overall.csv",
+"where": {
+"model": "k20"
+},
+"column": "accuracy_sample_weighted",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_rawppm_k20_acc_lo",
+"value": 0.6404382022471911,
+"file": "results_multiomic/03_prot_transfer/rawppm/accuracy_overall.csv",
+"where": {
+"model": "k20"
+},
+"column": "acc_ci95_low_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_rawppm_k20_acc_hi",
+"value": 0.8265404238618524,
+"file": "results_multiomic/03_prot_transfer/rawppm/accuracy_overall.csv",
+"where": {
+"model": "k20"
+},
+"column": "acc_ci95_high_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_rawppm_k20_n",
+"value": 94,
+"file": "results_multiomic/03_prot_transfer/rawppm/accuracy_overall.csv",
+"where": {
+"model": "k20"
+},
+"column": "n_samples_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_rawppm_k20_donors",
+"value": 13,
+"file": "results_multiomic/03_prot_transfer/rawppm/accuracy_overall.csv",
+"where": {
+"model": "k20"
+},
+"column": "n_donors_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_rawppm_k20_coverage",
+"value": 0.0851063829787234,
+"file": "results_multiomic/03_prot_transfer/rawppm/conformal_transfer.csv",
+"where": {
+"model": "k20",
+"conformal": "marginal"
+},
+"column": "coverage_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_rawppm_k20_cov_lo",
+"value": 0.0246764837126283,
+"file": "results_multiomic/03_prot_transfer/rawppm/coverage_ci.csv",
+"where": {
+"model": "k20"
+},
+"column": "ci95_low_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_rawppm_k20_cov_hi",
+"value": 0.1521960958296362,
+"file": "results_multiomic/03_prot_transfer/rawppm/coverage_ci.csv",
+"where": {
+"model": "k20"
+},
+"column": "ci95_high_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_rawppm_k20_empty",
+"value": 0.9148936170212766,
+"file": "results_multiomic/03_prot_transfer/rawppm/conformal_transfer.csv",
+"where": {
+"model": "k20",
+"conformal": "marginal"
+},
+"column": "frac_empty_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_rawppm_k20_setsize",
+"value": 0.0851063829787234,
+"file": "results_multiomic/03_prot_transfer/rawppm/conformal_transfer.csv",
+"where": {
+"model": "k20",
+"conformal": "marginal"
+},
+"column": "avg_set_size_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_rawppm_k20_ood_empty",
+"value": 0.9662576687116564,
+"file": "results_multiomic/03_prot_transfer/rawppm/conformal_transfer.csv",
+"where": {
+"model": "k20",
+"conformal": "marginal"
+},
+"column": "ood_frac_empty",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_rawppm_k50_accuracy",
+"value": 0.648936170212766,
+"file": "results_multiomic/03_prot_transfer/rawppm/accuracy_overall.csv",
+"where": {
+"model": "k50"
+},
+"column": "accuracy_sample_weighted",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_rawppm_k50_acc_lo",
+"value": 0.553392894030159,
+"file": "results_multiomic/03_prot_transfer/rawppm/accuracy_overall.csv",
+"where": {
+"model": "k50"
+},
+"column": "acc_ci95_low_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_rawppm_k50_acc_hi",
+"value": 0.7408119658119657,
+"file": "results_multiomic/03_prot_transfer/rawppm/accuracy_overall.csv",
+"where": {
+"model": "k50"
+},
+"column": "acc_ci95_high_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_rawppm_k50_n",
+"value": 94,
+"file": "results_multiomic/03_prot_transfer/rawppm/accuracy_overall.csv",
+"where": {
+"model": "k50"
+},
+"column": "n_samples_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_rawppm_k50_donors",
+"value": 13,
+"file": "results_multiomic/03_prot_transfer/rawppm/accuracy_overall.csv",
+"where": {
+"model": "k50"
+},
+"column": "n_donors_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_rawppm_k50_coverage",
+"value": 0.0638297872340425,
+"file": "results_multiomic/03_prot_transfer/rawppm/conformal_transfer.csv",
+"where": {
+"model": "k50",
+"conformal": "marginal"
+},
+"column": "coverage_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_rawppm_k50_cov_lo",
+"value": 0.0111111111111111,
+"file": "results_multiomic/03_prot_transfer/rawppm/coverage_ci.csv",
+"where": {
+"model": "k50"
+},
+"column": "ci95_low_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_rawppm_k50_cov_hi",
+"value": 0.1290322580645161,
+"file": "results_multiomic/03_prot_transfer/rawppm/coverage_ci.csv",
+"where": {
+"model": "k50"
+},
+"column": "ci95_high_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_rawppm_k50_empty",
+"value": 0.9361702127659576,
+"file": "results_multiomic/03_prot_transfer/rawppm/conformal_transfer.csv",
+"where": {
+"model": "k50",
+"conformal": "marginal"
+},
+"column": "frac_empty_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_rawppm_k50_setsize",
+"value": 0.0638297872340425,
+"file": "results_multiomic/03_prot_transfer/rawppm/conformal_transfer.csv",
+"where": {
+"model": "k50",
+"conformal": "marginal"
+},
+"column": "avg_set_size_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_rawppm_k50_ood_empty",
+"value": 0.9877300613496932,
+"file": "results_multiomic/03_prot_transfer/rawppm/conformal_transfer.csv",
+"where": {
+"model": "k50",
+"conformal": "marginal"
+},
+"column": "ood_frac_empty",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_rawppm_full_accuracy",
+"value": 0.7978723404255319,
+"file": "results_multiomic/03_prot_transfer/rawppm/accuracy_overall.csv",
+"where": {
+"model": "full"
+},
+"column": "accuracy_sample_weighted",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_rawppm_full_acc_lo",
+"value": 0.733313953488372,
+"file": "results_multiomic/03_prot_transfer/rawppm/accuracy_overall.csv",
+"where": {
+"model": "full"
+},
+"column": "acc_ci95_low_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_rawppm_full_acc_hi",
+"value": 0.8631578947368421,
+"file": "results_multiomic/03_prot_transfer/rawppm/accuracy_overall.csv",
+"where": {
+"model": "full"
+},
+"column": "acc_ci95_high_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_rawppm_full_n",
+"value": 94,
+"file": "results_multiomic/03_prot_transfer/rawppm/accuracy_overall.csv",
+"where": {
+"model": "full"
+},
+"column": "n_samples_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_rawppm_full_donors",
+"value": 13,
+"file": "results_multiomic/03_prot_transfer/rawppm/accuracy_overall.csv",
+"where": {
+"model": "full"
+},
+"column": "n_donors_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_rawppm_full_coverage",
+"value": 0.0,
+"file": "results_multiomic/03_prot_transfer/rawppm/conformal_transfer.csv",
+"where": {
+"model": "full",
+"conformal": "marginal"
+},
+"column": "coverage_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_rawppm_full_cov_lo",
+"value": 0.0,
+"file": "results_multiomic/03_prot_transfer/rawppm/coverage_ci.csv",
+"where": {
+"model": "full"
+},
+"column": "ci95_low_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_rawppm_full_cov_hi",
+"value": 0.0,
+"file": "results_multiomic/03_prot_transfer/rawppm/coverage_ci.csv",
+"where": {
+"model": "full"
+},
+"column": "ci95_high_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_rawppm_full_empty",
+"value": 1.0,
+"file": "results_multiomic/03_prot_transfer/rawppm/conformal_transfer.csv",
+"where": {
+"model": "full",
+"conformal": "marginal"
+},
+"column": "frac_empty_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_rawppm_full_setsize",
+"value": 0.0,
+"file": "results_multiomic/03_prot_transfer/rawppm/conformal_transfer.csv",
+"where": {
+"model": "full",
+"conformal": "marginal"
+},
+"column": "avg_set_size_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_rawppm_full_ood_empty",
+"value": 1.0,
+"file": "results_multiomic/03_prot_transfer/rawppm/conformal_transfer.csv",
+"where": {
+"model": "full",
+"conformal": "marginal"
+},
+"column": "ood_frac_empty",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_gtex_k20_accuracy",
+"value": 0.6539235412474849,
+"file": "results_frozen/13_gtex/accuracy_overall.csv",
+"where": {
+"model": "k20"
+},
+"column": "accuracy_sample_weighted",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_gtex_k20_n",
+"value": 2485,
+"file": "results_frozen/13_gtex/accuracy_overall.csv",
+"where": {
+"model": "k20"
+},
+"column": "n_samples",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_gtex_k20_coverage",
+"value": 0.3637826961770624,
+"file": "results_frozen/13_gtex/conformal_transfer.csv",
+"where": {
+"model": "k20",
+"conformal": "marginal"
+},
+"column": "coverage_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_gtex_k20_empty",
+"value": 0.6164989939637827,
+"file": "results_frozen/13_gtex/conformal_transfer.csv",
+"where": {
+"model": "k20",
+"conformal": "marginal"
+},
+"column": "frac_empty_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_gtex_k20_setsize",
+"value": 0.3835010060362173,
+"file": "results_frozen/13_gtex/conformal_transfer.csv",
+"where": {
+"model": "k20",
+"conformal": "marginal"
+},
+"column": "avg_set_size_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_gtex_k50_accuracy",
+"value": 0.7814889336016096,
+"file": "results_frozen/13_gtex/accuracy_overall.csv",
+"where": {
+"model": "k50"
+},
+"column": "accuracy_sample_weighted",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_gtex_k50_n",
+"value": 2485,
+"file": "results_frozen/13_gtex/accuracy_overall.csv",
+"where": {
+"model": "k50"
+},
+"column": "n_samples",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_gtex_k50_coverage",
+"value": 0.3629778672032193,
+"file": "results_frozen/13_gtex/conformal_transfer.csv",
+"where": {
+"model": "k50",
+"conformal": "marginal"
+},
+"column": "coverage_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_gtex_k50_empty",
+"value": 0.6313883299798793,
+"file": "results_frozen/13_gtex/conformal_transfer.csv",
+"where": {
+"model": "k50",
+"conformal": "marginal"
+},
+"column": "frac_empty_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_gtex_k50_setsize",
+"value": 0.3686116700201207,
+"file": "results_frozen/13_gtex/conformal_transfer.csv",
+"where": {
+"model": "k50",
+"conformal": "marginal"
+},
+"column": "avg_set_size_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_gtex_full_accuracy",
+"value": 0.854728370221328,
+"file": "results_frozen/13_gtex/accuracy_overall.csv",
+"where": {
+"model": "full"
+},
+"column": "accuracy_sample_weighted",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_gtex_full_n",
+"value": 2485,
+"file": "results_frozen/13_gtex/accuracy_overall.csv",
+"where": {
+"model": "full"
+},
+"column": "n_samples",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_gtex_full_coverage",
+"value": 0.0619718309859154,
+"file": "results_frozen/13_gtex/conformal_transfer.csv",
+"where": {
+"model": "full",
+"conformal": "marginal"
+},
+"column": "coverage_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_gtex_full_empty",
+"value": 0.9380281690140844,
+"file": "results_frozen/13_gtex/conformal_transfer.csv",
+"where": {
+"model": "full",
+"conformal": "marginal"
+},
+"column": "frac_empty_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_gtex_full_setsize",
+"value": 0.0619718309859154,
+"file": "results_frozen/13_gtex/conformal_transfer.csv",
+"where": {
+"model": "full",
+"conformal": "marginal"
+},
+"column": "avg_set_size_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_RNA_k20_accuracy",
+"value": 1.0,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "k20",
+"layer": "RNA"
+},
+"column": "accuracy",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_RNA_k20_acc_lo",
+"value": 1.0,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "k20",
+"layer": "RNA"
+},
+"column": "acc_ci95_low_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_RNA_k20_acc_hi",
+"value": 1.0,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "k20",
+"layer": "RNA"
+},
+"column": "acc_ci95_high_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_RNA_k20_n",
+"value": 42,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "k20",
+"layer": "RNA"
+},
+"column": "n_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_RNA_k20_donors",
+"value": 12,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "k20",
+"layer": "RNA"
+},
+"column": "n_donors",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_RNA_k20_coverage",
+"value": 0.4523809523809524,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "k20",
+"layer": "RNA"
+},
+"column": "coverage_motrpac_cal",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_RNA_k20_cov_lo",
+"value": 0.3476670201484625,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "k20",
+"layer": "RNA"
+},
+"column": "cov_ci95_low_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_RNA_k20_cov_hi",
+"value": 0.5813953488372093,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "k20",
+"layer": "RNA"
+},
+"column": "cov_ci95_high_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_RNA_k20_empty",
+"value": 0.5476190476190477,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "k20",
+"layer": "RNA"
+},
+"column": "frac_empty",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_RNA_k20_setsize",
+"value": 0.4523809523809524,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "k20",
+"layer": "RNA"
+},
+"column": "avg_set_size",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_RNA_full_accuracy",
+"value": 1.0,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "full",
+"layer": "RNA"
+},
+"column": "accuracy",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_RNA_full_acc_lo",
+"value": 1.0,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "full",
+"layer": "RNA"
+},
+"column": "acc_ci95_low_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_RNA_full_acc_hi",
+"value": 1.0,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "full",
+"layer": "RNA"
+},
+"column": "acc_ci95_high_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_RNA_full_n",
+"value": 42,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "full",
+"layer": "RNA"
+},
+"column": "n_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_RNA_full_donors",
+"value": 12,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "full",
+"layer": "RNA"
+},
+"column": "n_donors",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_RNA_full_coverage",
+"value": 0.0238095238095238,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "full",
+"layer": "RNA"
+},
+"column": "coverage_motrpac_cal",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_RNA_full_cov_lo",
+"value": 0.0,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "full",
+"layer": "RNA"
+},
+"column": "cov_ci95_low_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_RNA_full_cov_hi",
+"value": 0.075,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "full",
+"layer": "RNA"
+},
+"column": "cov_ci95_high_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_RNA_full_empty",
+"value": 0.9761904761904762,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "full",
+"layer": "RNA"
+},
+"column": "frac_empty",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_RNA_full_setsize",
+"value": 0.0238095238095238,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "full",
+"layer": "RNA"
+},
+"column": "avg_set_size",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_protein_k20_accuracy",
+"value": 0.4761904761904761,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "k20",
+"layer": "protein"
+},
+"column": "accuracy",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_protein_k20_acc_lo",
+"value": 0.3863636363636363,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "k20",
+"layer": "protein"
+},
+"column": "acc_ci95_low_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_protein_k20_acc_hi",
+"value": 0.5714285714285714,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "k20",
+"layer": "protein"
+},
+"column": "acc_ci95_high_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_protein_k20_n",
+"value": 42,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "k20",
+"layer": "protein"
+},
+"column": "n_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_protein_k20_donors",
+"value": 12,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "k20",
+"layer": "protein"
+},
+"column": "n_donors",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_protein_k20_coverage",
+"value": 0.0714285714285714,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "k20",
+"layer": "protein"
+},
+"column": "coverage_motrpac_cal",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_protein_k20_cov_lo",
+"value": 0.0,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "k20",
+"layer": "protein"
+},
+"column": "cov_ci95_low_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_protein_k20_cov_hi",
+"value": 0.15,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "k20",
+"layer": "protein"
+},
+"column": "cov_ci95_high_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_protein_k20_empty",
+"value": 0.9285714285714286,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "k20",
+"layer": "protein"
+},
+"column": "frac_empty",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_protein_k20_setsize",
+"value": 0.0714285714285714,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "k20",
+"layer": "protein"
+},
+"column": "avg_set_size",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_protein_full_accuracy",
+"value": 0.5238095238095238,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "full",
+"layer": "protein"
+},
+"column": "accuracy",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_protein_full_acc_lo",
+"value": 0.3953488372093023,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "full",
+"layer": "protein"
+},
+"column": "acc_ci95_low_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_protein_full_acc_hi",
+"value": 0.636411992263056,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "full",
+"layer": "protein"
+},
+"column": "acc_ci95_high_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_protein_full_n",
+"value": 42,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "full",
+"layer": "protein"
+},
+"column": "n_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_protein_full_donors",
+"value": 12,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "full",
+"layer": "protein"
+},
+"column": "n_donors",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_protein_full_coverage",
+"value": 0.0476190476190476,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "full",
+"layer": "protein"
+},
+"column": "coverage_motrpac_cal",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_protein_full_cov_lo",
+"value": 0.0,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "full",
+"layer": "protein"
+},
+"column": "cov_ci95_low_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_protein_full_cov_hi",
+"value": 0.119047619047619,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "full",
+"layer": "protein"
+},
+"column": "cov_ci95_high_donor_boot",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_protein_full_empty",
+"value": 0.9523809523809524,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "full",
+"layer": "protein"
+},
+"column": "frac_empty",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_same42_protein_full_setsize",
+"value": 0.0476190476190476,
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"where": {
+"model": "full",
+"layer": "protein"
+},
+"column": "avg_set_size",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_cramers_v",
+"value": 0.3237838960337224,
+"file": "results_multiomic/06_external_identifiability/design_comparison.csv",
+"where": {
+"dataset": "Jiang2020"
+},
+"column": "cramers_v",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_pairs_est",
+"value": 424,
+"file": "results_multiomic/06_external_identifiability/design_comparison.csv",
+"where": {
+"dataset": "Jiang2020"
+},
+"column": "n_pairs_estimable",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_pairs_total",
+"value": 528,
+"file": "results_multiomic/06_external_identifiability/design_comparison.csv",
+"where": {
+"dataset": "Jiang2020"
+},
+"column": "n_pairs_total",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_max_tissues_per_run",
+"value": 8,
+"file": "results_multiomic/06_external_identifiability/design_comparison.csv",
+"where": {
+"dataset": "Jiang2020"
+},
+"column": "max_tissues_per_level",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_jiang_n_runs",
+"value": 56,
+"file": "results_multiomic/06_external_identifiability/design_comparison.csv",
+"where": {
+"dataset": "Jiang2020"
+},
+"column": "n_levels",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_prot_cramers_v",
+"value": 1.0,
+"file": "results_multiomic/06_external_identifiability/design_comparison.csv",
+"where": {
+"dataset": "MoTrPAC PROT"
+},
+"column": "cramers_v",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_prot_pairs_total",
+"value": 21,
+"file": "results_multiomic/06_external_identifiability/design_comparison.csv",
+"where": {
+"dataset": "MoTrPAC PROT"
+},
+"column": "n_pairs_total",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_rp_n_genes",
+"value": 3701,
+"file": "results_multiomic/01_rii/rna_protein_correlation_summary.csv",
+"where": {},
+"column": "n_genes",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_rp_spearman_median",
+"value": 0.6785714285714287,
+"file": "results_multiomic/01_rii/rna_protein_correlation_summary.csv",
+"where": {},
+"column": "spearman_median",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_rp_null_median",
+"value": 0.2857142857142857,
+"file": "results_multiomic/01_rii/rna_protein_correlation_summary.csv",
+"where": {},
+"column": "null_mismatched_median",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_rp_null_q95",
+"value": 0.8571428571428573,
+"file": "results_multiomic/01_rii/rna_protein_correlation_summary.csv",
+"where": {},
+"column": "null_mismatched_q95",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_rp_frac_above_q95",
+"value": 0.1664415022966765,
+"file": "results_multiomic/01_rii/rna_protein_correlation_summary.csv",
+"where": {},
+"column": "frac_genes_above_null_q95",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_rp_frac_same_marker",
+"value": 0.4485274250202647,
+"file": "results_multiomic/01_rii/rna_protein_correlation_summary.csv",
+"where": {},
+"column": "frac_same_marker_tissue",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_rp_n_testable",
+"value": 20,
+"file": "results_multiomic/01_rii/rna_protein_panel_summary.csv",
+"where": {},
+"column": "n_testable_c",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_rp_n_same_marker",
+"value": 17,
+"file": "results_multiomic/01_rii/rna_protein_panel_summary.csv",
+"where": {},
+"column": "n_same_marker",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_sato_n_sedentary_mice_union",
+"value": 12,
+"file": "results_multiomic/08_verification/sato_invariance_design.csv",
+"where": {},
+"column": "n_sedentary_mice_union",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_sato_n_exercised_mice_union",
+"value": 12,
+"file": "results_multiomic/08_verification/sato_invariance_design.csv",
+"where": {},
+"column": "n_exercised_mice_union",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_sato_n_sedentary_samples_total",
+"value": 96,
+"file": "results_multiomic/08_verification/sato_invariance_design.csv",
+"where": {},
+"column": "n_sedentary_samples_total",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_sato_n_exercised_samples_total",
+"value": 95,
+"file": "results_multiomic/08_verification/sato_invariance_design.csv",
+"where": {},
+"column": "n_exercised_samples_total",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_sato_invariance_fit_animals",
+"value": 8,
+"file": "results_multiomic/08_verification/sato_invariance_design.csv",
+"where": {},
+"column": "invariance_fit_animals",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_sato_invariance_cal_animals",
+"value": 4,
+"file": "results_multiomic/08_verification/sato_invariance_design.csv",
+"where": {},
+"column": "invariance_cal_animals",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_sato_invariance_test_exercised_samples",
+"value": 95,
+"file": "results_multiomic/08_verification/sato_invariance_design.csv",
+"where": {},
+"column": "invariance_test_exercised_samples",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_sato_invariance_test_exercised_animals",
+"value": 12,
+"file": "results_multiomic/08_verification/sato_invariance_design.csv",
+"where": {},
+"column": "invariance_test_exercised_animals",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_sato_invariance_k20_accuracy",
+"value": 0.9473684210526316,
+"file": "results_multiomic/08_verification/sato_invariance_design.csv",
+"where": {},
+"column": "invariance_k20_accuracy",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_sato_invariance_k20_coverage",
+"value": 0.9052631578947368,
+"file": "results_multiomic/08_verification/sato_invariance_design.csv",
+"where": {},
+"column": "invariance_k20_coverage",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_sato_invariance_k20_set_size",
+"value": 0.9157894736842104,
+"file": "results_multiomic/08_verification/sato_invariance_design.csv",
+"where": {},
+"column": "invariance_k20_set_size",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_sato_invariance_full_accuracy",
+"value": 1.0,
+"file": "results_multiomic/08_verification/sato_invariance_design.csv",
+"where": {},
+"column": "invariance_full_accuracy",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_sato_invariance_full_coverage",
+"value": 0.9263157894736842,
+"file": "results_multiomic/08_verification/sato_invariance_design.csv",
+"where": {},
+"column": "invariance_full_coverage",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_sato_invariance_full_set_size",
+"value": 0.9263157894736842,
+"file": "results_multiomic/08_verification/sato_invariance_design.csv",
+"where": {},
+"column": "invariance_full_set_size",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_sato_invariance_n_classes",
+"value": 8,
+"file": "results_multiomic/08_verification/sato_invariance_design.csv",
+"where": {},
+"column": "invariance_n_classes",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_sato_exercise_design",
+"value": "acute: a single treadmill bout; the Metabolon sample metadata records TIME AFTER EXERCISE = 0 h and two Zeitgeber time points (ZT4 light, ZT16 dark) with 6 mice per treatment \u00d7 time point per tissue; no training programme (Sato et al. 2022, Cell Metab 34:329, 'time-dependent signatures of metabolic homeostasis' after acute exercise)",
+"file": "results_multiomic/08_verification/sato_invariance_design.csv",
+"where": {},
+"column": "exercise_design",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_hilic_sato_matched",
+"value": 58,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "hilic_sato"
+},
+"column": "matched_refmet",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_hilic_sato_n_mapped",
+"value": 191.0,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "hilic_sato"
+},
+"column": "n_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_hilic_sato_n_ind",
+"value": 24.0,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "hilic_sato"
+},
+"column": "n_individuals_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_hilic_sato_acc_k20",
+"value": 0.2774869109947644,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "hilic_sato"
+},
+"column": "acc_k20",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_hilic_sato_acc_k20_lo",
+"value": 0.256544502617801,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "hilic_sato"
+},
+"column": "acc_k0_ci_low",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_hilic_sato_acc_k20_hi",
+"value": 0.3,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "hilic_sato"
+},
+"column": "acc_k0_ci_high",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_hilic_sato_acc_full",
+"value": 0.4450261780104712,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "hilic_sato"
+},
+"column": "acc_full",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_hilic_sato_chance",
+"value": 0.0526315789473684,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "hilic_sato"
+},
+"column": "chance",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_hilic_sato_cov_k20",
+"value": 0.0520833333333333,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "hilic_sato"
+},
+"column": "coverage_k0_source_cal_primary",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_hilic_sato_cov_k20_recal5",
+"value": 0.8991071428571429,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "hilic_sato"
+},
+"column": "coverage_k0_recal5",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_hilic_sato_size_k20_recal5",
+"value": 11.86517857142857,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "hilic_sato"
+},
+"column": "set_size_k0_recal5",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_hilic_sato_src_tissues",
+"value": 19,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "hilic_sato"
+},
+"column": "source_tissues",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_deep_sato_matched",
+"value": 83,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "deep_sato"
+},
+"column": "matched_refmet",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_deep_sato_n_mapped",
+"value": 167.0,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "deep_sato"
+},
+"column": "n_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_deep_sato_n_ind",
+"value": 24.0,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "deep_sato"
+},
+"column": "n_individuals_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_deep_sato_acc_k20",
+"value": 0.3293413173652694,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "deep_sato"
+},
+"column": "acc_k20",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_deep_sato_acc_k20_lo",
+"value": 0.2694610778443114,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "deep_sato"
+},
+"column": "acc_k0_ci_low",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_deep_sato_acc_k20_hi",
+"value": 0.3878787878787879,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "deep_sato"
+},
+"column": "acc_k0_ci_high",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_deep_sato_acc_full",
+"value": 0.5269461077844312,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "deep_sato"
+},
+"column": "acc_full",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_deep_sato_chance",
+"value": 0.1111111111111111,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "deep_sato"
+},
+"column": "chance",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_deep_sato_cov_k20",
+"value": 0.0,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "deep_sato"
+},
+"column": "coverage_k0_source_cal_primary",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_deep_sato_cov_k20_recal5",
+"value": 0.9102040816326528,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "deep_sato"
+},
+"column": "coverage_k0_recal5",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_deep_sato_size_k20_recal5",
+"value": 5.276530612244898,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "deep_sato"
+},
+"column": "set_size_k0_recal5",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_deep_sato_src_tissues",
+"value": 9,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "deep_sato"
+},
+"column": "source_tissues",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_deep_mw_matched",
+"value": 44,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "deep_mw"
+},
+"column": "matched_refmet",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_deep_mw_n_mapped",
+"value": 490.0,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "deep_mw"
+},
+"column": "n_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_deep_mw_n_ind",
+"value": 70.0,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "deep_mw"
+},
+"column": "n_individuals_mapped",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_deep_mw_acc_k20",
+"value": 0.636734693877551,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "deep_mw"
+},
+"column": "acc_k20",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_deep_mw_acc_k20_lo",
+"value": 0.6122448979591837,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "deep_mw"
+},
+"column": "acc_k0_ci_low",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_deep_mw_acc_k20_hi",
+"value": 0.6612244897959184,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "deep_mw"
+},
+"column": "acc_k0_ci_high",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_deep_mw_acc_full",
+"value": 0.753061224489796,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "deep_mw"
+},
+"column": "acc_full",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_deep_mw_chance",
+"value": 0.1111111111111111,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "deep_mw"
+},
+"column": "chance",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_deep_mw_cov_k20",
+"value": 0.1530612244897959,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "deep_mw"
+},
+"column": "coverage_k0_source_cal_primary",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_deep_mw_cov_k20_recal5",
+"value": 0.91984126984127,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "deep_mw"
+},
+"column": "coverage_k0_recal5",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_deep_mw_size_k20_recal5",
+"value": 2.2333333333333334,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "deep_mw"
+},
+"column": "set_size_k0_recal5",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_deep_mw_src_tissues",
+"value": 9,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "deep_mw"
+},
+"column": "source_tissues",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_hilic_mw_matched",
+"value": 25,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "hilic_mw"
+},
+"column": "matched_refmet",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_hilic_mw_min_overlap",
+"value": 30,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "hilic_mw"
+},
+"column": "min_overlap",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_b1_n_rna_k20",
+"value": 20,
+"file": "results_multiomic/09_extensions/overlap_summary.csv",
+"where": {},
+"column": "n_rna_k20",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_b1_n_protein_k20",
+"value": 20,
+"file": "results_multiomic/09_extensions/overlap_summary.csv",
+"where": {},
+"column": "n_protein_k20",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_b1_n_protein_stable_core_ge_0.8",
+"value": 16,
+"file": "results_multiomic/09_extensions/overlap_summary.csv",
+"where": {},
+"column": "n_protein_stable_core_ge_0.8",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_b1_k20_intersection",
+"value": 0,
+"file": "results_multiomic/09_extensions/overlap_summary.csv",
+"where": {},
+"column": "k20_intersection",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_b1_rna_k20_x_protein_core",
+"value": 0,
+"file": "results_multiomic/09_extensions/overlap_summary.csv",
+"where": {},
+"column": "rna_k20_x_protein_core",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_b1_genes_in_both_candidate_lists",
+"value": 0,
+"file": "results_multiomic/09_extensions/overlap_summary.csv",
+"where": {},
+"column": "genes_in_both_candidate_lists",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_b1_genes_in_both_with_rna_marker_in_prot7",
+"value": 0,
+"file": "results_multiomic/09_extensions/overlap_summary.csv",
+"where": {},
+"column": "genes_in_both_with_rna_marker_in_prot7",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_b1_n_markers_agree",
+"value": 0,
+"file": "results_multiomic/09_extensions/overlap_summary.csv",
+"where": {},
+"column": "n_markers_agree",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_b1_prereg_B1_pass",
+"value": false,
+"file": "results_multiomic/09_extensions/overlap_summary.csv",
+"where": {},
+"column": "prereg_B1_pass",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_b1_genes_in_both",
+"value": null,
+"file": "results_multiomic/09_extensions/overlap_summary.csv",
+"where": {},
+"column": "genes_in_both",
+"agg": "value",
+"tol": 1e-06,
+"pending": true,
+"reason": "empty cell in results_multiomic/09_extensions/overlap_summary.csv (genes_in_both)"
 }
 ],
 "tables": [
@@ -6345,6 +8900,64 @@
 "json_file": "panel_model.json",
 "json_path": "validation",
 "n_rows": 3
+},
+{
+"id": "mo_ladder_within",
+"file": "results_multiomic/09_extensions/ladder_side_by_side.csv",
+"json_file": "multiomic.json",
+"json_path": "ladder_within",
+"n_rows": 16
+},
+{
+"id": "mo_recalibration",
+"file": "results_multiomic/08_verification/recalibration_set_sizes.csv",
+"json_file": "multiomic.json",
+"json_path": "recalibration",
+"n_rows": 58
+},
+{
+"id": "mo_fusion",
+"file": "results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv",
+"json_file": "multiomic.json",
+"json_path": "fusion",
+"n_rows": 12
+},
+{
+"id": "mo_confusion_structure",
+"file": "results_multiomic/05_fusion_transfer/confusion_structure.csv",
+"json_file": "multiomic.json",
+"json_path": "confusion_structure",
+"n_rows": 4
+},
+{
+"id": "mo_design",
+"file": "results_multiomic/06_external_identifiability/design_comparison.csv",
+"json_file": "multiomic.json",
+"json_path": "design",
+"n_rows": 12
+},
+{
+"id": "mo_rp_hist",
+"file": "results_multiomic/01_rii/rna_protein_correlation.csv",
+"json_file": "multiomic.json",
+"json_path": "rna_protein.hist_counts",
+"n_rows": 3701,
+"quantised": true
+},
+{
+"id": "mo_rp_panel_genes",
+"file": "results_multiomic/01_rii/rna_protein_panel_genes.csv",
+"json_file": "multiomic.json",
+"json_path": "rna_protein.panel_genes",
+"n_rows": 51,
+"quantised": true
+},
+{
+"id": "mo_per_tissue_k20",
+"file": "results_multiomic/08_verification/per_tissue_k20.csv",
+"json_file": "multiomic.json",
+"json_path": "per_tissue_k20",
+"n_rows": 32
 }
 ]
 }
