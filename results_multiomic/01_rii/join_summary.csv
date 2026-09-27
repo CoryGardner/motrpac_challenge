@@ -1,0 +1,2 @@
+n_tissues,n_vials,n_animals,n_proteins_union,n_proteins_inner,frac_nan_outer,frac_nan_inner,n_proteins_inner_complete,min_peptides,norm,release,assay
+7,420,60,17396,3637,0.548433411074248,0.03540856540581588,2393,2,total,c1.0,prot-pr

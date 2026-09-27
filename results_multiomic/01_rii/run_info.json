@@ -1,0 +1,18 @@
+{
+ "args": {
+  "assay": "prot-pr",
+  "release": "c1.0",
+  "min_peptides": 2,
+  "norm": "total",
+  "n_splits": 5,
+  "prefilter": 5000,
+  "grid": "1,2,3,5,8,10,15,20,30,50,100",
+  "seed": 20260925,
+  "n_perm": 200,
+  "n_perm_panel": 20,
+  "quick": false,
+  "skip_rna": false,
+  "out": null
+ },
+ "minutes": 1.9095888654390971
+}

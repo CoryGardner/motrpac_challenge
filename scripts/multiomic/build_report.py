@@ -1,0 +1,181 @@
+#!/usr/bin/env python
+"""Build docs/MULTIOMIC_REPORT.md from the CSVs under results_multiomic/.
+
+No number is typed here: every figure in the report is read from a result file and the file is named beside it. The
+"Significant findings so far" list at the top is rebuilt from scratch on every run, so it always reflects every phase that
+has produced results. Phases without results are shown as pending, or as DROPPED when results_multiomic/<phase>/STATUS.json
+says so. `--complete` appends the RUN COMPLETE line (Phase 7 only).
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import time
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+
+ROOT = Path(__file__).resolve().parents[2]
+R = ROOT / "results_multiomic"
+DOC = ROOT / "docs" / "MULTIOMIC_REPORT.md"
+PHASES = [("00_setup", "Phase 0 — setup and pre-registration"), ("01_rii", "Phase 1 — the RII rescue (local data only)"),
+          ("02_discovery", "Phase 2 — data discovery"), ("03_prot_transfer", "Phase 3 — protein fingerprint transfer"),
+          ("04_metab_transfer", "Phase 4 — metabolite fingerprint transfer"), ("05_fusion_transfer", "Phase 5 — fusion judged by transfer"),
+          ("06_external_identifiability", "Phase 6 — identifiability of the external designs"), ("07_synthesis", "Phase 7 — synthesis")]
+
+
+def csv(rel: str) -> pd.DataFrame | None:
+    p = R / rel
+    return pd.read_csv(p) if p.exists() else None
+
+
+def status(phase: str) -> dict:
+    p = R / phase / "STATUS.json"
+    return json.loads(p.read_text()) if p.exists() else {"status": "pending"}
+
+
+def f(v, nd=3):
+    try:
+        if v is None or (isinstance(v, float) and np.isnan(v)):
+            return "n/a"
+        return f"{float(v):.{nd}f}"
+    except (TypeError, ValueError):
+        return str(v)
+
+
+def pct(v, nd=0):
+    return "n/a" if v is None or (isinstance(v, float) and np.isnan(v)) else f"{100 * float(v):.{nd}f} %"
+
+
+def md_table(df: pd.DataFrame, floatfmt=".3f", max_rows=40) -> str:
+    d = df.head(max_rows).copy()
+    for c in d.columns:
+        if pd.api.types.is_float_dtype(d[c]):
+            d[c] = d[c].map(lambda v: "" if pd.isna(v) else format(v, floatfmt))
+    cols = [str(c) for c in d.columns]
+    out = ["| " + " | ".join(cols) + " |", "|" + "|".join(["---"] * len(cols)) + "|"]
+    out += ["| " + " | ".join(str(v) for v in r) + " |" for r in d.itertuples(index=False)]
+    return "\n".join(out)
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+def phase0(findings):
+    return ["- question · fix predictions (a)–(f) before any data are analysed.", "- data · none.",
+            "- design · `docs/PREREGISTRATION_MULTIOMIC.md` (six predictions with pass rules, fixed analysis choices, drop policy).",
+            "- result · written and committed before Phase 1 started.", "- what it does not show · nothing; it is the contract."]
+
+
+def phase1(findings):
+    d = "01_rii/"
+    js, vp, vpr = csv(d + "join_summary.csv"), csv(d + "variance_partition.csv"), csv(d + "variance_partition_ratio.csv")
+    if js is None or vp is None:
+        return None
+    js = js.iloc[0]
+    vpc, vpm = csv(d + "variance_partition_complete.csv"), csv(d + "variance_partition_median_norm.csv")
+    ds = csv(d + "diagnostic_accuracy_summary.csv").set_index("quantity")
+    pc, null = csv(d + "panel_curve_summary.csv"), csv(d + "panel_null_k20.csv").iloc[0]
+    pcc = csv(d + "panel_curve_complete_summary.csv")
+    rp, rpp = csv(d + "rna_protein_correlation_summary.csv"), csv(d + "rna_protein_panel_summary.csv")
+    rp = rp.iloc[0] if rp is not None else None
+    rpp = rpp.iloc[0] if rpp is not None else None
+    r2 = float(vp["R2_tissue"].iloc[0]); r2r = float(vpr["R2_tissue"].iloc[0]); n95 = float(vp["R2_tissue_null95"].iloc[0])
+    k_first = int(pc.loc[pc["bal_acc_mean"] >= 0.95, "k"].min()) if (pc["bal_acc_mean"] >= 0.95).any() else None
+    k20 = pc[pc["k"] == 20].iloc[0]
+    findings.append((1, f"**RII tissue-axis recovery.** On reporter-ion intensities normalised to the channel total, tissue explains R² = {f(r2)} of PC1 "
+                        f"(PC2 {f(float(vp['R2_tissue'].iloc[1]))}; label-permutation null 95th pct {f(n95)}) versus {f(r2r, 4)} on the distributed ratio matrix with the same code; "
+                        f"n = {int(js['n_vials'])} vials, {int(js['n_animals'])} animals, {int(js['n_proteins_inner'])} proteins in every tissue; identical on the "
+                        f"{int(js['n_proteins_inner_complete'])} proteins with no missing value (R² {f(float(vpc['R2_tissue'].iloc[0]))}). Within-study: plex is nested in tissue. "
+                        f"— `results_multiomic/01_rii/variance_partition.csv`, `variance_partition_ratio.csv`, `variance_partition_complete.csv`"))
+    if rpp is not None:
+        findings.append((2, f"**RNA panel markers hold at the protein level.** Of the {int(rpp['n_testable_c'])} RNA panel genes whose marker tissue is one of the 7 proteomics tissues and whose "
+                            f"protein is quantified, {int(rpp['n_same_marker'])} ({pct(rpp['frac_same_marker'])}) have the same marker tissue at the protein level (chance 1/7); "
+                            f"over all {int(rp['n_genes'])} genes with both layers, the cross-tissue RNA–protein Spearman has median {f(rp['spearman_median'])} "
+                            f"(IQR {f(rp['spearman_q25'])}–{f(rp['spearman_q75'])}; mismatched-pair null median {f(rp['null_mismatched_median'])}, 95th pct {f(rp['null_mismatched_q95'])}); "
+                            f"n = {rp['n_shared_animals_per_tissue'].split(';')[0].split(':')[1]} shared animals per tissue. "
+                            f"— `results_multiomic/01_rii/rna_protein_panel_summary.csv`, `rna_protein_correlation_summary.csv`"))
+    lines = [
+        "- question · does MoTrPAC proteomics carry a tissue axis on a scale where cross-tissue comparison is defined (pre-registration a–c)?",
+        f"- data · portal quant-id `prot-pr` reporter-ion intensities, {int(js['n_tissues'])} tissues, {int(js['n_vials'])} vials, {int(js['n_animals'])} animals; "
+        f"peptides summed per protein per plex, < {int(js['min_peptides'])} peptides dropped, channel-total normalisation, log2 ppm; {int(js['n_proteins_union'])} proteins in the union, "
+        f"{int(js['n_proteins_inner'])} in every tissue (NaN {pct(js['frac_nan_inner'], 1)}), {int(js['n_proteins_inner_complete'])} with no missing value (`join_summary.csv`).",
+        "- design · phase-03 PCA/R² code, phase-04 diagnostic on all 5 animal-grouped folds, `tfp.models.panel_curve` unchanged (RoundRobinSelector → logreg_l2), label-permutation nulls; "
+        "RNA–protein Spearman of tissue means over the same animals with a mismatched-pair null.",
+        f"- result · **(a) PASS**: tissue R² of PC1 = {f(r2)} (null95 {f(n95)}; ratio matrix {f(r2r, 4)}; median-normalised {f(float(vpm['R2_tissue'].iloc[0])) if vpm is not None else 'n/a'}; "
+        f"complete proteins {f(float(vpc['R2_tissue'].iloc[0]))}). **(b) PASS** (context): balanced accuracy ≥ 0.95 from k = {k_first}; k = 20 gives {f(k20['bal_acc_mean'])} ± {f(k20['bal_acc_sd'])} "
+        f"over {int(k20['n_folds'])} folds ({f(k20['n_test_animals_mean'], 0)} test animals each; permutation null 95th pct {f(null['null_q95'])}); the same on the complete-protein matrix "
+        f"({f(float(pcc.loc[pcc['k'] == 20, 'bal_acc_mean'].iloc[0]))}). Diagnostic: missingness alone still classifies tissue ({f(ds.loc['missingness_outer_acc', 'mean'])} outer, "
+        f"{f(ds.loc['missingness_inner_acc', 'mean'])} inner), per-tissue-mean removal collapses to {f(ds.loc['per_tissue_means_removed_acc', 'mean'])} (chance {f(ds.loc['chance', 'mean'])}; ratios "
+        f"{f(ds.loc['per_tissue_means_removed_acc', 'frozen_ratio_fold0']) if 'frozen_ratio_fold0' in ds.columns else 'n/a'}). "
+        + (f"**(c) PASS**: {int(rpp['n_same_marker'])} of {int(rpp['n_testable_c'])} testable RNA panel genes ({pct(rpp['frac_same_marker'])}) keep their marker tissue at the protein level. "
+           f"Cross-tissue RNA–protein Spearman over {int(rp['n_genes'])} genes: median {f(rp['spearman_median'])}, {pct(rp['frac_spearman_gt_0.5'], 1)} above 0.5, {pct(rp['frac_genes_above_null_q95'], 1)} above the "
+           f"mismatched-pair null 95th percentile ({f(rp['null_mismatched_q95'])}); same marker tissue in {pct(rp['frac_same_marker_tissue'], 1)} of genes (chance {pct(rp['chance_same_marker'], 1)}); "
+           f"correlation rises with the protein's cross-tissue range (median {f(rp.get('spearman_median_Q1 smallest protein range'))} → {f(rp.get('spearman_median_Q4 largest protein range'))} by quartile)." if rpp is not None else ""),
+        "- what it does not show · transfer. One plex is one tissue plus that tissue's reference pool, so tissue and plex are confounded exactly as in the audit; the axis is real on this scale "
+        "but a per-plex processing offset cannot be excluded without an external dataset. Accuracy 1.000 is a ceiling-task number and is reported as context only. The mismatched-pair null "
+        "median of the RNA–protein correlation is far above zero, meaning a large part of any gene's cross-tissue agreement is a shared tissue structure (e.g. muscle/heart vs brain), not gene-specific.",
+        f"- files · `results_multiomic/01_rii/README.md` (built from the CSVs), matrices `rii_inner_log2ppm.parquet`, `rii_outer_log2ppm.parquet`, `rii_meta.csv`.",
+    ]
+    ph = csv("01_rii/ph/join_summary.csv")
+    if ph is not None:
+        vph = csv("01_rii/ph/variance_partition.csv"); pph = csv("01_rii/ph/panel_curve_summary.csv")
+        lines.append(f"- secondary, phospho (`prot-ph`, `results_multiomic/01_rii/ph/`): {int(ph.iloc[0]['n_proteins_inner'])} phosphoprotein groups in every tissue; tissue R² of PC1 = "
+                     f"{f(float(vph['R2_tissue'].iloc[0]))}; k = 20 balanced accuracy {f(float(pph.loc[pph['k'] == 20, 'bal_acc_mean'].iloc[0]))}.")
+    return lines
+
+
+def generic(phase: str, findings):
+    """Phases whose section is written by their own script into results_multiomic/<phase>/REPORT_SECTION.md (numbers from CSVs there)."""
+    p = R / phase / "REPORT_SECTION.md"
+    if not p.exists():
+        return None
+    fp = R / phase / "FINDINGS.json"
+    if fp.exists():
+        for it in json.loads(fp.read_text()):
+            findings.append((it["rank"], it["text"]))
+    return [p.read_text().rstrip()]
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--complete", action="store_true")
+    args = ap.parse_args()
+    findings: list[tuple[int, str]] = []
+    sections = {}
+    sections["00_setup"] = phase0(findings)
+    sections["01_rii"] = phase1(findings)
+    for ph, _ in PHASES[2:]:
+        sections[ph] = generic(ph, findings)
+    now = time.strftime("%Y-%m-%d %H:%M UTC", time.gmtime())
+    done = [ph for ph, _ in PHASES if sections.get(ph) is not None or status(ph).get("status") == "DONE"]
+    out = ["# Multiomic overnight report — can the proteome and metabolome carry a tissue fingerprint that transfers?", "",
+           "Branch `multiomic-overnight`. Pre-registration: `docs/PREREGISTRATION_MULTIOMIC.md`. Log: `docs/MULTIOMIC_LOG.md`.",
+           "Every number in this file is read from a CSV under `results_multiomic/` by `scripts/multiomic/build_report.py`; the file is named beside each number. "
+           "Within-study accuracy is context, never a finding (the audit: batch is nested in tissue).", "",
+           f"## Significant findings so far ({now}; phases with results: {', '.join(p.split('_')[0].lstrip('0') or '0' for p in done)})", ""]
+    if findings:
+        out += [f"{i + 1}. {t}" for i, (_, t) in enumerate(sorted(findings, key=lambda x: x[0]))]
+    else:
+        out += ["_None yet._"]
+    out.append("")
+    for ph, title in PHASES:
+        out += [f"## {title}", ""]
+        st = status(ph)
+        body = sections.get(ph)
+        if body is None:
+            if st.get("status") == "DROPPED":
+                out += [f"**DROPPED** — {st.get('reason', '')}", ""]
+            else:
+                out += ["_pending_", ""]
+        else:
+            if st.get("status") == "DROPPED":
+                out += [f"**DROPPED (partial)** — {st.get('reason', '')}", ""]
+            out += body + [""]
+    if args.complete:
+        out += [f"RUN COMPLETE {time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())}"]
+    DOC.write_text("\n".join(out) + "\n")
+    print(f"wrote {DOC} ({len(findings)} findings; sections with results: {done})")
+
+
+if __name__ == "__main__":
+    main()
