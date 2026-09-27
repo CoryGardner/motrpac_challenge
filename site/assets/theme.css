@@ -85,10 +85,10 @@ main.wrap { padding-top: 1.5rem; padding-bottom: 4rem; }
 
 /* ---- header / nav ------------------------------------------------------------------------- */
 .site-header { border-bottom: 1px solid var(--grid); background: var(--page); position: sticky; top: 0; z-index: 20; }
-.site-header .wrap { display: flex; align-items: center; gap: 1rem; min-height: 56px; flex-wrap: wrap; padding-top: 0.4rem; padding-bottom: 0.4rem; }
+.site-header .wrap { display: flex; align-items: center; gap: 1rem; min-height: 60px; flex-wrap: wrap; padding-top: 0.4rem; padding-bottom: 0.4rem; }
 .brand { font-weight: 650; color: var(--ink); text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; white-space: nowrap; }
 .brand svg { width: 22px; height: 22px; }
-.brand img.mark { width: 24px; height: 24px; border-radius: 50%; display: block; box-shadow: 0 0 0 1px var(--mark-ring); }
+.brand img.mark { width: 44px; height: 44px; border-radius: 50%; display: block; box-shadow: 0 0 0 1px var(--mark-ring); }
 nav.primary { display: flex; flex-wrap: wrap; gap: 0.15rem 0.9rem; margin-left: auto; }
 nav.primary a { color: var(--ink-2); text-decoration: none; padding: 0.35rem 0.1rem; border-bottom: 2px solid transparent; font-size: 0.95rem; }
 nav.primary a[aria-current="page"] { color: var(--ink); border-bottom-color: var(--ink); }

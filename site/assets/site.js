@@ -75,7 +75,7 @@ export async function mountChrome(page) {
   syncThemeColor();
   window.addEventListener("load", syncThemeColor, { once: true });
   const header = document.querySelector("header.site-header") || document.body.insertBefore(el("header", { class: "site-header" }), document.body.firstChild);
-  const logo = el("img", { class: "mark", src: "assets/brand/badge-64.png", alt: "", width: 24, height: 24, decoding: "async" });
+  const logo = el("img", { class: "mark", src: "assets/brand/badge-192.png", alt: "", width: 44, height: 44, decoding: "async" });
   const nav = el("nav", { class: "primary", "aria-label": "Site" });
   for (const [href, label] of PAGES) {
     const a = el("a", { href }, label);
