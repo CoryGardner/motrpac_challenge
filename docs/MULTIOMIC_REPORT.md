@@ -3,7 +3,7 @@
 Branch `multiomic-overnight`. Pre-registration: `docs/PREREGISTRATION_MULTIOMIC.md`. Log: `docs/MULTIOMIC_LOG.md`.
 Every number in this file is read from a CSV under `results_multiomic/` by `scripts/multiomic/build_report.py`; the file is named beside each number. Within-study accuracy is context, never a finding (the audit: batch is nested in tissue).
 
-## Significant findings so far (2026-09-27 07:36 UTC; phases with results: 0, 1, 2, 3, 4, 6)
+## Significant findings so far (2026-09-27 07:37 UTC; phases with results: 0, 1, 2, 3, 4, 5, 6)
 
 1. **RII tissue-axis recovery.** On reporter-ion intensities normalised to the channel total, tissue explains R² = 0.991 of PC1 (PC2 0.998; label-permutation null 95th pct 0.029) versus 0.0009 on the distributed ratio matrix with the same code; n = 420 vials, 60 animals, 3637 proteins in every tissue; identical on the 2393 proteins with no missing value (R² 0.990). Within-study: plex is nested in tissue. — `results_multiomic/01_rii/variance_partition.csv`, `variance_partition_ratio.csv`, `variance_partition_complete.csv`
 2. **RNA panel markers hold at the protein level.** Of the 20 RNA panel genes whose marker tissue is one of the 7 proteomics tissues and whose protein is quantified, 17 (85 %) have the same marker tissue at the protein level (chance 1/7); over all 3701 genes with both layers, the cross-tissue RNA–protein Spearman has median 0.679 (IQR 0.429–0.821; mismatched-pair null median 0.286, 95th pct 0.857); n = 50 shared animals per tissue. — `results_multiomic/01_rii/rna_protein_panel_summary.csv`, `rna_protein_correlation_summary.csv`
@@ -12,6 +12,7 @@ Every number in this file is read from a CSV under `results_multiomic/` by `scri
 5. **Metabolite fingerprint transfer (hilic_sato).** A k20 RefMet-named metabolite panel selected on MoTrPAC (19 tissues, 58 matched names) names the tissue of 0.277 of 191 external samples (24 mice; full model 0.445; chance 0.053); coverage with MoTrPAC calibration 0.052, recalibrated on 5 mice 0.899; a native panel fit on sedentary mice keeps accuracy 1.000 / coverage 0.926 on exercised mice (RNA analogue 0.961 / 0.903). — `results_multiomic/04_metab_transfer/hilic_sato/accuracy_overall.csv`, `conformal_transfer.csv`, `recalibration.csv`
 6. **Metabolite fingerprint transfer (deep_sato).** A k20 RefMet-named metabolite panel selected on MoTrPAC (9 tissues, 83 matched names) names the tissue of 0.329 of 167 external samples (24 mice; full model 0.527; chance 0.111); coverage with MoTrPAC calibration 0.000, recalibrated on 5 mice 0.910; a native panel fit on sedentary mice keeps accuracy 1.000 / coverage 0.926 on exercised mice (RNA analogue 0.961 / 0.903). — `results_multiomic/04_metab_transfer/deep_sato/accuracy_overall.csv`, `conformal_transfer.csv`, `recalibration.csv`
 7. **Metabolite fingerprint transfer (deep_mw).** A k20 RefMet-named metabolite panel selected on MoTrPAC (9 tissues, 44 matched names) names the tissue of 0.637 of 490 external samples (70 mice; full model 0.753; chance 0.111); coverage with MoTrPAC calibration 0.153, recalibrated on 5 mice 0.920. — `results_multiomic/04_metab_transfer/deep_mw/accuracy_overall.csv`, `conformal_transfer.csv`, `recalibration.csv`
+8. **Fusion under the species shift (same 42 Jiang samples, 12 donors, 5 tissues).** At k20 accuracy / MoTrPAC-calibrated coverage / empty sets: RNA 1.000 / 0.452 / 0.548, protein 0.476 / 0.071 / 0.929, late-mean fusion 0.738 / 0.048 / 0.952, stacked 0.738 / 0.048 / 0.952; pre-registered robustness rule: late mean FAIL, stacked FAIL. The two layers' confusion structures on Jiang correlate at 0.259 (soft off-diagonal, k20). — `results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv`, `confusion_structure.csv`
 
 ## Phase 0 — setup and pre-registration
 
@@ -63,7 +64,12 @@ Every number in this file is read from a CSV under `results_multiomic/` by `scri
 
 ## Phase 5 — fusion judged by transfer
 
-_pending_
+- question · is a two-layer fingerprint more robust under the species shift than either layer alone — accuracy AND coverage AND empty-set fraction on the same human samples — and do the layers confuse the same pairs?
+- data · Jiang 2020: 182 samples with matched RNA and protein, 42 from 12 donors in the 5 mapped classes; MoTrPAC 7-tissue source, RNA 13800 / protein 2731 matched genes (`results_multiomic/05_fusion_transfer/overlap.csv`).
+- design · both layers fit on the 7 proteomics tissues (one label space); late fusion = mean probability; stacked LR fit on animal-grouped out-of-fold MoTrPAC probabilities; one calibration set (30 % of animals, held out of both layers) for every model; every Jiang statement on donors.
+- result · at k20 on the same 42 samples: RNA accuracy 1.000 / coverage 0.452 / empty 0.548; protein 0.476 / 0.071 / 0.929; late mean 0.738 / 0.048 / 0.952; stacked LR 0.738 / 0.048 / 0.952. Full models: RNA 1.000 / 0.024, protein 0.524 / 0.048, late mean 1.000 / 0.048, stacked 1.000 / 0.048. Pre-registered robustness rule at k20 (≥ RNA on accuracy and coverage, ≤ on empty sets): late mean FAIL, stacked FAIL. Confusion structure on Jiang (k20): off-diagonal Pearson hard n/a, soft 0.259; per-tissue accuracy correlation across layers n/a; locally (MoTrPAC out-of-fold, k20) soft 0.618. The 19-class RNA fingerprint on the same Jiang RNA: k20 0.526, full 0.816 over 76 mapped samples in 13 tissues (`rna19_on_jiang.csv`).
+- what it does not show · a precise fusion benefit: 42 samples, 12 donors, two classes with ≤ 5 samples; coverage under MoTrPAC calibration is near zero for every model, so 'coverage ≥' is a comparison of collapses. The protein arm uses the cleaned relative scale (conservative, see Phase 3).
+- files · `results_multiomic/05_fusion_transfer/README.md`.
 
 ## Phase 6 — identifiability of the external designs
 

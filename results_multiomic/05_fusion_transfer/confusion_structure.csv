@@ -1,0 +1,5 @@
+model,where,n_offdiag_cells,pearson_hard_offdiag,pearson_soft_offdiag,per_tissue_accuracy_pearson,rna_oof_accuracy,protein_oof_accuracy
+k20,Jiang 2020 (transfer),30,,0.2588641508357998,,,
+full,Jiang 2020 (transfer),30,,0.06473526526219703,,,
+k20,MoTrPAC 7 tissues (animal-grouped out-of-fold),42,,0.6181316569926567,,1.0,1.0
+full,MoTrPAC 7 tissues (animal-grouped out-of-fold),42,,0.8062071505129894,,1.0,1.0
