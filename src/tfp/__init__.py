@@ -1,4 +1,5 @@
-"""MoTrPAC hackathon starter library. See CLAUDE.md and docs/ for the rules."""
-from . import config, conformal, discordance, io, models, plots, report, splits  # noqa: F401
+"""tfp — the tissue-fingerprint pipeline library: io, splits (frozen), models, conformal, transfer, batch, plots, report.
+The evaluation rules every phase follows are in docs/EVALUATION_RULES.md."""
+from . import config, conformal, io, models, plots, report, splits  # noqa: F401
 
-__all__ = ["config", "conformal", "discordance", "io", "models", "plots", "report", "splits"]
+__all__ = ["batch", "cli", "config", "conformal", "io", "models", "plots", "report", "splits", "transfer"]

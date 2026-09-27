@@ -1,7 +1,0 @@
-,assay,label,n_samples,"same-label share of 15 neighbours, 50-PC space","same-label share of 15 neighbours, UMAP",chance (share of the commonest label)
-0,TRNSCRPT,tissue,899,0.984,0.986,0.056
-1,TRNSCRPT,sex,899,0.84,0.858,0.501
-2,PROT,tissue,416,0.885,0.983,0.144
-3,PROT,sex,416,0.858,0.854,0.502
-4,METAB,tissue,876,0.995,0.995,0.059
-5,METAB,sex,876,0.768,0.811,0.505

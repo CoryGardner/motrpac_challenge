@@ -1,4 +1,0 @@
-,native k20 (BodyMap CV),imported k20,imported k50,imported full
-"11 organs, all ages (balanced acc.)",0.993,,,
-"9 mapped organs, all ages (accuracy)",0.993,0.91,0.925,0.97
-"9 mapped organs, adults only (accuracy)",1.0,1.0,0.985,1.0

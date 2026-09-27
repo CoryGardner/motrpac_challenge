@@ -1,4 +1,0 @@
-,ADRNL,BAT,BLOOD,COLON,CORTEX,HEART,HIPPOC,HYPOTH,KIDNEY,LIVER,LUNG,OVARY,SKM-GN,SKM-VL,SMLINT,SPLEEN,TESTES,VENACV,WAT-SC
-n_cal_vials,15,15,15,15,15,15,15,15,15,15,15,8,15,15,15,15,7,15,15
-rank_needed,15,15,15,15,15,15,15,15,15,15,15,9,15,15,15,15,8,15,15
-threshold_infinite,False,False,False,False,False,False,False,False,False,False,False,True,False,False,False,False,True,False,False

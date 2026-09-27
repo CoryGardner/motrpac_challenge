@@ -6,10 +6,21 @@ __pycache__/
 data/raw/
 data/external/
 results/
-!results/.gitkeep
+results_smoke/
+data/synthetic/
 .DS_Store
 .superpowers/
 site/_screenshots/
 tools/node_modules/
 tools/package-lock.json
 notebooks/_outputs/
+
+# kept locally, never pushed
+CLAUDE.md
+docs/superpowers/
+docs/BUILD_LOG.md
+notebooks/
+extras/notebooks/_outputs/
+extras/notebooks/runs/
+extras/notebooks/_build/CONVENTIONS.md
+.server.pid

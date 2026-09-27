@@ -1,0 +1,10 @@
+assay,variable,n_levels,n_tissues,median_levels_per_tissue,max_levels_per_tissue,max_tissues_per_level,n_levels_shared,tissues_in_one_level,cramers_v,n_pairs_sharing_level,n_pairs_total
+TRNSCRPT,GET_site,2,19,1.0,1,10,2,19,1.0,81,171
+TRNSCRPT,RNA_extr_plate_ID,17,19,1.0,1,2,2,19,1.0,2,171
+TRNSCRPT,RNA_extr_date,17,19,1.0,1,2,2,19,1.0,2,171
+TRNSCRPT,Lib_prep_date,18,19,1.0,2,3,2,17,0.997712315376228,4,171
+TRNSCRPT,Lib_batch_ID,17,19,1.0,1,2,2,19,1.0,2,171
+TRNSCRPT,Seq_date,4,19,1.0,1,7,4,19,1.0,42,171
+TRNSCRPT,Seq_flowcell_ID,4,19,1.0,1,7,4,19,1.0,42,171
+TRNSCRPT,Seq_flowcell_lane,2,19,1.0,1,13,2,19,1.0,93,171
+TRNSCRPT,Seq_batch,4,19,1.0,1,7,4,19,1.0,42,171

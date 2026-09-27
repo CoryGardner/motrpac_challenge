@@ -42,7 +42,7 @@ def conformal_quantile(scores: np.ndarray, alpha: float) -> float:
 
     Fixed 2026-09-25. The previous rule, np.quantile(scores, min(ceil((n+1)(1-α))/n, 1), "higher"),
     returned the largest score instead of +inf when the rank exceeded n, and one rank too high
-    otherwise (FINDINGS_REPORT §14, item 13(a))."""
+    otherwise (the 2026-09-25 correction; docs/NUMBERS_RECONCILIATION.md)."""
     n = len(scores)
     if n == 0:
         return float("inf")

@@ -1,0 +1,3 @@
+assay,variable,n_levels,n_tissues,median_levels_per_tissue,max_levels_per_tissue,max_tissues_per_level,n_levels_shared,tissues_in_one_level,cramers_v,n_pairs_sharing_level,n_pairs_total
+IMMUNO,plate_id,20,17,3.0,5,4,12,3,0.6124633933547731,16,136
+IMMUNO,panel_name,6,17,3.0,6,17,6,3,0.3984387171272928,136,136

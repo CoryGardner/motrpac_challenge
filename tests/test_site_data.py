@@ -8,9 +8,16 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
+from tfp import config as C
+
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "site" / "data"
-RES = ROOT / "results"
+RES = C.results_root()          # results/ when a complete run is present, else the committed results_frozen/
+
+
+def _res(file: str) -> Path:
+    """A canonical provenance path (results/...) resolved against the results root in use."""
+    return RES / Path(file).relative_to("results")
 
 # Without results/ (CI) there is nothing to check against; with results/ present, a missing export is a failure.
 pytestmark = pytest.mark.skipif(not (RES / "06_conformal").exists() and not (SITE / "manifest.json").exists(),
@@ -109,8 +116,8 @@ def test_provenance_values_match_results_files():
             continue
         if not e.get("file"):
             continue
-        p = ROOT / e["file"]
-        assert p.exists(), f"{e['id']}: {e['file']} missing"
+        p = _res(e["file"])
+        assert p.exists(), f"{e['id']}: {e['file']} missing under {RES}"
         if p.suffix == ".csv":
             df = pd.read_csv(p)
             sel = df
@@ -144,7 +151,7 @@ def test_provenance_values_match_results_files():
     assert checked >= 20, f"only {checked} provenance entries were checkable"
     # copied tables: the JSON copy has the same number of rows as the CSV it cites (sample tables are quantised copies)
     for t in prov["tables"]:
-        p = ROOT / t["file"]
+        p = _res(t["file"])
         assert p.exists(), t
         n = sum(1 for _ in open(p)) - 1
         assert n == t["n_rows"] or t.get("matrix") or t.get("quantised"), (t["id"], n, t["n_rows"])
@@ -212,3 +219,45 @@ def test_provenance_records_the_reconciliation_counts():
     meta = _load("provenance.json")["_meta"]
     rec = meta.get("reconciliation")
     assert rec and rec["comparable"] > 0 and 0 <= rec["changed"] <= rec["comparable"]
+
+
+def test_manifest_lists_only_phases_the_site_reads():
+    """The manifest describes the results the export read, not every directory under results/."""
+    m = _load("manifest.json")
+    allowed = {"03_eda", "04_baselines", "05_panels", "06_conformal", "07_fusion", "08_shift", "12_bodymap", "13_gtex",
+               "14_transfer", "14_transfer_cpm", "15_time_course", "16_identifiability"}
+    assert set(m["phases"]) <= allowed, sorted(set(m["phases"]) - allowed)
+    assert "09_discordance" not in m["phases"] and "absent_phases" not in m
+    assert m["phases_used"] and set(m["phases_used"]) >= {"05_panels", "06_conformal", "31_site_regen"}
+    assert m["results_dir"] in ("results", "results_frozen")
+    for k in ("motrpac", "bodymap", "gtex"):
+        assert m["data_access"][k]["date"], k
+    assert all("regenerated" in f for f in m["site_data_files"])
+
+
+def test_no_float_counts_in_tile_text():
+    """Counts in the tile subtitles are integers ("899 vials", never "899.0 vials")."""
+    import re
+    h = _load("headline.json")
+    for t in h["tiles"]:
+        assert not re.search(r"\d+\.0 (vials|animals|samples|organs)", t.get("sub", "")), t["sub"]
+    for r in h["ladder"]:
+        assert isinstance(r["n_samples"], int), r["n_samples"]
+
+
+def test_headline_carries_the_design_constants():
+    d = _load("headline.json")["design"]
+    assert d["n_outer_folds"] == 5 and d["n_train_animals"] + d["n_test_animals"] == 50
+    assert d["n_fit_animals"] == 18 and d["n_cal_animals"] == 22 and d["alpha"] == 0.1 and d["k_panel"] == 20
+    assert d["variance_prefilter"] == 5000 and d["C_grid"] == [0.01, 0.1, 1.0] and d["inner_splits"] == 3
+
+
+def test_no_orphan_site_data_files():
+    """Every JSON in site/data is read by some page script (or is the manifest, provenance or fixtures)."""
+    import re
+    keep = {"manifest.json", "provenance.json", "conformal_fixtures.json"}
+    refs = set()
+    for js in (ROOT / "site" / "assets").rglob("*.js"):
+        refs |= set(re.findall(r'"data/([\w.-]+\.json)"', js.read_text()))
+    orphans = sorted(p.name for p in SITE.glob("*.json") if p.name not in keep and p.name not in refs)
+    assert not orphans, orphans

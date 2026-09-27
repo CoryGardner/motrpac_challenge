@@ -1,0 +1,19 @@
+model,conformal,organ,n,frac_empty,avg_set_size,max_set_size,most_frequent_members
+k20,marginal,Thymus,8,0.75,0.25,1,HYPOTH (2)
+k20,marginal,Uterus,4,1.0,0.0,0,
+k20,mondrian,Thymus,8,0.0,2.125,3,TESTES (8); OVARY (8); HYPOTH (1)
+k20,mondrian,Uterus,4,0.0,2.0,2,TESTES (4); OVARY (4)
+k20,floored,Thymus,8,0.0,2.25,3,TESTES (8); OVARY (8); HYPOTH (2)
+k20,floored,Uterus,4,0.0,2.0,2,TESTES (4); OVARY (4)
+k50,marginal,Thymus,8,1.0,0.0,0,
+k50,marginal,Uterus,4,1.0,0.0,0,
+k50,mondrian,Thymus,8,0.0,2.5,3,TESTES (8); OVARY (8); VENACV (4)
+k50,mondrian,Uterus,4,0.0,2.0,2,TESTES (4); OVARY (4)
+k50,floored,Thymus,8,0.0,2.5,3,TESTES (8); OVARY (8); VENACV (4)
+k50,floored,Uterus,4,0.0,2.0,2,TESTES (4); OVARY (4)
+full,marginal,Thymus,8,1.0,0.0,0,
+full,marginal,Uterus,4,1.0,0.0,0,
+full,mondrian,Thymus,8,0.0,2.0,2,TESTES (8); OVARY (8)
+full,mondrian,Uterus,4,0.0,2.0,2,TESTES (4); OVARY (4)
+full,floored,Thymus,8,0.0,2.0,2,TESTES (8); OVARY (8)
+full,floored,Uterus,4,0.0,2.0,2,TESTES (4); OVARY (4)

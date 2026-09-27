@@ -1,0 +1,9 @@
+assay,n_tissues,n_samples,n_pairs_total,n_pairs_estimable,estimable_pairs,variables_used
+TRNSCRPT,19,899,171,1,OVARY|TESTES,RNA_extr_plate_ID;Lib_batch_ID;Seq_flowcell_ID
+METHYL,8,400,28,0,,DNA_extr_plate_ID;Lib_batch_ID;Seq_flowcell_ID
+ATAC,8,500,28,0,,Nuclei_extr_date;Tagmentation_date;PCR_date;Seq_flowcell_ID
+PROT,7,420,21,0,,plex_id
+PHOSPHO,7,420,21,0,,plex_id
+ACETYL,2,108,1,0,,plex_id
+UBIQ,2,120,1,0,,plex_id
+IMMUNO,17,1375,136,16,BAT|SKM-GN;BAT|WAT-SC;COLON|LIVER;COLON|SMLINT;CORTEX|HIPPOC;CORTEX|OVARY;CORTEX|TESTES;HEART|SKM-VL;HIPPOC|OVARY;HIPPOC|TESTES;KIDNEY|LUNG;KIDNEY|SPLEEN;LIVER|SMLINT;LUNG|SPLEEN;OVARY|TESTES;SKM-GN|WAT-SC,plate_id

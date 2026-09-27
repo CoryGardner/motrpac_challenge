@@ -1,7 +1,0 @@
-model,n_recal,median_cal_samples,frac_draws_infinite,set_size_recalibrated
-full,3,7.5,0.55,11.178
-full,5,13.0,0.05,2.045
-k20,3,9.0,0.45,11.697
-k20,5,14.5,0.0,6.282
-k50,3,8.5,0.5,11.624
-k50,5,16.0,0.0,4.036

@@ -10,7 +10,7 @@ import pytest
 
 from tfp import config as C, conformal as cp
 
-RES = C.RESULTS_DIR
+RES = C.results_root()          # results/ when a complete run is present, else the committed results_frozen/
 REGEN = RES / "31_site_regen"
 
 pytestmark = pytest.mark.skipif(not (RES / "06_conformal" / "TRNSCRPT" / "coverage.csv").exists(),

@@ -1,0 +1,283 @@
+id,file,where,column,agg,pre_fix
+bridge_sum_ratio_all_genes_pool99,results/16_identifiability/bridge_variance.csv,"{""gene_set"": ""all_genes"", ""pool_bid"": 80001}",sum_ratio_batch_over_tissue,value,
+bridge_median_ratio_all_genes_pool99,results/16_identifiability/bridge_variance.csv,"{""gene_set"": ""all_genes"", ""pool_bid"": 80001}",median_ratio_batch_over_tissue,value,
+bridge_n_genes_all_genes_pool99,results/16_identifiability/bridge_variance.csv,"{""gene_set"": ""all_genes"", ""pool_bid"": 80001}",n_genes,value,
+bridge_sum_ratio_all_genes_expressed_in_pool_pool99,results/16_identifiability/bridge_variance.csv,"{""gene_set"": ""all_genes_expressed_in_pool"", ""pool_bid"": 80001}",sum_ratio_batch_over_tissue,value,
+bridge_median_ratio_all_genes_expressed_in_pool_pool99,results/16_identifiability/bridge_variance.csv,"{""gene_set"": ""all_genes_expressed_in_pool"", ""pool_bid"": 80001}",median_ratio_batch_over_tissue,value,
+bridge_n_genes_all_genes_expressed_in_pool_pool99,results/16_identifiability/bridge_variance.csv,"{""gene_set"": ""all_genes_expressed_in_pool"", ""pool_bid"": 80001}",n_genes,value,
+bridge_sum_ratio_panel_k20_pool99,results/16_identifiability/bridge_variance.csv,"{""gene_set"": ""panel_k20"", ""pool_bid"": 80001}",sum_ratio_batch_over_tissue,value,
+bridge_median_ratio_panel_k20_pool99,results/16_identifiability/bridge_variance.csv,"{""gene_set"": ""panel_k20"", ""pool_bid"": 80001}",median_ratio_batch_over_tissue,value,
+bridge_n_genes_panel_k20_pool99,results/16_identifiability/bridge_variance.csv,"{""gene_set"": ""panel_k20"", ""pool_bid"": 80001}",n_genes,value,
+bridge_sum_ratio_panel_k20_expressed_in_pool_pool99,results/16_identifiability/bridge_variance.csv,"{""gene_set"": ""panel_k20_expressed_in_pool"", ""pool_bid"": 80001}",sum_ratio_batch_over_tissue,value,
+bridge_median_ratio_panel_k20_expressed_in_pool_pool99,results/16_identifiability/bridge_variance.csv,"{""gene_set"": ""panel_k20_expressed_in_pool"", ""pool_bid"": 80001}",median_ratio_batch_over_tissue,value,
+bridge_n_genes_panel_k20_expressed_in_pool_pool99,results/16_identifiability/bridge_variance.csv,"{""gene_set"": ""panel_k20_expressed_in_pool"", ""pool_bid"": 80001}",n_genes,value,
+bridge_sum_ratio_all_genes_pool88,results/16_identifiability/bridge_variance.csv,"{""gene_set"": ""all_genes"", ""pool_bid"": 80000}",sum_ratio_batch_over_tissue,value,
+bridge_median_ratio_all_genes_pool88,results/16_identifiability/bridge_variance.csv,"{""gene_set"": ""all_genes"", ""pool_bid"": 80000}",median_ratio_batch_over_tissue,value,
+bridge_n_genes_all_genes_pool88,results/16_identifiability/bridge_variance.csv,"{""gene_set"": ""all_genes"", ""pool_bid"": 80000}",n_genes,value,
+bridge_sum_ratio_all_genes_expressed_in_pool_pool88,results/16_identifiability/bridge_variance.csv,"{""gene_set"": ""all_genes_expressed_in_pool"", ""pool_bid"": 80000}",sum_ratio_batch_over_tissue,value,
+bridge_median_ratio_all_genes_expressed_in_pool_pool88,results/16_identifiability/bridge_variance.csv,"{""gene_set"": ""all_genes_expressed_in_pool"", ""pool_bid"": 80000}",median_ratio_batch_over_tissue,value,
+bridge_n_genes_all_genes_expressed_in_pool_pool88,results/16_identifiability/bridge_variance.csv,"{""gene_set"": ""all_genes_expressed_in_pool"", ""pool_bid"": 80000}",n_genes,value,
+bridge_sum_ratio_panel_k20_pool88,results/16_identifiability/bridge_variance.csv,"{""gene_set"": ""panel_k20"", ""pool_bid"": 80000}",sum_ratio_batch_over_tissue,value,
+bridge_median_ratio_panel_k20_pool88,results/16_identifiability/bridge_variance.csv,"{""gene_set"": ""panel_k20"", ""pool_bid"": 80000}",median_ratio_batch_over_tissue,value,
+bridge_n_genes_panel_k20_pool88,results/16_identifiability/bridge_variance.csv,"{""gene_set"": ""panel_k20"", ""pool_bid"": 80000}",n_genes,value,
+bridge_sum_ratio_panel_k20_expressed_in_pool_pool88,results/16_identifiability/bridge_variance.csv,"{""gene_set"": ""panel_k20_expressed_in_pool"", ""pool_bid"": 80000}",sum_ratio_batch_over_tissue,value,
+bridge_median_ratio_panel_k20_expressed_in_pool_pool88,results/16_identifiability/bridge_variance.csv,"{""gene_set"": ""panel_k20_expressed_in_pool"", ""pool_bid"": 80000}",median_ratio_batch_over_tissue,value,
+bridge_n_genes_panel_k20_expressed_in_pool_pool88,results/16_identifiability/bridge_variance.csv,"{""gene_set"": ""panel_k20_expressed_in_pool"", ""pool_bid"": 80000}",n_genes,value,
+n_trnscrpt_vials,results/04_baselines/TRNSCRPT/per_fold.csv,"{""model"": ""logreg_l2""}",n_test,sum,
+n_bodymap_adult_mapped,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""marginal"", ""model"": ""k20"", ""stage_weeks"": 21}",n_mapped,value,68
+tile_acc_k20,results/05_panels/TRNSCRPT/panel_curve.csv,"{""k"": 20}",balanced_accuracy,mean,
+tile_acc_k20_sd,results/05_panels/TRNSCRPT/panel_curve.csv,"{""k"": 20}",balanced_accuracy,std,
+tile_bodymap_k20,results/12_bodymap/age_shift_accuracy.csv,"{""stage_weeks"": 21}",k20,value,1.0
+tile_bodymap_cov_k20,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""marginal"", ""model"": ""k20"", ""stage_weeks"": 21}",coverage_mapped,value,0.6176470588235294
+tile_bodymap_empty_k20,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""marginal"", ""model"": ""k20"", ""stage_weeks"": 21}",frac_empty_mapped,value,0.3823529411764705
+tile_estimable,results/16_identifiability/estimable_pairs.csv,"{""assay"": ""TRNSCRPT""}",n_pairs_estimable,value,
+tile_estimable_total,results/16_identifiability/estimable_pairs.csv,"{""assay"": ""TRNSCRPT""}",n_pairs_total,value,
+tile_estimable_pairs,results/16_identifiability/estimable_pairs.csv,"{""assay"": ""TRNSCRPT""}",estimable_pairs,value,
+tile_estimable_pairs_text,results/16_identifiability/estimable_pairs.csv,"{""assay"": ""TRNSCRPT""}",estimable_pairs,value,
+acc_k20,results/05_panels/TRNSCRPT/panel_curve.csv,"{""k"": 20}",balanced_accuracy,mean,
+acc_k20_sd,results/05_panels/TRNSCRPT/panel_curve.csv,"{""k"": 20}",balanced_accuracy,std,
+acc_k50,results/05_panels/TRNSCRPT/panel_curve.csv,"{""k"": 50}",balanced_accuracy,mean,
+acc_k50_sd,results/05_panels/TRNSCRPT/panel_curve.csv,"{""k"": 50}",balanced_accuracy,std,
+acc_full,results/04_baselines/TRNSCRPT/summary.csv,"{""model"": ""logreg_l2""}",balanced_accuracy_mean,value,
+acc_full_sd,results/04_baselines/TRNSCRPT/summary.csv,"{""model"": ""logreg_l2""}",balanced_accuracy_std,value,
+acc_fclassif_k20,results/05_panels/TRNSCRPT/panel_curve_fclassif.csv,"{""k"": 20}",balanced_accuracy,mean,
+cov_id_full_marginal_pooled,results/06_conformal/TRNSCRPT/coverage.csv,"{""alpha"": 0.1, ""calibration"": ""pooled"", ""conformal"": ""marginal"", ""method"": ""lac""}",coverage,mean,0.911018001241465
+cov_id_full_marginal_pooled_sd,results/06_conformal/TRNSCRPT/coverage.csv,"{""alpha"": 0.1, ""calibration"": ""pooled"", ""conformal"": ""marginal"", ""method"": ""lac""}",coverage,std,0.04023829674545779
+empty_id_full_marginal_pooled,results/06_conformal/TRNSCRPT/coverage.csv,"{""alpha"": 0.1, ""calibration"": ""pooled"", ""conformal"": ""marginal"", ""method"": ""lac""}",frac_empty,mean,0.08674736188702667
+size_id_full_marginal_pooled,results/06_conformal/TRNSCRPT/coverage.csv,"{""alpha"": 0.1, ""calibration"": ""pooled"", ""conformal"": ""marginal"", ""method"": ""lac""}",avg_set_size,mean,0.9132526381129733
+cov_id_full_marginal_one_per_animal,results/06_conformal/TRNSCRPT/coverage.csv,"{""alpha"": 0.1, ""calibration"": ""one_per_animal"", ""conformal"": ""marginal"", ""method"": ""lac""}",coverage,mean,0.9622160148975791
+cov_id_full_marginal_one_per_animal_sd,results/06_conformal/TRNSCRPT/coverage.csv,"{""alpha"": 0.1, ""calibration"": ""one_per_animal"", ""conformal"": ""marginal"", ""method"": ""lac""}",coverage,std,0.05021060740959884
+empty_id_full_marginal_one_per_animal,results/06_conformal/TRNSCRPT/coverage.csv,"{""alpha"": 0.1, ""calibration"": ""one_per_animal"", ""conformal"": ""marginal"", ""method"": ""lac""}",frac_empty,mean,0.03666666666666664
+size_id_full_marginal_one_per_animal,results/06_conformal/TRNSCRPT/coverage.csv,"{""alpha"": 0.1, ""calibration"": ""one_per_animal"", ""conformal"": ""marginal"", ""method"": ""lac""}",avg_set_size,mean,1.1805027932960894
+cov_id_full_mondrian_pooled,results/06_conformal/TRNSCRPT/coverage.csv,"{""alpha"": 0.1, ""calibration"": ""pooled"", ""conformal"": ""mondrian"", ""method"": ""lac""}",coverage,mean,0.9599565487274985
+cov_id_full_mondrian_pooled_sd,results/06_conformal/TRNSCRPT/coverage.csv,"{""alpha"": 0.1, ""calibration"": ""pooled"", ""conformal"": ""mondrian"", ""method"": ""lac""}",coverage,std,0.008233466867252235
+empty_id_full_mondrian_pooled,results/06_conformal/TRNSCRPT/coverage.csv,"{""alpha"": 0.1, ""calibration"": ""pooled"", ""conformal"": ""mondrian"", ""method"": ""lac""}",frac_empty,mean,0.03336436995654868
+size_id_full_mondrian_pooled,results/06_conformal/TRNSCRPT/coverage.csv,"{""alpha"": 0.1, ""calibration"": ""pooled"", ""conformal"": ""mondrian"", ""method"": ""lac""}",avg_set_size,mean,0.9921911855990068
+cov_id_full_floored_pooled,results/06_conformal/TRNSCRPT/coverage.csv,"{""alpha"": 0.1, ""calibration"": ""pooled"", ""conformal"": ""floored"", ""method"": ""lac""}",coverage,mean,0.9855369335816263
+cov_id_full_floored_pooled_sd,results/06_conformal/TRNSCRPT/coverage.csv,"{""alpha"": 0.1, ""calibration"": ""pooled"", ""conformal"": ""floored"", ""method"": ""lac""}",coverage,std,0.009301878433236063
+empty_id_full_floored_pooled,results/06_conformal/TRNSCRPT/coverage.csv,"{""alpha"": 0.1, ""calibration"": ""pooled"", ""conformal"": ""floored"", ""method"": ""lac""}",frac_empty,mean,0.008895096213531921
+size_id_full_floored_pooled,results/06_conformal/TRNSCRPT/coverage.csv,"{""alpha"": 0.1, ""calibration"": ""pooled"", ""conformal"": ""floored"", ""method"": ""lac""}",avg_set_size,mean,1.0177715704531347
+cov_train_control_test_trained_k20_marginal,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""panel_k20"", ""split"": ""train_control_test_trained""}",coverage_target_seen,value,0.9040333796940194
+acc_train_control_test_trained_k20,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""panel_k20"", ""split"": ""train_control_test_trained""}",accuracy_all,value,0.96105702364395
+accseen_train_control_test_trained_k20,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""panel_k20"", ""split"": ""train_control_test_trained""}",bal_acc_seen,value,0.963157894736842
+size_train_control_test_trained_k20_marginal,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""panel_k20"", ""split"": ""train_control_test_trained""}",avg_set_size_target,value,0.9221140472878998
+covsrc_train_control_test_trained_k20,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""panel_k20"", ""split"": ""train_control_test_trained""}",coverage_source_id,value,0.9444444444444444
+recal3_train_control_test_trained_k20,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""panel_k20"", ""split"": ""train_control_test_trained""}",cov_target_recal_N3,value,0.9322183837973312
+cov_train_control_test_trained_k20_mondrian,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""panel_k20"", ""split"": ""train_control_test_trained""}",coverage_target_seen_mondrian,value,0.7107093184979137
+size_train_control_test_trained_k20_mondrian,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""panel_k20"", ""split"": ""train_control_test_trained""}",avg_set_size_target_mondrian,value,0.717663421418637
+cov_train_control_test_trained_k20_floored,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""panel_k20"", ""split"": ""train_control_test_trained""}",coverage_target_seen_floored,value,0.9262865090403338
+size_train_control_test_trained_k20_floored,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""panel_k20"", ""split"": ""train_control_test_trained""}",avg_set_size_target_floored,value,0.9457579972183588
+cov_train_control_test_trained_k50_marginal,results/31_site_regen/08_shift_k50/shift_table.csv,"{""arm"": ""panel_k50"", ""split"": ""train_control_test_trained""}",coverage_target_seen,value,
+acc_train_control_test_trained_k50,results/31_site_regen/08_shift_k50/shift_table.csv,"{""arm"": ""panel_k50"", ""split"": ""train_control_test_trained""}",accuracy_all,value,
+accseen_train_control_test_trained_k50,results/31_site_regen/08_shift_k50/shift_table.csv,"{""arm"": ""panel_k50"", ""split"": ""train_control_test_trained""}",bal_acc_seen,value,
+size_train_control_test_trained_k50_marginal,results/31_site_regen/08_shift_k50/shift_table.csv,"{""arm"": ""panel_k50"", ""split"": ""train_control_test_trained""}",avg_set_size_target,value,
+covsrc_train_control_test_trained_k50,results/31_site_regen/08_shift_k50/shift_table.csv,"{""arm"": ""panel_k50"", ""split"": ""train_control_test_trained""}",coverage_source_id,value,
+recal3_train_control_test_trained_k50,results/31_site_regen/08_shift_k50/shift_table.csv,"{""arm"": ""panel_k50"", ""split"": ""train_control_test_trained""}",cov_target_recal_N3,value,
+cov_train_control_test_trained_k50_mondrian,results/31_site_regen/08_shift_k50/shift_table.csv,"{""arm"": ""panel_k50"", ""split"": ""train_control_test_trained""}",coverage_target_seen_mondrian,value,
+size_train_control_test_trained_k50_mondrian,results/31_site_regen/08_shift_k50/shift_table.csv,"{""arm"": ""panel_k50"", ""split"": ""train_control_test_trained""}",avg_set_size_target_mondrian,value,
+cov_train_control_test_trained_k50_floored,results/31_site_regen/08_shift_k50/shift_table.csv,"{""arm"": ""panel_k50"", ""split"": ""train_control_test_trained""}",coverage_target_seen_floored,value,
+size_train_control_test_trained_k50_floored,results/31_site_regen/08_shift_k50/shift_table.csv,"{""arm"": ""panel_k50"", ""split"": ""train_control_test_trained""}",avg_set_size_target_floored,value,
+cov_train_control_test_trained_full_marginal,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""full"", ""split"": ""train_control_test_trained""}",coverage_target_seen,value,0.8845618915159944
+acc_train_control_test_trained_full,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""full"", ""split"": ""train_control_test_trained""}",accuracy_all,value,0.9791376912378305
+accseen_train_control_test_trained_full,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""full"", ""split"": ""train_control_test_trained""}",bal_acc_seen,value,0.9802631578947368
+size_train_control_test_trained_full_marginal,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""full"", ""split"": ""train_control_test_trained""}",avg_set_size_target,value,0.894297635605007
+covsrc_train_control_test_trained_full,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""full"", ""split"": ""train_control_test_trained""}",coverage_source_id,value,0.9444444444444444
+recal3_train_control_test_trained_full,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""full"", ""split"": ""train_control_test_trained""}",cov_target_recal_N3,value,0.9346219151482308
+cov_train_control_test_trained_full_mondrian,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""full"", ""split"": ""train_control_test_trained""}",coverage_target_seen_mondrian,value,0.7190542420027817
+size_train_control_test_trained_full_mondrian,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""full"", ""split"": ""train_control_test_trained""}",avg_set_size_target_mondrian,value,0.721835883171071
+cov_train_control_test_trained_full_floored,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""full"", ""split"": ""train_control_test_trained""}",coverage_target_seen_floored,value,0.9109874826147428
+size_train_control_test_trained_full_floored,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""full"", ""split"": ""train_control_test_trained""}",avg_set_size_target_floored,value,0.9221140472878998
+cov_train_male_test_female_k20_marginal,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""panel_k20"", ""split"": ""train_male_test_female""}",coverage_target_seen,value,0.8376470588235294
+acc_train_male_test_female_k20,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""panel_k20"", ""split"": ""train_male_test_female""}",accuracy_all,value,0.8930957683741648
+accseen_train_male_test_female_k20,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""panel_k20"", ""split"": ""train_male_test_female""}",bal_acc_seen,value,0.943529411764706
+size_train_male_test_female_k20_marginal,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""panel_k20"", ""split"": ""train_male_test_female""}",avg_set_size_target,value,0.821826280623608
+covsrc_train_male_test_female_k20,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""panel_k20"", ""split"": ""train_male_test_female""}",coverage_source_id,value,0.9444444444444444
+recal3_train_male_test_female_k20,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""panel_k20"", ""split"": ""train_male_test_female""}",cov_target_recal_N3,value,0.9387700534759358
+unseen_train_male_test_female_k20,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""panel_k20"", ""split"": ""train_male_test_female""}",unseen_classes,value,OVARY
+cov_train_male_test_female_k20_mondrian,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""panel_k20"", ""split"": ""train_male_test_female""}",coverage_target_seen_mondrian,value,0.7035294117647058
+size_train_male_test_female_k20_mondrian,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""panel_k20"", ""split"": ""train_male_test_female""}",avg_set_size_target_mondrian,value,0.7015590200445434
+cov_train_male_test_female_k20_floored,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""panel_k20"", ""split"": ""train_male_test_female""}",coverage_target_seen_floored,value,0.9247058823529412
+size_train_male_test_female_k20_floored,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""panel_k20"", ""split"": ""train_male_test_female""}",avg_set_size_target_floored,value,0.910913140311804
+cov_train_male_test_female_k50_marginal,results/31_site_regen/08_shift_k50/shift_table.csv,"{""arm"": ""panel_k50"", ""split"": ""train_male_test_female""}",coverage_target_seen,value,
+acc_train_male_test_female_k50,results/31_site_regen/08_shift_k50/shift_table.csv,"{""arm"": ""panel_k50"", ""split"": ""train_male_test_female""}",accuracy_all,value,
+accseen_train_male_test_female_k50,results/31_site_regen/08_shift_k50/shift_table.csv,"{""arm"": ""panel_k50"", ""split"": ""train_male_test_female""}",bal_acc_seen,value,
+size_train_male_test_female_k50_marginal,results/31_site_regen/08_shift_k50/shift_table.csv,"{""arm"": ""panel_k50"", ""split"": ""train_male_test_female""}",avg_set_size_target,value,
+covsrc_train_male_test_female_k50,results/31_site_regen/08_shift_k50/shift_table.csv,"{""arm"": ""panel_k50"", ""split"": ""train_male_test_female""}",coverage_source_id,value,
+recal3_train_male_test_female_k50,results/31_site_regen/08_shift_k50/shift_table.csv,"{""arm"": ""panel_k50"", ""split"": ""train_male_test_female""}",cov_target_recal_N3,value,
+unseen_train_male_test_female_k50,results/31_site_regen/08_shift_k50/shift_table.csv,"{""arm"": ""panel_k50"", ""split"": ""train_male_test_female""}",unseen_classes,value,
+cov_train_male_test_female_k50_mondrian,results/31_site_regen/08_shift_k50/shift_table.csv,"{""arm"": ""panel_k50"", ""split"": ""train_male_test_female""}",coverage_target_seen_mondrian,value,
+size_train_male_test_female_k50_mondrian,results/31_site_regen/08_shift_k50/shift_table.csv,"{""arm"": ""panel_k50"", ""split"": ""train_male_test_female""}",avg_set_size_target_mondrian,value,
+cov_train_male_test_female_k50_floored,results/31_site_regen/08_shift_k50/shift_table.csv,"{""arm"": ""panel_k50"", ""split"": ""train_male_test_female""}",coverage_target_seen_floored,value,
+size_train_male_test_female_k50_floored,results/31_site_regen/08_shift_k50/shift_table.csv,"{""arm"": ""panel_k50"", ""split"": ""train_male_test_female""}",avg_set_size_target_floored,value,
+cov_train_male_test_female_full_marginal,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""full"", ""split"": ""train_male_test_female""}",coverage_target_seen,value,0.8188235294117647
+acc_train_male_test_female_full,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""full"", ""split"": ""train_male_test_female""}",accuracy_all,value,0.9131403118040088
+accseen_train_male_test_female_full,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""full"", ""split"": ""train_male_test_female""}",bal_acc_seen,value,0.9647058823529412
+size_train_male_test_female_full_marginal,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""full"", ""split"": ""train_male_test_female""}",avg_set_size_target,value,0.7928730512249443
+covsrc_train_male_test_female_full,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""full"", ""split"": ""train_male_test_female""}",coverage_source_id,value,0.9305555555555556
+recal3_train_male_test_female_full,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""full"", ""split"": ""train_male_test_female""}",cov_target_recal_N3,value,0.9307486631016044
+unseen_train_male_test_female_full,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""full"", ""split"": ""train_male_test_female""}",unseen_classes,value,OVARY
+cov_train_male_test_female_full_mondrian,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""full"", ""split"": ""train_male_test_female""}",coverage_target_seen_mondrian,value,0.6988235294117647
+size_train_male_test_female_full_mondrian,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""full"", ""split"": ""train_male_test_female""}",avg_set_size_target_mondrian,value,0.6926503340757239
+cov_train_male_test_female_full_floored,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""full"", ""split"": ""train_male_test_female""}",coverage_target_seen_floored,value,0.8941176470588236
+size_train_male_test_female_full_floored,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""full"", ""split"": ""train_male_test_female""}",avg_set_size_target_floored,value,0.8775055679287305
+cov_train_female_test_male_k20_marginal,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""panel_k20"", ""split"": ""train_female_test_male""}",coverage_target_seen,value,0.8823529411764706
+acc_train_female_test_male_k20,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""panel_k20"", ""split"": ""train_female_test_male""}",accuracy_all,value,0.9
+accseen_train_female_test_male_k20,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""panel_k20"", ""split"": ""train_female_test_male""}",bal_acc_seen,value,0.9529411764705882
+size_train_female_test_male_k20_marginal,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""panel_k20"", ""split"": ""train_female_test_male""}",avg_set_size_target,value,0.8333333333333334
+covsrc_train_female_test_male_k20,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""panel_k20"", ""split"": ""train_female_test_male""}",coverage_source_id,value,0.9583333333333334
+recal3_train_female_test_male_k20,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""panel_k20"", ""split"": ""train_female_test_male""}",cov_target_recal_N3,value,0.927807486631016
+unseen_train_female_test_male_k20,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""panel_k20"", ""split"": ""train_female_test_male""}",unseen_classes,value,TESTES
+cov_train_female_test_male_k20_mondrian,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""panel_k20"", ""split"": ""train_female_test_male""}",coverage_target_seen_mondrian,value,0.7976470588235294
+size_train_female_test_male_k20_mondrian,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""panel_k20"", ""split"": ""train_female_test_male""}",avg_set_size_target_mondrian,value,0.88
+cov_train_female_test_male_k20_floored,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""panel_k20"", ""split"": ""train_female_test_male""}",coverage_target_seen_floored,value,0.9152941176470588
+size_train_female_test_male_k20_floored,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""panel_k20"", ""split"": ""train_female_test_male""}",avg_set_size_target_floored,value,0.9911111111111112
+cov_train_female_test_male_k50_marginal,results/31_site_regen/08_shift_k50/shift_table.csv,"{""arm"": ""panel_k50"", ""split"": ""train_female_test_male""}",coverage_target_seen,value,
+acc_train_female_test_male_k50,results/31_site_regen/08_shift_k50/shift_table.csv,"{""arm"": ""panel_k50"", ""split"": ""train_female_test_male""}",accuracy_all,value,
+accseen_train_female_test_male_k50,results/31_site_regen/08_shift_k50/shift_table.csv,"{""arm"": ""panel_k50"", ""split"": ""train_female_test_male""}",bal_acc_seen,value,
+size_train_female_test_male_k50_marginal,results/31_site_regen/08_shift_k50/shift_table.csv,"{""arm"": ""panel_k50"", ""split"": ""train_female_test_male""}",avg_set_size_target,value,
+covsrc_train_female_test_male_k50,results/31_site_regen/08_shift_k50/shift_table.csv,"{""arm"": ""panel_k50"", ""split"": ""train_female_test_male""}",coverage_source_id,value,
+recal3_train_female_test_male_k50,results/31_site_regen/08_shift_k50/shift_table.csv,"{""arm"": ""panel_k50"", ""split"": ""train_female_test_male""}",cov_target_recal_N3,value,
+unseen_train_female_test_male_k50,results/31_site_regen/08_shift_k50/shift_table.csv,"{""arm"": ""panel_k50"", ""split"": ""train_female_test_male""}",unseen_classes,value,
+cov_train_female_test_male_k50_mondrian,results/31_site_regen/08_shift_k50/shift_table.csv,"{""arm"": ""panel_k50"", ""split"": ""train_female_test_male""}",coverage_target_seen_mondrian,value,
+size_train_female_test_male_k50_mondrian,results/31_site_regen/08_shift_k50/shift_table.csv,"{""arm"": ""panel_k50"", ""split"": ""train_female_test_male""}",avg_set_size_target_mondrian,value,
+cov_train_female_test_male_k50_floored,results/31_site_regen/08_shift_k50/shift_table.csv,"{""arm"": ""panel_k50"", ""split"": ""train_female_test_male""}",coverage_target_seen_floored,value,
+size_train_female_test_male_k50_floored,results/31_site_regen/08_shift_k50/shift_table.csv,"{""arm"": ""panel_k50"", ""split"": ""train_female_test_male""}",avg_set_size_target_floored,value,
+cov_train_female_test_male_full_marginal,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""full"", ""split"": ""train_female_test_male""}",coverage_target_seen,value,0.8964705882352941
+acc_train_female_test_male_full,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""full"", ""split"": ""train_female_test_male""}",accuracy_all,value,0.9422222222222222
+accseen_train_female_test_male_full,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""full"", ""split"": ""train_female_test_male""}",bal_acc_seen,value,0.9976470588235294
+size_train_female_test_male_full_marginal,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""full"", ""split"": ""train_female_test_male""}",avg_set_size_target,value,0.8466666666666667
+covsrc_train_female_test_male_full,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""full"", ""split"": ""train_female_test_male""}",coverage_source_id,value,0.9305555555555556
+recal3_train_female_test_male_full,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""full"", ""split"": ""train_female_test_male""}",cov_target_recal_N3,value,0.9403743315508022
+unseen_train_female_test_male_full,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""full"", ""split"": ""train_female_test_male""}",unseen_classes,value,TESTES
+cov_train_female_test_male_full_mondrian,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""full"", ""split"": ""train_female_test_male""}",coverage_target_seen_mondrian,value,0.7976470588235294
+size_train_female_test_male_full_mondrian,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""full"", ""split"": ""train_female_test_male""}",avg_set_size_target_mondrian,value,0.8088888888888889
+cov_train_female_test_male_full_floored,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""full"", ""split"": ""train_female_test_male""}",coverage_target_seen_floored,value,0.9364705882352942
+size_train_female_test_male_full_floored,results/08_shift/TRNSCRPT/shift_table.csv,"{""arm"": ""full"", ""split"": ""train_female_test_male""}",avg_set_size_target_floored,value,0.94
+acc_bodymap_k20,results/12_bodymap/age_shift_accuracy.csv,"{""stage_weeks"": 21}",k20,value,1.0
+cov_bodymap_k20_marginal,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""marginal"", ""model"": ""k20"", ""stage_weeks"": 21}",coverage_mapped,value,0.6176470588235294
+empty_bodymap_k20_marginal,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""marginal"", ""model"": ""k20"", ""stage_weeks"": 21}",frac_empty_mapped,value,0.3823529411764705
+size_bodymap_k20_marginal,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""marginal"", ""model"": ""k20"", ""stage_weeks"": 21}",avg_set_size_mapped,value,0.6176470588235294
+recal3_bodymap_k20,results/12_bodymap/recalibration.csv,"{""model"": ""k20"", ""n_recal"": 3}",coverage_recalibrated,value,0.9696227222390011
+recal3size_bodymap_k20,results/12_bodymap/recalibration.csv,"{""model"": ""k20"", ""n_recal"": 3}",set_size_recalibrated,value,1.105763616228732
+n_bodymap_k20_marginal,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""marginal"", ""model"": ""k20"", ""stage_weeks"": 21}",n_mapped,value,68
+cov_bodymap_k20_mondrian,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""mondrian"", ""model"": ""k20"", ""stage_weeks"": 21}",coverage_mapped,value,0.2794117647058823
+empty_bodymap_k20_mondrian,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""mondrian"", ""model"": ""k20"", ""stage_weeks"": 21}",frac_empty_mapped,value,0.6323529411764706
+size_bodymap_k20_mondrian,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""mondrian"", ""model"": ""k20"", ""stage_weeks"": 21}",avg_set_size_mapped,value,0.3676470588235294
+n_bodymap_k20_mondrian,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""mondrian"", ""model"": ""k20"", ""stage_weeks"": 21}",n_mapped,value,68
+cov_bodymap_k20_floored,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""floored"", ""model"": ""k20"", ""stage_weeks"": 21}",coverage_mapped,value,0.6911764705882353
+empty_bodymap_k20_floored,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""floored"", ""model"": ""k20"", ""stage_weeks"": 21}",frac_empty_mapped,value,0.2352941176470588
+size_bodymap_k20_floored,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""floored"", ""model"": ""k20"", ""stage_weeks"": 21}",avg_set_size_mapped,value,0.7794117647058824
+n_bodymap_k20_floored,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""floored"", ""model"": ""k20"", ""stage_weeks"": 21}",n_mapped,value,68
+acc_bodymap_k50,results/12_bodymap/age_shift_accuracy.csv,"{""stage_weeks"": 21}",k50,value,0.9852941176470588
+cov_bodymap_k50_marginal,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""marginal"", ""model"": ""k50"", ""stage_weeks"": 21}",coverage_mapped,value,0.6617647058823529
+empty_bodymap_k50_marginal,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""marginal"", ""model"": ""k50"", ""stage_weeks"": 21}",frac_empty_mapped,value,0.3235294117647059
+size_bodymap_k50_marginal,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""marginal"", ""model"": ""k50"", ""stage_weeks"": 21}",avg_set_size_mapped,value,0.6764705882352942
+recal3_bodymap_k50,results/12_bodymap/recalibration.csv,"{""model"": ""k50"", ""n_recal"": 3}",coverage_recalibrated,value,0.9423588039867108
+recal3size_bodymap_k50,results/12_bodymap/recalibration.csv,"{""model"": ""k50"", ""n_recal"": 3}",set_size_recalibrated,value,1.1076965669988923
+n_bodymap_k50_marginal,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""marginal"", ""model"": ""k50"", ""stage_weeks"": 21}",n_mapped,value,68
+cov_bodymap_k50_mondrian,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""mondrian"", ""model"": ""k50"", ""stage_weeks"": 21}",coverage_mapped,value,0.1764705882352941
+empty_bodymap_k50_mondrian,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""mondrian"", ""model"": ""k50"", ""stage_weeks"": 21}",frac_empty_mapped,value,0.7352941176470589
+size_bodymap_k50_mondrian,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""mondrian"", ""model"": ""k50"", ""stage_weeks"": 21}",avg_set_size_mapped,value,0.2647058823529412
+n_bodymap_k50_mondrian,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""mondrian"", ""model"": ""k50"", ""stage_weeks"": 21}",n_mapped,value,68
+cov_bodymap_k50_floored,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""floored"", ""model"": ""k50"", ""stage_weeks"": 21}",coverage_mapped,value,0.6911764705882353
+empty_bodymap_k50_floored,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""floored"", ""model"": ""k50"", ""stage_weeks"": 21}",frac_empty_mapped,value,0.2058823529411764
+size_bodymap_k50_floored,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""floored"", ""model"": ""k50"", ""stage_weeks"": 21}",avg_set_size_mapped,value,0.7941176470588235
+n_bodymap_k50_floored,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""floored"", ""model"": ""k50"", ""stage_weeks"": 21}",n_mapped,value,68
+acc_bodymap_full,results/12_bodymap/age_shift_accuracy.csv,"{""stage_weeks"": 21}",full,value,1.0
+cov_bodymap_full_marginal,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""marginal"", ""model"": ""full"", ""stage_weeks"": 21}",coverage_mapped,value,0.7058823529411765
+empty_bodymap_full_marginal,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""marginal"", ""model"": ""full"", ""stage_weeks"": 21}",frac_empty_mapped,value,0.2941176470588235
+size_bodymap_full_marginal,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""marginal"", ""model"": ""full"", ""stage_weeks"": 21}",avg_set_size_mapped,value,0.7058823529411765
+recal3_bodymap_full,results/12_bodymap/recalibration.csv,"{""model"": ""full"", ""n_recal"": 3}",coverage_recalibrated,value,0.9707351756770362
+recal3size_bodymap_full,results/12_bodymap/recalibration.csv,"{""model"": ""full"", ""n_recal"": 3}",set_size_recalibrated,value,0.9707351756770362
+n_bodymap_full_marginal,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""marginal"", ""model"": ""full"", ""stage_weeks"": 21}",n_mapped,value,68
+cov_bodymap_full_mondrian,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""mondrian"", ""model"": ""full"", ""stage_weeks"": 21}",coverage_mapped,value,0.2794117647058823
+empty_bodymap_full_mondrian,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""mondrian"", ""model"": ""full"", ""stage_weeks"": 21}",frac_empty_mapped,value,0.7205882352941176
+size_bodymap_full_mondrian,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""mondrian"", ""model"": ""full"", ""stage_weeks"": 21}",avg_set_size_mapped,value,0.2794117647058823
+n_bodymap_full_mondrian,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""mondrian"", ""model"": ""full"", ""stage_weeks"": 21}",n_mapped,value,68
+cov_bodymap_full_floored,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""floored"", ""model"": ""full"", ""stage_weeks"": 21}",coverage_mapped,value,0.75
+empty_bodymap_full_floored,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""floored"", ""model"": ""full"", ""stage_weeks"": 21}",frac_empty_mapped,value,0.25
+size_bodymap_full_floored,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""floored"", ""model"": ""full"", ""stage_weeks"": 21}",avg_set_size_mapped,value,0.75
+n_bodymap_full_floored,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""floored"", ""model"": ""full"", ""stage_weeks"": 21}",n_mapped,value,68
+acc_gtex_k20,results/13_gtex/accuracy_overall.csv,"{""model"": ""k20""}",accuracy_sample_weighted,value,0.6539235412474849
+cov_gtex_k20_marginal,results/13_gtex/conformal_transfer.csv,"{""conformal"": ""marginal"", ""model"": ""k20"", ""stage"": ""adult""}",coverage_mapped,value,0.3678068410462776
+empty_gtex_k20_marginal,results/13_gtex/conformal_transfer.csv,"{""conformal"": ""marginal"", ""model"": ""k20"", ""stage"": ""adult""}",frac_empty_mapped,value,0.6112676056338028
+size_gtex_k20_marginal,results/13_gtex/conformal_transfer.csv,"{""conformal"": ""marginal"", ""model"": ""k20"", ""stage"": ""adult""}",avg_set_size_mapped,value,0.3887323943661971
+recal3_gtex_k20,results/13_gtex/recalibration.csv,"{""model"": ""k20"", ""n_recal"": 3}",coverage_recalibrated,value,0.8795268061014241
+recal3size_gtex_k20,results/13_gtex/recalibration.csv,"{""model"": ""k20"", ""n_recal"": 3}",set_size_recalibrated,value,4.14935352907998
+n_gtex_k20_marginal,results/13_gtex/conformal_transfer.csv,"{""conformal"": ""marginal"", ""model"": ""k20"", ""stage"": ""adult""}",n_mapped,value,2485
+cov_gtex_k20_mondrian,results/13_gtex/conformal_transfer.csv,"{""conformal"": ""mondrian"", ""model"": ""k20"", ""stage"": ""adult""}",coverage_mapped,value,0.2084507042253521
+empty_gtex_k20_mondrian,results/13_gtex/conformal_transfer.csv,"{""conformal"": ""mondrian"", ""model"": ""k20"", ""stage"": ""adult""}",frac_empty_mapped,value,0.6503018108651911
+size_gtex_k20_mondrian,results/13_gtex/conformal_transfer.csv,"{""conformal"": ""mondrian"", ""model"": ""k20"", ""stage"": ""adult""}",avg_set_size_mapped,value,0.3529175050301811
+n_gtex_k20_mondrian,results/13_gtex/conformal_transfer.csv,"{""conformal"": ""mondrian"", ""model"": ""k20"", ""stage"": ""adult""}",n_mapped,value,2485
+cov_gtex_k20_floored,results/13_gtex/conformal_transfer.csv,"{""conformal"": ""floored"", ""model"": ""k20"", ""stage"": ""adult""}",coverage_mapped,value,0.4044265593561368
+empty_gtex_k20_floored,results/13_gtex/conformal_transfer.csv,"{""conformal"": ""floored"", ""model"": ""k20"", ""stage"": ""adult""}",frac_empty_mapped,value,0.4523138832997987
+size_gtex_k20_floored,results/13_gtex/conformal_transfer.csv,"{""conformal"": ""floored"", ""model"": ""k20"", ""stage"": ""adult""}",avg_set_size_mapped,value,0.5525150905432595
+n_gtex_k20_floored,results/13_gtex/conformal_transfer.csv,"{""conformal"": ""floored"", ""model"": ""k20"", ""stage"": ""adult""}",n_mapped,value,2485
+acc_gtex_k50,results/13_gtex/accuracy_overall.csv,"{""model"": ""k50""}",accuracy_sample_weighted,value,0.7814889336016096
+cov_gtex_k50_marginal,results/13_gtex/conformal_transfer.csv,"{""conformal"": ""marginal"", ""model"": ""k50"", ""stage"": ""adult""}",coverage_mapped,value,0.3678068410462776
+empty_gtex_k50_marginal,results/13_gtex/conformal_transfer.csv,"{""conformal"": ""marginal"", ""model"": ""k50"", ""stage"": ""adult""}",frac_empty_mapped,value,0.6265593561368209
+size_gtex_k50_marginal,results/13_gtex/conformal_transfer.csv,"{""conformal"": ""marginal"", ""model"": ""k50"", ""stage"": ""adult""}",avg_set_size_mapped,value,0.3734406438631791
+recal3_gtex_k50,results/13_gtex/recalibration.csv,"{""model"": ""k50"", ""n_recal"": 3}",coverage_recalibrated,value,0.9015256986439736
+recal3size_gtex_k50,results/13_gtex/recalibration.csv,"{""model"": ""k50"", ""n_recal"": 3}",set_size_recalibrated,value,3.45569877491189
+n_gtex_k50_marginal,results/13_gtex/conformal_transfer.csv,"{""conformal"": ""marginal"", ""model"": ""k50"", ""stage"": ""adult""}",n_mapped,value,2485
+cov_gtex_k50_mondrian,results/13_gtex/conformal_transfer.csv,"{""conformal"": ""mondrian"", ""model"": ""k50"", ""stage"": ""adult""}",coverage_mapped,value,0.1810865191146881
+empty_gtex_k50_mondrian,results/13_gtex/conformal_transfer.csv,"{""conformal"": ""mondrian"", ""model"": ""k50"", ""stage"": ""adult""}",frac_empty_mapped,value,0.7835010060362173
+size_gtex_k50_mondrian,results/13_gtex/conformal_transfer.csv,"{""conformal"": ""mondrian"", ""model"": ""k50"", ""stage"": ""adult""}",avg_set_size_mapped,value,0.2164989939637827
+n_gtex_k50_mondrian,results/13_gtex/conformal_transfer.csv,"{""conformal"": ""mondrian"", ""model"": ""k50"", ""stage"": ""adult""}",n_mapped,value,2485
+cov_gtex_k50_floored,results/13_gtex/conformal_transfer.csv,"{""conformal"": ""floored"", ""model"": ""k50"", ""stage"": ""adult""}",coverage_mapped,value,0.393158953722334
+empty_gtex_k50_floored,results/13_gtex/conformal_transfer.csv,"{""conformal"": ""floored"", ""model"": ""k50"", ""stage"": ""adult""}",frac_empty_mapped,value,0.5682092555331992
+size_gtex_k50_floored,results/13_gtex/conformal_transfer.csv,"{""conformal"": ""floored"", ""model"": ""k50"", ""stage"": ""adult""}",avg_set_size_mapped,value,0.4317907444668008
+n_gtex_k50_floored,results/13_gtex/conformal_transfer.csv,"{""conformal"": ""floored"", ""model"": ""k50"", ""stage"": ""adult""}",n_mapped,value,2485
+acc_gtex_full,results/13_gtex/accuracy_overall.csv,"{""model"": ""full""}",accuracy_sample_weighted,value,0.854728370221328
+cov_gtex_full_marginal,results/13_gtex/conformal_transfer.csv,"{""conformal"": ""marginal"", ""model"": ""full"", ""stage"": ""adult""}",coverage_mapped,value,0.0635814889336016
+empty_gtex_full_marginal,results/13_gtex/conformal_transfer.csv,"{""conformal"": ""marginal"", ""model"": ""full"", ""stage"": ""adult""}",frac_empty_mapped,value,0.9364185110663984
+size_gtex_full_marginal,results/13_gtex/conformal_transfer.csv,"{""conformal"": ""marginal"", ""model"": ""full"", ""stage"": ""adult""}",avg_set_size_mapped,value,0.0635814889336016
+recal3_gtex_full,results/13_gtex/recalibration.csv,"{""model"": ""full"", ""n_recal"": 3}",coverage_recalibrated,value,0.8801259557785102
+recal3size_gtex_full,results/13_gtex/recalibration.csv,"{""model"": ""full"", ""n_recal"": 3}",set_size_recalibrated,value,1.5143512423162275
+n_gtex_full_marginal,results/13_gtex/conformal_transfer.csv,"{""conformal"": ""marginal"", ""model"": ""full"", ""stage"": ""adult""}",n_mapped,value,2485
+cov_gtex_full_mondrian,results/13_gtex/conformal_transfer.csv,"{""conformal"": ""mondrian"", ""model"": ""full"", ""stage"": ""adult""}",coverage_mapped,value,0.0776659959758551
+empty_gtex_full_mondrian,results/13_gtex/conformal_transfer.csv,"{""conformal"": ""mondrian"", ""model"": ""full"", ""stage"": ""adult""}",frac_empty_mapped,value,0.9203219315895372
+size_gtex_full_mondrian,results/13_gtex/conformal_transfer.csv,"{""conformal"": ""mondrian"", ""model"": ""full"", ""stage"": ""adult""}",avg_set_size_mapped,value,0.0796780684104627
+n_gtex_full_mondrian,results/13_gtex/conformal_transfer.csv,"{""conformal"": ""mondrian"", ""model"": ""full"", ""stage"": ""adult""}",n_mapped,value,2485
+cov_gtex_full_floored,results/13_gtex/conformal_transfer.csv,"{""conformal"": ""floored"", ""model"": ""full"", ""stage"": ""adult""}",coverage_mapped,value,0.1327967806841046
+empty_gtex_full_floored,results/13_gtex/conformal_transfer.csv,"{""conformal"": ""floored"", ""model"": ""full"", ""stage"": ""adult""}",frac_empty_mapped,value,0.8651911468812877
+size_gtex_full_floored,results/13_gtex/conformal_transfer.csv,"{""conformal"": ""floored"", ""model"": ""full"", ""stage"": ""adult""}",avg_set_size_mapped,value,0.1348088531187122
+n_gtex_full_floored,results/13_gtex/conformal_transfer.csv,"{""conformal"": ""floored"", ""model"": ""full"", ""stage"": ""adult""}",n_mapped,value,2485
+gtex_heart_k20,results/13_gtex/accuracy_by_tissue.csv,"{""gtex_tissue"": ""Heart - Left Ventricle"", ""model"": ""k20""}",accuracy,value,0.0333333333333333
+gtex_heart_k20_top,results/13_gtex/accuracy_by_tissue.csv,"{""gtex_tissue"": ""Heart - Left Ventricle"", ""model"": ""k20""}",top_prediction,value,SKM-GN
+gtex_heart_k20_top_frac,results/13_gtex/accuracy_by_tissue.csv,"{""gtex_tissue"": ""Heart - Left Ventricle"", ""model"": ""k20""}",top_prediction_frac,value,0.88
+gtex_ovary_k20,results/13_gtex/accuracy_by_tissue.csv,"{""gtex_tissue"": ""Ovary"", ""model"": ""k20""}",accuracy,value,0.0
+gtex_ovary_k20_top,results/13_gtex/accuracy_by_tissue.csv,"{""gtex_tissue"": ""Ovary"", ""model"": ""k20""}",top_prediction,value,HEART
+gtex_ovary_k20_top_frac,results/13_gtex/accuracy_by_tissue.csv,"{""gtex_tissue"": ""Ovary"", ""model"": ""k20""}",top_prediction_frac,value,0.9533333333333334
+gtex_native_k20,results/13_gtex/native_panel.csv,{},native_gtex_panel_k20_accuracy,value,0.9790744466800804
+bodymap_native_k20,results/12_bodymap/native_panel.csv,{},native_panel_k20_accuracy_9_mapped_organs,value,0.9925373134328358
+bodymap_imported_k20_all_ages,results/12_bodymap/native_panel.csv,{},imported_k20_accuracy_9_mapped_organs_all_ages,value,0.9104477611940298
+bodymap_acc_2wk_k20,results/12_bodymap/age_shift_accuracy.csv,"{""stage_weeks"": 2}",k20,value,0.7647058823529411
+bodymap_acc_6wk_k20,results/12_bodymap/age_shift_accuracy.csv,"{""stage_weeks"": 6}",k20,value,0.9701492537313432
+bodymap_acc_104wk_k20,results/12_bodymap/age_shift_accuracy.csv,"{""stage_weeks"": 104}",k20,value,0.9076923076923076
+bodymap_floored_k20,results/12_bodymap/conformal_transfer.csv,"{""conformal"": ""floored"", ""model"": ""k20"", ""stage_weeks"": 21}",coverage_mapped,value,0.6911764705882353
+shared_genes_bodymap,results/12_bodymap/gene_overlap.csv,{},shared_ensembl,value,21040
+motrpac_genes,results/12_bodymap/gene_overlap.csv,{},motrpac_genes,value,21193
+orthologs_1to1,results/13_gtex/gene_overlap.csv,{},rat_genes_with_1to1_human_ortholog,value,14609
+orthologs_in_gtex,results/13_gtex/gene_overlap.csv,{},orthologs_present_in_gtex,value,14569
+gtex_samples,results/13_gtex/gene_overlap.csv,{},gtex_samples,value,2485
+gtex_donors,results/13_gtex/gene_overlap.csv,{},gtex_donors,value,862
+qc_technical,results/16_identifiability/qc_only_summary.csv,"{""features"": ""technical""}",bal_acc_mean,value,
+qc_technical_sd,results/16_identifiability/qc_only_summary.csv,"{""features"": ""technical""}",bal_acc_sd,value,
+qc_composition,results/16_identifiability/qc_only_summary.csv,"{""features"": ""composition""}",bal_acc_mean,value,
+qc_composition_sd,results/16_identifiability/qc_only_summary.csv,"{""features"": ""composition""}",bal_acc_sd,value,
+qc_all,results/16_identifiability/qc_only_summary.csv,"{""features"": ""all""}",bal_acc_mean,value,
+qc_all_sd,results/16_identifiability/qc_only_summary.csv,"{""features"": ""all""}",bal_acc_sd,value,
+n_plates,results/16_identifiability/batch_counts.csv,"{""assay"": ""TRNSCRPT"", ""variable"": ""RNA_extr_plate_ID""}",n_levels,value,
+n_lib_batches,results/16_identifiability/batch_counts.csv,"{""assay"": ""TRNSCRPT"", ""variable"": ""Lib_batch_ID""}",n_levels,value,
+n_flowcells,results/16_identifiability/batch_counts.csv,"{""assay"": ""TRNSCRPT"", ""variable"": ""Seq_flowcell_ID""}",n_levels,value,
+cert_k20_frac,results/06_conformal/TRNSCRPT/certificate_distribution.csv,"{""k"": 20}",frac_certified,value,0.52
+cert_any_frac,results/06_conformal/TRNSCRPT/certificate_alpha_delta_grid.csv,"{""alpha"": 0.1, ""delta"": 0.1}",frac_any_certified,value,0.7
+n_zero_error_0505,results/06_conformal/TRNSCRPT/sizing_table.csv,"{""alpha"": 0.05, ""delta"": 0.05}",n_zero_error_needed,value,59
+n_zero_error_1005,results/06_conformal/TRNSCRPT/sizing_table.csv,"{""alpha"": 0.1, ""delta"": 0.05}",n_zero_error_needed,value,29
+n_zero_error_1010,results/06_conformal/TRNSCRPT/sizing_table.csv,"{""alpha"": 0.1, ""delta"": 0.1}",n_zero_error_needed,value,22
+n_zero_error_2010,results/06_conformal/TRNSCRPT/sizing_table.csv,"{""alpha"": 0.2, ""delta"": 0.1}",n_zero_error_needed,value,11
+skmgn_cov_marginal,results/06_conformal/TRNSCRPT/per_tissue_marginal_vs_mondrian_alpha0.1.csv,"{""y_true"": ""SKM-GN""}",coverage_marginal,value,0.44
+skmgn_cov_mondrian,results/06_conformal/TRNSCRPT/per_tissue_marginal_vs_mondrian_alpha0.1.csv,"{""y_true"": ""SKM-GN""}",coverage_mondrian,value,0.98
+pgk2_testes_2wk,results/12_bodymap/juvenile_marker_check.csv,"{""gene_symbol"": ""Pgk2"", ""organ"": ""Testes"", ""stage_weeks"": 2}",mean_log2_cpm,value,0.226569076381019
+pgk2_testes_21wk,results/12_bodymap/juvenile_marker_check.csv,"{""gene_symbol"": ""Pgk2"", ""organ"": ""Testes"", ""stage_weeks"": 21}",mean_log2_cpm,value,9.681903699899747

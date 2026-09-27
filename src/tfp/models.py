@@ -158,6 +158,10 @@ class BlockScaler(BaseEstimator, TransformerMixin):
 # ---------------------------------------------------------------------------------------
 # Pipelines and grids
 # ---------------------------------------------------------------------------------------
+# the inner animal-grouped grid search over the classifier's regularisation (tuned within the training fold)
+C_GRID = [0.01, 0.1, 1.0]
+
+
 def make_pipeline(kind: str, k: int | None = None, prefilter: int | None = 5000,
                   seed: int = C.SEED, n_jobs: int = -1, selector: str = "roundrobin") -> Pipeline:
     """impute → variance prefilter → scale → panel selector(k) → classifier."""
@@ -186,7 +190,7 @@ def param_grid(kind: str, quick: bool = False) -> dict:
     if kind == "centroid":
         return {"clf__shrink_threshold": [None, 0.5]} if not quick else {}
     if kind in ("logreg_l1", "logreg_l2"):
-        return {"clf__C": [0.01, 0.1, 1.0]} if not quick else {"clf__C": [0.1]}
+        return {"clf__C": list(C_GRID)} if not quick else {"clf__C": [0.1]}
     if kind == "rf":
         return {"clf__max_features": ["sqrt", 0.05]} if not quick else {}
     return {}

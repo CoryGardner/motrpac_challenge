@@ -1,7 +1,7 @@
 {
 "_meta": {
-"generated": "2026-09-27 02:03 UTC",
-"git_hash": "208ef60",
+"generated": "2026-09-27 03:08 UTC",
+"git_hash": "6adc938",
 "sources": [
 "results/03_eda/batch_partition_METAB.csv",
 "results/03_eda/batch_partition_PROT.csv",
@@ -4146,6 +4146,17 @@
 ],
 "agg": "recomputed",
 "note": "fraction of the 20 three-donor recalibration draws (k20) whose threshold is +\u221e"
+},
+{
+"id": "n_tissues",
+"value": 19,
+"file": "results/16_identifiability/estimable_pairs.csv",
+"where": {
+"assay": "TRNSCRPT"
+},
+"column": "n_tissues",
+"agg": "value",
+"tol": 1e-06
 }
 ],
 "tables": [

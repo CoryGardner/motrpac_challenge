@@ -22,6 +22,7 @@ qc_only_per_fold.csv, qc_only_summary.csv, layers.json, NOTES.md
 from __future__ import annotations
 
 import json
+import os
 import re
 import warnings
 
@@ -81,7 +82,21 @@ QC_TECH = ["RIN", "r_260_280", "r_260_230", "pct_adapter_detected", "pct_trimmed
 QC_COMP = ["pct_rRNA", "pct_globin", "pct_chrM", "pct_chrX", "pct_chrY", "pct_mrna", "pct_coding", "pct_utr",
            "pct_intronic", "pct_intergenic"]
 QC_SETS = {"technical": QC_TECH, "composition": QC_COMP, "all": QC_TECH + QC_COMP}
-QC_TABLE = C.ROOT.parents[1] / "data/quant-id/rat-training-06/c1.0/transcriptomics/qa-qc/motrpac_pass1b-06_transcript-rna-seq_qa-qc-metrics.csv"
+# Portal inputs (the MoTrPAC Data Hub download, release c1.0): only the consortium RNA-seq QC table and the 19 per-tissue
+# RSEM count files (for the reference-standard vials) are read. Set --portal / MOTRPAC_PORTAL to the directory that holds
+# rat-training-06/; without it the QC baseline uses the package metadata and the bridge measurement is skipped.
+PORTAL: Path | None = None
+QC_TABLE_REL = "rat-training-06/c1.0/transcriptomics/qa-qc/motrpac_pass1b-06_transcript-rna-seq_qa-qc-metrics.csv"
+PORTAL_RNA_REL = "rat-training-06/c1.0/transcriptomics"
+PORTAL_TISSUE_DIRS = ["t30-blood-rna", "t52-hippocampus", "t53-cortex", "t54-hypothalamus", "t55-gastrocnemius", "t56-vastus-lateralis",
+                      "t58-heart", "t59-kidney", "t60-adrenal", "t61-colon", "t62-spleen", "t63-testes", "t64-ovaries", "t66-lung",
+                      "t67-small-intestine", "t68-liver", "t69-brown-adipose", "t70-white-adipose", "t99-vena-cava"]
+
+
+def portal_files() -> list[tuple[str, Path | None]]:
+    """The portal files phase 16 can use: (relative path, resolved path or None)."""
+    rels = [QC_TABLE_REL] + [f"{PORTAL_RNA_REL}/{t}/transcript-rna-seq/motrpac_pass1b-06_{t.split('-', 1)[1]}_transcript-rna-seq_rsem-genes-count.txt" for t in PORTAL_TISSUE_DIRS]
+    return [(r, (PORTAL / r) if PORTAL else None) for r in rels]
 
 
 def qc_model():
@@ -113,10 +128,11 @@ def qc_only_baseline(out) -> tuple[pd.DataFrame, pd.DataFrame, dict]:
     pheno = io.load_pheno()
     om = io.stack_tissues("TRNSCRPT", source=cli.resolve_source("TRNSCRPT", "auto"), join="inner", pheno=pheno, verbose=False)
     folds = list(grouped_kfold(om.meta, "tissue", 5, C.SEED))
-    if QC_TABLE.exists():
-        q = pd.read_csv(QC_TABLE, dtype=str)
+    qc_table = (PORTAL / QC_TABLE_REL) if PORTAL else None
+    if qc_table is not None and qc_table.exists():
+        q = pd.read_csv(qc_table, dtype=str)
         q = q[q["vial_label"].str.startswith("9")].drop_duplicates("vial_label").set_index("vial_label")
-        source = str(QC_TABLE.relative_to(C.ROOT.parents[1]))
+        source = "portal:" + QC_TABLE_REL
     else:  # same columns, exported from the R package metadata
         q = pd.read_csv(C.META_DIR / "TRNSCRPT.csv", dtype=str, low_memory=False).drop_duplicates("viallabel").set_index("viallabel")
         source = "data/raw/meta/TRNSCRPT.csv (consortium QC table not found)"
@@ -151,9 +167,6 @@ def qc_only_baseline(out) -> tuple[pd.DataFrame, pd.DataFrame, dict]:
     return pf, summ, info
 
 
-PORTAL_RNA = C.ROOT.parents[1] / "data/quant-id/rat-training-06/c1.0/transcriptomics"
-
-
 def bridge_variance(out) -> tuple[pd.DataFrame, pd.DataFrame, dict] | None:
     """Batch measured directly on the bridging standards.
 
@@ -166,7 +179,7 @@ def bridge_variance(out) -> tuple[pd.DataFrame, pd.DataFrame, dict] | None:
     sets as the median and as the ratio of sums, is what "batch as a fraction of the variance that separates tissues"
     means here. Study vials and reference vials use the same unit: log2(CPM + 1) on the total library over all genes.
     Reads the portal per-tissue RSEM count files; returns None when they are absent."""
-    files = sorted(PORTAL_RNA.glob("t*/transcript-rna-seq/*rsem-genes-count.txt"))
+    files = sorted((PORTAL / PORTAL_RNA_REL).glob("t*/transcript-rna-seq/*rsem-genes-count.txt")) if PORTAL else []
     if not files:
         return None
     cols, frames = [], []
@@ -236,7 +249,7 @@ def bridge_variance(out) -> tuple[pd.DataFrame, pd.DataFrame, dict] | None:
     summary.to_csv(out / "bridge_variance.csv", index=False)
     pg.to_csv(out / "bridge_variance_per_gene.csv", index=False)
     info = {"n_ref_vials": int(lcpm.shape[1]), "n_pools": len(pools), "n_bridging_pools": int(summary[["pool_bid", "pool_type"]].drop_duplicates().shape[0]) if len(summary) else 0,
-            "n_genes_shared": len(genes), "source": str(PORTAL_RNA.relative_to(C.ROOT.parents[1])) + "/t*/transcript-rna-seq/*rsem-genes-count.txt (reference vials) + the pipeline's stacked study matrix",
+            "n_genes_shared": len(genes), "source": "portal:" + PORTAL_RNA_REL + "/t*/transcript-rna-seq/*rsem-genes-count.txt (reference vials) + the pipeline's stacked study matrix",
             "definition": "V_batch = variance of a pool's log2 CPM across the plates it was run on (one vial per plate); V_tissue = variance of the 19 tissue means of study-vial log2 CPM; ratio per gene, median and ratio of sums over gene sets"}
     return summary, pg, info
 
@@ -245,7 +258,19 @@ def main() -> None:
     ap = cli.common_parser("Identifiability: batch nesting, estimable pairs, QC-only baseline")
     ap.add_argument("--skip-qc", action="store_true", help="skip the QC-only baseline (metadata tables only)")
     ap.add_argument("--bridge", action="store_true", help="also measure batch directly on the bridging reference pools (needs the portal count files)")
+    ap.add_argument("--portal", default=os.environ.get("MOTRPAC_PORTAL") or None, help="root of the MoTrPAC portal download (holds rat-training-06/); default $MOTRPAC_PORTAL")
+    ap.add_argument("--check-portal", action="store_true", help="list the portal files this phase reads, present or absent, and exit")
     args = ap.parse_args()
+    global PORTAL
+    PORTAL = Path(args.portal).expanduser() if args.portal else None
+    if args.check_portal:
+        n_ok = 0
+        for r, p in portal_files():
+            ok = p is not None and p.exists()
+            n_ok += ok
+            print(f"  {'present' if ok else 'absent '}  {r}" + (f"  ({p.stat().st_size / 1e6:.1f} MB)" if ok else ""))
+        print(f"{n_ok} of {len(portal_files())} portal files present under {PORTAL or '(no --portal / MOTRPAC_PORTAL)'}")
+        raise SystemExit(0 if n_ok == len(portal_files()) else 1)
     cli.banner("16_identifiability", args)
     out = cli.outdir("16_identifiability", args.out)
 
@@ -285,7 +310,7 @@ def main() -> None:
     if args.bridge:
         b = bridge_variance(out)
         if b is None:
-            bridge_info = {"status": "unavailable", "reason": "portal RNA-seq count files (data/quant-id/.../transcript-rna-seq) not present"}
+            bridge_info = {"status": "unavailable", "reason": f"portal RNA-seq count files not found under --portal / MOTRPAC_PORTAL ({PORTAL or 'unset'}); see --check-portal"}
             print("  bridge: portal count files not found; skipped")
         else:
             summary, pg, bridge_info = b

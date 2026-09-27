@@ -1,0 +1,5 @@
+alpha,delta,n_zero_error_needed,n_cal_this_run
+0.05,0.05,59,22
+0.1,0.05,29,22
+0.1,0.1,22,22
+0.2,0.1,11,22

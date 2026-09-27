@@ -1,0 +1,288 @@
+key,section,published_value,reference_value,tolerance,source,note,notebook
+s01.n_animals,01,147.0,147.0,1e-09,results/02_inventory/summary.json (n_animals),,01_replication.ipynb
+s01.n_vials,01,6156.0,6156.0,1e-09,results/REPORT.md §02 (Animals in PHENO: 147; vials: 6156),,01_replication.ipynb
+s01.max_pid_per_bid,01,1.0,1.0,1e-09,docs/DATA_GUIDE.md (147 bids <-> 147 pids),one-to-one check,01_replication.ipynb
+s01.max_bid_per_pid,01,1.0,1.0,1e-09,docs/DATA_GUIDE.md (147 bids <-> 147 pids),one-to-one check,01_replication.ipynb
+s01.n_tables,01,92.0,92.0,1e-09,results/02_inventory/summary.json (tables),,01_replication.ipynb
+s01.n_unmatched_after_fallback,01,0.0,0.0,1e-09,results/SUMMARY.md (Unmatched samples: 0),zero by construction: counted after the bid fallback,01_replication.ipynb
+s01.n_bid_fallback,01,,2.0,1e-09,this notebook (new count; not in pipeline results),IMMUNO/PLASMA: 2 sample columns matched only via bid prefix,01_replication.ipynb
+s01.n_fusion_tissues,01,7.0,7.0,1e-09,results/02_inventory/summary.json (fusion_tissues),,01_replication.ipynb
+s01.fusion_common_bid_total,01,345.0,345.0,1e-09,results/02_inventory/fusion_overlap.csv (sum of n_common_bid),,01_replication.ipynb
+s02.TRNSCRPT_PC1_explained,02,0.2794794019211317,0.2794794019211317,0.0001,"results/03_eda/variance_partition_TRNSCRPT.csv (PC1, explained)","recomputed live; PCA is seeded (observed diff ~1e-15), tolerance allows solver/BLAS differences across machines",01_replication.ipynb
+s02.TRNSCRPT_PC1_R2_tissue,02,0.9949745801673032,0.9949745801673032,0.0001,"results/03_eda/variance_partition_TRNSCRPT.csv (PC1, R2_tissue)","recomputed live; PCA is seeded (observed diff ~1e-15), tolerance allows solver/BLAS differences across machines",01_replication.ipynb
+s02.TRNSCRPT_PC1_R2_sex,02,3.8180799654531485e-05,3.8180799654531485e-05,0.0001,"results/03_eda/variance_partition_TRNSCRPT.csv (PC1, R2_sex)","recomputed live; PCA is seeded (observed diff ~1e-15), tolerance allows solver/BLAS differences across machines",01_replication.ipynb
+s02.PROT_PC1_explained,02,0.1595942387214717,0.1595942387214717,0.0001,"results/03_eda/variance_partition_PROT.csv (PC1, explained)","recomputed live; PCA is seeded (observed diff ~1e-15), tolerance allows solver/BLAS differences across machines",01_replication.ipynb
+s02.PROT_PC1_R2_tissue,02,0.0007799705354843,0.0007799705354843,0.0001,"results/03_eda/variance_partition_PROT.csv (PC1, R2_tissue)","recomputed live; PCA is seeded (observed diff ~1e-15), tolerance allows solver/BLAS differences across machines",01_replication.ipynb
+s02.PROT_PC1_R2_sex,02,0.2473499385918117,0.2473499385918117,0.0001,"results/03_eda/variance_partition_PROT.csv (PC1, R2_sex)","recomputed live; PCA is seeded (observed diff ~1e-15), tolerance allows solver/BLAS differences across machines",01_replication.ipynb
+s02.METAB_PC1_explained,02,0.1850194464224741,0.1850194464224741,0.0001,"results/03_eda/variance_partition_METAB.csv (PC1, explained)","recomputed live; PCA is seeded (observed diff ~1e-15), tolerance allows solver/BLAS differences across machines",01_replication.ipynb
+s02.METAB_PC1_R2_tissue,02,0.9918259316942318,0.9918259316942318,0.0001,"results/03_eda/variance_partition_METAB.csv (PC1, R2_tissue)","recomputed live; PCA is seeded (observed diff ~1e-15), tolerance allows solver/BLAS differences across machines",01_replication.ipynb
+s02.METAB_PC1_R2_sex,02,1.4961468948393334e-05,1.4961468948393334e-05,0.0001,"results/03_eda/variance_partition_METAB.csv (PC1, R2_sex)","recomputed live; PCA is seeded (observed diff ~1e-15), tolerance allows solver/BLAS differences across machines",01_replication.ipynb
+s03.model_as_fitted,03,0.9759036144578314,0.9759036144578314,0.005,results/04_baselines/PROT/diagnostic_accuracy.csv,"fold 0 of 5, as in scripts/04_prot_diagnostic.py",01_replication.ipynb
+s03.missingness_indicators_only,03,1.0,1.0,0.005,results/04_baselines/PROT/diagnostic_accuracy.csv,"fold 0 of 5, as in scripts/04_prot_diagnostic.py",01_replication.ipynb
+s03.per_tissue_means_removed,03,0.1927710843373494,0.1927710843373494,0.005,results/04_baselines/PROT/diagnostic_accuracy.csv,"fold 0 of 5, as in scripts/04_prot_diagnostic.py",01_replication.ipynb
+s03.chance_balanced,03,0.1428571428571428,0.1428571428571428,1e-09,results/04_baselines/PROT/diagnostic_accuracy.csv,1 / number of tissues,01_replication.ipynb
+s03.HEART_R2_channel_sex,03,1.0,1.0,1e-09,results/03_eda/within_tissue_pca_PROT.csv (R2_tmt11_channel~sex),"Cramér's V² of TMT channel vs sex, recomputed from data/raw/meta/PROT.csv",01_replication.ipynb
+s03.LIVER_R2_channel_sex,03,1.0,1.0,1e-09,results/03_eda/within_tissue_pca_PROT.csv (R2_tmt11_channel~sex),"Cramér's V² of TMT channel vs sex, recomputed from data/raw/meta/PROT.csv",01_replication.ipynb
+s04.n_samples,04,899.0,899.0,0.0,results/REPORT.md (stack TRNSCRPT/counts note),stacked TRNSCRPT counts matrix,01_replication.ipynb
+s04.n_features,04,21193.0,21193.0,0.0,results/REPORT.md (stack TRNSCRPT/counts note),genes kept by the pre-split filter (known deviation; reproduced as is),01_replication.ipynb
+s04.n_animals,04,50.0,50.0,0.0,results/04_baselines/TRNSCRPT/per_fold.csv,40 train + 10 test animals per fold,01_replication.ipynb
+s04.leak_shared_animals_samplekfold,04,,50.0,0.0,this notebook (new demonstration),animals on both sides of fold 0 of a plain KFold(5; shuffle; SEED) over samples; not a pipeline output,01_replication.ipynb
+s04.bal_acc_centroid,04,0.9821052631578948,0.9821052631578948,0.005,results/04_baselines/TRNSCRPT/summary.csv; SUMMARY.md baselines TRNSCRPT,recomputed live in both modes,01_replication.ipynb
+s04.bal_acc_logreg_l2,04,0.9947368421052633,0.9947368421052633,0.005,results/04_baselines/TRNSCRPT/summary.csv; SUMMARY.md baselines TRNSCRPT,recomputed live in both modes,01_replication.ipynb
+s04.bal_acc_rf,04,0.9926315789473684,0.9926315789473684,0.005,results/04_baselines/TRNSCRPT/summary.csv; SUMMARY.md baselines TRNSCRPT,loaded from per_fold.csv when RECOMPUTE=False (exact); recomputed when RECOMPUTE=True,01_replication.ipynb
+s04.n_errors_logreg_l2,04,5.0,5.0,0.0,results/04_baselines/TRNSCRPT/confusable_pairs_logreg_l2.csv,misclassified samples pooled over folds,01_replication.ipynb
+s05.bal_acc_rr_k20,05,0.9757894736842104,0.9757894736842104,0.005,results/05_panels/TRNSCRPT/panel_curve.csv; SUMMARY.md panel size k=20,round-robin selector; recomputed live,01_replication.ipynb
+s05.bal_acc_fclassif_k20,05,0.3989473684210526,0.3989473684210526,0.005,results/05_panels/TRNSCRPT/panel_curve_fclassif.csv,F-test selector; recomputed live,01_replication.ipynb
+s05.bal_acc_rr_k10,05,0.8136842105263158,0.8136842105263158,0.005,results/05_panels/TRNSCRPT/panel_curve.csv; SUMMARY.md panel size k=10,recomputed live,01_replication.ipynb
+s05.bal_acc_rr_k50,05,0.9926315789473684,0.9926315789473684,0.005,results/05_panels/TRNSCRPT/panel_curve.csv; SUMMARY.md panel size k=50,recomputed live,01_replication.ipynb
+s05.smallest_k_bal_acc_ge_099,05,50.0,50.0,0.0,results/05_panels/TRNSCRPT/panel_curve.csv,from the full published grid when RECOMPUTE=False,01_replication.ipynb
+s05.n_errors_k20,05,23.0,23.0,0.0,results/05_panels/TRNSCRPT/confusable_pairs_k20.csv (sum of count),recomputed live; same seed,01_replication.ipynb
+s05.top_error_count_k20,05,12.0,12.0,0.0,results/05_panels/TRNSCRPT/confusable_pairs_k20.csv,VENACV->BAT; derived by code,01_replication.ipynb
+s05.n_candidate_panel,05,10.0,10.0,0.0,results/05_panels/TRNSCRPT/candidate_panel.csv; SUMMARY.md stable candidate panel,stability selection loaded when RECOMPUTE=False,01_replication.ipynb
+s05.n_panel_tissues_covered,05,10.0,10.0,0.0,results/05_panels/TRNSCRPT/candidate_panel_annotated.csv,distinct marker_tissue; annotation recomputed live,01_replication.ipynb
+s05.n_flag_regulated,05,2.0,2.0,0.0,results/05_panels/TRNSCRPT/candidate_panel_annotated.csv; SUMMARY.md risk_T7_regulated,annotation recomputed live,01_replication.ipynb
+s05.n_flag_qc,05,2.0,2.0,0.0,results/05_panels/TRNSCRPT/candidate_panel_annotated.csv; SUMMARY.md risk_qc_correlated,annotation recomputed live,01_replication.ipynb
+s06.cov_pooled_lac_a10,06,0.9110180012414648,0.9076846679081316,0.005,results/06_conformal/TRNSCRPT/coverage.csv,"recomputed live (5 folds, same seeds); mean over folds",01_replication.ipynb
+s06.size_pooled_lac_a10,06,0.9132526381129732,0.90991930477964,0.005,results/06_conformal/TRNSCRPT/coverage.csv,"recomputed live (5 folds, same seeds); mean over folds",01_replication.ipynb
+s06.cov_pooled_aps_a10,06,0.9966542520173804,0.9966542520173804,0.005,results/06_conformal/TRNSCRPT/coverage.csv,"recomputed live (5 folds, same seeds); mean over folds",01_replication.ipynb
+s06.size_pooled_aps_a10,06,1.0723339540657977,1.0678895096213532,0.005,results/06_conformal/TRNSCRPT/coverage.csv,"recomputed live (5 folds, same seeds); mean over folds",01_replication.ipynb
+s06.cov_opa_lac_a10,06,0.9622160148975792,0.9164804469273742,0.005,results/06_conformal/TRNSCRPT/coverage.csv,"recomputed live (5 folds, same seeds); mean over folds",01_replication.ipynb
+s06.size_opa_lac_a10,06,1.1805027932960894,0.9198199875853506,0.005,results/06_conformal/TRNSCRPT/coverage.csv,"recomputed live (5 folds, same seeds); mean over folds",01_replication.ipynb
+s06.cov_opa_aps_a10,06,0.9966542520173804,0.9966542520173804,0.005,results/06_conformal/TRNSCRPT/coverage.csv,"recomputed live (5 folds, same seeds); mean over folds",01_replication.ipynb
+s06.size_opa_aps_a10,06,1.2337368094351333,1.1112973308504035,0.005,results/06_conformal/TRNSCRPT/coverage.csv,"recomputed live (5 folds, same seeds); mean over folds",01_replication.ipynb
+s06.cov_opa_lac_a05,06,0.9622160148975792,0.9622160148975792,0.005,results/06_conformal/TRNSCRPT/coverage.csv,recomputed live,01_replication.ipynb
+s06.skmgn_cov_marginal,06,0.44,0.42,0.005,results/06_conformal/TRNSCRPT/per_tissue_marginal_vs_mondrian_alpha0.1.csv,recomputed live,01_replication.ipynb
+s06.skmgn_cov_mondrian,06,0.98,0.8800000000000001,0.005,results/06_conformal/TRNSCRPT/per_tissue_marginal_vs_mondrian_alpha0.1.csv,recomputed live,01_replication.ipynb
+s06.n_tissues_under085,06,3.0,4.0,1e-09,results/06_conformal/TRNSCRPT/per_tissue_marginal_vs_mondrian_alpha0.1.csv,count of tissues with marginal pooled LAC α=0.1 coverage < 0.85,01_replication.ipynb
+s06.cov_mondrian_lac_a10,06,0.9599565487274984,0.918826815642458,0.005,results/06_conformal/TRNSCRPT/coverage_marginal_vs_mondrian.csv,recomputed live,01_replication.ipynb
+s06.size_mondrian_lac_a10,06,0.9921911855990068,0.9210614525139664,0.005,results/06_conformal/TRNSCRPT/coverage_marginal_vs_mondrian.csv,recomputed live,01_replication.ipynb
+s06.cov_floored_lac_a10,06,0.9855369335816264,0.9699813780260708,0.005,results/06_conformal/TRNSCRPT/coverage_marginal_vs_mondrian.csv,recomputed live,01_replication.ipynb
+s06.size_floored_lac_a10,06,1.0177715704531347,0.9722160148975793,0.005,results/06_conformal/TRNSCRPT/coverage_marginal_vs_mondrian.csv,recomputed live,01_replication.ipynb
+s06.size_mondrian_lac_a05,06,0.9921911855990068,2.9432526381129733,0.005,results/06_conformal/TRNSCRPT/coverage_marginal_vs_mondrian.csv,recomputed live; moved by the quantile fix (OVARY/TESTES get +inf thresholds),01_replication.ipynb
+s07.sizing_a0.05_d0.05,07,59.0,59.0,1e-09,results/06_conformal/TRNSCRPT/sizing_table.csv,ceil(ln δ / ln(1 − α)),01_replication.ipynb
+s07.sizing_a0.10_d0.05,07,29.0,29.0,1e-09,results/06_conformal/TRNSCRPT/sizing_table.csv,ceil(ln δ / ln(1 − α)),01_replication.ipynb
+s07.sizing_a0.10_d0.10,07,22.0,22.0,1e-09,results/06_conformal/TRNSCRPT/sizing_table.csv,ceil(ln δ / ln(1 − α)),01_replication.ipynb
+s07.sizing_a0.20_d0.10,07,11.0,11.0,1e-09,results/06_conformal/TRNSCRPT/sizing_table.csv,ceil(ln δ / ln(1 − α)),01_replication.ipynb
+s07.ucb_0err_n22,07,0.0993719797887214,0.0993719797887214,1e-06,"computed: scipy.stats.beta.ppf(0.9, 1, 22)","Clopper–Pearson, not a results file",01_replication.ipynb
+s07.ucb_1err_n22,07,0.1655893737192146,0.1655893737192146,1e-06,"computed: scipy.stats.beta.ppf(0.9, 2, 21)","Clopper–Pearson, not a results file",01_replication.ipynb
+s07.frac_certified_k20,07,0.52,0.52,1e-09,results/06_conformal/TRNSCRPT/certificate_distribution.csv,loaded (RECOMPUTE=False); the 100-split certificate is unchanged by the quantile fix,01_replication.ipynb
+s07.frac_certified_k15,07,0.34,0.34,1e-09,results/06_conformal/TRNSCRPT/certificate_distribution.csv,loaded (RECOMPUTE=False); the 100-split certificate is unchanged by the quantile fix,01_replication.ipynb
+s07.n_none_certified,07,30.0,30.0,1e-09,results/06_conformal/TRNSCRPT/certificate_validity.csv,loaded (RECOMPUTE=False); the 100-split certificate is unchanged by the quantile fix,01_replication.ipynb
+s07.k_half,07,20.0,20.0,1e-09,results/06_conformal/TRNSCRPT/certificate_distribution.csv,loaded (RECOMPUTE=False); the 100-split certificate is unchanged by the quantile fix,01_replication.ipynb
+s07.validity,07,1.0,1.0,1e-09,results/06_conformal/TRNSCRPT/certificate_validity.csv,loaded (RECOMPUTE=False); the 100-split certificate is unchanged by the quantile fix,01_replication.ipynb
+s07.frac_any_animal_any_wrong,07,0.0,0.0,1e-09,results/06_conformal/TRNSCRPT/certificate_distribution.csv,loaded (RECOMPUTE=False); the 100-split certificate is unchanged by the quantile fix,01_replication.ipynb
+s07.ad_a20_d10_frac_k20,07,0.89,0.89,1e-09,results/06_conformal/TRNSCRPT/certificate_alpha_delta_grid.csv,loaded (RECOMPUTE=False); the 100-split certificate is unchanged by the quantile fix,01_replication.ipynb
+s07.frac_zero_err_k15,07,0.37,0.37,1e-09,results/06_conformal/TRNSCRPT/certificate_by_fold.csv,loaded (RECOMPUTE=False); the 100-split certificate is unchanged by the quantile fix,01_replication.ipynb
+s07.mean_test_err_k15,07,0.0421610800744878,0.0421610800744878,1e-09,results/06_conformal/TRNSCRPT/certificate_by_fold.csv,loaded (RECOMPUTE=False); the 100-split certificate is unchanged by the quantile fix,01_replication.ipynb
+s07.frac_zero_err_k20,07,0.55,0.55,1e-09,results/06_conformal/TRNSCRPT/certificate_by_fold.csv,loaded (RECOMPUTE=False); the 100-split certificate is unchanged by the quantile fix,01_replication.ipynb
+s07.mean_test_err_k20,07,0.0240878336436995,0.0240878336436995,1e-09,results/06_conformal/TRNSCRPT/certificate_by_fold.csv,loaded (RECOMPUTE=False); the 100-split certificate is unchanged by the quantile fix,01_replication.ipynb
+s07.point_k,07,15.0,15.0,1e-09,results/05_panels/TRNSCRPT/panel_curve.csv,smallest k with mean balanced accuracy ≥ 0.90,01_replication.ipynb
+s07.n_cert_files_counts_changed,07,0.0,0.0,1e-09,"backup vs results/06_conformal/{TRNSCRPT,TRNSCRPT_pooled_a05}/certificate_*.csv",certificate files whose counts / certified k changed with the quantile fix,01_replication.ipynb
+s08.trn_m2f_full_acc,08,0.9131403118040088,0.9131403118040088,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_m2f_full_cov,08,0.8188235294117647,0.8070588235294117,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_m2f_full_covsrc,08,0.9305555555555556,0.9305555555555556,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_m2f_full_recalN3,08,0.9307486631016044,0.9034759358288772,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_m2f_k20_acc,08,0.8930957683741648,0.8930957683741648,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_m2f_k20_cov,08,0.8376470588235294,0.8329411764705882,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_m2f_k20_covsrc,08,0.9444444444444444,0.9305555555555556,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_m2f_k20_recalN3,08,0.9387700534759358,0.9144385026737968,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_f2m_full_acc,08,0.9422222222222222,0.9422222222222222,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_f2m_full_cov,08,0.8964705882352941,0.8729411764705882,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_f2m_full_covsrc,08,0.9305555555555556,0.9305555555555556,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_f2m_full_recalN3,08,0.9403743315508022,0.9139037433155082,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_f2m_k20_acc,08,0.9,0.9,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_f2m_k20_cov,08,0.8823529411764706,0.8823529411764706,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_f2m_k20_covsrc,08,0.9583333333333334,0.9305555555555556,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_f2m_k20_recalN3,08,0.927807486631016,0.9213903743315508,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_8w_full_acc,08,1.0,1.0,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_8w_full_cov,08,0.9,0.8944444444444445,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_8w_full_covsrc,08,0.9444444444444444,0.9444444444444444,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_8w_full_recalN3,08,0.9349206349206348,0.9182539682539684,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_8w_k20_acc,08,0.9888888888888888,0.9888888888888888,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_8w_k20_cov,08,0.9,0.8666666666666667,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_8w_k20_covsrc,08,0.9074074074074074,0.9074074074074074,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_8w_k20_recalN3,08,0.934126984126984,0.9253968253968252,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_1w_full_acc,08,0.9666666666666668,0.9666666666666668,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_1w_full_cov,08,0.8777777777777778,0.8722222222222222,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_1w_full_covsrc,08,0.8888888888888888,0.8888888888888888,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_1w_full_recalN3,08,0.9166666666666669,0.8984126984126984,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_1w_k20_acc,08,0.9555555555555556,0.9555555555555556,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_1w_k20_cov,08,0.85,0.85,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_1w_k20_covsrc,08,0.9351851851851852,0.9166666666666666,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_1w_k20_recalN3,08,0.9285714285714286,0.9190476190476192,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_ctrl2trained_full_acc,08,0.9791376912378305,0.9791376912378305,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_ctrl2trained_full_cov,08,0.8845618915159944,0.8803894297635605,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_ctrl2trained_full_covsrc,08,0.9444444444444444,0.9444444444444444,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_ctrl2trained_full_recalN3,08,0.9346219151482308,0.9183878615457562,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_ctrl2trained_k20_acc,08,0.96105702364395,0.96105702364395,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_ctrl2trained_k20_cov,08,0.9040333796940194,0.9026425591098748,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_ctrl2trained_k20_covsrc,08,0.9444444444444444,0.9444444444444444,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.trn_ctrl2trained_k20_recalN3,08,0.9322183837973312,0.9242534263586896,0.005,results/08_shift/TRNSCRPT/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.met_m2f_full_acc,08,1.0,1.0,0.005,results/08_shift/METAB_core9/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.met_m2f_full_cov,08,0.6620370370370371,0.5694444444444444,0.005,results/08_shift/METAB_core9/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.met_m2f_k10_acc,08,0.9814814814814816,0.9814814814814816,0.005,results/08_shift/METAB_core9/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.met_m2f_k10_cov,08,0.7222222222222222,0.7222222222222222,0.005,results/08_shift/METAB_core9/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.met_f2m_full_acc,08,1.0,1.0,0.005,results/08_shift/METAB_core9/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.met_f2m_full_cov,08,0.9,0.8727272727272727,0.005,results/08_shift/METAB_core9/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.met_f2m_k10_acc,08,1.0,1.0,0.005,results/08_shift/METAB_core9/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.met_f2m_k10_cov,08,0.9318181818181818,0.9181818181818182,0.005,results/08_shift/METAB_core9/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.met_8w_full_acc,08,1.0,1.0,0.005,results/08_shift/METAB_core9/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.met_8w_full_cov,08,0.891566265060241,0.8795180722891566,0.005,results/08_shift/METAB_core9/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.met_8w_k10_acc,08,1.0,1.0,0.005,results/08_shift/METAB_core9/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.met_8w_k10_cov,08,0.891566265060241,0.891566265060241,0.005,results/08_shift/METAB_core9/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.met_1w_full_acc,08,1.0,1.0,0.005,results/08_shift/METAB_core9/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.met_1w_full_cov,08,0.8314606741573034,0.8314606741573034,0.005,results/08_shift/METAB_core9/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.met_1w_k10_acc,08,0.9887640449438202,0.9887640449438202,0.005,results/08_shift/METAB_core9/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.met_1w_k10_cov,08,0.8876404494382022,0.8876404494382022,0.005,results/08_shift/METAB_core9/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.met_ctrl2trained_full_acc,08,1.0,1.0,0.005,results/08_shift/METAB_core9/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.met_ctrl2trained_full_cov,08,0.9598853868194842,0.9369627507163324,0.005,results/08_shift/METAB_core9/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.met_ctrl2trained_k10_acc,08,0.997134670487106,0.997134670487106,0.005,results/08_shift/METAB_core9/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.met_ctrl2trained_k10_cov,08,0.997134670487106,0.9799426934097422,0.005,results/08_shift/METAB_core9/shift_table.csv,"recomputed live, same seed",01_replication.ipynb
+s08.met_m2f_full_recalN3,08,0.9627662005143748,0.9464997504122434,0.005,results/08_shift/METAB_core9/shift_table.csv,recomputed live,01_replication.ipynb
+s09.shared_genes,09,21040.0,21040.0,1e-09,results/12_bodymap/gene_overlap.csv:shared_ensembl,recomputed live (Ensembl-id match),02_transfer.ipynb
+s09.bodymap_samples,09,316.0,316.0,1e-09,"results/SUMMARY.md, BodyMap heading (316 samples)",recomputed live from bodymap_counts.csv,02_transfer.ipynb
+s09.acc_adult_k20,09,1.0,1.0,1e-09,results/12_bodymap/age_shift_accuracy.csv:stage 21,,02_transfer.ipynb
+s09.acc_adult_k50,09,0.9852941176470588,0.9852941176470588,1e-09,results/12_bodymap/age_shift_accuracy.csv:stage 21,,02_transfer.ipynb
+s09.acc_adult_full,09,1.0,1.0,1e-09,results/12_bodymap/age_shift_accuracy.csv:stage 21,,02_transfer.ipynb
+s09.acc_2wk_k20,09,0.7647058823529411,0.7647058823529411,1e-09,results/12_bodymap/age_shift_accuracy.csv:stage 2,,02_transfer.ipynb
+s09.acc_104wk_k20,09,0.9076923076923076,0.9076923076923076,1e-09,results/12_bodymap/age_shift_accuracy.csv:stage 104,,02_transfer.ipynb
+s09.native_bal_acc_11,09,0.9928571428571428,0.9928571428571428,1e-09,results/12_bodymap/native_panel.csv,,02_transfer.ipynb
+s09.native_acc_9,09,0.9925373134328358,0.9925373134328358,1e-09,results/12_bodymap/native_panel.csv,,02_transfer.ipynb
+s09.imported_k20_acc_9_all_ages,09,0.9104477611940298,0.9104477611940298,1e-09,results/12_bodymap/native_panel.csv,,02_transfer.ipynb
+s09.cov_adult_k20_marginal,09,0.6176470588235294,0.6176470588235294,1e-09,results/12_bodymap/conformal_transfer.csv:stage 21 coverage_mapped,,02_transfer.ipynb
+s09.cov_adult_k20_mondrian,09,0.2794117647058823,0.3382352941176471,1e-09,results/12_bodymap/conformal_transfer.csv:stage 21 coverage_mapped,,02_transfer.ipynb
+s09.cov_adult_k20_floored,09,0.6911764705882353,0.6911764705882353,1e-09,results/12_bodymap/conformal_transfer.csv:stage 21 coverage_mapped,,02_transfer.ipynb
+s09.cov_adult_k50_marginal,09,0.6617647058823529,0.6617647058823529,1e-09,results/12_bodymap/conformal_transfer.csv:stage 21 coverage_mapped,,02_transfer.ipynb
+s09.cov_adult_k50_mondrian,09,0.1764705882352941,0.2352941176470588,1e-09,results/12_bodymap/conformal_transfer.csv:stage 21 coverage_mapped,,02_transfer.ipynb
+s09.cov_adult_k50_floored,09,0.6911764705882353,0.6911764705882353,1e-09,results/12_bodymap/conformal_transfer.csv:stage 21 coverage_mapped,,02_transfer.ipynb
+s09.cov_adult_full_marginal,09,0.7058823529411765,0.7058823529411765,1e-09,results/12_bodymap/conformal_transfer.csv:stage 21 coverage_mapped,,02_transfer.ipynb
+s09.cov_adult_full_mondrian,09,0.2794117647058823,0.2794117647058823,1e-09,results/12_bodymap/conformal_transfer.csv:stage 21 coverage_mapped,,02_transfer.ipynb
+s09.cov_adult_full_floored,09,0.75,0.75,1e-09,results/12_bodymap/conformal_transfer.csv:stage 21 coverage_mapped,,02_transfer.ipynb
+s09.n_mondrian_infinite,09,,2.0,1e-09,notebook derivation (textbook rank vs calibration vials per tissue),no pipeline counterpart; pre-fix rule had no infinite threshold,02_transfer.ipynb
+s09.recal_cov_k20_n3,09,0.9696227222390011,0.9426243330313098,1e-09,results/12_bodymap/recalibration.csv:coverage_recalibrated,,02_transfer.ipynb
+s09.recal_cov_k20_n5,09,0.9275975783475784,0.9139707977207978,1e-09,results/12_bodymap/recalibration.csv:coverage_recalibrated,,02_transfer.ipynb
+s09.srccal_cov_same_test_k20,09,0.6187267190174166,0.6187267190174166,1e-09,results/12_bodymap/recalibration.csv:coverage_source_cal_same_test (n_recal 3),,02_transfer.ipynb
+s09.recal_cov_full_n3,09,0.9707351756770362,0.9460674015906576,1e-09,results/12_bodymap/recalibration.csv:coverage_recalibrated,,02_transfer.ipynb
+s09.recal_cov_full_n5,09,0.9488461538461538,0.9193076923076922,1e-09,results/12_bodymap/recalibration.csv:coverage_recalibrated,,02_transfer.ipynb
+s09.srccal_cov_same_test_full,09,0.711168579482533,0.711168579482533,1e-09,results/12_bodymap/recalibration.csv:coverage_source_cal_same_test (n_recal 3),,02_transfer.ipynb
+s09.acc_2wk_testes_k20,09,0.0,0.0,1e-09,results/12_bodymap/accuracy_by_organ.csv,,02_transfer.ipynb
+s09.acc_2wk_spleen_k20,09,0.0,0.0,1e-09,results/12_bodymap/accuracy_by_organ.csv,,02_transfer.ipynb
+s09.pgk2_testes_2wk,09,0.226569076381019,0.226569076381019,1e-09,results/12_bodymap/juvenile_marker_check.csv,,02_transfer.ipynb
+s09.pgk2_testes_21wk,09,9.681903699899747,9.681903699899747,1e-09,results/12_bodymap/juvenile_marker_check.csv,,02_transfer.ipynb
+s10.orthologs_1to1,10,14609.0,14609.0,1e-09,results/13_gtex/gene_overlap.csv,recomputed live,02_transfer.ipynb
+s10.orthologs_in_gtex,10,14569.0,14569.0,1e-09,results/13_gtex/gene_overlap.csv,recomputed live,02_transfer.ipynb
+s10.lost_to_orthology,10,6624.0,6624.0,1e-09,results/13_gtex/gene_overlap.csv,recomputed live,02_transfer.ipynb
+s10.acc_k20,10,0.6539235412474849,0.6539235412474849,1e-09,results/13_gtex/accuracy_overall.csv:accuracy_sample_weighted,recomputed from the per-tissue table,02_transfer.ipynb
+s10.acc_k50,10,0.7814889336016096,0.7814889336016096,1e-09,results/13_gtex/accuracy_overall.csv:accuracy_sample_weighted,recomputed from the per-tissue table,02_transfer.ipynb
+s10.acc_full,10,0.854728370221328,0.854728370221328,1e-09,results/13_gtex/accuracy_overall.csv:accuracy_sample_weighted,recomputed from the per-tissue table,02_transfer.ipynb
+s10.acc_heart_k20,10,0.0333333333333333,0.0333333333333333,1e-09,results/13_gtex/accuracy_by_tissue.csv,,02_transfer.ipynb
+s10.acc_ovary_k20,10,0.0,0.0,1e-09,results/13_gtex/accuracy_by_tissue.csv,,02_transfer.ipynb
+s10.heart_to_skm_frac_k20,10,0.9066666666666666,0.9066666666666666,1e-09,results/13_gtex/confusion_k20.csv (derived),,02_transfer.ipynb
+s10.ovary_to_heart_frac_k20,10,0.9533333333333334,0.9533333333333334,1e-09,results/13_gtex/confusion_k20.csv (derived),,02_transfer.ipynb
+s10.cov_k20_marginal,10,0.3678068410462776,0.3637826961770624,1e-09,results/13_gtex/conformal_transfer.csv:coverage_mapped,,02_transfer.ipynb
+s10.cov_k20_mondrian,10,0.2084507042253521,0.3291750503018109,1e-09,results/13_gtex/conformal_transfer.csv:coverage_mapped,,02_transfer.ipynb
+s10.cov_k20_floored,10,0.4044265593561368,0.5215291750503018,1e-09,results/13_gtex/conformal_transfer.csv:coverage_mapped,,02_transfer.ipynb
+s10.cov_k50_marginal,10,0.3678068410462776,0.3629778672032193,1e-09,results/13_gtex/conformal_transfer.csv:coverage_mapped,,02_transfer.ipynb
+s10.cov_k50_mondrian,10,0.1810865191146881,0.3018108651911468,1e-09,results/13_gtex/conformal_transfer.csv:coverage_mapped,,02_transfer.ipynb
+s10.cov_k50_floored,10,0.393158953722334,0.510261569416499,1e-09,results/13_gtex/conformal_transfer.csv:coverage_mapped,,02_transfer.ipynb
+s10.cov_full_marginal,10,0.0635814889336016,0.0619718309859154,1e-09,results/13_gtex/conformal_transfer.csv:coverage_mapped,,02_transfer.ipynb
+s10.cov_full_mondrian,10,0.0776659959758551,0.1983903420523138,1e-09,results/13_gtex/conformal_transfer.csv:coverage_mapped,,02_transfer.ipynb
+s10.cov_full_floored,10,0.1327967806841046,0.2519114688128772,1e-09,results/13_gtex/conformal_transfer.csv:coverage_mapped,,02_transfer.ipynb
+s10.recal_cov_k20_n3,10,0.8795268061014241,0.9544042733273792,1e-09,results/13_gtex/recalibration.csv:coverage_recalibrated,,02_transfer.ipynb
+s10.recal_size_k20_n3,10,4.14935352907998,11.69662694772028,1e-09,results/13_gtex/recalibration.csv:set_size_recalibrated,,02_transfer.ipynb
+s10.recal_cov_k20_n5,10,0.9486581611681733,0.9328742780196038,1e-09,results/13_gtex/recalibration.csv:coverage_recalibrated,,02_transfer.ipynb
+s10.recal_size_k20_n5,10,6.98413669166924,6.281691250243343,1e-09,results/13_gtex/recalibration.csv:set_size_recalibrated,,02_transfer.ipynb
+s10.recal_cov_k50_n3,10,0.9015256986439736,0.9592233996675894,1e-09,results/13_gtex/recalibration.csv:coverage_recalibrated,,02_transfer.ipynb
+s10.recal_size_k50_n3,10,3.45569877491189,11.624427101911984,1e-09,results/13_gtex/recalibration.csv:set_size_recalibrated,,02_transfer.ipynb
+s10.recal_cov_k50_n5,10,0.9503903352851985,0.9355222782501288,1e-09,results/13_gtex/recalibration.csv:coverage_recalibrated,,02_transfer.ipynb
+s10.recal_size_k50_n5,10,4.381548159810533,4.035639894611753,1e-09,results/13_gtex/recalibration.csv:set_size_recalibrated,,02_transfer.ipynb
+s10.recal_cov_full_n3,10,0.8801259557785102,0.9506761028326765,1e-09,results/13_gtex/recalibration.csv:coverage_recalibrated,,02_transfer.ipynb
+s10.recal_size_full_n3,10,1.5143512423162275,11.177532052752412,1e-09,results/13_gtex/recalibration.csv:set_size_recalibrated,,02_transfer.ipynb
+s10.recal_cov_full_n5,10,0.8767027920341368,0.8657841719256185,1e-09,results/13_gtex/recalibration.csv:coverage_recalibrated,,02_transfer.ipynb
+s10.recal_size_full_n5,10,1.6086662609180111,2.045111570457871,1e-09,results/13_gtex/recalibration.csv:set_size_recalibrated,,02_transfer.ipynb
+s10.frac_recal_draws_infinite_k20_n3,10,,0.45,1e-09,notebook derivation (replayed seeded donor draws),no pipeline counterpart; value from this notebook's replay,02_transfer.ipynb
+s10.native_acc,10,0.9790744466800804,0.9790744466800804,1e-09,results/13_gtex/native_panel.csv,,02_transfer.ipynb
+s10.p14_gtex_zscore_k20_acc,10,0.6539235412474849,0.6539235412474849,1e-09,results/14_transfer/target_summary.csv (standard),,02_transfer.ipynb
+s10.p14_gtex_zscore_k50_acc,10,0.7814889336016096,0.7814889336016096,1e-09,results/14_transfer/target_summary.csv (standard),,02_transfer.ipynb
+s10.p14_gtex_rank_k20_acc,10,0.2865191146881288,0.2865191146881288,1e-09,results/14_transfer/target_summary.csv (standard),,02_transfer.ipynb
+s10.p14_gtex_rank_k50_acc,10,0.6317907444668008,0.6317907444668008,1e-09,results/14_transfer/target_summary.csv (standard),,02_transfer.ipynb
+s10.p14_gtex_pairs_k20_acc,10,0.2845070422535211,0.2845070422535211,1e-09,results/14_transfer/target_summary.csv (standard),,02_transfer.ipynb
+s10.p14_gtex_pairs_k50_acc,10,0.6370221327967807,0.6370221327967807,1e-09,results/14_transfer/target_summary.csv (standard),,02_transfer.ipynb
+s10.p14_bodymap_zscore_k20_srccov,10,0.6176470588235294,0.6176470588235294,1e-09,"results/14_transfer/recalibration.csv:coverage_source_cal (standard, n_recal 3)",,02_transfer.ipynb
+s10.p14_bodymap_zscore_k20_recalcov_n3,10,0.9647788352694764,0.929834709627676,1e-09,"results/14_transfer/recalibration.csv:coverage_recalibrated (standard, n_recal 3)",,02_transfer.ipynb
+s10.p14_bodymap_zscore_k50_srccov,10,0.6617647058823529,0.6617647058823529,1e-09,"results/14_transfer/recalibration.csv:coverage_source_cal (standard, n_recal 3)",,02_transfer.ipynb
+s10.p14_bodymap_zscore_k50_recalcov_n3,10,0.93640642303433,0.9282115171650056,1e-09,"results/14_transfer/recalibration.csv:coverage_recalibrated (standard, n_recal 3)",,02_transfer.ipynb
+s10.p14_bodymap_rank_k20_srccov,10,0.9558823529411764,0.9558823529411764,1e-09,"results/14_transfer/recalibration.csv:coverage_source_cal (standard, n_recal 3)",,02_transfer.ipynb
+s10.p14_bodymap_rank_k20_recalcov_n3,10,0.9663520587939192,0.9277559649652674,1e-09,"results/14_transfer/recalibration.csv:coverage_recalibrated (standard, n_recal 3)",,02_transfer.ipynb
+s10.p14_bodymap_rank_k50_srccov,10,0.8088235294117647,0.75,1e-09,"results/14_transfer/recalibration.csv:coverage_source_cal (standard, n_recal 3)",,02_transfer.ipynb
+s10.p14_bodymap_rank_k50_recalcov_n3,10,0.940753045404208,0.9004983388704317,1e-09,"results/14_transfer/recalibration.csv:coverage_recalibrated (standard, n_recal 3)",,02_transfer.ipynb
+s10.p14_bodymap_pairs_k20_srccov,10,0.6029411764705882,0.5882352941176471,1e-09,"results/14_transfer/recalibration.csv:coverage_source_cal (standard, n_recal 3)",,02_transfer.ipynb
+s10.p14_bodymap_pairs_k20_recalcov_n3,10,0.9663495419309373,0.9383821604751836,1e-09,"results/14_transfer/recalibration.csv:coverage_recalibrated (standard, n_recal 3)",,02_transfer.ipynb
+s10.p14_bodymap_pairs_k50_srccov,10,0.3823529411764705,0.3676470588235294,1e-09,"results/14_transfer/recalibration.csv:coverage_source_cal (standard, n_recal 3)",,02_transfer.ipynb
+s10.p14_bodymap_pairs_k50_recalcov_n3,10,0.9681063122923586,0.9279900332225914,1e-09,"results/14_transfer/recalibration.csv:coverage_recalibrated (standard, n_recal 3)",,02_transfer.ipynb
+s10.p14_gtex_zscore_k20_srccov,10,0.3678068410462776,0.3637826961770624,1e-09,"results/14_transfer/recalibration.csv:coverage_source_cal (standard, n_recal 3)",,02_transfer.ipynb
+s10.p14_gtex_zscore_k20_recalcov_n3,10,0.87190008114547,0.9661880041533962,1e-09,"results/14_transfer/recalibration.csv:coverage_recalibrated (standard, n_recal 3)",,02_transfer.ipynb
+s10.p14_gtex_zscore_k50_srccov,10,0.3678068410462776,0.3629778672032193,1e-09,"results/14_transfer/recalibration.csv:coverage_source_cal (standard, n_recal 3)",,02_transfer.ipynb
+s10.p14_gtex_zscore_k50_recalcov_n3,10,0.9060336147261492,0.929635805640716,1e-09,"results/14_transfer/recalibration.csv:coverage_recalibrated (standard, n_recal 3)",,02_transfer.ipynb
+s10.p14_gtex_rank_k20_srccov,10,0.3509054325955734,0.3501006036217304,1e-09,"results/14_transfer/recalibration.csv:coverage_source_cal (standard, n_recal 3)",,02_transfer.ipynb
+s10.p14_gtex_rank_k20_recalcov_n3,10,0.835978175502893,0.964206876115643,1e-09,"results/14_transfer/recalibration.csv:coverage_recalibrated (standard, n_recal 3)",,02_transfer.ipynb
+s10.p14_gtex_rank_k50_srccov,10,0.2507042253521127,0.2406438631790744,1e-09,"results/14_transfer/recalibration.csv:coverage_source_cal (standard, n_recal 3)",,02_transfer.ipynb
+s10.p14_gtex_rank_k50_recalcov_n3,10,0.891808944968201,0.9245507178365192,1e-09,"results/14_transfer/recalibration.csv:coverage_recalibrated (standard, n_recal 3)",,02_transfer.ipynb
+s10.p14_gtex_pairs_k20_srccov,10,0.1569416498993963,0.1577464788732394,1e-09,"results/14_transfer/recalibration.csv:coverage_source_cal (standard, n_recal 3)",,02_transfer.ipynb
+s10.p14_gtex_pairs_k20_recalcov_n3,10,0.8547876699340268,0.975176541676628,1e-09,"results/14_transfer/recalibration.csv:coverage_recalibrated (standard, n_recal 3)",,02_transfer.ipynb
+s10.p14_gtex_pairs_k50_srccov,10,0.0752515090543259,0.0668008048289738,1e-09,"results/14_transfer/recalibration.csv:coverage_source_cal (standard, n_recal 3)",,02_transfer.ipynb
+s10.p14_gtex_pairs_k50_recalcov_n3,10,0.8871583488183152,0.9242986362187704,1e-09,"results/14_transfer/recalibration.csv:coverage_recalibrated (standard, n_recal 3)",,02_transfer.ipynb
+s10.units_rankpairs_cpm_minus_tpm,10,-0.0044265593561368,-0.0044265593561368,1e-09,results/14_transfer + 14_transfer_cpm target_summary (standard),,02_transfer.ipynb
+s10.units_rankpairs_minus_z_on_cpm,10,-0.2722334004024145,-0.2722334004024145,1e-09,results/14_transfer_cpm/target_summary.csv (standard),,02_transfer.ipynb
+s11.taskA_best_single,11,1.0,1.0,1e-09,results/07_fusion/taskA_summary.csv (max single-omic balanced_accuracy_mean),loaded,02_transfer.ipynb
+s11.taskA_best_fusion,11,0.9988888888888888,0.9988888888888888,1e-09,results/07_fusion/taskA_summary.csv (max fusion balanced_accuracy_mean),loaded,02_transfer.ipynb
+s11.taskA_min_arm,11,0.9932098765432098,0.9932098765432098,1e-09,results/07_fusion/taskA_summary.csv (min balanced_accuracy_mean),loaded,02_transfer.ipynb
+s11.taskB_n_fusion_beats_single,11,0.0,0.0,0.0,results/07_fusion/taskB_best_vs_null.csv (sum fusion_beats_single_by_gt_sd),recomputed from loaded taskB_summary + taskB_null,02_transfer.ipynb
+s11.taskB_n_beats_null,11,7.0,7.0,0.0,results/07_fusion/taskB_best_vs_null.csv (sum best_beats_null_p95),recomputed from loaded taskB_summary + taskB_null,02_transfer.ipynb
+s11.taskB_null_p95_max,11,0.8958333333333334,0.8958333333333334,1e-09,results/07_fusion/taskB_best_vs_null.csv (max null_p95_max_auroc),recomputed from loaded taskB_null,02_transfer.ipynb
+s11.batch_n_unresolvable,11,3.0,3.0,0.0,results/07_fusion/batch_conclusion.csv (verdict != training),verdict rule rerun on loaded tables,02_transfer.ipynb
+s11.skmgn_depth_rf,11,0.9166666666666666,0.9166666666666666,1e-09,results/07_fusion/batch_covariate_auroc.csv (SKM-GN trnscrpt_depth rf),the '0.917'; loaded,02_transfer.ipynb
+s11.skmgn_qc_logreg,11,0.9583333333333331,0.9583333333333331,1e-09,results/07_fusion/batch_covariate_auroc.csv (SKM-GN trnscrpt_qc logreg),the '0.958'; loaded,02_transfer.ipynb
+s11.skmgn_qc_logreg_p,11,0.0099009900990099,0.0099009900990099,1e-09,results/07_fusion/batch_covariate_auroc.csv (SKM-GN trnscrpt_qc logreg p_perm),100-draw within-sex null; loaded,02_transfer.ipynb
+s11.skmgn_depth_rf_live,11,0.9166666666666666,0.9166666666666666,0.005,results/07_fusion/batch_covariate_auroc.csv (SKM-GN trnscrpt_depth rf),recomputed live (same seed; no null),02_transfer.ipynb
+s11.skmgn_qc_logreg_live,11,0.9583333333333331,0.9583333333333331,0.005,results/07_fusion/batch_covariate_auroc.csv (SKM-GN trnscrpt_qc logreg),recomputed live (no null),02_transfer.ipynb
+s11.skmgn_qc_rf_live,11,0.9583333333333331,0.9583333333333331,0.005,results/07_fusion/batch_covariate_auroc.csv (SKM-GN trnscrpt_qc rf),recomputed live (same seed),02_transfer.ipynb
+s12.median_rho_WATSC,12,0.371812725090036,0.371812725090036,0.005,results/09_discordance/summary.csv (WAT-SC median_rho),recomputed live,02_transfer.ipynb
+s12.median_rho_CORTEX,12,0.0298199279711884,0.0298199279711884,0.005,results/09_discordance/summary.csv (CORTEX median_rho),recomputed live,02_transfer.ipynb
+s12.n_sig_either,12,1948.0,1948.0,0.0,results/09_discordance/discordance_rates.csv (sum n_sig_either); FINDINGS_ONE_PAGER item 5,recomputed live; 56 contrasts FDR 0.10,02_transfer.ipynb
+s12.n_one_layer_only,12,1899.0,1899.0,0.0,results/09_discordance/discordance_rates.csv (sum n_one_layer_only),recomputed live,02_transfer.ipynb
+s12.n_sign_discordant,12,4.0,4.0,0.0,results/09_discordance/discordance_rates.csv (sum n_sign_discordant),recomputed live,02_transfer.ipynb
+s12.n_concordant,12,45.0,45.0,0.0,results/09_discordance/discordance_rates.csv (sum n_concordant),recomputed live,02_transfer.ipynb
+s12.auroc_one_layer_logreg_with_flag,12,0.7799763305392329,0.7799763305392329,0.005,SUMMARY.md Discordance table (any_one_layer logreg 0.780),recomputed live; includes circular is_training_regulated,02_transfer.ipynb
+s12.auroc_one_layer_logreg_without_flag,12,0.7419852925755585,0.7419852925755585,0.005,SUMMARY.md Discordance table (any_one_layer (no regulated flag) logreg 0.742),recomputed live,02_transfer.ipynb
+s12.auroc_one_layer_rf_with_flag,12,0.7752668443169652,0.7752668443169652,0.005,SUMMARY.md Discordance table (any_one_layer rf 0.775),recomputed live; RF differs from published at 1e-4 (0.77521 in this run),02_transfer.ipynb
+s12.auroc_one_layer_rf_without_flag,12,0.7466004793343886,0.7466004793343886,0.005,SUMMARY.md Discordance table (any_one_layer (no regulated flag) rf 0.747),recomputed live; RF differs from published at 1e-4 (0.74667 in this run),02_transfer.ipynb
+s14.acc_technical,13,,0.8731533209186841,0.005,notebook run 2026-09-25 (new analysis),NEW: not in the pipeline; section-4 folds; probe p4 reported bal. acc. 0.876 on its own folds,02_transfer.ipynb
+s14.bal_acc_technical,13,,0.8742105263157894,0.005,notebook run 2026-09-25 (new analysis),NEW,02_transfer.ipynb
+s14.acc_composition,13,,0.9488268156424582,0.005,notebook run 2026-09-25 (new analysis),NEW,02_transfer.ipynb
+s14.bal_acc_composition,13,,0.951578947368421,0.005,notebook run 2026-09-25 (new analysis),NEW,02_transfer.ipynb
+s14.acc_all,13,,0.9754934823091248,0.005,notebook run 2026-09-25 (new analysis),NEW,02_transfer.ipynb
+s14.bal_acc_all,13,,0.9757894736842104,0.005,notebook run 2026-09-25 (new analysis),NEW,02_transfer.ipynb
+s14.n_tissues_one_plate,13,,19.0,0.0,notebook run 2026-09-25 (new analysis),NEW: tissues whose vials all share one RNA extraction plate,02_transfer.ipynb
+s14.n_plates,13,,17.0,0.0,notebook run 2026-09-25 (new analysis),NEW: RNA_extr_plate_ID levels among study vials,02_transfer.ipynb
+s14.n_flowcells,13,,4.0,0.0,notebook run 2026-09-25 (new analysis),NEW: Seq_flowcell_ID levels among study vials,02_transfer.ipynb
+s14.bodymap_adult_k20,13,1.0,1.0,1e-09,results/12_bodymap/age_shift_accuracy.csv (stage 21 k20); pre-fix file identical,loaded,02_transfer.ipynb
+s14.bodymap_adult_full,13,1.0,1.0,1e-09,results/12_bodymap/age_shift_accuracy.csv (stage 21 full); pre-fix file identical,loaded,02_transfer.ipynb
+s09.native_acc_9_live,09,0.9925373134328358,0.9925373134328358,0.005,results/12_bodymap/native_panel.csv (native_panel_k20_accuracy_9_mapped_organs),"recomputed live: BodyMap native-panel CV, same call and seed as the pipeline",02_transfer.ipynb
+s09.native_acc_9_adults,09,,1.0,0.005,"notebook recomputation of the BodyMap native-panel CV, adults (21 weeks), 9 mapped organs",new: the pipeline saves only the all-ages native number; reference = this run,02_transfer.ipynb
+s09.imported_k20_acc_9_adults,09,1.0,1.0,1e-09,"results/12_bodymap/age_shift_accuracy.csv (stage 21, k20)",,02_transfer.ipynb
+s14.bodymap_adult_cov_k20,13,0.6176470588235294,0.6176470588235294,1e-09,"results/12_bodymap/conformal_transfer.csv (stage 21, k20, marginal)",,02_transfer.ipynb
+s14.bodymap_adult_empty_k20,13,0.3823529411764705,0.3823529411764705,1e-09,"results/12_bodymap/conformal_transfer.csv (stage 21, k20, marginal)",,02_transfer.ipynb
+s14.bodymap_recal3_cov_k20,13,0.9696227222390011,0.9426243330313098,1e-09,"results/12_bodymap/recalibration.csv (k20, n_recal 3)",moved by the quantile fix,02_transfer.ipynb
+s02.pc50_purity_TRNSCRPT_tissue,02,,0.9835372636262514,0.005,notebook computation (section 2b; saved to _outputs/s02/umap_neighbour_purity.csv),new (UMAP subsection 2b): 15-NN same-label share in the 50-PC space; reference = first run,01_replication.ipynb
+s02.umap_purity_TRNSCRPT_tissue,02,,0.98605858361142,0.02,notebook computation (section 2b; saved to _outputs/s02/umap_neighbour_purity.csv),"new (UMAP subsection 2b): 15-NN same-label share in the UMAP map; UMAP layouts can differ slightly across machines / numba versions, hence 0.02",01_replication.ipynb
+s02.pc50_purity_TRNSCRPT_sex,02,,0.8401186503522432,0.005,notebook computation (section 2b; saved to _outputs/s02/umap_neighbour_purity.csv),new (UMAP subsection 2b): 15-NN same-label share in the 50-PC space; reference = first run,01_replication.ipynb
+s02.umap_purity_TRNSCRPT_sex,02,,0.8584352984797924,0.02,notebook computation (section 2b; saved to _outputs/s02/umap_neighbour_purity.csv),"new (UMAP subsection 2b): 15-NN same-label share in the UMAP map; UMAP layouts can differ slightly across machines / numba versions, hence 0.02",01_replication.ipynb
+s02.pc50_purity_PROT_tissue,02,,0.8849358974358974,0.005,notebook computation (section 2b; saved to _outputs/s02/umap_neighbour_purity.csv),new (UMAP subsection 2b): 15-NN same-label share in the 50-PC space; reference = first run,01_replication.ipynb
+s02.umap_purity_PROT_tissue,02,,0.982852564102564,0.02,notebook computation (section 2b; saved to _outputs/s02/umap_neighbour_purity.csv),"new (UMAP subsection 2b): 15-NN same-label share in the UMAP map; UMAP layouts can differ slightly across machines / numba versions, hence 0.02",01_replication.ipynb
+s02.pc50_purity_PROT_sex,02,,0.8576923076923076,0.005,notebook computation (section 2b; saved to _outputs/s02/umap_neighbour_purity.csv),new (UMAP subsection 2b): 15-NN same-label share in the 50-PC space; reference = first run,01_replication.ipynb
+s02.umap_purity_PROT_sex,02,,0.8540064102564102,0.02,notebook computation (section 2b; saved to _outputs/s02/umap_neighbour_purity.csv),"new (UMAP subsection 2b): 15-NN same-label share in the UMAP map; UMAP layouts can differ slightly across machines / numba versions, hence 0.02",01_replication.ipynb
+s02.pc50_purity_METAB_tissue,02,,0.9946727549467276,0.005,notebook computation (section 2b; saved to _outputs/s02/umap_neighbour_purity.csv),new (UMAP subsection 2b): 15-NN same-label share in the 50-PC space; reference = first run,01_replication.ipynb
+s02.umap_purity_METAB_tissue,02,,0.9946727549467276,0.02,notebook computation (section 2b; saved to _outputs/s02/umap_neighbour_purity.csv),"new (UMAP subsection 2b): 15-NN same-label share in the UMAP map; UMAP layouts can differ slightly across machines / numba versions, hence 0.02",01_replication.ipynb
+s02.pc50_purity_METAB_sex,02,,0.7682648401826484,0.005,notebook computation (section 2b; saved to _outputs/s02/umap_neighbour_purity.csv),new (UMAP subsection 2b): 15-NN same-label share in the 50-PC space; reference = first run,01_replication.ipynb
+s02.umap_purity_METAB_sex,02,,0.8105783866057839,0.02,notebook computation (section 2b; saved to _outputs/s02/umap_neighbour_purity.csv),"new (UMAP subsection 2b): 15-NN same-label share in the UMAP map; UMAP layouts can differ slightly across machines / numba versions, hence 0.02",01_replication.ipynb

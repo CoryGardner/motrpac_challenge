@@ -1,0 +1,3 @@
+assay,variable,n_levels,n_tissues,median_levels_per_tissue,max_levels_per_tissue,max_tissues_per_level,n_levels_shared,tissues_in_one_level,cramers_v,n_pairs_sharing_level,n_pairs_total
+UBIQ,plex_id,12,2,6.0,6,1,0,0,1.0,0,1
+UBIQ,tmt11_channel,10,2,10.0,10,2,10,0,0.0,1,1

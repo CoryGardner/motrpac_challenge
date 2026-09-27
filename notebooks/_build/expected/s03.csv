@@ -1,7 +1,0 @@
-key,section,published_value,reference_value,tolerance,source,note
-s03.model_as_fitted,03,0.9759036144578314,0.9759036144578314,0.005,results/04_baselines/PROT/diagnostic_accuracy.csv,"fold 0 of 5, as in scripts/04_prot_diagnostic.py"
-s03.missingness_indicators_only,03,1.0,1.0,0.005,results/04_baselines/PROT/diagnostic_accuracy.csv,"fold 0 of 5, as in scripts/04_prot_diagnostic.py"
-s03.per_tissue_means_removed,03,0.1927710843373494,0.1927710843373494,0.005,results/04_baselines/PROT/diagnostic_accuracy.csv,"fold 0 of 5, as in scripts/04_prot_diagnostic.py"
-s03.chance_balanced,03,0.1428571428571428,0.1428571428571428,1e-09,results/04_baselines/PROT/diagnostic_accuracy.csv,1 / number of tissues
-s03.HEART_R2_channel_sex,03,1.0,1.0,1e-09,results/03_eda/within_tissue_pca_PROT.csv (R2_tmt11_channel~sex),"Cramér's V² of TMT channel vs sex, recomputed from data/raw/meta/PROT.csv"
-s03.LIVER_R2_channel_sex,03,1.0,1.0,1e-09,results/03_eda/within_tissue_pca_PROT.csv (R2_tmt11_channel~sex),"Cramér's V² of TMT channel vs sex, recomputed from data/raw/meta/PROT.csv"

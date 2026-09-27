@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """Phase 30 — export everything the site shows into site/data/*.json, with provenance.
 
-Rules (docs/superpowers/specs/2026-09-26-submission-site-spec.md):
+Rules:
 - No number on the site is typed by hand: every value comes from a results/ file (this script records
   file, row selector, column and aggregation in site/data/provenance.json) or is recomputed here from
   per-sample outputs of the pipeline (recorded as agg = "recomputed" with a note).
@@ -9,8 +9,9 @@ Rules (docs/superpowers/specs/2026-09-26-submission-site-spec.md):
 - results/ is read only. Per-sample scores come from the --save-scores regeneration runs under
   results/31_site_regen/ (phases 06, 12, 13) and the identifiability recompute results/16_identifiability/.
 
-Usage: python scripts/30_export_site_data.py [--skip-expr] [--check-anchors] [--reconciliation]
-       [--readme-table] [--abstract]
+Usage: python scripts/30_export_site_data.py [--results DIR] [--out DIR] [--skip-expr] [--check-anchors]
+       [--reconciliation] [--readme-table] [--abstract] [--write-prefix-table --prefix-backup DIR]
+Results are read from --results, else $TFP_RESULTS, else results/ when complete, else results_frozen/ (tfp.config.results_root).
 """
 from __future__ import annotations
 
@@ -30,12 +31,30 @@ import pandas as pd
 from tfp import config as C, conformal as cp, io, transfer
 
 ROOT = C.ROOT
-RES = C.RESULTS_DIR
+RES = C.results_root()
 REGEN = RES / "31_site_regen"
 SITE = ROOT / "site" / "data"
-WORKSPACE = ROOT.parents[1]
-PREFIX_BACKUP = WORKSPACE / "backup" / "pipeline_history" / "results_pre_quantile_fix_2026-09-25"
+# pre-fix values of every provenance entry, generated once from the pre-quantile-fix results of 2026-09-25 (not in the repository)
+PREFIX_TABLE = ROOT / "docs" / "reconciliation" / "pre_quantile_fix_values.csv"
 PLOTLY_VERSION = "2.35.2"
+DATA_ACCESS = {
+    "motrpac": {"what": "MotrpacRatTraining6moData 2.0.0 (portal release c1.0, rn6); GitHub commit f831a4fe421ec11687640452484a8247137aa74a",
+                "how": "R/export_motrpac.R (make export)", "date": "2026-09-17", "documented_in": "docs/DATA_GUIDE.md"},
+    "bodymap": {"what": "rat BodyMap GSE53960, Bioconductor bodymapRat 1.28.0 (ExperimentHub)", "how": "R/export_bodymap.R (make bodymap)",
+                "date": "2026-09-17", "documented_in": "docs/EXTERNAL_VALIDATION.md"},
+    "gtex": {"what": "GTEx v8 open-access (release 2017-06-05, RNASeQCv1.1.9): gene TPM GCT, sample attributes, gene read-count GCT",
+             "how": "portal download + scripts/11_gtex_prepare.py (make gtex)", "date": "2026-09-17 (TPM, attributes); 2026-09-18 (read counts)",
+             "documented_in": "docs/GTEX_TRANSFER.md"},
+}
+
+
+def configure(results: Path | None = None, out: Path | None = None):
+    """Set the results root and the output directory (module globals used by every exporter)."""
+    global RES, REGEN, SITE
+    RES = C.results_root(results)
+    REGEN = RES / "31_site_regen"
+    if out:
+        SITE = Path(out)
 
 TISSUE_NAMES = {
     "ADRNL": "adrenal gland", "BAT": "brown adipose tissue", "BLOOD": "whole blood", "COLON": "colon",
@@ -106,10 +125,29 @@ def records(df: pd.DataFrame) -> list[dict]:
 
 
 def rel(p: Path) -> str:
+    """Canonical provenance path: files under the results root are always written as results/<path>, whichever
+    root (results/ or results_frozen/) the export read them from; other paths are relative to the repository."""
+    p = Path(p)
+    if p == RES:
+        return "results"
+    try:
+        return "results/" + str(p.relative_to(RES))
+    except ValueError:
+        pass
     try:
         return str(p.relative_to(ROOT))
     except ValueError:
         return str(p)
+
+
+def gene_symbols(ids) -> dict:
+    """feature_ID → gene symbol from the package annotation (data/raw/feature_to_gene.csv); without the data
+    (a re-export from the snapshot) the symbols already committed in site/data/panel_curve.json are reused."""
+    if (C.RAW_DIR / "feature_to_gene.csv").exists():
+        return io.map_to_gene_symbols(ids)
+    committed = ROOT / "site" / "data" / "panel_curve.json"
+    known = json.loads(committed.read_text()).get("gene_symbols", {}) if committed.exists() else {}
+    return {g: known.get(g, g) for g in ids}
 
 
 def cluster_boot(ok, groups, n_boot: int = 2000, seed: int = C.SEED) -> list[float]:
@@ -249,17 +287,23 @@ class Writer:
 # ---------------------------------------------------------------------------------------------
 # A1 manifest
 # ---------------------------------------------------------------------------------------------
-def export_manifest(w: Writer):
-    phases = {}
-    for d in sorted(p for p in RES.iterdir() if p.is_dir() and p.name != "31_site_regen"):
-        files = [{"path": rel(f), "bytes": f.stat().st_size, "sha256": sha256(f)} for f in sorted(d.rglob("*")) if f.is_file()]
-        phases[d.name] = {"files": files, "n_files": len(files), "bytes": int(sum(f["bytes"] for f in files))}
-    regen = {}
-    if REGEN.exists():
-        for d in sorted(p for p in REGEN.iterdir() if p.is_dir() and p.name != "logs"):
-            regen[d.name] = [{"path": rel(f), "bytes": f.stat().st_size, "sha256": sha256(f)} for f in sorted(d.rglob("*")) if f.is_file()]
-    expected_absent = {"17_training_transfer": "17_*", "21_identifiability_audit": "21_*", "22_26_decomposition": "2[2-6]_*"}
-    absent = {k: v for k, v in expected_absent.items() if not list(RES.glob(v))}
+def export_manifest(w: Writer, prov: Prov):
+    """site/data/manifest.json: the result files this export actually read (from the provenance ledger), grouped by
+    phase, each with size and sha256; the regeneration runs; software versions; data releases and access dates;
+    and the site data files with a flag saying whether this run wrote them."""
+    def entry(src: str) -> dict:
+        f = RES / src.split("/", 1)[1]
+        return {"path": src, "bytes": f.stat().st_size, "sha256": sha256(f)}
+    sources = sorted(s for s in prov.sources if s.startswith("results/"))
+    phases: dict[str, dict] = {}
+    regen: dict[str, list] = {}
+    for src in sources:
+        parts = src.split("/")
+        if parts[1] == "31_site_regen":
+            regen.setdefault(parts[2], []).append(entry(src))
+        else:
+            phases.setdefault(parts[1], []).append(entry(src))
+    phases = {k: {"files": v, "n_files": len(v), "bytes": int(sum(f["bytes"] for f in v))} for k, v in phases.items()}
     import sklearn
     versions = {"python": platform.python_version(), "pandas": pd.__version__, "numpy": np.__version__,
                 "scikit-learn": sklearn.__version__, "plotly.js": PLOTLY_VERSION}
@@ -267,13 +311,24 @@ def export_manifest(w: Writer):
         versions["node"] = subprocess.check_output(["node", "--version"], text=True).strip()
     except Exception:
         pass
-    root_files = [{"path": rel(f), "bytes": f.stat().st_size, "sha256": sha256(f)} for f in sorted(RES.iterdir()) if f.is_file()]
-    m = {"generated": w.generated, "git_hash": w.ghash, "results_dir": rel(RES), "phases": phases, "root_files": root_files,
-         "regeneration_runs": regen, "absent_phases": absent, "versions": versions,
+    results_dir = "results" if RES == C.RESULTS_DIR else ("results_frozen" if RES == C.FROZEN_DIR else str(RES))
+    snapshot = None
+    if (RES / "MANIFEST.json").exists():
+        fm = json.loads((RES / "MANIFEST.json").read_text())
+        snapshot = {k: fm.get(k) for k in ("snapshot_date", "frozen_from_commit", "n_files")}
+    m = {"generated": w.generated, "git_hash": w.ghash, "results_dir": results_dir, "results_snapshot": snapshot,
+         "phases": phases, "regeneration_runs": regen, "phases_used": sorted({s.split("/")[1] for s in sources}),
+         "versions": versions,
          "data": {"motrpac": "MotrpacRatTraining6moData 2.0.0 (= portal release c1.0, rn6)",
-                  "bodymap": "rat BodyMap GSE53960 via bodymapRat (316 samples)", "gtex": "GTEx v8 (2017-06-05) open-access expression"}}
+                  "bodymap": "rat BodyMap GSE53960 via bodymapRat 1.28.0 (316 samples)", "gtex": "GTEx v8 (2017-06-05) open-access expression"},
+         "data_access": DATA_ACCESS,
+         "site_data_files": [{"name": p.name, "bytes": p.stat().st_size, "regenerated": p.name in w.written or p.name in ("provenance.json", "conformal_fixtures.json")}
+                             for p in sorted(SITE.glob("*.json")) if p.name != "manifest.json"]}
+    stale = [f["name"] for f in m["site_data_files"] if not f["regenerated"]]
+    if stale:
+        print(f"  WARNING: site/data files not written by this export: {', '.join(stale)}")
     (SITE / "manifest.json").write_text(json.dumps(m, indent=1))
-    print(f"  wrote manifest.json: {len(phases)} phases, absent {list(absent)}")
+    print(f"  wrote manifest.json: {len(phases)} phases, {len(regen)} regeneration runs, {len(m['site_data_files'])} site data files")
     return m
 
 
@@ -354,7 +409,7 @@ def export_aggregates(w: Writer, prov: Prov, rec: pd.DataFrame | None):
     sel = P.read("05_panels/TRNSCRPT/selected_by_fold.csv")
     selected = {str(k): {str(f): d[d["fold"] == f]["feature_ID"].tolist() for f in sorted(d["fold"].unique())}
                 for k, d in sel.groupby("k")}
-    sym_sel = io.map_to_gene_symbols(sorted(sel["feature_ID"].unique()))
+    sym_sel = gene_symbols(sorted(sel["feature_ID"].unique()))
     stab = P.read("05_panels/TRNSCRPT/stability_k20_annotated.csv").set_index("feature_ID")
     # the round-robin selector picks the best remaining gene of each class in turn, classes in sorted order
     # (models.roundrobin_order): the k-th pick belongs to class (k − 1) mod n_classes. Verified below on the annotated genes.
@@ -498,7 +553,7 @@ def export_aggregates(w: Writer, prov: Prov, rec: pd.DataFrame | None):
         "design": "representations: per-gene z-score within dataset, within-sample rank of the panel genes, top-scoring pairs; standard vs transfer-aware selector; GTEx on log2 TPM and, in the CPM run, on log2 CPM from read counts"},
         [rel(RES / f) for f in ("14_transfer/target_summary.csv", "14_transfer/recalibration.csv", "14_transfer/motrpac_cv_cost.csv", "14_transfer_cpm/target_summary.csv")])
 
-    # ---- identifiability (16) and batch verdict (07) ---------------------------------------------
+    # ---- identifiability (16) ---------------------------------------------
     d16 = RES / "16_identifiability"
     nesting = {}
     for f in sorted(d16.glob("nesting_*.csv")):
@@ -549,7 +604,7 @@ def export_aggregates(w: Writer, prov: Prov, rec: pd.DataFrame | None):
 # ---------------------------------------------------------------------------------------------
 def export_headline(w: Writer, prov: Prov, rec: pd.DataFrame | None):
     P = prov
-    n_vials = P.val("n_trnscrpt_vials", "04_baselines/TRNSCRPT/per_fold.csv", "n_test", where={"model": "logreg_l2"}, agg="sum", note="the five test folds partition the vials")
+    n_vials = int(P.val("n_trnscrpt_vials", "04_baselines/TRNSCRPT/per_fold.csv", "n_test", where={"model": "logreg_l2"}, agg="sum", note="the five test folds partition the vials"))
     n_animals = P.recomputed("n_trnscrpt_animals", int(P.read("04_baselines/TRNSCRPT/per_fold.csv").query("model == 'logreg_l2'").iloc[0][["n_train_animals", "n_test_animals"]].sum()),
                              ["04_baselines/TRNSCRPT/per_fold.csv"], "train + test animals of one fold")
     rc12_ = P.read("12_bodymap/recalibration.csv")
@@ -808,8 +863,23 @@ def export_headline(w: Writer, prov: Prov, rec: pd.DataFrame | None):
                                                             "fraction of the 20 three-donor recalibration draws (k20) whose threshold is +∞")
     else:
         extras["gtex_recal_k20_n3_frac_inf"] = P.pending("gtex_recal_k20_n3_frac_inf", "per-draw thresholds not regenerated")
+    # the design constants the diagrams state (read from the result tables where they are recorded; pipeline constants otherwise)
+    from tfp import models as _models
+    import inspect as _inspect
+    pc = P.read("05_panels/TRNSCRPT/panel_curve.csv")
+    pc20 = pc[pc["k"] == 20]
+    cov06_ = P.read("06_conformal/TRNSCRPT/coverage.csv")
+    design = {"n_outer_folds": int(pc20["fold"].nunique()) if "fold" in pc20 else int(len(pc20)),
+              "n_train_animals": int(round(pc20["n_train_animals"].mean())), "n_test_animals": int(round(pc20["n_test_animals"].mean())),
+              "n_fit_animals": int(round(cov06_["n_fit_animals"].mean())), "n_cal_animals": int(round(cov06_["n_cal_animals"].mean())),
+              "alpha": 0.1, "k_panel": 20, "variance_prefilter": int(_inspect.signature(_models.make_pipeline).parameters["prefilter"].default),
+              "C_grid": list(_models.C_GRID), "inner_splits": int(_inspect.signature(_models.fit_tuned).parameters["inner_splits"].default),
+              "source": "results/05_panels/TRNSCRPT/panel_curve.csv (folds, animals), results/06_conformal/TRNSCRPT/coverage.csv (fit / calibration animals), src/tfp/models.py (prefilter, C grid, inner splits)"}
+    assert design["n_train_animals"] + design["n_test_animals"] == n_animals, design
+    extras["n_vials"], extras["n_animals"] = int(n_vials), int(n_animals)
+    extras["n_tissues"] = int(P.val("n_tissues", "16_identifiability/estimable_pairs.csv", "n_tissues", where={"assay": "TRNSCRPT"}))
     w.write("headline.json", {"question": "Can a molecular signature identify a tissue reliably?",
-                              "tiles": tiles, "accuracy": {m: {"mean": a[0], "sd": a[1]} for m, a in acc.items()}, "ladder": ladder, "extras": extras,
+                              "tiles": tiles, "accuracy": {m: {"mean": a[0], "sd": a[1]} for m, a in acc.items()}, "ladder": ladder, "extras": extras, "design": design,
                               "rung_order": ["in_distribution", "train_control_test_trained", "train_male_test_female", "train_female_test_male", "different_lab", "different_species"]},
             sorted(prov.sources))
 
@@ -1131,33 +1201,68 @@ def check_anchors(prov_entries: list[dict]) -> bool:
     return ok_all
 
 
-def reconciliation(prov_entries: list[dict], out_md: Path):
-    """docs/NUMBERS_RECONCILIATION.md: every headline number, its source, post-fix value and, where a pre-fix
-    snapshot of the same file exists, the pre-fix value; plus where the stale documents still show pre-fix values."""
+def _prefix_key(e: dict) -> tuple:
+    return (e["file"], json.dumps(e.get("where", {}), sort_keys=True), e["column"], e["agg"])
+
+
+def _pre_fix_value(e: dict, backup: Path):
+    """The value of a provenance entry read from a pre-fix results tree ("" when the file or row is absent)."""
+    bp = backup / e["file"].replace("results/", "", 1)
+    if not bp.exists():
+        return ""
+    sel = pd.read_csv(bp)
+    for k, v in e["where"].items():
+        sel = sel[sel[k].astype(str) == str(v)]
+    if e["agg"] == "value" and len(sel) == 1:
+        return jsonable(sel[e["column"]].iloc[0])
+    if e["agg"] == "mean":
+        return jsonable(sel[e["column"]].astype(float).mean())
+    if e["agg"] == "std":
+        return jsonable(sel[e["column"]].astype(float).std())
+    if e["agg"] == "sum":
+        return jsonable(sel[e["column"]].astype(float).sum())
+    if e["agg"] == "count":
+        return len(sel)
+    return ""
+
+
+def write_prefix_table(prov_entries: list[dict], backup: Path, out_csv: Path):
+    """Generate the committed pre-fix value table from a pre-quantile-fix results tree (run once; the tree is not in the repo)."""
+    rows = []
+    for e in prov_entries:
+        if e.get("pending") or e.get("agg") == "recomputed" or not e.get("file"):
+            continue
+        k = _prefix_key(e)
+        rows.append({"id": e["id"], "file": k[0], "where": k[1], "column": k[2], "agg": k[3], "pre_fix": _pre_fix_value(e, backup)})
+    out_csv.parent.mkdir(parents=True, exist_ok=True)
+    pd.DataFrame(rows).to_csv(out_csv, index=False)
+    n = sum(1 for r in rows if r["pre_fix"] != "")
+    print(f"  wrote {out_csv}: {len(rows)} entries, {n} with a pre-fix value")
+
+
+def reconciliation(prov_entries: list[dict], out_md: Path, prefix_table: Path = None):
+    """docs/NUMBERS_RECONCILIATION.md: every headline number, its source, post-fix value and, where the committed
+    pre-fix table holds the same entry, the pre-fix value."""
+    prefix_table = prefix_table or PREFIX_TABLE
+    pre_by_key: dict[tuple, object] = {}
+    if prefix_table.exists():
+        pt = pd.read_csv(prefix_table, dtype=str, keep_default_na=False)
+        for _, r in pt.iterrows():
+            v = r["pre_fix"]
+            try:
+                v = float(v) if v != "" else ""
+            except ValueError:
+                pass
+            pre_by_key[(r["file"], r["where"], r["column"], r["agg"])] = v
+    else:
+        print(f"  WARNING: {prefix_table} missing; reconciliation has no pre-fix values")
     rows = []
     for e in prov_entries:
         if e.get("pending") or e.get("agg") == "recomputed" or not e.get("file"):
             rows.append({"id": e["id"], "value": e.get("value"), "source": e.get("file") or ", ".join(e.get("files", [])),
                          "where": json.dumps(e.get("where", {})), "column": e.get("column", ""), "agg": e.get("agg", "pending"), "pre_fix": "", "changed": ""})
             continue
-        pre = ""
-        relf = e["file"].replace("results/", "", 1)
-        bp = PREFIX_BACKUP / relf
-        if bp.exists():
-            df = pd.read_csv(bp)
-            sel = df
-            for k, v in e["where"].items():
-                sel = sel[sel[k].astype(str) == str(v)]
-            if e["agg"] == "value" and len(sel) == 1:
-                pre = jsonable(sel[e["column"]].iloc[0])
-            elif e["agg"] == "mean":
-                pre = jsonable(sel[e["column"]].astype(float).mean())
-            elif e["agg"] == "std":
-                pre = jsonable(sel[e["column"]].astype(float).std())
-            elif e["agg"] == "sum":
-                pre = jsonable(sel[e["column"]].astype(float).sum())
-            elif e["agg"] == "count":
-                pre = len(sel)
+        pre = pre_by_key.get(_prefix_key(e), "")
         changed = ""
         if pre != "" and pre is not None and isinstance(pre, (int, float)) and isinstance(e["value"], (int, float)):
             changed = "yes" if abs(float(pre) - float(e["value"])) > 1e-9 else "no"
@@ -1174,8 +1279,8 @@ def reconciliation(prov_entries: list[dict], out_md: Path):
 
     lines = ["# Numbers reconciliation — what the site shows, where it comes from, and what moved with the conformal-quantile fix",
              "", f"Generated {datetime.now(timezone.utc):%Y-%m-%d %H:%M UTC} by `scripts/30_export_site_data.py --reconciliation` from `site/data/provenance.json`.",
-             "`results/` (post-fix, 2026-09-25) is the truth; the pre-fix snapshot is "
-             "`../../backup/pipeline_history/results_pre_quantile_fix_2026-09-25/`. Values are shown to 4 decimals; the JSON holds them unrounded.", "",
+             "`results/` (post-fix, 2026-09-25) is the truth; the pre-fix values come from `docs/reconciliation/pre_quantile_fix_values.csv`, "
+             "generated once from the pre-fix results of 2026-09-25 (not in the repository). Values are shown to 4 decimals; the JSON holds them unrounded.", "",
              "## 1. Headline numbers (the home-page tiles and the transfer ladder)", ""]
     head_ids = ["tile_acc_k20", "tile_acc_k20_sd", "acc_k50", "acc_full", "acc_fclassif_k20", "tile_bodymap_k20", "tile_bodymap_cov_k20", "tile_bodymap_empty_k20",
                 "bodymap_floored_k20", "recal3_bodymap_k20", "recal3size_bodymap_k20", "tile_estimable", "tile_estimable_total",
@@ -1194,30 +1299,7 @@ def reconciliation(prov_entries: list[dict], out_md: Path):
               "| id | post-fix | pre-fix | source | selector | column |", "|---|---|---|---|---|---|"]
     for _, r in ch.iterrows():
         lines.append(f"| `{r['id']}` | {fmt(r['value'])} | {fmt(r['pre_fix'])} | `{r['source']}` | `{r['where']}` | `{r['column']}` |")
-    # stale documents: which pre-fix headline strings still appear
-    stale = {"in-distribution coverage, one vial per animal (0.962 → 0.916)": ("0.962", "0.916"),
-             "Mondrian pooled α = 0.10 (0.960 → 0.919)": ("0.960", "0.919"), "floored pooled α = 0.10 (0.986 → 0.970)": ("0.986", "0.970"),
-             "BodyMap k20 Mondrian (0.279 → 0.338)": ("0.279", "0.338"), "BodyMap recalibrated n = 3, k20 (0.970 → 0.943)": ("0.970", "0.943"),
-             "GTEx marginal k20 (0.368 → 0.364)": ("0.368", "0.364"), "GTEx floored k20 (0.404 → 0.522)": ("0.404", "0.522"),
-             "GTEx recalibrated n = 3, k20 coverage (0.880 → 0.954)": ("0.880", "0.954"), "GTEx recalibrated n = 3, k20 set size (4.15 → 11.70)": ("4.15", "11.70"),
-             "male → female full coverage (0.819 → 0.807)": ("0.819", "0.807"), "METAB male → female full coverage (0.662 → 0.569)": ("0.662", "0.569")}
-    docs = {"results/SUMMARY.md": RES / "SUMMARY.md", "results/ABSTRACT.md": RES / "ABSTRACT.md",
-            "docs/findings/FINDINGS_REPORT.md (workspace)": WORKSPACE / "docs" / "findings" / "FINDINGS_REPORT.md"}
-    lines += ["", "## 3. The three stale documents", "",
-              "These documents are not edited (a banner at the top of each points here). For each headline that moved, the count of lines in each "
-              "document containing the pre-fix string and the post-fix string. A pre-fix count above zero marks a passage that is stale "
-              "(a string can also occur by coincidence; the counts are a locator, not a verdict).", "",
-              "| number | " + " | ".join(f"{d} pre / post" for d in docs) + " |", "|---|" + "---|" * len(docs)]
-    for label, (pre_s, post_s) in stale.items():
-        cells = []
-        for name, p in docs.items():
-            if p.exists():
-                txt = p.read_text(errors="ignore").splitlines()
-                cells.append(f"{sum(pre_s in l for l in txt)} / {sum(post_s in l for l in txt)}")
-            else:
-                cells.append("absent")
-        lines.append(f"| {label} | " + " | ".join(cells) + " |")
-    lines += ["", "## 4. Recomputed and pending entries", "", "| id | value | files / reason |", "|---|---|---|"]
+    lines += ["", "## 3. Recomputed and pending entries", "", "| id | value | files / reason |", "|---|---|---|"]
     for e in prov_entries:
         if e.get("pending"):
             lines.append(f"| `{e['id']}` | pending | {e['reason']} |")
@@ -1245,6 +1327,7 @@ def readme_table(prov_entries: list[dict]) -> str:
         ("GTEx (human): accuracy k20 / k50 / full", f"{f('acc_gtex_k20')} / {f('acc_gtex_k50')} / {f('acc_gtex_full')}", "results/13_gtex/accuracy_overall.csv"),
         ("GTEx coverage k20 / empty; recalibrated on 3 donors: coverage at set size", f"{f('cov_gtex_k20_marginal')} / {f('empty_gtex_k20_marginal')}; {f('recal3_gtex_k20')} at {f('recal3size_gtex_k20', 2)}", "results/13_gtex/"),
         ("Estimable tissue pairs within study (RNA-seq)", f"{f('tile_estimable')} of {f('tile_estimable_total')} ({' and '.join(t.lower() for t in str(byid.get('tile_estimable_pairs', '')).split('|'))})", "results/16_identifiability/estimable_pairs.csv"),
+        ("Batch measured on a bridging reference pool run on 6 plates (Σ V_batch / Σ V_tissue, all genes)", f('bridge_sum_ratio_all_genes_pool99'), "results/16_identifiability/bridge_variance.csv"),
         ("QC covariates alone, balanced accuracy: technical / composition / all", f"{f('qc_technical')} / {f('qc_composition')} / {f('qc_all')}", "results/16_identifiability/qc_only_summary.csv"),
     ]
     return "\n".join(["| result | value | source |", "|---|---|---|"] + [f"| {a} | {b} | `{c}` |" for a, b, c in rows])
@@ -1274,23 +1357,33 @@ def abstract(prov_entries: list[dict]) -> str:
 # ---------------------------------------------------------------------------------------------
 def main():
     ap = argparse.ArgumentParser(description="export site data with provenance")
+    ap.add_argument("--results", help="results root to read (default: tfp.config.results_root())")
+    ap.add_argument("--out", help="output directory (default: site/data)")
+    ap.add_argument("--write-prefix-table", action="store_true", help="write docs/reconciliation/pre_quantile_fix_values.csv from --prefix-backup and exit")
+    ap.add_argument("--prefix-backup", help="a pre-quantile-fix results tree (only for --write-prefix-table)")
+    ap.add_argument("--prefix-table", help="pre-fix value table for --reconciliation (default docs/reconciliation/pre_quantile_fix_values.csv)")
     ap.add_argument("--skip-expr", action="store_true", help="skip the per-sample expression exports (slow GTEx read)")
     ap.add_argument("--check-anchors", action="store_true")
     ap.add_argument("--reconciliation", action="store_true", help="also write docs/NUMBERS_RECONCILIATION.md")
     ap.add_argument("--readme-table", action="store_true", help="print the README key-results table and exit")
     ap.add_argument("--abstract", action="store_true", help="print the abstract and exit")
     args = ap.parse_args()
+    configure(Path(args.results) if args.results else None, Path(args.out) if args.out else None)
     SITE.mkdir(parents=True, exist_ok=True)
     if args.readme_table or args.abstract:
         entries = json.loads((SITE / "provenance.json").read_text())["entries"]
         print(readme_table(entries) if args.readme_table else abstract(entries))
         return
+    if args.write_prefix_table:
+        assert args.prefix_backup, "--write-prefix-table needs --prefix-backup DIR"
+        entries = json.loads((SITE / "provenance.json").read_text())["entries"]
+        write_prefix_table(entries, Path(args.prefix_backup), Path(args.prefix_table) if args.prefix_table else PREFIX_TABLE)
+        return
+    print(f"== results root: {RES} ({'live run' if RES == C.RESULTS_DIR else 'snapshot' if RES == C.FROZEN_DIR else 'explicit'}); output: {SITE}")
     generated = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     ghash = git_hash()
     prov = Prov()
     w = Writer(prov, generated, ghash)
-    print("== manifest")
-    export_manifest(w)
     regen06 = REGEN / "06_conformal" / "TRNSCRPT"
     rec = probs = cal = classes = None
     if (regen06 / "scores_test_probs.csv").exists():
@@ -1320,20 +1413,27 @@ def main():
         export_fixtures(w, motrpac, bodymap, gtex)
     else:
         print("!! phase-06 regeneration missing: per-sample exports skipped")
-    print("== genes")
-    export_genes(w, prov, args.skip_expr)
+    if (C.RAW_DIR / "pheno.csv").exists():
+        print("== genes")
+        export_genes(w, prov, args.skip_expr)
+    else:
+        committed = ROOT / "site" / "data"
+        kept = []
+        for name in ("genes.json", "expr_motrpac.json", "expr_bodymap.json", "expr_gtex.json"):
+            if (committed / name).exists():
+                if (SITE / name).resolve() != (committed / name).resolve():
+                    (SITE / name).write_bytes((committed / name).read_bytes())
+                kept.append(name)
+        print(f"== genes: data/raw absent; kept the committed exports ({', '.join(kept)})")
     (SITE / "provenance.json").write_text(json.dumps(jsonable({"_meta": {"generated": generated, "git_hash": ghash, "sources": sorted(prov.sources)},
                                                               "entries": prov.entries, "tables": prov.tables}), indent=0))
-    # the manifest lists the site data files last, once they all exist
-    mpath = SITE / "manifest.json"
-    mdata = json.loads(mpath.read_text())
-    mdata["site_data_files"] = [{"name": p.name, "bytes": p.stat().st_size} for p in sorted(SITE.glob("*.json"))]
-    mpath.write_text(json.dumps(mdata, indent=1))
+    print("== manifest")
+    export_manifest(w, prov)
     total = sum(p.stat().st_size for p in SITE.glob("*.json"))
     print(f"== {len(prov.entries)} provenance entries, {len(prov.tables)} tables; site/data total {total / 1e6:.2f} MB; largest "
           f"{max(SITE.glob('*.json'), key=lambda p: p.stat().st_size).name}")
     if args.reconciliation:
-        counts = reconciliation(prov.entries, ROOT / "docs" / "NUMBERS_RECONCILIATION.md")
+        counts = reconciliation(prov.entries, ROOT / "docs" / "NUMBERS_RECONCILIATION.md", Path(args.prefix_table) if args.prefix_table else None)
         pp = SITE / "provenance.json"
         pj = json.loads(pp.read_text())
         pj["_meta"]["reconciliation"] = counts

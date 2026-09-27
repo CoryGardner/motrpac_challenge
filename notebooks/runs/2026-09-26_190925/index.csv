@@ -1,8 +1,0 @@
-file,kind,notebook,section,shape,columns
-tables/nb_test__0-setup-library__table01.csv,table,nb_test.ipynb,0 setup + library,8x4,module;status;inline_lines;src_lines
-tables/nb_test__1-Setup-and-data-inventory__table01.csv,table,nb_test.ipynb,1 Setup and data inventory,2x5,control;1w;2w;4w;8w
-tables/nb_test__1-Setup-and-data-inventory__table02.csv,table,nb_test.ipynb,1 Setup and data inventory,1x6,kind;assay;tissue;n_samples;n_exact_viallabel;n_bid_fallback
-tables/nb_test__1-Setup-and-data-inventory__table03.csv,table,nb_test.ipynb,1 Setup and data inventory,7x5,tissues;samples;animals;features_median;distinct_animals
-tables/nb_test__1-Setup-and-data-inventory__table04.csv,table,nb_test.ipynb,1 Setup and data inventory,20x7,ACETYL;IMMUNO;METAB;PHOSPHO;PROT;TRNSCRPT;UBIQ
-figures/nb_test__1-Setup-and-data-inventory__figure01.png,figure,nb_test.ipynb,1 Setup and data inventory,,
-tables/nb_test__1-Setup-and-data-inventory__table05.csv,table,nb_test.ipynb,1 Setup and data inventory,7x6,tissue;n_TRNSCRPT;n_PROT;n_METAB;n_common_bid;n_common_bid_published

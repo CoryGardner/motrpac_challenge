@@ -1,7 +1,0 @@
-,model,conformal,organ,n,frac_empty,avg_set_size,max_set_size,most_frequent_members
-0,k20,marginal,Thymus,8,0.75,0.25,1,HYPOTH (2)
-1,k20,marginal,Uterus,4,1.0,0.0,0,
-6,k50,marginal,Thymus,8,1.0,0.0,0,
-7,k50,marginal,Uterus,4,1.0,0.0,0,
-12,full,marginal,Thymus,8,1.0,0.0,0,
-13,full,marginal,Uterus,4,1.0,0.0,0,

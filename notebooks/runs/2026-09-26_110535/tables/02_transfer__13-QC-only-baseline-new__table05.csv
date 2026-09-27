@@ -1,8 +1,0 @@
-,levels,max tissues per level,levels shared by >1 tissue,tissues in exactly 1 level
-RNA_extr_plate_ID,17,2,2,19
-Lib_batch_ID,17,2,2,19
-Lib_prep_date,18,3,2,17
-Seq_flowcell_ID,4,7,4,19
-Seq_flowcell_lane,2,13,2,19
-Seq_batch,4,7,4,19
-GET_site,2,10,2,19

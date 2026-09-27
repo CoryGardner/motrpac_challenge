@@ -1,9 +1,0 @@
-Clopper–Pearson (1 − δ) upper bound with n = 22 calibration animals, δ = 0.1:
-100 fit/calibration splits; 22 calibration units per split (18 fit / 22 calibration animals)
-fraction of the splits whose certified k is ≤ k (cumulative), this notebook vs the pipeline's file:
-certified k over the splits (value: number of splits): {15: 34, 20: 18, 50: 12, 100: 6} | none certified: 30
-certified k: min 15, median 20.0, max 100; smallest k certified in ≥ half the splits: 20
-validity: fraction of certified splits with test error ≤ α at the certified k = 1.00 (target ≥ 1 − δ = 0.90); worst test error at a certified k = 0.061
-deployment certificate on all animals (20 repeats), certified k: {15.0: 6, 20.0: 3, 30.0: 1, 50.0: 2, 100.0: 1, nan: 7}
-point-estimate k (smallest k with mean 5-fold balanced accuracy ≥ 0.90): 15
-certified k (primary, 100 splits) pre-fix == post-fix: True

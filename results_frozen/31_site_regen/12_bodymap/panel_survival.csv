@@ -1,0 +1,4 @@
+panel,n_genes,present_in_bodymap,genes
+k=20 (all-animal fit),20,20,Cyp21a1;Mybph;Pmch;Mss51;Fibcd1l1;Pgk2;Qrfpr;Umod;Gabrd;Akr1c3;Cfhr2;Trim29;Hbq1b;Otop1;Ccl25;Cldn18;Abo3;Fcrl5;Lrrc10;Gdf10
+k=50 (all-animal fit),50,50,St6galnac1;Cyp21a1;Csn3;Mybph;Ucp1;Pmch;Tbr1;Ccr3;Hoxb13;Mss51;Fibcd1l1;Sftpb;Ebf2;Pgk2;Trem3;Qrfpr;Slc34a1;Vtcn1;Gnb3;Umod;Slc17a6;Slc6a18;Gabrd;Akr1c3;Inha;Cfhr2;Trim29;RGD1565323;Ephx4;Cpn2;Lbx1;Neurod6;Cxcl3;Hbq1b;Tnni3k;Otop1;Ccl25;Cyp11b2;Cldn18;LOC691352;Abo3;Treml1;LOC100271845;Cfhr1;Fcrl5;AABR07040887.1;Lrrc10;Gdf10;Clec1b;Cabp7
+T5 stable core,10,10,Cyp21a1;Gabrd;Lrrc10;Fibcd1l1;Pmch;Umod;Cldn18;Akr1c3;Ccl25;Fcrl5

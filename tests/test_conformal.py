@@ -109,7 +109,7 @@ def test_floored_mondrian_contains_marginal_and_mondrian_sets():
 
 
 # ---------------------------------------------------------------------------------------
-# conformal_quantile follows the textbook split-conformal rank (FINDINGS_REPORT §14, 13(a)):
+# conformal_quantile follows the textbook split-conformal rank (the 2026-09-25 correction; docs/NUMBERS_RECONCILIATION.md):
 # the ceil((n+1)(1-alpha))-th smallest calibration score, or +inf ("every class") when that
 # rank exceeds n. Three regimes at alpha = 0.10: n <= 8, 9 <= n <= 18, n >= 19.
 # ---------------------------------------------------------------------------------------

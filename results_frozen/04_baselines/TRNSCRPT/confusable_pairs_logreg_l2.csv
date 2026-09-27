@@ -1,0 +1,5 @@
+true,predicted,count,frac_of_true
+VENACV,ADRNL,2,0.04
+ADRNL,BAT,1,0.02
+HIPPOC,HYPOTH,1,0.02
+HYPOTH,HIPPOC,1,0.02

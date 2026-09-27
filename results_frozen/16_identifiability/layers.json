@@ -1,0 +1,252 @@
+{
+ "layers": {
+  "TRNSCRPT": {
+   "status": "recomputed",
+   "n_samples": 899,
+   "n_tissues": 19,
+   "variables": [
+    "GET_site",
+    "RNA_extr_plate_ID",
+    "RNA_extr_date",
+    "Lib_prep_date",
+    "Lib_batch_ID",
+    "Seq_date",
+    "Seq_flowcell_ID",
+    "Seq_flowcell_lane",
+    "Seq_batch"
+   ],
+   "estimable_variables": [
+    "RNA_extr_plate_ID",
+    "Lib_batch_ID",
+    "Seq_flowcell_ID"
+   ],
+   "n_pairs_total": 171,
+   "n_pairs_estimable": 1,
+   "estimable_pairs": [
+    [
+     "OVARY",
+     "TESTES"
+    ]
+   ],
+   "source": "data/raw/meta/TRNSCRPT.csv"
+  },
+  "METHYL": {
+   "status": "recomputed",
+   "n_samples": 400,
+   "n_tissues": 8,
+   "variables": [
+    "GET_site",
+    "DNA_extr_plate_ID",
+    "DNA_extr_date",
+    "Lib_prep_date",
+    "Lib_batch_ID",
+    "Seq_date",
+    "Seq_flowcell_ID",
+    "Seq_flowcell_lane",
+    "Seq_batch"
+   ],
+   "estimable_variables": [
+    "DNA_extr_plate_ID",
+    "Lib_batch_ID",
+    "Seq_flowcell_ID"
+   ],
+   "n_pairs_total": 28,
+   "n_pairs_estimable": 0,
+   "estimable_pairs": [],
+   "source": "data/raw/meta/METHYL.csv"
+  },
+  "ATAC": {
+   "status": "recomputed",
+   "n_samples": 500,
+   "n_tissues": 8,
+   "variables": [
+    "GET_site",
+    "Sample_batch",
+    "Nuclei_extr_date",
+    "Tagmentation_date",
+    "PCR_date",
+    "Seq_date",
+    "Seq_flowcell_ID",
+    "Seq_flowcell_lane",
+    "Seq_batch"
+   ],
+   "estimable_variables": [
+    "Nuclei_extr_date",
+    "Tagmentation_date",
+    "PCR_date",
+    "Seq_flowcell_ID"
+   ],
+   "n_pairs_total": 28,
+   "n_pairs_estimable": 0,
+   "estimable_pairs": [],
+   "source": "data/raw/meta/ATAC.csv"
+  },
+  "PROT": {
+   "status": "recomputed",
+   "n_samples": 420,
+   "n_tissues": 7,
+   "variables": [
+    "plex_id",
+    "tmt11_channel"
+   ],
+   "estimable_variables": [
+    "plex_id"
+   ],
+   "n_pairs_total": 21,
+   "n_pairs_estimable": 0,
+   "estimable_pairs": [],
+   "source": "data/raw/meta/PROT.csv"
+  },
+  "PHOSPHO": {
+   "status": "recomputed",
+   "n_samples": 420,
+   "n_tissues": 7,
+   "variables": [
+    "plex_id",
+    "tmt11_channel"
+   ],
+   "estimable_variables": [
+    "plex_id"
+   ],
+   "n_pairs_total": 21,
+   "n_pairs_estimable": 0,
+   "estimable_pairs": [],
+   "source": "data/raw/meta/PHOSPHO.csv"
+  },
+  "ACETYL": {
+   "status": "recomputed",
+   "n_samples": 108,
+   "n_tissues": 2,
+   "variables": [
+    "plex_id",
+    "tmt11_channel"
+   ],
+   "estimable_variables": [
+    "plex_id"
+   ],
+   "n_pairs_total": 1,
+   "n_pairs_estimable": 0,
+   "estimable_pairs": [],
+   "source": "data/raw/meta/ACETYL.csv"
+  },
+  "UBIQ": {
+   "status": "recomputed",
+   "n_samples": 120,
+   "n_tissues": 2,
+   "variables": [
+    "plex_id",
+    "tmt11_channel"
+   ],
+   "estimable_variables": [
+    "plex_id"
+   ],
+   "n_pairs_total": 1,
+   "n_pairs_estimable": 0,
+   "estimable_pairs": [],
+   "source": "data/raw/meta/UBIQ.csv"
+  },
+  "IMMUNO": {
+   "status": "recomputed",
+   "n_samples": 1375,
+   "n_tissues": 17,
+   "variables": [
+    "plate_id",
+    "panel_name"
+   ],
+   "estimable_variables": [
+    "plate_id"
+   ],
+   "n_pairs_total": 136,
+   "n_pairs_estimable": 16,
+   "estimable_pairs": [
+    [
+     "BAT",
+     "SKM-GN"
+    ],
+    [
+     "BAT",
+     "WAT-SC"
+    ],
+    [
+     "COLON",
+     "LIVER"
+    ],
+    [
+     "COLON",
+     "SMLINT"
+    ],
+    [
+     "CORTEX",
+     "HIPPOC"
+    ],
+    [
+     "CORTEX",
+     "OVARY"
+    ],
+    [
+     "CORTEX",
+     "TESTES"
+    ],
+    [
+     "HEART",
+     "SKM-VL"
+    ],
+    [
+     "HIPPOC",
+     "OVARY"
+    ],
+    [
+     "HIPPOC",
+     "TESTES"
+    ],
+    [
+     "KIDNEY",
+     "LUNG"
+    ],
+    [
+     "KIDNEY",
+     "SPLEEN"
+    ],
+    [
+     "LIVER",
+     "SMLINT"
+    ],
+    [
+     "LUNG",
+     "SPLEEN"
+    ],
+    [
+     "OVARY",
+     "TESTES"
+    ],
+    [
+     "SKM-GN",
+     "WAT-SC"
+    ]
+   ],
+   "source": "data/raw/meta/IMMUNO.csv"
+  },
+  "METAB": {
+   "status": "unavailable",
+   "reason": "the export carries the platform (dataset) per vial but no run, plate or batch variable"
+  }
+ },
+ "qc_only": {
+  "qc_source": "data/quant-id/rat-training-06/c1.0/transcriptomics/qa-qc/motrpac_pass1b-06_transcript-rna-seq_qa-qc-metrics.csv",
+  "n_vials": 899,
+  "n_animals": 50,
+  "n_tissues": 19,
+  "chance": 0.05263157894736842,
+  "model": "LogisticRegression(C=1.0, multinomial) after median imputation and standardisation, fit inside each fold",
+  "folds": "grouped_kfold(meta, 'tissue', 5, SEED): the phase-04 folds"
+ },
+ "bridge": {
+  "n_ref_vials": 36,
+  "n_pools": 20,
+  "n_bridging_pools": 6,
+  "n_genes_shared": 21193,
+  "source": "data/quant-id/rat-training-06/c1.0/transcriptomics/t*/transcript-rna-seq/*rsem-genes-count.txt (reference vials) + the pipeline's stacked study matrix",
+  "definition": "V_batch = variance of a pool's log2 CPM across the plates it was run on (one vial per plate); V_tissue = variance of the 19 tissue means of study-vial log2 CPM; ratio per gene, median and ratio of sums over gene sets",
+  "status": "recomputed"
+ }
+}

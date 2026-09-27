@@ -1,7 +1,7 @@
 # Numbers reconciliation — what the site shows, where it comes from, and what moved with the conformal-quantile fix
 
-Generated 2026-09-27 02:03 UTC by `scripts/30_export_site_data.py --reconciliation` from `site/data/provenance.json`.
-`results/` (post-fix, 2026-09-25) is the truth; the pre-fix snapshot is `../../backup/pipeline_history/results_pre_quantile_fix_2026-09-25/`. Values are shown to 4 decimals; the JSON holds them unrounded.
+Generated 2026-09-27 03:08 UTC by `scripts/30_export_site_data.py --reconciliation` from `site/data/provenance.json`.
+`results/` (post-fix, 2026-09-25) is the truth; the pre-fix values come from `docs/reconciliation/pre_quantile_fix_values.csv`, generated once from the pre-fix results of 2026-09-25 (not in the repository). Values are shown to 4 decimals; the JSON holds them unrounded.
 
 ## 1. Headline numbers (the home-page tiles and the transfer ladder)
 
@@ -158,25 +158,7 @@ Generated 2026-09-27 02:03 UTC by `scripts/30_export_site_data.py --reconciliati
 | `skmgn_cov_marginal` | 0.4200 | 0.4400 | `results/06_conformal/TRNSCRPT/per_tissue_marginal_vs_mondrian_alpha0.1.csv` | `{"y_true": "SKM-GN"}` | `coverage_marginal` |
 | `skmgn_cov_mondrian` | 0.8800 | 0.9800 | `results/06_conformal/TRNSCRPT/per_tissue_marginal_vs_mondrian_alpha0.1.csv` | `{"y_true": "SKM-GN"}` | `coverage_mondrian` |
 
-## 3. The three stale documents
-
-These documents are not edited (a banner at the top of each points here). For each headline that moved, the count of lines in each document containing the pre-fix string and the post-fix string. A pre-fix count above zero marks a passage that is stale (a string can also occur by coincidence; the counts are a locator, not a verdict).
-
-| number | results/SUMMARY.md pre / post | results/ABSTRACT.md pre / post | docs/findings/FINDINGS_REPORT.md (workspace) pre / post |
-|---|---|---|---|
-| in-distribution coverage, one vial per animal (0.962 → 0.916) | 2 / 1 | 0 / 0 | 16 / 16 |
-| Mondrian pooled α = 0.10 (0.960 → 0.919) | 0 / 2 | 0 / 0 | 12 / 19 |
-| floored pooled α = 0.10 (0.986 → 0.970) | 1 / 2 | 0 / 0 | 5 / 10 |
-| BodyMap k20 Mondrian (0.279 → 0.338) | 1 / 0 | 0 / 0 | 5 / 2 |
-| BodyMap recalibrated n = 3, k20 (0.970 → 0.943) | 2 / 2 | 0 / 0 | 10 / 11 |
-| GTEx marginal k20 (0.368 → 0.364) | 1 / 1 | 0 / 0 | 3 / 11 |
-| GTEx floored k20 (0.404 → 0.522) | 0 / 0 | 0 / 0 | 0 / 2 |
-| GTEx recalibrated n = 3, k20 coverage (0.880 → 0.954) | 2 / 0 | 0 / 0 | 23 / 10 |
-| GTEx recalibrated n = 3, k20 set size (4.15 → 11.70) | 0 / 1 | 0 / 0 | 1 / 7 |
-| male → female full coverage (0.819 → 0.807) | 0 / 1 | 0 / 1 | 0 / 23 |
-| METAB male → female full coverage (0.662 → 0.569) | 1 / 1 | 0 / 1 | 6 / 8 |
-
-## 4. Recomputed and pending entries
+## 3. Recomputed and pending entries
 
 | id | value | files / reason |
 |---|---|---|

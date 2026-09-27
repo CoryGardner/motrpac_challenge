@@ -1,0 +1,10 @@
+assay,variable,n_levels,n_tissues,median_levels_per_tissue,max_levels_per_tissue,max_tissues_per_level,n_levels_shared,tissues_in_one_level,cramers_v,n_pairs_sharing_level,n_pairs_total
+METHYL,GET_site,1,8,1.0,1,8,1,8,0.0,28,28
+METHYL,DNA_extr_plate_ID,8,8,1.0,1,1,0,8,1.0,0,28
+METHYL,DNA_extr_date,8,8,1.0,1,1,0,8,1.0,0,28
+METHYL,Lib_prep_date,8,8,1.0,2,2,1,7,0.9944903161976939,1,28
+METHYL,Lib_batch_ID,8,8,1.0,1,1,0,8,1.0,0,28
+METHYL,Seq_date,2,8,1.0,1,6,2,8,1.0,16,28
+METHYL,Seq_flowcell_ID,3,8,1.0,1,6,1,8,1.0,15,28
+METHYL,Seq_flowcell_lane,5,8,1.0,2,2,5,6,0.9130007735581503,5,28
+METHYL,Seq_batch,3,8,1.0,1,6,1,8,1.0,15,28

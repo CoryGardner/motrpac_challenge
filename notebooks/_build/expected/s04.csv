@@ -1,9 +1,0 @@
-key,section,published_value,reference_value,tolerance,source,note
-s04.n_samples,04,899,899,0,results/REPORT.md (stack TRNSCRPT/counts note),stacked TRNSCRPT counts matrix
-s04.n_features,04,21193,21193,0,results/REPORT.md (stack TRNSCRPT/counts note),genes kept by the pre-split filter (known deviation; reproduced as is)
-s04.n_animals,04,50,50,0,results/04_baselines/TRNSCRPT/per_fold.csv,40 train + 10 test animals per fold
-s04.leak_shared_animals_samplekfold,04,,50,0,this notebook (new demonstration),animals on both sides of fold 0 of a plain KFold(5; shuffle; SEED) over samples; not a pipeline output
-s04.bal_acc_centroid,04,0.9821052631578947,0.9821052631578947,0.005,results/04_baselines/TRNSCRPT/summary.csv; SUMMARY.md baselines TRNSCRPT,recomputed live in both modes
-s04.bal_acc_logreg_l2,04,0.9947368421052631,0.9947368421052631,0.005,results/04_baselines/TRNSCRPT/summary.csv; SUMMARY.md baselines TRNSCRPT,recomputed live in both modes
-s04.bal_acc_rf,04,0.9926315789473683,0.9926315789473683,0.005,results/04_baselines/TRNSCRPT/summary.csv; SUMMARY.md baselines TRNSCRPT,loaded from per_fold.csv when RECOMPUTE=False (exact); recomputed when RECOMPUTE=True
-s04.n_errors_logreg_l2,04,5,5,0,results/04_baselines/TRNSCRPT/confusable_pairs_logreg_l2.csv,misclassified samples pooled over folds

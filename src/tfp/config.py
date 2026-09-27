@@ -15,6 +15,23 @@ CODES_DIR = RAW_DIR / "codes"
 EXTERNAL_DIR = DATA_DIR / "external"
 RESULTS_DIR = Path(os.environ.get("MOTRPAC_RESULTS", ROOT / "results"))
 FIG_DIR = RESULTS_DIR / "figures"
+# The committed snapshot of every result file the site export reads (scripts/33_freeze_results.py).
+FROZEN_DIR = ROOT / "results_frozen"
+
+
+def results_root(explicit=None) -> Path:
+    """Where the READ side (site export, tests, figures) finds the result tables.
+    Order: an explicit path (--results) > $TFP_RESULTS > results/ when it holds a complete run
+    (06_conformal/TRNSCRPT/coverage.csv) > results_frozen/. Writers (the numbered phases) always use RESULTS_DIR;
+    nothing ever writes into results_frozen/."""
+    if explicit:
+        return Path(explicit)
+    env = os.environ.get("TFP_RESULTS")
+    if env:
+        return Path(env)
+    if (RESULTS_DIR / "06_conformal" / "TRNSCRPT" / "coverage.csv").exists():
+        return RESULTS_DIR
+    return FROZEN_DIR
 
 SEED = 20260925
 
