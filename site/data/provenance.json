@@ -1,7 +1,7 @@
 {
 "_meta": {
-"generated": "2026-09-27 00:15 UTC",
-"git_hash": "fb3c3c0",
+"generated": "2026-09-27 00:21 UTC",
+"git_hash": "4541299",
 "sources": [
 "results/02_inventory/inventory.csv",
 "results/02_inventory/tissue_by_assay.csv",
@@ -83,6 +83,8 @@
 "results/14_transfer_cpm/target_summary.csv",
 "results/15_time_course/5_6_fingerprint/part5_by_duration.csv",
 "results/16_identifiability/batch_counts.csv",
+"results/16_identifiability/bridge_variance.csv",
+"results/16_identifiability/bridge_variance_per_gene.csv",
 "results/16_identifiability/estimable_pairs.csv",
 "results/16_identifiability/nesting_ACETYL.csv",
 "results/16_identifiability/nesting_ATAC.csv",
@@ -140,6 +142,302 @@
 ],
 "agg": "recomputed",
 "note": "fraction of recalibration draws whose threshold is +\u221e (too few mapped samples for a finite rank), from the per-draw thresholds"
+},
+{
+"id": "bridge_sum_ratio_all_genes_pool99",
+"value": 0.0164901614097426,
+"file": "results/16_identifiability/bridge_variance.csv",
+"where": {
+"pool_bid": 80001,
+"gene_set": "all_genes"
+},
+"column": "sum_ratio_batch_over_tissue",
+"agg": "value",
+"tol": 1e-06,
+"note": "gastrocnemius-derived reference pool 80001 (type 99) on 6 plates at both sites: \u03a3 V_batch / \u03a3 V_tissue over all_genes"
+},
+{
+"id": "bridge_median_ratio_all_genes_pool99",
+"value": 0.0100582050791757,
+"file": "results/16_identifiability/bridge_variance.csv",
+"where": {
+"pool_bid": 80001,
+"gene_set": "all_genes"
+},
+"column": "median_ratio_batch_over_tissue",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "bridge_n_genes_all_genes_pool99",
+"value": 21193,
+"file": "results/16_identifiability/bridge_variance.csv",
+"where": {
+"pool_bid": 80001,
+"gene_set": "all_genes"
+},
+"column": "n_genes",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "bridge_sum_ratio_all_genes_expressed_in_pool_pool99",
+"value": 0.0237557054737119,
+"file": "results/16_identifiability/bridge_variance.csv",
+"where": {
+"pool_bid": 80001,
+"gene_set": "all_genes_expressed_in_pool"
+},
+"column": "sum_ratio_batch_over_tissue",
+"agg": "value",
+"tol": 1e-06,
+"note": "gastrocnemius-derived reference pool 80001 (type 99) on 6 plates at both sites: \u03a3 V_batch / \u03a3 V_tissue over all_genes_expressed_in_pool"
+},
+{
+"id": "bridge_median_ratio_all_genes_expressed_in_pool_pool99",
+"value": 0.0165312110027287,
+"file": "results/16_identifiability/bridge_variance.csv",
+"where": {
+"pool_bid": 80001,
+"gene_set": "all_genes_expressed_in_pool"
+},
+"column": "median_ratio_batch_over_tissue",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "bridge_n_genes_all_genes_expressed_in_pool_pool99",
+"value": 11558,
+"file": "results/16_identifiability/bridge_variance.csv",
+"where": {
+"pool_bid": 80001,
+"gene_set": "all_genes_expressed_in_pool"
+},
+"column": "n_genes",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "bridge_sum_ratio_panel_k20_pool99",
+"value": 0.009622579370579,
+"file": "results/16_identifiability/bridge_variance.csv",
+"where": {
+"pool_bid": 80001,
+"gene_set": "panel_k20"
+},
+"column": "sum_ratio_batch_over_tissue",
+"agg": "value",
+"tol": 1e-06,
+"note": "gastrocnemius-derived reference pool 80001 (type 99) on 6 plates at both sites: \u03a3 V_batch / \u03a3 V_tissue over panel_k20"
+},
+{
+"id": "bridge_median_ratio_panel_k20_pool99",
+"value": 0.0001038770546351,
+"file": "results/16_identifiability/bridge_variance.csv",
+"where": {
+"pool_bid": 80001,
+"gene_set": "panel_k20"
+},
+"column": "median_ratio_batch_over_tissue",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "bridge_n_genes_panel_k20_pool99",
+"value": 20,
+"file": "results/16_identifiability/bridge_variance.csv",
+"where": {
+"pool_bid": 80001,
+"gene_set": "panel_k20"
+},
+"column": "n_genes",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "bridge_sum_ratio_panel_k20_expressed_in_pool_pool99",
+"value": 0.0642439917888825,
+"file": "results/16_identifiability/bridge_variance.csv",
+"where": {
+"pool_bid": 80001,
+"gene_set": "panel_k20_expressed_in_pool"
+},
+"column": "sum_ratio_batch_over_tissue",
+"agg": "value",
+"tol": 1e-06,
+"note": "gastrocnemius-derived reference pool 80001 (type 99) on 6 plates at both sites: \u03a3 V_batch / \u03a3 V_tissue over panel_k20_expressed_in_pool"
+},
+{
+"id": "bridge_median_ratio_panel_k20_expressed_in_pool_pool99",
+"value": 0.0119052467351399,
+"file": "results/16_identifiability/bridge_variance.csv",
+"where": {
+"pool_bid": 80001,
+"gene_set": "panel_k20_expressed_in_pool"
+},
+"column": "median_ratio_batch_over_tissue",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "bridge_n_genes_panel_k20_expressed_in_pool_pool99",
+"value": 3,
+"file": "results/16_identifiability/bridge_variance.csv",
+"where": {
+"pool_bid": 80001,
+"gene_set": "panel_k20_expressed_in_pool"
+},
+"column": "n_genes",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "bridge_sum_ratio_all_genes_pool88",
+"value": 0.0169045350837373,
+"file": "results/16_identifiability/bridge_variance.csv",
+"where": {
+"pool_bid": 80000,
+"gene_set": "all_genes"
+},
+"column": "sum_ratio_batch_over_tissue",
+"agg": "value",
+"tol": 1e-06,
+"note": "gastrocnemius-derived reference pool 80000 (type 88) on 6 plates at both sites: \u03a3 V_batch / \u03a3 V_tissue over all_genes"
+},
+{
+"id": "bridge_median_ratio_all_genes_pool88",
+"value": 0.010319309524832,
+"file": "results/16_identifiability/bridge_variance.csv",
+"where": {
+"pool_bid": 80000,
+"gene_set": "all_genes"
+},
+"column": "median_ratio_batch_over_tissue",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "bridge_n_genes_all_genes_pool88",
+"value": 21193,
+"file": "results/16_identifiability/bridge_variance.csv",
+"where": {
+"pool_bid": 80000,
+"gene_set": "all_genes"
+},
+"column": "n_genes",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "bridge_sum_ratio_all_genes_expressed_in_pool_pool88",
+"value": 0.0245968362493984,
+"file": "results/16_identifiability/bridge_variance.csv",
+"where": {
+"pool_bid": 80000,
+"gene_set": "all_genes_expressed_in_pool"
+},
+"column": "sum_ratio_batch_over_tissue",
+"agg": "value",
+"tol": 1e-06,
+"note": "gastrocnemius-derived reference pool 80000 (type 88) on 6 plates at both sites: \u03a3 V_batch / \u03a3 V_tissue over all_genes_expressed_in_pool"
+},
+{
+"id": "bridge_median_ratio_all_genes_expressed_in_pool_pool88",
+"value": 0.0170342677725131,
+"file": "results/16_identifiability/bridge_variance.csv",
+"where": {
+"pool_bid": 80000,
+"gene_set": "all_genes_expressed_in_pool"
+},
+"column": "median_ratio_batch_over_tissue",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "bridge_n_genes_all_genes_expressed_in_pool_pool88",
+"value": 11488,
+"file": "results/16_identifiability/bridge_variance.csv",
+"where": {
+"pool_bid": 80000,
+"gene_set": "all_genes_expressed_in_pool"
+},
+"column": "n_genes",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "bridge_sum_ratio_panel_k20_pool88",
+"value": 0.0097438101567471,
+"file": "results/16_identifiability/bridge_variance.csv",
+"where": {
+"pool_bid": 80000,
+"gene_set": "panel_k20"
+},
+"column": "sum_ratio_batch_over_tissue",
+"agg": "value",
+"tol": 1e-06,
+"note": "gastrocnemius-derived reference pool 80000 (type 88) on 6 plates at both sites: \u03a3 V_batch / \u03a3 V_tissue over panel_k20"
+},
+{
+"id": "bridge_median_ratio_panel_k20_pool88",
+"value": 0.0,
+"file": "results/16_identifiability/bridge_variance.csv",
+"where": {
+"pool_bid": 80000,
+"gene_set": "panel_k20"
+},
+"column": "median_ratio_batch_over_tissue",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "bridge_n_genes_panel_k20_pool88",
+"value": 20,
+"file": "results/16_identifiability/bridge_variance.csv",
+"where": {
+"pool_bid": 80000,
+"gene_set": "panel_k20"
+},
+"column": "n_genes",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "bridge_sum_ratio_panel_k20_expressed_in_pool_pool88",
+"value": 0.0649783552876026,
+"file": "results/16_identifiability/bridge_variance.csv",
+"where": {
+"pool_bid": 80000,
+"gene_set": "panel_k20_expressed_in_pool"
+},
+"column": "sum_ratio_batch_over_tissue",
+"agg": "value",
+"tol": 1e-06,
+"note": "gastrocnemius-derived reference pool 80000 (type 88) on 6 plates at both sites: \u03a3 V_batch / \u03a3 V_tissue over panel_k20_expressed_in_pool"
+},
+{
+"id": "bridge_median_ratio_panel_k20_expressed_in_pool_pool88",
+"value": 0.0123698505233579,
+"file": "results/16_identifiability/bridge_variance.csv",
+"where": {
+"pool_bid": 80000,
+"gene_set": "panel_k20_expressed_in_pool"
+},
+"column": "median_ratio_batch_over_tissue",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "bridge_n_genes_panel_k20_expressed_in_pool_pool88",
+"value": 3,
+"file": "results/16_identifiability/bridge_variance.csv",
+"where": {
+"pool_bid": 80000,
+"gene_set": "panel_k20_expressed_in_pool"
+},
+"column": "n_genes",
+"agg": "value",
+"tol": 1e-06
 },
 {
 "id": "fusion_n_beats_single",
@@ -3345,6 +3643,20 @@
 "json_file": "nesting.json",
 "json_path": "nesting.UBIQ",
 "n_rows": 2
+},
+{
+"id": "bridge_variance",
+"file": "results/16_identifiability/bridge_variance.csv",
+"json_file": "nesting.json",
+"json_path": "bridge.summary",
+"n_rows": 36
+},
+{
+"id": "bridge_variance_per_gene",
+"file": "results/16_identifiability/bridge_variance_per_gene.csv",
+"json_file": "nesting.json",
+"json_path": "bridge.per_gene",
+"n_rows": 120
 },
 {
 "id": "estimable_pairs",

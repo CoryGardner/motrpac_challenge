@@ -40,3 +40,15 @@ gene export (Pgk2 was NP_001012130.1), select/caption overflow on phones, the du
 **Next.** Task 13 (link check, offline mode, sizes, load time, a11y), Task 14 (rename src/motrpac → src/tfp,
 README, LICENSE, CITATION, compliance doc, workflows, Makefile targets, abstract, summary figure), final review.
 **Blockers.** None. Optional 6b (bridge variance) still open.
+
+## 2026-09-27 00:10–00:40 — verification, repo polish, bridge measurement
+**Done.** Full verification pass: 36 renders clean (normal) + 36 clean with the CDN blocked (vendored Plotly), 46 Python
+tests, JS fixture test, link check clean, load 241 ms, no missing alt text, site 7.7 MB. Rename src/motrpac → src/tfp
+(57 files; the executed section notebook reports the inline library identical to src/tfp). README, abstract (199
+words), compliance doc, CITATION.cff, LICENSE data note, GitHub Pages + tests workflows, Makefile targets, summary
+figure (300 dpi). Optional 6b done: `scripts/16_identifiability.py --bridge` measures batch on the reference pools
+from the portal count files: for the two gastrocnemius-derived pools on 6 plates at both sites, Σ V_batch / Σ V_tissue
+= 0.017 / 0.017 over all genes (0.010 on the panel genes the pool expresses); wired into the Identifiability and Home
+pages with the definition and the muscle-pool caveat. Whole-branch review dispatched to a fresh-context reviewer.
+**Next.** Review findings, final export, tag `hackathon-submission-v1`, final report.
+**Blockers.** None.

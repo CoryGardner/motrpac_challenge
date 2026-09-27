@@ -86,8 +86,47 @@ async function main() {
     "The composition set (mitochondrial, globin, rRNA, intronic and intergenic read fractions, chrX/chrY) is read biologically by MoTrPAC itself: a higher mitochondrial fraction in trained muscle is what mitochondrial biogenesis produces. The technical set is closer to pure processing, but RIN and duplication also depend on the tissue's RNA. Which is why the two are shown separately, and why neither number is a verdict on its own."));
 
   // ---- bridge ---------------------------------------------------------------------------------------------
-  document.getElementById("bridge-block").replaceChildren(pendingBlock("Bridge-sample variance measurement",
-    "The 36 reference-standard vials (Sample_category = ref in the consortium QC table, two per extraction plate) are not in the pipeline's data export (data/raw/counts holds study vials only), and the parallel identifiability audit that measured them (phase 21) is not present in this copy of the results. The measurement will appear here when results/21_identifiability/ lands; the site regenerates from it (make site)."));
+  const br = N.bridge;
+  const bridgeEl = document.getElementById("bridge-block");
+  if (!br || br.status !== "recomputed") {
+    bridgeEl.replaceChildren(pendingBlock("Bridge-sample variance measurement", (br && br.reason) || "not available in this copy"));
+  } else {
+    const sum = br.summary;
+    const row = (bid, gs) => sum.find((r) => r.pool_bid === bid && r.gene_set === gs);
+    const g99 = row(80001, "all_genes"), g88 = row(80000, "all_genes"), e99 = row(80001, "all_genes_expressed_in_pool"), p99 = row(80001, "panel_k20_expressed_in_pool"), pk = row(80001, "panel_k20");
+    const others = sum.filter((r) => r.gene_set === "all_genes" && ![80000, 80001].includes(r.pool_bid));
+    bridgeEl.replaceChildren(
+      el("p", {}, [
+        `The consortium ran ${br.info.n_ref_vials} reference-standard vials from ${br.info.n_pools} RNA pools; ${br.info.n_bridging_pools} pools were run on more than one extraction plate, and two gastrocnemius-derived pools (types 99 and 88) were run on ${g99.n_plates} plates at both sequencing sites. `,
+        `For those two pools the variance of a gene's log2 CPM across plates, summed over all ${g99.n_genes.toLocaleString()} genes, is `, el("b", {}, `${(100 * g99.sum_ratio_batch_over_tissue).toFixed(1)} %`), ` and ${(100 * g88.sum_ratio_batch_over_tissue).toFixed(1)} % of the summed variance of the 19 tissue means`,
+        ` (${(100 * e99.sum_ratio_batch_over_tissue).toFixed(1)} % over the ${e99.n_genes.toLocaleString()} genes the pool expresses; median per-gene ratio ${fmt(g99.median_ratio_batch_over_tissue, 3)}). `,
+        `On the 20-gene panel the pool expresses ${p99 ? p99.n_genes : 0} genes, and there batch is ${p99 ? (100 * p99.sum_ratio_batch_over_tissue).toFixed(1) : "—"} % of the tissue-separating variance. `,
+        others.length ? `The within-site pools agree in order of magnitude (${others.map((r) => `${r.pool_tissue.replace(" Powder", "").toLowerCase()} pool ${r.pool_type}, ${r.n_plates} plates: ${(100 * r.sum_ratio_batch_over_tissue).toFixed(1)} %`).join("; ")}).` : "",
+      ]),
+      callout("note", "Definition, and what this does and does not measure", [
+        br.info.definition + ". Study vials and reference vials use the same unit, log2(CPM + 1) on the total library. ",
+        "A muscle-derived pool measures batch only on the genes it expresses: markers of other tissues (Umod, Pgk2, Hbq1b, …) read zero on every plate and contribute no batch variance, which is why the per-gene ratios below are zero for most panel genes and why the expressed-in-pool sets are the fair comparison. This is a recomputation with the stated definition (scripts/16_identifiability.py --bridge); the parallel identifiability audit's own bridge number is not in this copy of the results.",
+      ]),
+    );
+    const fig = el("div");
+    bridgeEl.appendChild(fig);
+    const pg = br.per_gene.filter((r) => r.pool_bid === 80001 || r.pool_bid === 80000);
+    await figure(fig, {
+      title: "On the panel genes a bridging pool expresses, batch is a few percent of the tissue-separating variance",
+      subtitle: "Per panel gene: between-plate variance of the two gastrocnemius-derived pools (6 plates, both sites) as a fraction of the variance of the 19 tissue means; genes the pool does not express (mean log2 CPM < 1) are hollow and read zero.",
+      build: () => {
+        const t = tokens(); const p = palette();
+        const genes = [...new Set(pg.map((r) => r.gene_symbol))].sort((a, b) => (pg.find((r) => r.gene_symbol === a && r.pool_bid === 80001)?.ratio_batch_over_tissue ?? 0) - (pg.find((r) => r.gene_symbol === b && r.pool_bid === 80001)?.ratio_batch_over_tissue ?? 0));
+        const tr = (bid, name, slot) => { const rows = genes.map((g) => pg.find((r) => r.gene_symbol === g && r.pool_bid === bid)); return { ...bar(rows.map((r) => (r ? r.ratio_batch_over_tissue : null)), genes, { horizontal: true, name, slot, hover: "%{customdata}<extra></extra>" }),
+          customdata: rows.map((r) => (r ? `${r.gene_symbol} (${name}): batch/tissue ${fmt(r.ratio_batch_over_tissue, 4)}<br>V_batch ${fmt(r.v_batch, 4)}, V_tissue ${fmt(r.v_tissue, 2)}, within-tissue ${fmt(r.v_within_tissue, 3)}<br>mean log2 CPM in pool ${fmt(r.mean_log2cpm_in_pool, 2)}${r.expressed_in_pool ? "" : " (not expressed)"}` : "")),
+          marker: { color: rows.map((r) => (r && r.expressed_in_pool ? p[slot - 1] : t.surface)), line: { color: rows.map((r) => (r && r.expressed_in_pool ? t.surface : p[slot - 1])), width: 2 }, cornerradius: 4 } }; };
+        return { traces: [tr(80001, "pool 99", 1), tr(80000, "pool 88", 2)], layout: { barmode: "group", xaxis: { title: { text: "V_batch / V_tissue" }, rangemode: "tozero" }, yaxis: { automargin: true, tickfont: { size: 10 } }, margin: { t: 40, l: 10 }, legend: { y: 1.1 }, bargap: 0.25 },
+                 table: { columns: ["gene_symbol", "pool_bid", "pool_type", "expressed_in_pool", "mean_log2cpm_in_pool", "v_batch", "v_tissue", "v_within_tissue", "ratio_batch_over_tissue", "n_plates"], rows: pg } };
+      },
+      source: "results/16_identifiability/bridge_variance_per_gene.csv (reference vials from the portal per-tissue RSEM count files; study-vial tissue means from the pipeline's stacked matrix)",
+      notShow: "genes the pool does not express (hollow bars): their batch variance is unmeasurable with a muscle pool; the liver and hippocampus pools (2–3 plates, one site) are in the data table of the summary.", height: "tall",
+    });
+  }
 
   // ---- two failure modes ------------------------------------------------------------------------------------
   const vp = Object.fromEntries(["TRNSCRPT", "PROT", "METAB"].map((a) => [a, E[`variance_${a}`]]));

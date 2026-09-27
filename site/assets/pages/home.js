@@ -95,7 +95,10 @@ async function main() {
     `Every tissue was extracted, library-prepped and sequenced as its own batch: ${ex.n_plates} RNA plates, ${ex.n_lib_batches} library batches and ${ex.n_flowcells} flowcells, each holding whole tissues. `,
     `Only ${est.n_pairs_estimable} of ${est.n_pairs_total} tissue pairs share a level of all three (${est.estimable_pairs.replace("|", " vs ").toLowerCase()}, which is also the sex contrast). `,
     `Library QC numbers alone, with no gene, classify the tissue at ${fmt(qc.all.acc_mean)} ± ${fmt(qc.all.acc_sd)} (technical numbers ${fmt(qc.technical.acc_mean)}, composition fractions ${fmt(qc.composition.acc_mean)}). `,
-    "So within-study accuracy is not evidence that the signature is biology. The evidence is external: the panel transfers to a laboratory where none of these batches exist.",
+    "So within-study accuracy is not evidence that the signature is biology. The evidence is external: the panel transfers to a laboratory where none of these batches exist. ",
+    ...(typeof ex.bridge_sum_ratio_all_genes_pool99 === "number"
+      ? [`And where batch could be measured directly, on a reference RNA pool run on ${ex.bridge_n_plates_pool99} plates at both sites, it was ${(100 * ex.bridge_sum_ratio_all_genes_pool99).toFixed(1)} % of the variance that separates tissues.`]
+      : []),
   );
   await figure(document.getElementById("fig-nesting"), {
     title: "One tissue pair in 171 can be contrasted inside a processing batch",

@@ -427,9 +427,22 @@ def export_aggregates(w: Writer, prov: Prov, rec: pd.DataFrame | None):
         assay = f.stem.replace("nesting_", "")
         nesting[assay] = P.table(f"nesting_{assay}", f"16_identifiability/{f.name}", "nesting.json", f"nesting.{assay}")
     layers = json.loads((d16 / "layers.json").read_text())
+    bridge = {"status": "pending", "reason": "phase 16 was not run with --bridge (needs the portal RNA-seq count files with the reference-standard vials)"}
+    if (d16 / "bridge_variance.csv").exists() and layers.get("bridge") and layers["bridge"].get("status") == "recomputed":
+        bridge = {"status": "recomputed", "info": layers["bridge"],
+                  "summary": P.table("bridge_variance", "16_identifiability/bridge_variance.csv", "nesting.json", "bridge.summary"),
+                  "per_gene": P.table("bridge_variance_per_gene", "16_identifiability/bridge_variance_per_gene.csv", "nesting.json", "bridge.per_gene")}
+        for bid, ptype in ((80001, 99), (80000, 88)):
+            for gs in ("all_genes", "all_genes_expressed_in_pool", "panel_k20", "panel_k20_expressed_in_pool"):
+                where = {"pool_bid": bid, "gene_set": gs}
+                P.val(f"bridge_sum_ratio_{gs}_pool{ptype}", "16_identifiability/bridge_variance.csv", "sum_ratio_batch_over_tissue", where=where,
+                      note=f"gastrocnemius-derived reference pool {bid} (type {ptype}) on 6 plates at both sites: Σ V_batch / Σ V_tissue over {gs}")
+                P.val(f"bridge_median_ratio_{gs}_pool{ptype}", "16_identifiability/bridge_variance.csv", "median_ratio_batch_over_tissue", where=where)
+                P.val(f"bridge_n_genes_{gs}_pool{ptype}", "16_identifiability/bridge_variance.csv", "n_genes", where=where)
     w.write("nesting.json", {"nesting": nesting,
                              "estimable_pairs": P.table("estimable_pairs", "16_identifiability/estimable_pairs.csv", "nesting.json", "estimable_pairs"),
                              "batch_counts": P.table("batch_counts", "16_identifiability/batch_counts.csv", "nesting.json", "batch_counts"),
+                             "bridge": bridge,
                              "layers": layers["layers"],
                              "definition": "a tissue pair is estimable when the two tissues share a level of every processing variable listed in variables_used, so a within-batch contrast exists",
                              "notes": (d16 / "NOTES.md").read_text()},
@@ -680,6 +693,19 @@ def export_headline(w: Writer, prov: Prov, rec: pd.DataFrame | None):
     heart = ck.loc["Heart - Left Ventricle"]
     extras["gtex_heart_k20_to_skm_frac"] = P.recomputed("gtex_heart_k20_to_skm_frac", float((heart["SKM-GN"] + heart["SKM-VL"]) / heart.sum()),
                                                         ["13_gtex/confusion_k20.csv"], "fraction of GTEx heart samples called either skeletal muscle class (SKM-GN + SKM-VL) by the k20 panel")
+    bv = RES / "16_identifiability" / "bridge_variance.csv"
+    if bv.exists():
+        b = pd.read_csv(bv)
+        sel = b[(b["pool_bid"] == 80001) & (b["gene_set"] == "all_genes")]
+        if len(sel) == 1:
+            extras["bridge_sum_ratio_all_genes_pool99"] = float(sel["sum_ratio_batch_over_tissue"].iloc[0])
+            extras["bridge_n_plates_pool99"] = int(sel["n_plates"].iloc[0])
+        sel = b[(b["pool_bid"] == 80001) & (b["gene_set"] == "panel_k20_expressed_in_pool")]
+        if len(sel) == 1:
+            extras["bridge_sum_ratio_panel_expressed_pool99"] = float(sel["sum_ratio_batch_over_tissue"].iloc[0])
+            extras["bridge_n_panel_expressed_pool99"] = int(sel["n_genes"].iloc[0])
+    else:
+        extras["bridge_sum_ratio_all_genes_pool99"] = P.pending("bridge_sum_ratio_all_genes_pool99", "phase 16 not run with --bridge")
     rt = REGEN / "13_gtex" / "recal_thresholds.csv"
     if rt.exists():
         r = pd.read_csv(rt)
@@ -989,6 +1015,7 @@ ANCHORS = [  # (id in provenance, spec value, tolerance)
     ("orthologs_1to1", 14609, 0), ("orthologs_in_gtex", 14569, 0), ("disc_n_sig_either", 1948, 0), ("disc_n_one_layer", 1899, 0), ("disc_n_sign", 4, 0),
     ("disc_auroc_with_flag", 0.780, 0.0005), ("disc_auroc_without_flag", 0.742, 0.0005), ("fusion_n_beats_single", 0, 0), ("fusion_n_beats_null", 7, 0),
     ("tile_estimable", 1, 0), ("tile_estimable_total", 171, 0), ("cov_id_full_marginal_one_per_animal", 0.916, 0.0005), ("cov_id_full_marginal_pooled", 0.908, 0.0005),
+    ("bridge_sum_ratio_all_genes_pool99", 0.017, 0.002),   # the brief's "~1.7 % of the variance that separates tissues"
 ]
 
 

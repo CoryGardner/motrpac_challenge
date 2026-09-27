@@ -1,6 +1,6 @@
 {
- "generated": "2026-09-27 00:15 UTC",
- "git_hash": "fb3c3c0",
+ "generated": "2026-09-27 00:21 UTC",
+ "git_hash": "4541299",
  "results_dir": "results",
  "phases": {
   "02_inventory": {
@@ -1762,13 +1762,23 @@
    "files": [
     {
      "path": "results/16_identifiability/NOTES.md",
-     "bytes": 1742,
-     "sha256": "bd556ca89e06acfb71ba03da22e654fe0d1ee9eb38a9dbd195ebe5767333e708"
+     "bytes": 2103,
+     "sha256": "9a0d678a3d0027c95896e3a36abfa942dc7a97e0b20fd5f6cbfb2efc72d2e492"
     },
     {
      "path": "results/16_identifiability/batch_counts.csv",
      "bytes": 837,
      "sha256": "5cd0f2b9e7c04af2405190d7e1feeb87c1f0c6d89f6412ea480196edd7132e68"
+    },
+    {
+     "path": "results/16_identifiability/bridge_variance.csv",
+     "bytes": 6556,
+     "sha256": "e78be078f7d63d686a62a9aca665cc8296e35cecceb29e0707416160e677111f"
+    },
+    {
+     "path": "results/16_identifiability/bridge_variance_per_gene.csv",
+     "bytes": 14902,
+     "sha256": "3c0385d176cddd09e2e85fe25dc2eda38ae2018fd896c27b490bb170120be741"
     },
     {
      "path": "results/16_identifiability/estimable_pairs.csv",
@@ -1777,8 +1787,8 @@
     },
     {
      "path": "results/16_identifiability/layers.json",
-     "bytes": 4393,
-     "sha256": "f8152434ac87e80046c68a1fee7271f324eb8cc7aa766e5db954925bf2696917"
+     "bytes": 4927,
+     "sha256": "48286d7999f024a84042fbd59267c6a4af1e69c6e58d228f6654b40b5f9e0084"
     },
     {
      "path": "results/16_identifiability/nesting_ACETYL.csv",
@@ -1831,8 +1841,8 @@
      "sha256": "83228207638175d1f5ca8473dbedfc1ef0edd6507da53104881578c3a8866ec8"
     }
    ],
-   "n_files": 14,
-   "bytes": 12327
+   "n_files": 16,
+   "bytes": 34680
   }
  },
  "root_files": [

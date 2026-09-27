@@ -1,6 +1,6 @@
 # Numbers reconciliation — what the site shows, where it comes from, and what moved with the conformal-quantile fix
 
-Generated 2026-09-27 00:15 UTC by `scripts/30_export_site_data.py --reconciliation` from `site/data/provenance.json`.
+Generated 2026-09-27 00:21 UTC by `scripts/30_export_site_data.py --reconciliation` from `site/data/provenance.json`.
 `results/` (post-fix, 2026-09-25) is the truth; the pre-fix snapshot is `../../backup/pipeline_history/results_pre_quantile_fix_2026-09-25/`. Values are shown to 4 decimals; the JSON holds them unrounded.
 
 ## 1. Headline numbers (the home-page tiles and the transfer ladder)
