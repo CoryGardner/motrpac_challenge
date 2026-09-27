@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tfp-tissue-fingerprint-pipeline"
-version = "2.1.1"
+version = "2.1.2"
 description = "Calibrated, leakage-safe evaluation of MoTrPAC multi-omic tissue fingerprints"
 requires-python = ">=3.10"
 license = {text = "MIT"}
@@ -32,9 +32,9 @@ extras = ["umap-learn", "pyarrow", "statsmodels", "seaborn", "nbformat"]
 dev = ["pytest>=7"]
 
 [project.urls]
-Homepage = "https://github.com/CoryGardner/motrpac_challenge"
-Repository = "https://github.com/CoryGardner/motrpac_challenge.git"
-Site = "https://corygardner.github.io/motrpac_challenge/"
+Homepage = "https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3"
+Repository = "https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3.git"
+Site = "https://turbo-guide-2yve4kz.pages.github.io/"
 
 [tool.setuptools.packages.find]
 where = ["src"]
