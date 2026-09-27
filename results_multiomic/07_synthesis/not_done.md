@@ -1,0 +1,11 @@
+- **Metabolite transfer HILIC+ → MW ST003188 (`hilic_mw`)**: stopped under the pre-registered rule — only 25 RefMet names shared between the 129 HILIC+ metabolites named in every MoTrPAC tissue and the atlas's 190 (`results_multiomic/04_metab_transfer/hilic_mw/feature_overlap.csv`). The deep-platform source covered the atlas instead.
+- **Wang 2019 as a full target**: the PRIDE MaxQuant bundle (28.2 GB) exceeds the 20 GB box and was not downloaded; the Europe PMC EV tables (gene-level intensities, one donor per tissue) were used, so Wang contributes 6 mapped tissue samples and no donor-level statement (`results_multiomic/03_prot_transfer/wang2019/`).
+- **Geiger 2013**: matched by gene symbol across species (no rat–mouse orthology table in the repo) and one pooled sample per tissue; treated as a secondary check only (`results_multiomic/03_prot_transfer/geiger2013/`).
+- **A rat multi-tissue proteome (the BodyMap-equivalent)**: none with processed tables exists on PRIDE or ProteomeXchange (searches logged in `results_multiomic/02_discovery/attempts.csv`); the reverse-direction test therefore uses a human atlas.
+- **MetaboLights** was reachable but not searched: two matchable rodent metabolomes were already in hand within the 2 h discovery box.
+- **Sato 2022 batch variable**: ROUND labels repeat across the per-tissue Metabolon tables and could not be verified as shared runs; listed in Phase 6, not claimed.
+- **PXD082651** (2026 mouse lifespan multi-tissue atlas of non-canonical peptides) not pursued (non-canonical peptide focus).
+- **Portal release c2.0 RII, acetyl and ubiquityl RII**: not run in the main line (c1.0 `prot-pr` and `prot-ph` only) unless a later log entry says otherwise.
+- **Figures**: described in the site draft with their source CSVs; no image files were rendered and `site/` was not touched.
+- **Kidney and adipose** have no human protein target in Jiang 2020; they are covered only by the mouse atlas (Geiger, n = 1 per tissue).
+- **Download log** (`results_multiomic/02_discovery/download_log.csv`): 19 files, 237 MB — geiger2013 1 files, 10 MB; jiang2020 8 files, 169 MB; mw_ST003188 3 files, 6 MB; sato2022 7 files, 53 MB. 15 attempts recorded (`attempts.csv`), including the failures (raw-only PRIDE project, bot-walled publisher page, over-box bundle, no rat atlas, Sato absent from Metabolomics Workbench).

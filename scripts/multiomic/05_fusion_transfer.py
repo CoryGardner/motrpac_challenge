@@ -23,6 +23,7 @@ import pandas as pd
 from sklearn.linear_model import LogisticRegression
 
 from tfp import config as C, conformal as cp, io, report
+from tfp.boot import individual_bootstrap_ci
 from tfp.splits import assert_no_group_leak, grouped_kfold
 from tfp.transfer import PanelModels, one_to_one_orthologs, zscore
 
@@ -171,8 +172,15 @@ def main():
             correct = np.array([p in s for p, s in zip(pred, y_sets)])
             cov, emp, size = sets_stats(pt_[mapped], q, classes, [y_sets[i] for i in np.flatnonzero(mapped)])
             sets_ood = cp.predict_sets(pt_[~mapped], q, "lac")
+            sets_m = cp.predict_sets(pt_[mapped], q, "lac")
+            covered_m = np.array([any(sets_m[j, classes.index(t)] for t in y_sets[i]) for j, i in enumerate(np.flatnonzero(mapped))], dtype=float)
+            donors_m = mt["donor"].to_numpy()[mapped]
+            a_lo, a_hi, _ = individual_bootstrap_ci(correct[mapped].astype(float), donors_m, 1000, SEED)
+            c_lo, c_hi, _ = individual_bootstrap_ci(covered_m, donors_m, 1000, SEED)
             rows_summary.append({"model": name, "layer": fname, "n_mapped": int(mapped.sum()), "n_donors": mt.loc[mapped, "donor"].nunique(), "accuracy": float(correct[mapped].mean()),
-                                 "coverage_motrpac_cal": cov, "frac_empty": emp, "avg_set_size": size, "ood_frac_empty": float((sets_ood.sum(axis=1) == 0).mean()), "n_cal_rows": len(y_cal),
+                                 "acc_ci95_low_donor_boot": a_lo, "acc_ci95_high_donor_boot": a_hi,
+                                 "coverage_motrpac_cal": cov, "cov_ci95_low_donor_boot": c_lo, "cov_ci95_high_donor_boot": c_hi, "frac_empty": emp, "avg_set_size": size,
+                                 "ood_frac_empty": float((sets_ood.sum(axis=1) == 0).mean()), "n_cal_rows": len(y_cal),
                                  "cal_accuracy": float(np.mean(np.asarray(classes)[pc_.argmax(axis=1)] == y_cal))})
             sub = mt.assign(pred=pred, correct=correct)[mapped]
             for organ, d in sub.groupby("organ7"):
@@ -249,8 +257,10 @@ def main():
     sec = ["- question · is a two-layer fingerprint more robust under the species shift than either layer alone — accuracy AND coverage AND empty-set fraction on the same human samples — and do the layers confuse the same pairs?",
            f"- data · Jiang 2020: {int(o['jiang_samples_with_both_layers'])} samples with matched RNA and protein, {int(o['mapped_samples_7class'])} from {int(o['mapped_donors_7class'])} donors in the 5 mapped classes; MoTrPAC 7-tissue source, RNA {int(o['rna_genes_matched'])} / protein {int(o['protein_genes_matched'])} matched genes (`results_multiomic/05_fusion_transfer/overlap.csv`).",
            "- design · both layers fit on the 7 proteomics tissues (one label space); late fusion = mean probability; stacked LR fit on animal-grouped out-of-fold MoTrPAC probabilities; one calibration set (30 % of animals, held out of both layers) for every model; every Jiang statement on donors.",
-           f"- result · at k20 on the same {int(o['mapped_samples_7class'])} samples: RNA accuracy {f(k20.loc['RNA', 'accuracy'])} / coverage {f(k20.loc['RNA', 'coverage_motrpac_cal'])} / empty {f(k20.loc['RNA', 'frac_empty'])}; protein {f(k20.loc['protein', 'accuracy'])} / {f(k20.loc['protein', 'coverage_motrpac_cal'])} / {f(k20.loc['protein', 'frac_empty'])}; "
-           f"late mean {f(k20.loc['late_mean', 'accuracy'])} / {f(k20.loc['late_mean', 'coverage_motrpac_cal'])} / {f(k20.loc['late_mean', 'frac_empty'])}; stacked LR {f(k20.loc['stacked_LR', 'accuracy'])} / {f(k20.loc['stacked_LR', 'coverage_motrpac_cal'])} / {f(k20.loc['stacked_LR', 'frac_empty'])}. "
+           f"- result · at k20 on the same {int(o['mapped_samples_7class'])} samples (accuracy with donor-bootstrap 95 % CI): RNA accuracy {f(k20.loc['RNA', 'accuracy'])} ({f(k20.loc['RNA', 'acc_ci95_low_donor_boot'], 2)}–{f(k20.loc['RNA', 'acc_ci95_high_donor_boot'], 2)}) / coverage {f(k20.loc['RNA', 'coverage_motrpac_cal'])} / empty {f(k20.loc['RNA', 'frac_empty'])}; "
+           f"protein {f(k20.loc['protein', 'accuracy'])} ({f(k20.loc['protein', 'acc_ci95_low_donor_boot'], 2)}–{f(k20.loc['protein', 'acc_ci95_high_donor_boot'], 2)}) / {f(k20.loc['protein', 'coverage_motrpac_cal'])} / {f(k20.loc['protein', 'frac_empty'])}; "
+           f"late mean {f(k20.loc['late_mean', 'accuracy'])} ({f(k20.loc['late_mean', 'acc_ci95_low_donor_boot'], 2)}–{f(k20.loc['late_mean', 'acc_ci95_high_donor_boot'], 2)}) / {f(k20.loc['late_mean', 'coverage_motrpac_cal'])} / {f(k20.loc['late_mean', 'frac_empty'])}; "
+           f"stacked LR {f(k20.loc['stacked_LR', 'accuracy'])} ({f(k20.loc['stacked_LR', 'acc_ci95_low_donor_boot'], 2)}–{f(k20.loc['stacked_LR', 'acc_ci95_high_donor_boot'], 2)}) / {f(k20.loc['stacked_LR', 'coverage_motrpac_cal'])} / {f(k20.loc['stacked_LR', 'frac_empty'])}. "
            f"Full models: RNA {f(full.loc['RNA', 'accuracy'])} / {f(full.loc['RNA', 'coverage_motrpac_cal'])}, protein {f(full.loc['protein', 'accuracy'])} / {f(full.loc['protein', 'coverage_motrpac_cal'])}, late mean {f(full.loc['late_mean', 'accuracy'])} / {f(full.loc['late_mean', 'coverage_motrpac_cal'])}, stacked {f(full.loc['stacked_LR', 'accuracy'])} / {f(full.loc['stacked_LR', 'coverage_motrpac_cal'])}. "
            f"Pre-registered robustness rule at k20 (≥ {best_single} on accuracy and coverage, ≤ on empty sets): late mean {'PASS' if verdict_k20['late_mean'] else 'FAIL'}, stacked {'PASS' if verdict_k20['stacked_LR'] else 'FAIL'}. "
            f"Confusion structure on Jiang (k20): off-diagonal Pearson hard {f(cs.iloc[0]['pearson_hard_offdiag'])}, soft {f(cs.iloc[0]['pearson_soft_offdiag'])}; per-tissue accuracy correlation across layers {f(cs.iloc[0]['per_tissue_accuracy_pearson'])}; locally (MoTrPAC out-of-fold, k20) soft {f(cs.iloc[2]['pearson_soft_offdiag'])}. "
@@ -258,7 +268,7 @@ def main():
            f"- what it does not show · a precise fusion benefit: {int(o['mapped_samples_7class'])} samples, {int(o['mapped_donors_7class'])} donors, two classes with ≤ 5 samples; coverage under MoTrPAC calibration is near zero for every model, so 'coverage ≥' is a comparison of collapses. The protein arm uses the cleaned relative scale (conservative, see Phase 3).",
            "- files · `results_multiomic/05_fusion_transfer/README.md`."]
     (OUT / "REPORT_SECTION.md").write_text("\n".join(sec) + "\n")
-    finds = [{"rank": 5, "text": f"**Fusion under the species shift (same {int(o['mapped_samples_7class'])} Jiang samples, {int(o['mapped_donors_7class'])} donors, 5 tissues).** At k20 accuracy / MoTrPAC-calibrated coverage / empty sets: RNA {f(k20.loc['RNA', 'accuracy'])} / {f(k20.loc['RNA', 'coverage_motrpac_cal'])} / {f(k20.loc['RNA', 'frac_empty'])}, "
+    finds = [{"rank": 7, "text": f"**Fusion under the species shift (same {int(o['mapped_samples_7class'])} Jiang samples, {int(o['mapped_donors_7class'])} donors, 5 tissues).** At k20 accuracy / MoTrPAC-calibrated coverage / empty sets: RNA {f(k20.loc['RNA', 'accuracy'])} / {f(k20.loc['RNA', 'coverage_motrpac_cal'])} / {f(k20.loc['RNA', 'frac_empty'])}, "
                                   f"protein {f(k20.loc['protein', 'accuracy'])} / {f(k20.loc['protein', 'coverage_motrpac_cal'])} / {f(k20.loc['protein', 'frac_empty'])}, late-mean fusion {f(k20.loc['late_mean', 'accuracy'])} / {f(k20.loc['late_mean', 'coverage_motrpac_cal'])} / {f(k20.loc['late_mean', 'frac_empty'])}, "
                                   f"stacked {f(k20.loc['stacked_LR', 'accuracy'])} / {f(k20.loc['stacked_LR', 'coverage_motrpac_cal'])} / {f(k20.loc['stacked_LR', 'frac_empty'])}; pre-registered robustness rule: late mean {'PASS' if verdict_k20['late_mean'] else 'FAIL'}, stacked {'PASS' if verdict_k20['stacked_LR'] else 'FAIL'}. "
                                   f"The two layers' confusion structures on Jiang correlate at {f(cs.iloc[0]['pearson_soft_offdiag'])} (soft off-diagonal, k20). — `results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv`, `confusion_structure.csv`"}]

@@ -1,26 +1,26 @@
 # Phase 5 — fusion judged by transfer (Jiang 2020, matched RNA + protein)
 
-Built by `scripts/multiomic/05_fusion_transfer.py` on 2026-09-27 07:36 UTC; numbers from the CSVs here.
+Built by `scripts/multiomic/05_fusion_transfer.py` on 2026-09-27 07:41 UTC; numbers from the CSVs here.
 
 - 182 Jiang samples (13 donors, 32 tissues) have both layers; **42 from 12 donors map to the 7-class fingerprint** (CORTEX, HEART, LIVER, LUNG, SKM-GN present; KIDNEY, WAT-SC absent). RNA: 13800 matched genes; protein: 2731 (`overlap.csv`).
 - MoTrPAC 7-tissue source: RNA 350 vials / 50 animals; RII 420 vials / 60 animals; calibration on 15 animals held out of both layers (105 animal × tissue rows).
 
 ## Accuracy, coverage and empty sets on the same mapped Jiang samples — `fusion_transfer_summary.csv`
 
-| model | layer | n_mapped | n_donors | accuracy | coverage_motrpac_cal | frac_empty | avg_set_size | ood_frac_empty | n_cal_rows | cal_accuracy |
-|---|---|---|---|---|---|---|---|---|---|---|
-| k20 | RNA | 42 | 12 | 1.000 | 0.452 | 0.548 | 0.452 | 0.979 | 105 | 1.000 |
-| k20 | protein | 42 | 12 | 0.476 | 0.071 | 0.929 | 0.071 | 0.964 | 105 | 1.000 |
-| k20 | late_mean | 42 | 12 | 0.738 | 0.048 | 0.952 | 0.048 | 0.979 | 105 | 1.000 |
-| k20 | stacked_LR | 42 | 12 | 0.738 | 0.048 | 0.952 | 0.048 | 0.979 | 105 | 1.000 |
-| k50 | RNA | 42 | 12 | 1.000 | 0.238 | 0.762 | 0.238 | 0.979 | 105 | 1.000 |
-| k50 | protein | 42 | 12 | 0.476 | 0.048 | 0.952 | 0.048 | 0.979 | 105 | 1.000 |
-| k50 | late_mean | 42 | 12 | 0.833 | 0.048 | 0.952 | 0.048 | 0.979 | 105 | 1.000 |
-| k50 | stacked_LR | 42 | 12 | 0.833 | 0.048 | 0.952 | 0.048 | 0.979 | 105 | 1.000 |
-| full | RNA | 42 | 12 | 1.000 | 0.024 | 0.976 | 0.024 | 1.000 | 105 | 1.000 |
-| full | protein | 42 | 12 | 0.524 | 0.048 | 0.952 | 0.048 | 1.000 | 105 | 1.000 |
-| full | late_mean | 42 | 12 | 1.000 | 0.048 | 0.952 | 0.048 | 1.000 | 105 | 1.000 |
-| full | stacked_LR | 42 | 12 | 1.000 | 0.048 | 0.952 | 0.048 | 1.000 | 105 | 1.000 |
+| model | layer | n_mapped | n_donors | accuracy | acc_ci95_low_donor_boot | acc_ci95_high_donor_boot | coverage_motrpac_cal | cov_ci95_low_donor_boot | cov_ci95_high_donor_boot | frac_empty | avg_set_size | ood_frac_empty | n_cal_rows | cal_accuracy |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| k20 | RNA | 42 | 12 | 1.000 | 1.000 | 1.000 | 0.452 | 0.348 | 0.581 | 0.548 | 0.452 | 0.979 | 105 | 1.000 |
+| k20 | protein | 42 | 12 | 0.476 | 0.386 | 0.571 | 0.071 | 0.000 | 0.150 | 0.929 | 0.071 | 0.964 | 105 | 1.000 |
+| k20 | late_mean | 42 | 12 | 0.738 | 0.611 | 0.857 | 0.048 | 0.000 | 0.119 | 0.952 | 0.048 | 0.979 | 105 | 1.000 |
+| k20 | stacked_LR | 42 | 12 | 0.738 | 0.611 | 0.857 | 0.048 | 0.000 | 0.119 | 0.952 | 0.048 | 0.979 | 105 | 1.000 |
+| k50 | RNA | 42 | 12 | 1.000 | 1.000 | 1.000 | 0.238 | 0.133 | 0.342 | 0.762 | 0.238 | 0.979 | 105 | 1.000 |
+| k50 | protein | 42 | 12 | 0.476 | 0.381 | 0.568 | 0.048 | 0.000 | 0.119 | 0.952 | 0.048 | 0.979 | 105 | 1.000 |
+| k50 | late_mean | 42 | 12 | 0.833 | 0.703 | 0.933 | 0.048 | 0.000 | 0.119 | 0.952 | 0.048 | 0.979 | 105 | 1.000 |
+| k50 | stacked_LR | 42 | 12 | 0.833 | 0.703 | 0.933 | 0.048 | 0.000 | 0.119 | 0.952 | 0.048 | 0.979 | 105 | 1.000 |
+| full | RNA | 42 | 12 | 1.000 | 1.000 | 1.000 | 0.024 | 0.000 | 0.075 | 0.976 | 0.024 | 1.000 | 105 | 1.000 |
+| full | protein | 42 | 12 | 0.524 | 0.395 | 0.636 | 0.048 | 0.000 | 0.119 | 0.952 | 0.048 | 1.000 | 105 | 1.000 |
+| full | late_mean | 42 | 12 | 1.000 | 1.000 | 1.000 | 0.048 | 0.000 | 0.119 | 0.952 | 0.048 | 1.000 | 105 | 1.000 |
+| full | stacked_LR | 42 | 12 | 1.000 | 1.000 | 1.000 | 0.048 | 0.000 | 0.119 | 0.952 | 0.048 | 1.000 | 105 | 1.000 |
 
 Rule (pre-registration): a fusion is 'more robust' only if accuracy AND coverage ≥ the better single layer (RNA at k20) and empty-set fraction ≤ it. At k20: late_mean NO, stacked_LR NO.
 

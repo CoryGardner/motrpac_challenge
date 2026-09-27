@@ -1,6 +1,6 @@
 # Phase 3b — protein transfer to geiger2013 (one sample per tissue)
 
-Built by `scripts/multiomic/03b_prot_transfer_atlases.py` on 2026-09-27 07:29 UTC; numbers from the CSVs here.
+Built by `scripts/multiomic/03b_prot_transfer_atlases.py` on 2026-09-27 07:39 UTC; numbers from the CSVs here.
 
 - Matching: gene symbol, upper-cased (rat ↔ mouse); 2151 genes after the ≥ 50% completeness filter (`gene_overlap.csv`).
 - Target: 29 tissue samples; 9 map to CORTEX;HEART;KIDNEY;LIVER;LUNG;SKM-GN;WAT-SC; without target: none; 20 OOD samples.
@@ -8,11 +8,11 @@ Built by `scripts/multiomic/03b_prot_transfer_atlases.py` on 2026-09-27 07:29 UT
 
 ## Accuracy over mapped samples — `accuracy_overall.csv`, `predictions_by_sample.csv`
 
-| model | accuracy | n_mapped | n_ood | chance_1_over_7 |
-|---|---|---|---|---|
-| full | 1.0 | 9 | 20 | 0.143 |
-| k20 | 0.6666666666666666 | 9 | 20 | 0.143 |
-| k50 | 0.8888888888888888 | 9 | 20 | 0.143 |
+| model | accuracy | n_mapped | n_ood | chance_1_over_7 | acc_ci95_low_sample_boot | acc_ci95_high_sample_boot |
+|---|---|---|---|---|---|---|
+| full | 1.0 | 9 | 20 | 0.143 | 1.000 | 1.000 |
+| k20 | 0.6666666666666666 | 9 | 20 | 0.143 | 0.333 | 1.000 |
+| k50 | 0.8888888888888888 | 9 | 20 | 0.143 | 0.667 | 1.000 |
 
 Per sample at k20:
 

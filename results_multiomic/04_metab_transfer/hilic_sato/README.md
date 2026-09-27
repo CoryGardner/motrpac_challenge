@@ -1,6 +1,6 @@
 # Phase 4 — metabolite transfer, hilic_sato
 
-Built by `scripts/multiomic/04_metab_transfer.py` on 2026-09-27 07:35 UTC; numbers from the CSVs here.
+Built by `scripts/multiomic/04_metab_transfer.py` on 2026-09-27 07:41 UTC; numbers from the CSVs here.
 
 - Source `hilic`: 876 vials, 54 animals, 19 tissues, 129 RefMet-named metabolites present in every tissue (`../source_hilic_tissues.csv`).
 - Target `sato`: 191 samples, 24 individuals, 8 tissues, 237 RefMet keys; matched 58 (`feature_overlap.csv`).
@@ -20,12 +20,12 @@ Matched RefMet names: **58** (`matched_features.csv`); source classes 19; mapped
 
 ## Accuracy — `accuracy_overall.csv`, `accuracy_by_tissue.csv`, `accuracy_by_stage.csv`
 
-| model | accuracy_sample_weighted | accuracy_macro_over_target_tissues | n_samples_mapped | n_individuals_mapped | n_target_tissues_mapped | n_source_classes | chance | n_matched_features |
-|---|---|---|---|---|---|---|---|---|
-| full | 0.445 | 0.443 | 191 | 24 | 8 | 19 | 0.053 | 58 |
-| k10 | 0.215 | 0.214 | 191 | 24 | 8 | 19 | 0.053 | 58 |
-| k20 | 0.277 | 0.276 | 191 | 24 | 8 | 19 | 0.053 | 58 |
-| k50 | 0.445 | 0.443 | 191 | 24 | 8 | 19 | 0.053 | 58 |
+| model | accuracy_sample_weighted | accuracy_macro_over_target_tissues | n_samples_mapped | n_individuals_mapped | n_target_tissues_mapped | n_source_classes | chance | n_matched_features | acc_ci95_low_animal_boot | acc_ci95_high_animal_boot | n_boot |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| full | 0.445 | 0.443 | 191 | 24 | 8 | 19 | 0.053 | 58 | 0.401 | 0.484 | 1000 |
+| k10 | 0.215 | 0.214 | 191 | 24 | 8 | 19 | 0.053 | 58 | 0.188 | 0.241 | 1000 |
+| k20 | 0.277 | 0.276 | 191 | 24 | 8 | 19 | 0.053 | 58 | 0.257 | 0.300 | 1000 |
+| k50 | 0.445 | 0.443 | 191 | 24 | 8 | 19 | 0.053 | 58 | 0.419 | 0.471 | 1000 |
 
 | target_tissue | rat_classes | n | n_individuals | full | k10 | k20 | k50 |
 |---|---|---|---|---|---|---|---|

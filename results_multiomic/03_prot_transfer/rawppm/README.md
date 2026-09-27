@@ -1,6 +1,6 @@
 # Phase 3 — protein fingerprint transfer to Jiang 2020 (raw reporter intensities re-normalised to channel-total log2 ppm)
 
-Built by `scripts/multiomic/03_prot_transfer.py` on 2026-09-27 07:24 UTC; every number is read from a CSV in this directory.
+Built by `scripts/multiomic/03_prot_transfer.py` on 2026-09-27 07:39 UTC; every number is read from a CSV in this directory.
 
 ## Data and matching — `gene_overlap.csv`
 - Source: MoTrPAC RII, 3637 proteins quantified in every tissue → 3570 genes; 3167 with a 1:1 human ortholog; **2414 matched** to the target after its completeness filter (≥ 80% non-missing; 4737 of 12627 target genes).

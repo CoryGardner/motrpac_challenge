@@ -29,8 +29,9 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 
 from tfp import config as C, io, report
+from tfp.boot import individual_bootstrap_ci
 from tfp.splits import assert_no_group_leak
-from tfp.transfer import PanelModels, calibrate_models, conformal_transfer, gene_check, one_to_one_orthologs, per_organ_coverage, score_block, zscore
+from tfp.transfer import PanelModels, calibrate_models, conformal_transfer, gene_check, one_to_one_orthologs, per_organ_coverage, score_block, sets_for, zscore
 
 ROOT = C.ROOT
 EXT = ROOT / "data" / "external_multiomic" / "jiang2020"
@@ -130,9 +131,10 @@ def main() -> None:
     pm = PanelModels(L_src, y, rat_genes, grid, args.prefilter)
     Lt_pre, Zt_pre = pm.target_matrices(L_tgt)
     model_names = [f"k{k}" for k in grid] + ["full"]
-    acc_rows, conf = [], {}
+    acc_rows, conf, ok_by_model = [], {}, {}
     for name in model_names:
         pred, ok, p, cls = score_block(pm, name, Lt_pre, Zt_pre, mt, organ_map)
+        ok_by_model[name] = ok
         sub = mt.assign(pred=pred, correct=ok)
         for (tissue, organ), d in sub.groupby(["tissue", "organ"]):
             vc = d["pred"].value_counts()
@@ -150,6 +152,8 @@ def main() -> None:
     ao = pd.DataFrame({"model": overall.index, "accuracy_sample_weighted": overall.to_numpy(), "accuracy_macro_over_rat_classes": macro.loc[overall.index].to_numpy(),
                        "n_samples_mapped": int(mapped.sum()), "n_donors_mapped": mt.loc[mapped, "donor"].nunique(), "n_rat_classes_with_target": int(mt.loc[mapped, "organ"].nunique()),
                        "chance_1_over_7": 1 / 7})
+    cis = [individual_bootstrap_ci(ok_by_model[n][mapped].astype(float), mt["donor"].to_numpy()[mapped], 1000, args.seed) for n in ao["model"]]
+    ao["acc_ci95_low_donor_boot"] = [c[0] for c in cis]; ao["acc_ci95_high_donor_boot"] = [c[1] for c in cis]; ao["n_boot"] = 1000
     ao.to_csv(out / "accuracy_overall.csv", index=False)
     print(ao.to_string(index=False))
 
@@ -174,6 +178,15 @@ def main() -> None:
     recal.to_csv(out / "recalibration.csv", index=False)
     pt = per_organ_coverage(calib, classes, Lt_c, Zt_c, mt, organ_map, model_names).rename(columns={"organ": "rat_class_or_ood_tissue"})
     pt.to_csv(out / "coverage_by_tissue.csv", index=False)
+    # donor-bootstrap intervals for the marginal coverage of the mapped samples
+    cov_rows = []
+    for name in model_names:
+        p = calib[name]["proba"](Lt_c, Zt_c)
+        sets = sets_for(calib[name], p, "marginal")
+        covered = np.array([any(sets[i, classes.index(t)] for t in organ_map[o]) for i, o in enumerate(mt["organ"]) if organ_map.get(o)], dtype=float)
+        lo, hi, nd = individual_bootstrap_ci(covered, mt["donor"].to_numpy()[mapped], 1000, args.seed)
+        cov_rows.append({"model": name, "conformal": "marginal", "coverage_mapped": float(covered.mean()), "ci95_low_donor_boot": lo, "ci95_high_donor_boot": hi, "n_samples": int(len(covered)), "n_donors": nd})
+    pd.DataFrame(cov_rows).to_csv(out / "coverage_ci.csv", index=False)
     print(conf_df.round(3).to_string(index=False)); print(recal.round(3).to_string(index=False))
 
     # ---- the ladder: protein (this run) beside RNA (frozen phase 13, GTEx) ---------------------------------------------
@@ -283,7 +296,7 @@ def main() -> None:
                f"{int(o['matched_genes'])} genes matched to the {int(o['rii_genes'])} RII genes through 1:1 orthologs; {int(o['target_samples_mapped'])} samples from {int(o['target_donors_mapped'])} donors in the 5 mapped classes "
                f"({o['mapped_rat_classes']}); KIDNEY and WAT-SC have no target; {int(o['n_ood_tissues'])} human tissues are OOD (`results_multiomic/03_prot_transfer/gene_overlap.csv`).",
                "- design · `tfp.transfer` unchanged: panels on all MoTrPAC animals, z-scores within dataset, super-class scoring, conformal sets calibrated on 30 % held-out MoTrPAC animals (α = 0.10), recalibration on 3 and 5 donors (20 draws), reverse direction, per-gene check; sensitivity run on raw reporter intensities re-normalised like the RII (`rawppm/`).",
-               f"- result · accuracy over the {int(o['target_samples_mapped'])} mapped samples: " + ", ".join(f"{r.model} **{f(r.accuracy_sample_weighted)}**" for r in ao.itertuples()) + f" (chance {f(1 / 7)}). "
+               f"- result · accuracy over the {int(o['target_samples_mapped'])} mapped samples: " + ", ".join(f"{r.model} **{f(r.accuracy_sample_weighted)}** (donor-bootstrap 95 % CI {f(r.acc_ci95_low_donor_boot, 2)}–{f(r.acc_ci95_high_donor_boot, 2)})" for r in ao.itertuples()) + f" (chance {f(1 / 7)}). "
                f"Marginal coverage with MoTrPAC calibration at {k20}: **{f(cmk['coverage_mapped'])}** (empty sets {f(cmk['frac_empty_mapped'])}, set size {f(cmk['avg_set_size_mapped'])}); floored Mondrian {f(cmf['coverage_mapped'])}. "
                f"Recalibration on 3 donors → {f(rk3['coverage_recalibrated'])} (set size {f(rk3['set_size_recalibrated'])}), on 5 donors → {f(rk5['coverage_recalibrated'])} (set size {f(rk5['set_size_recalibrated'])}). "
                f"OOD tissues at {k20} (marginal): empty-set fraction {f(cmk['ood_frac_empty'])}. "
@@ -294,9 +307,13 @@ def main() -> None:
                f"Panel genes failing in the target at {k20}: {', '.join(fails['gene_symbol'].astype(str)) or 'none'} (`panel_gene_check.csv`).",
                "- files · `results_multiomic/03_prot_transfer/README.md`."]
         (out / "REPORT_SECTION.md").write_text("\n".join(sec) + "\n")
-        find = [{"rank": 3, "text": f"**Protein fingerprint transfers to a human proteome atlas, with the RNA coverage pattern.** A {k0}-protein panel selected on MoTrPAC RII names the tissue of "
-                                     f"{f(overall[k20])} of {int(o['target_samples_mapped'])} Jiang 2020 samples ({int(o['target_donors_mapped'])} donors, 5 mapped tissues; k50 {f(overall.get('k50', np.nan))}, full {f(overall['full'])}; chance {f(1 / 7)}); "
-                                     f"marginal conformal coverage with MoTrPAC calibration is {f(cmk['coverage_mapped'])} (empty sets {f(cmk['frac_empty_mapped'])}) against a nominal 0.90, and recalibration on 5 donors restores "
+        aok = ao.set_index("model")
+        cci = pd.read_csv(out / "coverage_ci.csv").set_index("model")
+        find = [{"rank": 1, "text": f"**Protein fingerprint transfers to a human proteome atlas, with the RNA coverage pattern.** A {k0}-protein panel selected on MoTrPAC RII names the tissue of "
+                                     f"{f(overall[k20])} of {int(o['target_samples_mapped'])} Jiang 2020 samples (donor-bootstrap 95 % CI {f(aok.loc[k20, 'acc_ci95_low_donor_boot'], 2)}–{f(aok.loc[k20, 'acc_ci95_high_donor_boot'], 2)}; "
+                                     f"{int(o['target_donors_mapped'])} donors, 5 mapped tissues; k50 {f(overall.get('k50', np.nan))}, full {f(overall['full'])}; chance {f(1 / 7)}; on the raw reporter scale re-normalised like the RII, k20 rises to "
+                                     f"{f(float(pd.read_csv(out / 'rawppm' / 'accuracy_overall.csv').set_index('model').loc['k20', 'accuracy_sample_weighted']), 3) if (out / 'rawppm' / 'accuracy_overall.csv').exists() else 'n/a'} on 94 samples); "
+                                     f"marginal conformal coverage with MoTrPAC calibration is {f(cmk['coverage_mapped'])} (CI {f(cci.loc[k20, 'ci95_low_donor_boot'], 2)}–{f(cci.loc[k20, 'ci95_high_donor_boot'], 2)}; empty sets {f(cmk['frac_empty_mapped'])}) against a nominal 0.90, and recalibration on 5 donors restores "
                                      f"{f(rk5['coverage_recalibrated'])} at set size {f(rk5['set_size_recalibrated'])}. Human adults, post-mortem, different TMT design — all shifts at once. "
                                      f"— `results_multiomic/03_prot_transfer/accuracy_overall.csv`, `conformal_transfer.csv`, `recalibration.csv`"}]
         (out / "FINDINGS.json").write_text(json.dumps(find, indent=1))

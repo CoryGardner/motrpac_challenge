@@ -1,6 +1,6 @@
 [
  {
-  "rank": 5,
+  "rank": 7,
   "text": "**Fusion under the species shift (same 42 Jiang samples, 12 donors, 5 tissues).** At k20 accuracy / MoTrPAC-calibrated coverage / empty sets: RNA 1.000 / 0.452 / 0.548, protein 0.476 / 0.071 / 0.929, late-mean fusion 0.738 / 0.048 / 0.952, stacked 0.738 / 0.048 / 0.952; pre-registered robustness rule: late mean FAIL, stacked FAIL. The two layers' confusion structures on Jiang correlate at 0.259 (soft off-diagonal, k20). \u2014 `results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv`, `confusion_structure.csv`"
  }
 ]

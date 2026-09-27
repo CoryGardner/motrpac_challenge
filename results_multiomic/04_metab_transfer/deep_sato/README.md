@@ -1,6 +1,6 @@
 # Phase 4 — metabolite transfer, deep_sato
 
-Built by `scripts/multiomic/04_metab_transfer.py` on 2026-09-27 07:35 UTC; numbers from the CSVs here.
+Built by `scripts/multiomic/04_metab_transfer.py` on 2026-09-27 07:41 UTC; numbers from the CSVs here.
 
 - Source `deep`: 451 vials, 54 animals, 9 tissues, 340 RefMet-named metabolites present in every tissue (`../source_deep_tissues.csv`).
 - Target `sato`: 191 samples, 24 individuals, 8 tissues, 237 RefMet keys; matched 83 (`feature_overlap.csv`).
@@ -20,12 +20,12 @@ Matched RefMet names: **83** (`matched_features.csv`); source classes 9; mapped 
 
 ## Accuracy — `accuracy_overall.csv`, `accuracy_by_tissue.csv`, `accuracy_by_stage.csv`
 
-| model | accuracy_sample_weighted | accuracy_macro_over_target_tissues | n_samples_mapped | n_individuals_mapped | n_target_tissues_mapped | n_source_classes | chance | n_matched_features |
-|---|---|---|---|---|---|---|---|---|
-| full | 0.527 | 0.524 | 167 | 24 | 7 | 9 | 0.111 | 83 |
-| k10 | 0.192 | 0.190 | 167 | 24 | 7 | 9 | 0.111 | 83 |
-| k20 | 0.329 | 0.327 | 167 | 24 | 7 | 9 | 0.111 | 83 |
-| k50 | 0.533 | 0.530 | 167 | 24 | 7 | 9 | 0.111 | 83 |
+| model | accuracy_sample_weighted | accuracy_macro_over_target_tissues | n_samples_mapped | n_individuals_mapped | n_target_tissues_mapped | n_source_classes | chance | n_matched_features | acc_ci95_low_animal_boot | acc_ci95_high_animal_boot | n_boot |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| full | 0.527 | 0.524 | 167 | 24 | 7 | 9 | 0.111 | 83 | 0.500 | 0.555 | 1000 |
+| k10 | 0.192 | 0.190 | 167 | 24 | 7 | 9 | 0.111 | 83 | 0.162 | 0.220 | 1000 |
+| k20 | 0.329 | 0.327 | 167 | 24 | 7 | 9 | 0.111 | 83 | 0.269 | 0.388 | 1000 |
+| k50 | 0.533 | 0.530 | 167 | 24 | 7 | 9 | 0.111 | 83 | 0.494 | 0.566 | 1000 |
 
 | target_tissue | rat_classes | n | n_individuals | full | k10 | k20 | k50 |
 |---|---|---|---|---|---|---|---|

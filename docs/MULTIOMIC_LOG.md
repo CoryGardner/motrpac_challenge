@@ -79,3 +79,24 @@ Timestamped log of decisions, downloads (URL, size, sha256, date), failures and 
 - Design: both layers fit on MoTrPAC's 7 proteomics tissues (one label space); RNA = counts → log2 CPM in the 1:1-ortholog space of Jiang's RNA log TPM (13,800 genes; 350 vials / 50 animals), protein = RII log2 ppm in the ortholog space of Jiang's cleaned relative abundance (2,731 genes; 420 vials / 60 animals); late fusion = mean probability; stacked LR fit on animal-grouped out-of-fold MoTrPAC probabilities; one calibration set (30 % of the animals present in both layers, 105 animal × tissue rows) for every model; 182 Jiang samples with both layers, 42 from 12 donors in the 5 mapped classes.
 - Result (`results_multiomic/05_fusion_transfer/fusion_transfer_summary.csv`): k20 accuracy / MoTrPAC-calibrated coverage / empty: RNA 1.000 / 0.452 / 0.548; protein 0.476 / 0.071 / 0.929; late mean 0.738 / 0.048 / 0.952; stacked 0.738 / 0.048 / 0.952. Full models: RNA 1.000 / 0.024, protein 0.524 / 0.048, both fusions 1.000 / 0.048. Pre-registered robustness rule at k20 (≥ RNA on accuracy and coverage, ≤ on empty sets): late mean FAIL, stacked FAIL — the weaker layer drags the fusion down under shift. Confusion structure (soft off-diagonal Pearson, RNA vs protein): 0.259 on Jiang at k20, 0.065 at full; locally on MoTrPAC (out-of-fold) 0.618 / 0.806; hard-call correlations are undefined because RNA makes no error. The 19-class RNA fingerprint on the same Jiang RNA: k20 0.526, k50 0.763, full 0.816 over 76 mapped samples in 13 tissues (GTEx frozen: 0.654 / 0.781 / 0.855).
 - Phase 5 DONE 07:41Z.
+## Spread on the transfer means (07:41Z–07:45Z)
+
+- Added `src/tfp/boot.py` (`individual_bootstrap_ci`: percentile bootstrap over individuals — donors, mice, or tissue samples where each is its own individual — 1,000 resamples) and wired it into Phases 3, 3b, 4 and 5: `accuracy_overall.csv` now carries `acc_ci95_*`, `coverage_ci.csv` the marginal-coverage interval, `fusion_transfer_summary.csv` both. All transfer scripts re-run (identical point estimates; seeds unchanged). Findings re-ranked so that external results lead: protein transfer (1), Jiang crossed design (2), metabolite transfer to the mouse aging atlas (3), RII tissue-axis recovery (4), RNA panel markers at the protein level (5), Sato metabolite legs (6), fusion under shift (7).
+## Phase 7 — synthesis (DONE; repeated at the end)
+
+- 07:43Z `scripts/multiomic/07_synthesis.py` writes, from the CSVs, `results_multiomic/07_synthesis/{submission_changes.md, for_the_talk.md, not_done.md, site_draft_multiomic.md}`; `build_report.py --complete` appends them to `docs/MULTIOMIC_REPORT.md` (sections "What this changes in the submission, if anything", "For the talk", "Not done / not possible", the site draft as Markdown) and ends the file with `RUN COMPLETE <UTC>`. The findings list is rebuilt on every run (8 findings at 07:43Z).
+- `site/`, `results_frozen/`, `README.md`, `docs/EVALUATION_RULES.md`, `src/tfp/splits.py` untouched (verified with `git status` / `git diff --stat main -- site results_frozen README.md docs/EVALUATION_RULES.md src/tfp/splits.py` before the final commit).
+- Remaining time is spent on robustness runs that do not change the design: Phase 1 on portal release c2.0 (`results_multiomic/01_rii/c2/`), acetyl RII (`results_multiomic/01_rii/ac_c2/`), and a bootstrap stability selection of the k = 20 protein panel; Phase 7 is repeated after them.
+
+## Phase status (2026-09-27T07:45Z)
+
+| Phase | Status | Where |
+|---|---|---|
+| 0 setup and pre-registration | DONE 06:55Z | `docs/PREREGISTRATION_MULTIOMIC.md` |
+| 1 RII rescue | DONE 07:10Z (+ ph 07:08Z) | `results_multiomic/01_rii/` |
+| 2 data discovery | DONE 07:26Z | `results_multiomic/02_discovery/` |
+| 3 protein transfer | DONE 07:28Z (Jiang primary + raw scale, Wang, Geiger) | `results_multiomic/03_prot_transfer/` |
+| 4 metabolite transfer | DONE 07:38Z (3 legs run, `hilic_mw` stopped by the pre-registered overlap rule) | `results_multiomic/04_metab_transfer/` |
+| 5 fusion by transfer | DONE 07:41Z | `results_multiomic/05_fusion_transfer/` |
+| 6 external identifiability | DONE 07:38Z | `results_multiomic/06_external_identifiability/` |
+| 7 synthesis | DONE 07:43Z (repeated at the end) | `results_multiomic/07_synthesis/`, `docs/MULTIOMIC_REPORT.md` |

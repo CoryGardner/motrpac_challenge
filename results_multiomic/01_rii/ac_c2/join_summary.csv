@@ -1,0 +1,2 @@
+n_tissues,n_vials,n_animals,n_proteins_union,n_proteins_inner,frac_nan_outer,frac_nan_inner,n_proteins_inner_complete,min_peptides,norm,release,assay
+7,420,60,2538,114,0.7681995572066493,0.09730576441102758,35,2,total,c2.0,prot-ac

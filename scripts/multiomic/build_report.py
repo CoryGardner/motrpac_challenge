@@ -82,13 +82,13 @@ def phase1(findings):
     r2 = float(vp["R2_tissue"].iloc[0]); r2r = float(vpr["R2_tissue"].iloc[0]); n95 = float(vp["R2_tissue_null95"].iloc[0])
     k_first = int(pc.loc[pc["bal_acc_mean"] >= 0.95, "k"].min()) if (pc["bal_acc_mean"] >= 0.95).any() else None
     k20 = pc[pc["k"] == 20].iloc[0]
-    findings.append((1, f"**RII tissue-axis recovery.** On reporter-ion intensities normalised to the channel total, tissue explains R² = {f(r2)} of PC1 "
+    findings.append((4, f"**RII tissue-axis recovery.** On reporter-ion intensities normalised to the channel total, tissue explains R² = {f(r2)} of PC1 "
                         f"(PC2 {f(float(vp['R2_tissue'].iloc[1]))}; label-permutation null 95th pct {f(n95)}) versus {f(r2r, 4)} on the distributed ratio matrix with the same code; "
                         f"n = {int(js['n_vials'])} vials, {int(js['n_animals'])} animals, {int(js['n_proteins_inner'])} proteins in every tissue; identical on the "
                         f"{int(js['n_proteins_inner_complete'])} proteins with no missing value (R² {f(float(vpc['R2_tissue'].iloc[0]))}). Within-study: plex is nested in tissue. "
                         f"— `results_multiomic/01_rii/variance_partition.csv`, `variance_partition_ratio.csv`, `variance_partition_complete.csv`"))
     if rpp is not None:
-        findings.append((2, f"**RNA panel markers hold at the protein level.** Of the {int(rpp['n_testable_c'])} RNA panel genes whose marker tissue is one of the 7 proteomics tissues and whose "
+        findings.append((5, f"**RNA panel markers hold at the protein level.** Of the {int(rpp['n_testable_c'])} RNA panel genes whose marker tissue is one of the 7 proteomics tissues and whose "
                             f"protein is quantified, {int(rpp['n_same_marker'])} ({pct(rpp['frac_same_marker'])}) have the same marker tissue at the protein level (chance 1/7); "
                             f"over all {int(rp['n_genes'])} genes with both layers, the cross-tissue RNA–protein Spearman has median {f(rp['spearman_median'])} "
                             f"(IQR {f(rp['spearman_q25'])}–{f(rp['spearman_q75'])}; mismatched-pair null median {f(rp['null_mismatched_median'])}, 95th pct {f(rp['null_mismatched_q95'])}); "
@@ -187,6 +187,13 @@ def main():
             if st.get("status") == "DROPPED":
                 out += [f"**DROPPED (partial)** — {st.get('reason', '')}", ""]
             out += body + [""]
+    # Phase 7 synthesis sections (written by scripts/multiomic/07_synthesis.py from the CSVs)
+    syn = R / "07_synthesis"
+    for fn, title in (("submission_changes.md", "What this changes in the submission, if anything"), ("for_the_talk.md", "For the talk"),
+                      ("not_done.md", "Not done / not possible"), ("site_draft_multiomic.md", "Draft for site/_drafts/multiomic.html (Markdown only; the site is untouched)")):
+        p = syn / fn
+        if p.exists():
+            out += [f"## {title}", "", p.read_text().rstrip(), ""]
     if args.complete:
         out += [f"RUN COMPLETE {time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())}"]
     DOC.write_text("\n".join(out) + "\n")

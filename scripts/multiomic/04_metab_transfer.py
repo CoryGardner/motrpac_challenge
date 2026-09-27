@@ -32,8 +32,9 @@ import numpy as np
 import pandas as pd
 
 from tfp import config as C, io, report
+from tfp.boot import individual_bootstrap_ci
 from tfp.splits import assert_no_group_leak
-from tfp.transfer import PanelModels, calibrate_models, conformal_transfer, per_organ_coverage, score_block
+from tfp.transfer import PanelModels, calibrate_models, conformal_transfer, per_organ_coverage, score_block, sets_for
 
 ROOT = C.ROOT
 EXT = ROOT / "data" / "external_multiomic"
@@ -173,9 +174,10 @@ def transfer(L_src_df, meta_s, L_tgt_df, mt, organ_map, out: Path, grid, alpha, 
     ood_organs = sorted(mt.loc[~mapped, "organ"].unique())
     pm = PanelModels(L_src, y, keys, grid, prefilter)
     Lt_pre, Zt_pre = pm.target_matrices(L_tgt)
-    acc_rows, conf = [], {}
+    acc_rows, conf, ok_by_model = [], {}, {}
     for name in model_names:
         pred, ok, p, cls = score_block(pm, name, Lt_pre, Zt_pre, mt, organ_map)
+        ok_by_model[name] = ok
         sub = mt.assign(pred=pred, correct=ok)
         for organ, d in sub.groupby("organ"):
             vc = d["pred"].value_counts(); wrong = d.loc[~d["correct"], "pred"].value_counts()
@@ -191,6 +193,8 @@ def transfer(L_src_df, meta_s, L_tgt_df, mt, organ_map, out: Path, grid, alpha, 
     ao = pd.DataFrame({"model": overall.index, "accuracy_sample_weighted": overall.to_numpy(), "accuracy_macro_over_target_tissues": macro.loc[overall.index].to_numpy(),
                        "n_samples_mapped": int(mapped.sum()), "n_individuals_mapped": mt.loc[mapped, "group_id"].nunique(), "n_target_tissues_mapped": int(mt.loc[mapped, "organ"].nunique()),
                        "n_source_classes": len(classes_src), "chance": 1 / len(classes_src), "n_matched_features": len(keys)})
+    cis = [individual_bootstrap_ci(ok_by_model[n][mapped].astype(float), mt["group_id"].to_numpy()[mapped], 1000, seed) for n in ao["model"]]
+    ao["acc_ci95_low_animal_boot"] = [c[0] for c in cis]; ao["acc_ci95_high_animal_boot"] = [c[1] for c in cis]; ao["n_boot"] = 1000
     ao.to_csv(out / "accuracy_overall.csv", index=False)
     # per-stage accuracy (age / treatment)
     st_rows = []
@@ -216,6 +220,14 @@ def transfer(L_src_df, meta_s, L_tgt_df, mt, organ_map, out: Path, grid, alpha, 
     conf_df.to_csv(out / "conformal_transfer.csv", index=False); ood.to_csv(out / "ood_sets.csv", index=False); recal.to_csv(out / "recalibration.csv", index=False)
     pt = per_organ_coverage(calib, classes, Lt_c, Zt_c, mt, organ_map, model_names).rename(columns={"organ": "target_tissue"})
     pt.to_csv(out / "coverage_by_tissue.csv", index=False)
+    cov_rows = []
+    for name in model_names:
+        p = calib[name]["proba"](Lt_c, Zt_c)
+        sets = sets_for(calib[name], p, "marginal")
+        covered = np.array([any(sets[i, classes.index(t)] for t in organ_map[o] if t in classes) for i, o in enumerate(mt["organ"]) if organ_map.get(o)], dtype=float)
+        lo, hi, nd = individual_bootstrap_ci(covered, mt["group_id"].to_numpy()[mapped], 1000, seed)
+        cov_rows.append({"model": name, "conformal": "marginal", "coverage_mapped_all_stages": float(covered.mean()), "ci95_low_animal_boot": lo, "ci95_high_animal_boot": hi, "n_samples": int(len(covered)), "n_individuals": nd})
+    pd.DataFrame(cov_rows).to_csv(out / "coverage_ci.csv", index=False)
     k0 = 20 if 20 in grid else grid[0]          # headline panel size, as in Phases 3 and 13
     look = refmet_lookup()
     panel = pd.DataFrame({"refmet_key": pm.panel_genes(k0), "refmet_name": [look.get(k, k) for k in pm.panel_genes(k0)],
@@ -329,7 +341,10 @@ def main():
         k = f"k{R['k0']}"
         cm = R["conf"][(R["conf"]["model"] == k) & (R["conf"]["conformal"] == "marginal") & (R["conf"]["stage"].astype(str) == primary)].iloc[0]
         r3 = R["recal"][(R["recal"]["model"] == k) & (R["recal"]["n_recal"] == 3)]; r5 = R["recal"][(R["recal"]["model"] == k) & (R["recal"]["n_recal"] == 5)]
+        aok = R["ao"].set_index("model")
         summaries.append({**ov, "k0": R["k0"], **{f"acc_{r.model}": float(r.accuracy_sample_weighted) for r in R["ao"].itertuples()}, "chance": float(R["ao"]["chance"].iloc[0]),
+                          "acc_k0_ci_low": float(aok.loc[k, "acc_ci95_low_animal_boot"]), "acc_k0_ci_high": float(aok.loc[k, "acc_ci95_high_animal_boot"]),
+                          "acc_full_ci_low": float(aok.loc["full", "acc_ci95_low_animal_boot"]), "acc_full_ci_high": float(aok.loc["full", "acc_ci95_high_animal_boot"]),
                           "n_mapped": R["mapped"], "n_individuals_mapped": R["n_ind"], "primary_stage": primary,
                           "coverage_k0_source_cal_primary": float(cm["coverage_mapped"]), "frac_empty_k0_source_cal_primary": float(cm["frac_empty_mapped"]), "ood_frac_empty_k0": float(cm["ood_frac_empty"]) if not np.isnan(cm["ood_frac_empty"]) else np.nan,
                           "coverage_k0_recal3": float(r3["coverage_recalibrated"].iloc[0]) if len(r3) else np.nan, "coverage_k0_recal5": float(r5["coverage_recalibrated"].iloc[0]) if len(r5) else np.nan,
@@ -349,7 +364,7 @@ def main():
            "MW ST003188 scored per age (primary 3 months); Sato scored per treatment (primary Sedentary) plus the native sedentary → exercised invariance test."]
     res = []
     for r in run.itertuples():
-        res.append(f"`{r.leg}`: accuracy over {int(r.n_mapped)} mapped samples ({int(r.n_individuals_mapped)} individuals) k{r.k0} **{f(getattr(r, f'acc_k{r.k0}'))}**, full {f(r.acc_full)} (chance {f(r.chance)}); "
+        res.append(f"`{r.leg}`: accuracy over {int(r.n_mapped)} mapped samples ({int(r.n_individuals_mapped)} individuals) k{r.k0} **{f(getattr(r, f'acc_k{r.k0}'))}** (animal-bootstrap 95 % CI {f(r.acc_k0_ci_low, 2)}–{f(r.acc_k0_ci_high, 2)}), full {f(r.acc_full)} ({f(r.acc_full_ci_low, 2)}–{f(r.acc_full_ci_high, 2)}) (chance {f(r.chance)}); "
                    f"coverage with MoTrPAC calibration at k{r.k0} ({r.primary_stage}) {f(r.coverage_k0_source_cal_primary)} (empty {f(r.frac_empty_k0_source_cal_primary)}); recalibrated on 3 / 5 animals {f(r.coverage_k0_recal3)} / {f(r.coverage_k0_recal5)} (set size {f(r.set_size_k0_recal5)})"
                    + (f"; native sedentary→exercised: accuracy k{r.k0} {f(r.invariance_acc_k0)} coverage {f(r.invariance_cov_k0)}, full {f(r.invariance_acc_full)} / {f(r.invariance_cov_full)} (RNA controls→trained 0.961 / 0.903)" if hasattr(r, "invariance_acc_k0") and not pd.isna(r.invariance_acc_k0) else ""))
     passes = [(r.leg, getattr(r, f"acc_k{r.k0}") >= 2 * r.chance and r.matched_refmet >= 30) for r in run.itertuples()]
@@ -359,8 +374,8 @@ def main():
     (OUT / "REPORT_SECTION.md").write_text("\n".join(sec) + "\n")
     finds = []
     for r in run.itertuples():
-        finds.append({"rank": 4, "text": f"**Metabolite fingerprint transfer ({r.leg}).** A k{r.k0} RefMet-named metabolite panel selected on MoTrPAC ({r.source_tissues} tissues, {r.matched_refmet} matched names) names the tissue of "
-                                         f"{f(getattr(r, f'acc_k{r.k0}'))} of {int(r.n_mapped)} external samples ({int(r.n_individuals_mapped)} mice; full model {f(r.acc_full)}; chance {f(r.chance)}); coverage with MoTrPAC calibration {f(r.coverage_k0_source_cal_primary)}, "
+        finds.append({"rank": 3 if r.target == "mw" else 6, "text": f"**Metabolite fingerprint transfer ({r.leg}).** A k{r.k0} RefMet-named metabolite panel selected on MoTrPAC ({r.source_tissues} tissues, {r.matched_refmet} matched names) names the tissue of "
+                                         f"{f(getattr(r, f'acc_k{r.k0}'))} of {int(r.n_mapped)} external samples (animal-bootstrap 95 % CI {f(r.acc_k0_ci_low, 2)}–{f(r.acc_k0_ci_high, 2)}; {int(r.n_individuals_mapped)} mice; full model {f(r.acc_full)}; chance {f(r.chance)}); coverage with MoTrPAC calibration {f(r.coverage_k0_source_cal_primary)}, "
                                          f"recalibrated on 5 mice {f(r.coverage_k0_recal5)}" + (f"; a native panel fit on sedentary mice keeps accuracy {f(r.invariance_acc_full)} / coverage {f(r.invariance_cov_full)} on exercised mice (RNA analogue 0.961 / 0.903)" if hasattr(r, "invariance_acc_full") and not pd.isna(r.invariance_acc_full) else "")
                                          + f". — `results_multiomic/04_metab_transfer/{r.leg}/accuracy_overall.csv`, `conformal_transfer.csv`, `recalibration.csv`"})
     (OUT / "FINDINGS.json").write_text(json.dumps(finds, indent=1))

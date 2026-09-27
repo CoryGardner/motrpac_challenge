@@ -125,6 +125,9 @@ def main():
     am = acc[acc["rat_class"] != "OOD"]
     ao = am.groupby("model").agg(accuracy=("correct", "mean"), n_mapped=("correct", "size")).reset_index()
     ao["n_ood"] = int((~mapped).sum()); ao["chance_1_over_7"] = 1 / 7
+    from tfp.boot import individual_bootstrap_ci
+    cis = [individual_bootstrap_ci(am.loc[am["model"] == n, "correct"].astype(float).to_numpy(), am.loc[am["model"] == n, "atlas_tissue"].to_numpy(), 1000, args.seed) for n in ao["model"]]
+    ao["acc_ci95_low_sample_boot"] = [c[0] for c in cis]; ao["acc_ci95_high_sample_boot"] = [c[1] for c in cis]
     ao.to_csv(out / "accuracy_overall.csv", index=False); print(ao.to_string(index=False))
     # conformal with MoTrPAC calibration
     uniq = np.unique(g); rng.shuffle(uniq)
