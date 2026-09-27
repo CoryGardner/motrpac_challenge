@@ -19,7 +19,7 @@ and `pyproject.toml`.
   provenance. `tests/test_score_tool.js` checks the example: 12 labels give a finite threshold, coverage 0.911 on the
   68 unlabelled mapped-organ samples with singleton sets wherever a single-tissue organ is covered, and thymus and
   uterus abstain on most samples.
-- Cosmetic: the theme toggle stays on the nav row at 1024 px; the "1 of 171" tile on the Identifiability page is a
+- Cosmetic: the header badge is 72 px (56 px on phones); the theme toggle stays on the nav row at 1024 px; the "1 of 171" tile on the Identifiability page is a
   normal-width tile; the Home ladder title is one line with the rest in the subtitle; `make screenshots` renders
   1440, 1024 and 390 px.
 

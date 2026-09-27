@@ -88,7 +88,7 @@ main.wrap { padding-top: 1.5rem; padding-bottom: 4rem; }
 .site-header .wrap { display: flex; align-items: center; gap: 1rem; min-height: 60px; flex-wrap: wrap; padding-top: 0.4rem; padding-bottom: 0.4rem; }
 .brand { font-weight: 650; color: var(--ink); text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; white-space: nowrap; }
 .brand svg { width: 22px; height: 22px; }
-.brand img.mark { width: 44px; height: 44px; border-radius: 50%; display: block; box-shadow: 0 0 0 1px var(--mark-ring); }
+.brand img.mark { width: 72px; height: 72px; border-radius: 50%; display: block; box-shadow: 0 0 0 1px var(--mark-ring); }
 nav.primary { display: flex; flex-wrap: wrap; gap: 0.15rem 0.9rem; margin-left: auto; }
 nav.primary a { color: var(--ink-2); text-decoration: none; padding: 0.35rem 0.1rem; border-bottom: 2px solid transparent; font-size: 0.95rem; }
 nav.primary a[aria-current="page"] { color: var(--ink); border-bottom-color: var(--ink); }
@@ -245,6 +245,7 @@ img.shot { max-width: 100%; height: auto; border: 1px solid var(--grid); border-
 }
 @media (max-width: 640px) {
   .site-header .wrap { gap: 0.5rem; }
+  .brand img.mark { width: 56px; height: 56px; }
   .team-block { grid-template-columns: 1fr; }
   .team-block img { max-width: 280px; }
   nav.primary { margin-left: 0; width: 100%; gap: 0.1rem 0.7rem; font-size: 0.9rem; }
