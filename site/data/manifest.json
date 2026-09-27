@@ -1,6 +1,6 @@
 {
- "generated": "2026-09-27 18:31 UTC",
- "git_hash": "14d8244",
+ "generated": "2026-09-27 18:51 UTC",
+ "git_hash": "eb05da5",
  "results_dir": "results_frozen",
  "results_snapshot": {
   "snapshot_date": "2026-09-26",
@@ -841,12 +841,12 @@
   },
   {
    "name": "product.json",
-   "bytes": 73766,
+   "bytes": 74258,
    "regenerated": false
   },
   {
    "name": "provenance.json",
-   "bytes": 145826,
+   "bytes": 146240,
    "regenerated": true
   },
   {

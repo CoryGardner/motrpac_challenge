@@ -72,7 +72,7 @@ def main():
     ax.grid(axis="x", visible=False)
     ax.grid(axis="y", color=T["grid"], linewidth=0.8)
     ax.legend(frameon=False, loc="upper left", fontsize=8, ncol=2)
-    title(ax, "a  Accuracy holds at every rung of the shift ladder", "The 90 % guarantee holds within the study and is restored by three animals from a new laboratory (20-gene panel, α = 0.10, source-calibrated)")
+    title(ax, "a  Accuracy holds at every rung of the shift ladder", "The 90 % guarantee holds within the study; three animals from a new laboratory restore observed coverage (mean of 20 draws) (20-gene panel, α = 0.10)")
 
     # (b) stable core: effect size per gene
     core = sorted(SC["core"], key=lambda r: r["effect_size"])

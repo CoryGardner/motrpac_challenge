@@ -5044,6 +5044,37 @@
 ]
 }
 },
+"example_counts": {
+"genes": [
+"ENSRNOG00000000428",
+"ENSRNOG00000004632",
+"ENSRNOG00000006641"
+],
+"symbols": [
+"Cyp21a1",
+"Pmch",
+"Dbh"
+],
+"samples": [
+"Liver.F.21.Lvr_F_021_1",
+"Brain.F.21.Brn_F_021_1"
+],
+"counts": [
+[
+29,
+45
+],
+[
+0,
+0
+],
+[
+3,
+6
+]
+],
+"source": "tests/fixtures/bodymap_counts_subset.csv.gz: raw counts of rat BodyMap samples (Yu et al., Nat Commun 5:3230, 2014; GEO GSE53960; via Bioconductor bodymapRat 1.28.0; CC BY 4.0)"
+},
 "ood": {
 "Thymus": {
 "n": 8,
@@ -5055,8 +5086,8 @@
 }
 },
 "_meta": {
-"generated": "2026-09-27 18:32 UTC",
-"git_hash": "14d8244",
+"generated": "2026-09-27 18:52 UTC",
+"git_hash": "eb05da5",
 "sources": [
 "results_frozen/12_bodymap/ood_sets.csv",
 "results_product/40_product/composition_summary.csv",
@@ -5067,7 +5098,8 @@
 "results_product/40_product/recal_draws_summary.csv",
 "results_product/40_product/scaling.csv",
 "results_product/40_product/venacv_cases.csv",
-"results_product/40_product/venacv_summary.csv"
+"results_product/40_product/venacv_summary.csv",
+"tests/fixtures/bodymap_counts_subset.csv.gz"
 ],
 "note": "every value traces to results_product/40_product/ or results_frozen/ through the pv_* entries of provenance.json"
 }

@@ -671,6 +671,9 @@ def export_headline(w: Writer, prov: Prov, rec: pd.DataFrame | None):
            "full": (P.val("acc_full", "04_baselines/TRNSCRPT/summary.csv", "balanced_accuracy_mean", where={"model": "logreg_l2"}),
                     P.val("acc_full_sd", "04_baselines/TRNSCRPT/summary.csv", "balanced_accuracy_std", where={"model": "logreg_l2"}))}
     acc_fclassif_k20 = P.val("acc_fclassif_k20", "05_panels/TRNSCRPT/panel_curve_fclassif.csv", "balanced_accuracy", where={"k": 20}, agg="mean", note="F-test selector at the same k")
+    # the other all-gene simple baselines on the same folds (logreg_l2 is acc_full above), for the README key results
+    for _bm in ("centroid", "rf"):
+        P.val(f"baseline_{_bm}", "04_baselines/TRNSCRPT/summary.csv", "balanced_accuracy_mean", where={"model": _bm})
     # the "1 of 171" tile belongs to the Identifiability page; the home page shows the bridge measurement instead
     tiles_identifiability = [t for t in tiles if t["id"] == "tile_estimable"]
     tiles = [t for t in tiles if t["id"] != "tile_estimable"]
@@ -1661,6 +1664,7 @@ def readme_table(prov_entries: list[dict]) -> str:
         ("20-gene panel, balanced accuracy (19 tissues, 5 animal-grouped folds)", f"{f('acc_k20')} ± {f('acc_k20_sd')}", "results/05_panels/TRNSCRPT/panel_curve.csv"),
         ("50-gene panel / all genes", f"{f('acc_k50')} / {f('acc_full')}", "results/05_panels/TRNSCRPT/panel_curve.csv, results/04_baselines/TRNSCRPT/summary.csv"),
         ("F-test selector at k = 20 (why the selector matters)", f('acc_fclassif_k20'), "results/05_panels/TRNSCRPT/panel_curve_fclassif.csv"),
+        ("All-gene simple baselines on the same folds, balanced accuracy: nearest centroid / L2 logistic regression / random forest", f"{f('baseline_centroid')} / {f('acc_full')} / {f('baseline_rf')}", "results/04_baselines/TRNSCRPT/summary.csv"),
         ("Coverage of 90 % sets in-distribution, all genes (pooled / one vial per animal)", f"{f('cov_id_full_marginal_pooled')} / {f('cov_id_full_marginal_one_per_animal')}", "results/06_conformal/TRNSCRPT/coverage.csv"),
         ("Coverage of 90 % sets in-distribution, 20-gene panel (pooled / one vial per animal)", f"{f('cov_id_k20_marginal_pooled')} / {f('cov_id_k20_marginal_one_per_animal')}", "results/31_site_regen/06_conformal/TRNSCRPT/scores_*.csv (recomputed)"),
         ("Trained animals, panel fit on the sedentary controls only: accuracy k20 / coverage", f"{f('acc_train_control_test_trained_k20')} / {f('cov_train_control_test_trained_k20_marginal')}", "results/08_shift/TRNSCRPT/shift_table.csv"),

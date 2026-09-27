@@ -246,7 +246,7 @@ async function main() {
     "The metabolite recalibrations behave the same way; the HILIC+ → Sato sets hold most of the 19 classes.",
   );
   await figure(document.getElementById("fig-recal-cov"), {
-    title: "Coverage is restored by three to five target individuals in every transfer",
+    title: "Observed coverage returns after recalibrating on three to five target individuals, in every transfer",
     subtitle: "Coverage of the α = 0.10 sets (20-feature panels) vs number of target individuals used to recalibrate (0 = MoTrPAC calibration); mean over draws.",
     build: () => { const ref = refLine(0.9, "0.90"); return { traces: recSeries("cov"), layout: { xaxis: { type: "category", title: { text: "target individuals used for recalibration" } }, yaxis: { range: [0, 1.05], title: { text: "coverage" } }, shapes: ref.shapes, annotations: ref.annotations, legend: { y: 1.22, font: { size: 11 } }, margin: { t: 60 } } }; },
     source: "results_multiomic/08_verification/recalibration_set_sizes.csv (every recalibrated coverage in the report, with its set size and label-space size), results_multiomic/03_prot_transfer/conformal_transfer.csv, rawppm/conformal_transfer.csv, results_multiomic/04_metab_transfer/<leg>/conformal_transfer.csv, results_frozen/13_gtex/conformal_transfer.csv (the n = 0 points)",

@@ -173,6 +173,10 @@ site-data: ## export site/data with provenance from results/ (or RESULTS=<dir>, 
 	$(PY) scripts/30_export_site_data.py --check-anchors --reconciliation $(if $(RESULTS),--results $(RESULTS),)
 	$(PY) scripts/multiomic/export_site_data.py   # re-appends the mo_* provenance entries the main export rewrites
 	$(PY) scripts/41_export_product_data.py       # and the pv_* entries of the Check samples page
+	$(PY) tools/readme_blocks.py --write          # the README's generated blocks follow the data
+
+readme: ## rewrite the README's generated blocks from site/data (tools/readme_blocks.py; tests/test_readme.py checks them)
+	$(PY) tools/readme_blocks.py --write
 
 site-test: ## the site tests: provenance, regeneration, JS conformal port, links
 	$(PY) -m pytest -q tests/test_site_data.py tests/test_regen_scores.py tests/test_frozen_results.py
@@ -186,6 +190,7 @@ site: site-data site-test ## export the site data and run the site tests
 
 screenshots: ## render every page in both themes and widths (needs Chrome + playwright: cd tools && npm install)
 	cd tools && npm install --no-audit --no-fund >/dev/null && cd .. && node tools/screenshot.js --base $${SITE_BASE:-http://localhost:8000}
+	cd tools && node check_flow.js --base $${SITE_BASE:-http://localhost:8000}
 
 linkcheck: ## static link, asset and size check of site/
 	$(PY) tools/linkcheck.py

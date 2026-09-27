@@ -31,32 +31,75 @@
 <header class="site-header"></header>
 <main id="main" class="wrap">
   <section class="hero" id="hero">
+    <p class="eyebrow">Tissue identity check</p>
     <h1>Is this sample the tissue you think it is?</h1>
-    <p class="lede">Drop an expression table; get a tissue call with a 90 % conformal prediction set, a gene-level explanation, and flags for swaps, contamination and unknown tissue. Runs in your browser; nothing is uploaded.</p>
-    <p class="small">A <a href="science.html#glossary">conformal prediction set</a> is the list of tissues the model cannot rule out: on samples like its held-out calibration animals it contains the true tissue at least 90 % of the time. One tissue is a confident call, several is ambiguous, none means the model abstains.</p>
+    <p class="lede">Drop in an expression table and get back, for every sample, a tissue call, its 90 % prediction set (the tissues the model cannot rule out), the genes behind the call, and a flag when your label doesn't fit.</p>
     <div class="hero-actions">
-      <button class="btn primary" type="button" id="btn-example">Try the example</button>
-      <button class="btn" type="button" id="btn-upload">Upload / paste</button>
+      <button class="btn primary" type="button" id="btn-upload">Check my samples</button>
+      <button class="btn" type="button" id="btn-example">Try the example</button>
     </div>
-    <div class="trust" id="trust" aria-label="How far to trust it"></div>
   </section>
 
-  <section class="section" id="input" aria-labelledby="input-h">
-    <h2 id="input-h">Your samples</h2>
-    <p id="input-help" class="small">Rat RNA-seq. Either a table of the 20 panel genes in log2 CPM (samples in rows, genes as columns), or a full raw-count matrix in either orientation with Ensembl IDs or gene symbols; counts are converted to log2 CPM here with the pipeline's transform. An optional column <code>claimed_tissue</code> (or <code>tissue</code>, <code>true_tissue</code>) holds the tissue you think each sample is.</p>
-    <div class="controls" id="input-controls">
-      <label class="control" for="in-file"><span>File (CSV or TSV)</span><input id="in-file" type="file" accept=".csv,.tsv,.txt,.tab,text/csv,text/tab-separated-values,text/plain"></label>
-      <label class="control" for="in-format"><span>Input</span>
+  <section class="card" id="how" aria-labelledby="how-h">
+    <h2 id="how-h">How it works</h2>
+    <ol class="steps">
+      <li><b>Drop in an expression table.</b> CSV or TSV, the 20-gene panel or a full raw-count matrix.</li>
+      <li><b>Get a call, a 90 % prediction set and the genes behind it,</b> with flags for swapped labels, contamination and unknown tissue.</li>
+      <li><b>Samples from another lab:</b> expect many “Unknown” at first; recalibrate on at least <span id="how-min-labelled">nine</span> of your own labelled samples.</li>
+    </ol>
+    <p class="small">A <a href="science.html#glossary">conformal prediction set</a> lists the tissues the model cannot rule out. On samples like its held-out calibration animals it contains the true tissue at least 90 % of the time; that 90 % describes the sets, not the confidence of any single call. One tissue is a confident call, several is ambiguous, none means the model abstains.</p>
+  </section>
+
+  <section class="accuracy" id="accuracy" aria-labelledby="accuracy-h">
+    <h2 id="accuracy-h">How accurate is it?</h2>
+    <p id="trust"></p>
+  </section>
+
+  <section class="card" id="what-upload" aria-labelledby="what-upload-h">
+    <h2 id="what-upload-h">What you can upload</h2>
+    <div class="grid-2">
+      <ul class="checklist">
+        <li>Rat bulk RNA-seq.</li>
+        <li>CSV or TSV with a header row.</li>
+        <li><b>Format A</b>: the 20 panel genes in log2 CPM, samples in rows and genes as columns; or <b>format B</b>: a full raw-count matrix, genes × samples or samples × genes, Ensembl IDs or gene symbols (converted to log2 CPM here with the pipeline's transform).</li>
+        <li>If no tissue clears the calibrated threshold, the sample is marked <b>Unknown</b>: the model abstains.</li>
+      </ul>
+      <div class="optional">
+        <p class="eyebrow">Optional · flags swaps</p>
+        <p>A <code>claimed_tissue</code> column (or <code>tissue</code>, <code>true_tissue</code>) with the tissue you think each sample is; it is compared with the call.</p>
+        <p class="info">Use the tissue names in the <a href="#accepted" id="accepted-link">list of accepted names</a> (the 19 reference tissues and their synonyms, e.g. brain, muscle, fat).</p>
+      </div>
+    </div>
+    <details class="fig-notes" id="example-tables"><summary>Show example input tables</summary>
+      <div class="grid-2">
+        <div><p class="small"><b>A · 20-gene panel</b> (log2 CPM; samples in rows, genes as columns)</p><div id="ex-table-a"></div><p class="small" id="ex-table-a-src"></p></div>
+        <div><p class="small"><b>B · Full count matrix</b> (raw counts; either orientation; Ensembl IDs shown, gene symbols work too)</p><div id="ex-table-b"></div><p class="small" id="ex-table-b-src"></p></div>
+      </div>
+    </details>
+  </section>
+
+  <section class="card" id="input" aria-labelledby="input-h">
+    <h2 id="input-h">Check your samples</h2>
+    <div class="dropzone" id="dropzone">
+      <p><b>Drop a CSV or TSV file here</b> (one file at a time)</p>
+      <label class="btn" for="in-file" id="choose-file">Choose a file</label>
+      <input id="in-file" class="visually-hidden" type="file" accept=".csv,.tsv,.txt,.tab,text/csv,text/tab-separated-values,text/plain">
+    </div>
+    <label class="control block" for="in-text"><span>Or paste the table</span></label>
+    <textarea id="in-text" rows="5" spellcheck="false" placeholder="sample,Cyp21a1,Pmch,…,claimed_tissue"></textarea>
+    <div class="input-row">
+      <label class="control inline" for="in-format"><span>Input format:</span>
         <select id="in-format">
           <option value="auto">detect</option>
           <option value="log2cpm">20-gene log2 CPM</option>
           <option value="counts">raw counts (full matrix)</option>
         </select>
       </label>
+      <button class="btn" type="button" id="btn-load-example">Load example data</button>
+      <button class="btn primary" type="button" id="btn-check">Check samples</button>
+      <button class="btn" type="button" id="btn-template">Download a template</button>
     </div>
-    <label class="control block" for="in-text"><span>Or paste the table</span></label>
-    <textarea id="in-text" rows="6" spellcheck="false" placeholder="sample,Cyp21a1,Pmch,Dbh,…,claimed_tissue&#10;my_sample_1,4.21,0.12,…,liver"></textarea>
-    <div class="hero-actions"><button class="btn primary" type="button" id="btn-check">Check the pasted table</button><button class="btn" type="button" id="btn-template">Download a template (the 20 genes)</button></div>
+    <p class="small local-note">Processed locally in your browser. No data leaves this page.</p>
     <div id="progress" class="small" role="status" aria-live="polite"></div>
     <p class="small" id="model-note"></p>
     <div id="example-note"></div>

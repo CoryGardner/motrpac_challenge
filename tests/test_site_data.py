@@ -18,7 +18,7 @@ RES = C.results_root()          # results/ when a complete run is present, else 
 def _res(file: str) -> Path:
     """A canonical provenance path (results/...) resolved against the results root in use; paths under
     results_multiomic/ or results_frozen/ (the multiomic follow-up page) are repository-relative."""
-    if file.startswith(("results_multiomic/", "results_frozen/", "results_product/")):
+    if file.startswith(("results_multiomic/", "results_frozen/", "results_product/", "tests/fixtures/")):
         return ROOT / file
     return RES / Path(file).relative_to("results")
 

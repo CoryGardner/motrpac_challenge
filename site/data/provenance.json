@@ -1,7 +1,7 @@
 {
 "_meta": {
-"generated": "2026-09-27 18:31 UTC",
-"git_hash": "14d8244",
+"generated": "2026-09-27 18:51 UTC",
+"git_hash": "eb05da5",
 "sources": [
 "results/03_eda/batch_partition_METAB.csv",
 "results/03_eda/batch_partition_PROT.csv",
@@ -131,8 +131,8 @@
 "document": "docs/NUMBERS_RECONCILIATION.md"
 },
 "multiomic": {
-"generated": "2026-09-27 18:32 UTC",
-"git_hash": "14d8244",
+"generated": "2026-09-27 18:52 UTC",
+"git_hash": "eb05da5",
 "n_entries": 244,
 "n_tables": 13,
 "sources": [
@@ -177,9 +177,9 @@
 ]
 },
 "product": {
-"generated": "2026-09-27 18:32 UTC",
-"git_hash": "14d8244",
-"n_entries": 188,
+"generated": "2026-09-27 18:52 UTC",
+"git_hash": "eb05da5",
+"n_entries": 194,
 "n_tables": 5,
 "sources": [
 "results_frozen/12_bodymap/ood_sets.csv",
@@ -191,7 +191,8 @@
 "results_product/40_product/recal_draws_summary.csv",
 "results_product/40_product/scaling.csv",
 "results_product/40_product/venacv_cases.csv",
-"results_product/40_product/venacv_summary.csv"
+"results_product/40_product/venacv_summary.csv",
+"tests/fixtures/bodymap_counts_subset.csv.gz"
 ]
 }
 },
@@ -1052,6 +1053,28 @@
 "agg": "mean",
 "tol": 1e-06,
 "note": "F-test selector at the same k"
+},
+{
+"id": "baseline_centroid",
+"value": 0.9821052631578948,
+"file": "results/04_baselines/TRNSCRPT/summary.csv",
+"where": {
+"model": "centroid"
+},
+"column": "balanced_accuracy_mean",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "baseline_rf",
+"value": 0.9926315789473684,
+"file": "results/04_baselines/TRNSCRPT/summary.csv",
+"where": {
+"model": "rf"
+},
+"column": "balanced_accuracy_mean",
+"agg": "value",
+"tol": 1e-06
 },
 {
 "id": "tile_bridge",
@@ -10742,6 +10765,72 @@
 "PC": "PC2"
 },
 "column": "explained",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_excounts_ENSRNOG00000000428_0",
+"value": 29,
+"file": "tests/fixtures/bodymap_counts_subset.csv.gz",
+"where": {
+"feature_ID": "ENSRNOG00000000428"
+},
+"column": "Liver.F.21.Lvr_F_021_1",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_excounts_ENSRNOG00000000428_1",
+"value": 45,
+"file": "tests/fixtures/bodymap_counts_subset.csv.gz",
+"where": {
+"feature_ID": "ENSRNOG00000000428"
+},
+"column": "Brain.F.21.Brn_F_021_1",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_excounts_ENSRNOG00000004632_0",
+"value": 0,
+"file": "tests/fixtures/bodymap_counts_subset.csv.gz",
+"where": {
+"feature_ID": "ENSRNOG00000004632"
+},
+"column": "Liver.F.21.Lvr_F_021_1",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_excounts_ENSRNOG00000004632_1",
+"value": 0,
+"file": "tests/fixtures/bodymap_counts_subset.csv.gz",
+"where": {
+"feature_ID": "ENSRNOG00000004632"
+},
+"column": "Brain.F.21.Brn_F_021_1",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_excounts_ENSRNOG00000006641_0",
+"value": 3,
+"file": "tests/fixtures/bodymap_counts_subset.csv.gz",
+"where": {
+"feature_ID": "ENSRNOG00000006641"
+},
+"column": "Liver.F.21.Lvr_F_021_1",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_excounts_ENSRNOG00000006641_1",
+"value": 6,
+"file": "tests/fixtures/bodymap_counts_subset.csv.gz",
+"where": {
+"feature_ID": "ENSRNOG00000006641"
+},
+"column": "Brain.F.21.Brn_F_021_1",
 "agg": "value",
 "tol": 1e-09
 },
