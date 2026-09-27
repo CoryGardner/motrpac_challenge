@@ -14,4 +14,17 @@ async function main() {
   );
 }
 
-main().catch((e) => { console.error(e); });
+async function multiomic() {
+  const M = await loadJSON("data/multiomic.json");
+  const H = M.how, S = M.scales;
+  const mw = M.metabolites.find((m) => m.leg === "deep_mw");
+  const jr = M.ladder_species.find((r) => r.target.startsWith("protein → Jiang 2020 (cleaned") && r.model === "k20");
+  document.getElementById("p-mo-matrix").replaceChildren(
+    `Proteins: MoTrPAC ran global proteomics on ${H.n_tissues_prot} of its ${H.n_tissues_rna} tissues. From the portal's peptide-level reporter-ion intensities (release ${H.release}), each TMT plex is rolled up to proteins (at least ${H.min_peptides} quantified peptides), its reference-pool channel dropped, each channel divided by its total and expressed as log2 ppm; proteins quantified in every tissue are kept (${S.n_proteins_inner} proteins, ${S.n_vials} vials, ${S.n_animals} animals). Metabolites use the distributed MoTrPAC tables.`);
+  document.getElementById("p-mo-code").replaceChildren(
+    "The same code as the RNA fingerprint: the round-robin selector, the tuned L2 logistic regression, animal-grouped folds and the split-conformal sets with recalibration on a few target individuals (src/tfp/models.py, conformal.py, transfer.py). The only new loader is src/tfp/rii.py, which reads the reporter-ion files.");
+  document.getElementById("p-mo-transfer").replaceChildren(
+    `Transfer: proteins map to the human atlas through the same 1:1 rat–human orthologs as GTEx (${jr.n_samples} Jiang 2020 samples from ${jr.n_individuals} donors map to MoTrPAC tissues); metabolites map by RefMet name (${mw.matched} names shared with the mouse aging atlas, ${mw.n_mapped} samples from ${mw.n_individuals} mice). Every feature is z-scored within its own dataset and the classifier's coefficients are applied unchanged.`);
+}
+
+main().then(multiomic).catch((e) => { console.error(e); });

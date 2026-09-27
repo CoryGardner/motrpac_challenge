@@ -65,6 +65,14 @@
     <h2>The transfer protocol</h2>
     <p>Rat BodyMap (GSE53960, 316 samples, 11 organs, 4 ages) and GTEx v8 (2,485 samples, 862 donors, 17 tissues, ≤ 150 donors per tissue) are scored with panels fit on all 50 MoTrPAC animals: the same imputation and prefilter, every gene z-scored within its own dataset, the classifier's coefficients unchanged. Muscle and brain are super-classes (any of their rat tissues counts); thymus and uterus have no MoTrPAC tissue and are out-of-distribution; Artery – Aorta → vena cava is an imperfect mapping. GTEx uses 1:1 orthologs only (14,569 of 21,193 genes), and its panel is re-selected in that ortholog space. For conformal transfer the models are refit on 35 MoTrPAC animals and calibrated on the other 15; recalibration draws 3 or 5 target individuals (20 draws; all combinations where fewer) and tests on the rest. Every BodyMap split is grouped on the assumed animal, every GTEx split on the donor.</p>
   </section>
+
+  <section class="section prose" id="multiomic">
+    <h2>Multiomic follow-up</h2>
+    <p id="p-mo-matrix"></p>
+    <p id="p-mo-code"></p>
+    <p id="p-mo-transfer"></p>
+    <p>The predictions and pass/fail rules were written down before the runs in <code>docs/PREREGISTRATION_MULTIOMIC.md</code>; results and the run log are in <code>docs/MULTIOMIC_REPORT.md</code> and <code>docs/MULTIOMIC_LOG.md</code>, and the <a href="multiomic.html">Multiomic page</a> shows them.</p>
+  </section>
 </main>
 <footer class="site-footer"></footer>
 </body>

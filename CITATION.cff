@@ -2,15 +2,15 @@ cff-version: 1.2.0
 message: "If you use this code or site, please cite it as below, and cite the data sources listed in the README and under references."
 title: "Molecular Tissue Fingerprints: a 20-gene panel, its conformal guarantee, and what a within-study fingerprint can identify"
 type: software
-version: "1.7.0"
+version: "1.8.0"
 date-released: 2026-09-27
 license: MIT
 repository-code: "https://github.com/CoryGardner/motrpac_challenge"
 url: "https://corygardner.github.io/motrpac_challenge/"
 identifiers:
   - type: url
-    value: "https://github.com/CoryGardner/motrpac_challenge/releases/tag/hackathon-submission-v8"
-    description: "Release tag hackathon-submission-v8 (version 1.7.0)"
+    value: "https://github.com/CoryGardner/motrpac_challenge/releases/tag/hackathon-submission-v9"
+    description: "Release tag hackathon-submission-v9 (version 1.8.0)"
 # team "The Rat PAC"; members in no particular order
 authors:
   - given-names: Erol
@@ -89,3 +89,67 @@ references:
     url: "https://motrpac.github.io/MotrpacRatTraining6moData/"
     license: MIT
     notes: "Installed from commit f831a4f (GitHub tag v2.1.0); the DESCRIPTION reads 2.0.0 at both tags v2.0.0 and v2.1.0, so the commit is the pin. Exported 2026-09-17 by R/export_motrpac.R."
+  - type: article
+    title: "A Quantitative Proteome Map of the Human Body"
+    authors:
+      - family-names: Jiang
+        given-names: Lihua
+      - name: "et al."
+    journal: Cell
+    volume: 183
+    start: 269
+    end: 283
+    year: 2020
+    doi: 10.1016/j.cell.2020.08.036
+    notes: "The GTEx tissue proteome (TMT); PRIDE PXD016999. Supplementary tables mmc2-mmc8 downloaded 2026-09-27; sha256 in results_multiomic/02_discovery/download_log.csv."
+  - type: article
+    title: "A deep proteome and transcriptome abundance atlas of 29 healthy human tissues"
+    authors:
+      - family-names: Wang
+        given-names: Dongxue
+      - name: "et al."
+    journal: Molecular Systems Biology
+    volume: 15
+    start: e8503
+    year: 2019
+    doi: 10.15252/msb.20188503
+    notes: "PRIDE PXD010154; Tables EV1-EV8 from Europe PMC PMC6379049."
+  - type: article
+    title: "Initial Quantitative Proteomic Map of 28 Mouse Tissues Using the SILAC Mouse"
+    authors:
+      - family-names: Geiger
+        given-names: Tamar
+      - name: "et al."
+    journal: Molecular & Cellular Proteomics
+    volume: 12
+    start: 1709
+    end: 1722
+    year: 2013
+    doi: 10.1074/mcp.M112.024919
+  - type: article
+    title: "Atlas of exercise metabolism reveals time-dependent signatures of metabolic homeostasis"
+    authors:
+      - family-names: Sato
+        given-names: Shogo
+      - name: "et al."
+    journal: Cell Metabolism
+    volume: 34
+    start: 329
+    end: 345
+    year: 2022
+    doi: 10.1016/j.cmet.2021.12.016
+  - type: data
+    title: "A metabolic atlas of mouse aging (Metabolomics Workbench study ST003188, project PR001984)"
+    authors:
+      - name: "Mullen Lab, Keck School of Medicine, University of Southern California"
+    date-released: 2025-11-18
+    doi: 10.21228/M88J0W
+    url: "https://www.metabolomicsworkbench.org/data/DRCCMetadata.php?Mode=Study&StudyID=ST003188"
+    license: CC-BY-4.0
+    notes: "Analysis AN005236 data table, study data and mwTab downloaded 2026-09-27 via the Metabolomics Workbench REST API."
+  - type: data
+    title: "MoTrPAC rat endurance training (pass1b-06) proteomics reporter-ion intensities, Data Hub quant-id folders prot-pr, releases c1.0 and c2.0"
+    authors:
+      - name: "MoTrPAC Study Group"
+    url: "https://motrpac-data.org/"
+    notes: "Peptide-level rii-results and vial-metadata files for 7 tissues; read by src/tfp/rii.py."

@@ -4,6 +4,30 @@ All notable changes to this repository. The format follows [Keep a Changelog](ht
 dates are UTC. Each section is a `hackathon-submission-v<n>` git tag; the version numbers are those of `CITATION.cff`
 and `pyproject.toml`.
 
+## [1.8.0] — 2026-09-27 (tag `hackathon-submission-v9`)
+
+### Added
+- Multiomic page: an "In plain words" box under the banner; a "How it was done" section before section 1 (why 7 of 19
+  tissues, how the protein matrix is built, how the round-robin selector picks proteins high or low in a tissue, the
+  20-protein transfer panel with its direction and rat and human effects); the per-tissue Jiang table taken out of its
+  collapsed block and shown on both scales with n samples and n donors; in the metabolite section the within-MoTrPAC
+  tissue R² of the first metabolite PC, the missing batch variable, a per-organ table for the mouse aging atlas at k20,
+  and why metabolites are not the core fingerprint; a "Data sources" block with verified DOIs and accessions.
+- `scripts/multiomic/export_site_data.py` exports the new values (`how`, `metab_within`, `deep_mw_by_tissue_k20`,
+  `metabolites_stopped.source_metabolites`) with provenance entries `mo_how_*`, `mo_metab_*`, `mo_deep_mw_by_tissue_k20`,
+  `mo_hilic_mw_src_metabolites`; two new checks in `tests/test_site_data.py`.
+- Citations of Jiang 2020, Wang 2019, Geiger 2013, Sato 2022, Metabolomics Workbench ST003188 and the MoTrPAC
+  reporter-ion files in the README data table (with download URLs and sha256), `site/about.html`,
+  `docs/COMPETITION_COMPLIANCE.md` (CFDE: Metabolomics Workbench and the GTEx proteome) and `CITATION.cff`.
+- Home: a seventh five-minute-tour item for the Multiomic page. Methods: a "Multiomic follow-up" subsection.
+
+### Changed
+- Multiomic source note: the work is merged into main; points to the report, pre-registration and log. The two
+  hand-typed metabolite numbers on the page are now read from `multiomic.json`.
+- `make site-data` re-runs the multiomic export after the main export, which rewrites `provenance.json`.
+- Home tiles: the interval line may wrap, which removes the 15 px horizontal overflow at 768 px.
+- Methods word budget in `tools/screenshot.js` raised from 1000 to 1200 for the new subsection.
+
 ## [1.7.0] — 2026-09-27 (tag `hackathon-submission-v8`)
 
 ### Added

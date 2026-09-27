@@ -213,6 +213,30 @@ def main():
                                    "coverage_k20": prov.val(f"mo_{leg}_cov_k20", L4, "coverage_k0_source_cal_primary", {"leg": leg}), "coverage_k20_recal5": prov.val(f"mo_{leg}_cov_k20_recal5", L4, "coverage_k0_recal5", {"leg": leg}),
                                    "set_size_k20_recal5": prov.val(f"mo_{leg}_size_k20_recal5", L4, "set_size_k0_recal5", {"leg": leg}), "n_classes": 19 if leg.startswith("hilic") else 9, "source_tissues": prov.val(f"mo_{leg}_src_tissues", L4, "source_tissues", {"leg": leg})})
     out["metabolites_stopped"] = {"leg": "hilic_mw", "matched": prov.val("mo_hilic_mw_matched", L4, "matched_refmet", {"leg": "hilic_mw"}), "min_overlap": prov.val("mo_hilic_mw_min_overlap", L4, "min_overlap", {"leg": "hilic_mw"})}
+    out["metabolites_stopped"]["source_metabolites"] = prov.val("mo_hilic_mw_src_metabolites", L4, "source_metabolites", {"leg": "hilic_mw"})
+    # ---- v9: "how it was done" (design counts, matrix build, the 20-protein transfer panel) --------------------------------------
+    ts = R / "01_rii" / "tissue_summary.csv"
+    dcp = R / "06_external_identifiability" / "design_comparison.csv"
+    out["how"] = {"n_tissues_prot": prov.val("mo_how_n_tissues_prot", js, "n_tissues", {"assay": "prot-pr"}),
+                  "n_tissues_rna": prov.val("mo_how_n_tissues_rna", dcp, "n_tissues", {"dataset": "MoTrPAC TRNSCRPT"}),
+                  "min_peptides": prov.val("mo_how_min_peptides", js, "min_peptides", {"assay": "prot-pr"}),
+                  "norm": prov.val("mo_how_norm", js, "norm", {"assay": "prot-pr"}),
+                  "release": prov.val("mo_how_release", js, "release", {"assay": "prot-pr"})}
+    tsd = prov.read(ts)
+    out["how"]["prot_tissues"] = prov.table("mo_how_prot_tissues", ts, "how.prot_tissues", records(tsd, ["tissue", "n_vials", "n_animals", "n_plexes"]))
+    pgc = prov.read(R / "03_prot_transfer" / "panel_gene_check.csv")
+    panel = [{"protein": r.gene_symbol, "marker_tissue": r.marker_tissue, "direction": "higher" if r.source_effect_z > 0 else "lower",
+              "effect_rat_z": jsonable(r.source_effect_z), "effect_human_z": jsonable(r.target_effect_z)} for r in pgc.itertuples()]
+    out["how"]["transfer_panel"] = prov.table("mo_how_transfer_panel", R / "03_prot_transfer" / "panel_gene_check.csv", "how.transfer_panel", panel)
+    # ---- v9: metabolites — within-MoTrPAC tissue R² of the first metabolite PC, deep_mw per tissue at k20 ------------------------------
+    vpm = FZ / "03_eda" / "variance_partition_METAB.csv"
+    out["metab_within"] = {"r2_tissue_pc1": prov.val("mo_metab_r2_tissue_PC1", vpm, "R2_tissue", {"PC": "PC1"}),
+                           "explained_pc1": prov.val("mo_metab_explained_PC1", vpm, "explained", {"PC": "PC1"})}
+    abt = R / "04_metab_transfer" / "deep_mw" / "accuracy_by_tissue.csv"
+    ab = prov.read(abt)
+    out["deep_mw_by_tissue_k20"] = prov.table("mo_deep_mw_by_tissue_k20", abt, "deep_mw_by_tissue_k20",
+                                              records(ab[ab["model"] == "k20"], ["target_tissue", "rat_classes", "n", "n_individuals", "accuracy", "top_prediction", "top_prediction_frac"]))
+    prov.tables[-1]["n_rows"] = int(len(ab)); prov.tables[-1]["quantised"] = True   # the k20 rows of the CSV
     ovs = R / "09_extensions" / "overlap_summary.csv"
     out["b1"] = {k: prov.val(f"mo_b1_{k}", ovs, k) for k in ("n_rna_k20", "n_protein_k20", "n_protein_stable_core_ge_0.8", "k20_intersection", "rna_k20_x_protein_core", "genes_in_both_candidate_lists", "genes_in_both_with_rna_marker_in_prot7", "n_markers_agree", "prereg_B1_pass")}
     out["b1"]["genes_in_both"] = prov.val("mo_b1_genes_in_both", ovs, "genes_in_both")
@@ -221,8 +245,8 @@ def main():
         gh = subprocess.check_output(["git", "rev-parse", "--short", "HEAD"], cwd=ROOT, text=True).strip()
     except Exception:
         gh = "n/a"
-    out["_meta"] = {"generated": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"), "git_hash": gh, "branch": "multiomic-overnight", "sources": sorted(prov.sources),
-                    "note": "follow-up work on branch multiomic-overnight; every value traces to a results_multiomic/ or results_frozen/ file through the mo_* entries of provenance.json"}
+    out["_meta"] = {"generated": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"), "git_hash": gh, "branch": "main", "sources": sorted(prov.sources),
+                    "note": "follow-up work, merged into main (developed on branch multiomic-overnight); every value traces to a results_multiomic/ or results_frozen/ file through the mo_* entries of provenance.json"}
     (SITE / "multiomic.json").write_text(json.dumps(out, indent=0))
     P = json.loads((SITE / "provenance.json").read_text())
     P["entries"] = [e for e in P["entries"] if not str(e.get("id", "")).startswith("mo_")] + prov.entries

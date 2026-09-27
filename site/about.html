@@ -55,6 +55,16 @@
       <li><b>GTEx v8</b> open-access gene expression (release 2017-06-05, RNASeQCv1.1.9 TPM and read counts) and sample attributes, a donor-capped subset per tissue. Free to use under the <a href="https://gtexportal.org/home/license">GTEx data-use policy</a>.</li>
       <li><b>Orthology</b>: the rat-to-human table shipped with the MoTrPAC package (1:1 pairs only).</li>
     </ul>
+    <p>For the <a href="multiomic.html">multiomic follow-up</a>:</p>
+    <ul>
+      <li><b>MoTrPAC proteomics reporter-ion files</b> from the Data Hub quant-id folders (<code>proteomics-untargeted/&lt;tissue&gt;/prot-pr/</code>, peptide-level reporter-ion intensities and vial metadata), releases c1.0 (rn6) and c2.0 (rn7). Consortium data-use terms.</li>
+      <li><b>Human TMT proteome of GTEx tissues</b>: Jiang et al., <i>Cell</i> 183:269–283 (2020), <a href="https://doi.org/10.1016/j.cell.2020.08.036">doi:10.1016/j.cell.2020.08.036</a>, PRIDE <a href="https://www.ebi.ac.uk/pride/archive/projects/PXD016999">PXD016999</a>.</li>
+      <li><b>Human label-free tissue atlas</b>: Wang et al., <i>Mol Syst Biol</i> 15:e8503 (2019), <a href="https://doi.org/10.15252/msb.20188503">doi:10.15252/msb.20188503</a>, PRIDE <a href="https://www.ebi.ac.uk/pride/archive/projects/PXD010154">PXD010154</a>. CC BY 4.0.</li>
+      <li><b>Mouse SILAC tissue proteome</b>: Geiger et al., <i>Mol Cell Proteomics</i> 12:1709–1722 (2013), <a href="https://doi.org/10.1074/mcp.M112.024919">doi:10.1074/mcp.M112.024919</a>.</li>
+      <li><b>Mouse exercise metabolome</b>: Sato et al., <i>Cell Metab</i> 34:329–345 (2022), <a href="https://doi.org/10.1016/j.cmet.2021.12.016">doi:10.1016/j.cmet.2021.12.016</a>.</li>
+      <li><b>Mouse aging metabolome</b>: Metabolomics Workbench study <a href="https://www.metabolomicsworkbench.org/data/DRCCMetadata.php?Mode=Study&amp;StudyID=ST003188">ST003188</a>, “A metabolic atlas of mouse aging” (Mullen Lab, University of Southern California; project PR001984), <a href="https://doi.org/10.21228/M88J0W">doi:10.21228/M88J0W</a>. CC BY 4.0.</li>
+    </ul>
+    <p>Download URLs and sha256 of the external files are in the README data table and <code>results_multiomic/02_discovery/download_log.csv</code>.</p>
     <p>No data file is in the repository. <code>data/raw/</code> (1.9 GB) is recreated by <code>R/export_motrpac.R</code> (<code>make export</code>); <code>data/external/</code> (5.8 GB) by <code>R/export_bodymap.R</code> (<code>make bodymap</code>, Bioconductor <code>bodymapRat</code>) and, for GTEx, by downloading the three v8 files named in the Makefile and running <code>scripts/11_gtex_prepare.py</code> (<code>make gtex</code>). The full portal download is not needed; phase 16 reads a 165 MB subset of it (the RNA-seq QC table and the 19 per-tissue count files with the reference-standard vials) when <code>MOTRPAC_PORTAL</code> is set, otherwise it uses the package metadata and reports the bridging measurement as pending.</p>
   </section>
 
@@ -80,7 +90,7 @@ python -m http.server -d site 8000    # then open http://localhost:8000</pre>
 
   <section class="section prose" id="cite">
     <h2>How to cite</h2>
-    <p>See <code>CITATION.cff</code> in the repository, and cite the data: MoTrPAC Study Group (2024) <i>Nature</i> 629:174–183; Yu et al. (2014) <i>Nature Communications</i> 5:3230 (rat BodyMap); the GTEx Consortium (2020) <i>Science</i> 369:1318–1330.</p>
+    <p>See <code>CITATION.cff</code> in the repository, and cite the data: MoTrPAC Study Group (2024) <i>Nature</i> 629:174–183; Yu et al. (2014) <i>Nature Communications</i> 5:3230 (rat BodyMap); the GTEx Consortium (2020) <i>Science</i> 369:1318–1330; and, for the multiomic follow-up, Jiang et al. (2020) <i>Cell</i> 183:269; Wang et al. (2019) <i>Mol Syst Biol</i> 15:e8503; Geiger et al. (2013) <i>Mol Cell Proteomics</i> 12:1709; Sato et al. (2022) <i>Cell Metab</i> 34:329; Metabolomics Workbench ST003188 (doi:10.21228/M88J0W).</p>
   </section>
 
   <section class="section prose" id="licence">

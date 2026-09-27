@@ -131,11 +131,12 @@
 "document": "docs/NUMBERS_RECONCILIATION.md"
 },
 "multiomic": {
-"generated": "2026-09-27 09:11 UTC",
-"git_hash": "ed32bbe",
-"n_entries": 228,
-"n_tables": 8,
+"generated": "2026-09-27 15:00 UTC",
+"git_hash": "18d98c2",
+"n_entries": 236,
+"n_tables": 11,
 "sources": [
+"results_frozen/03_eda/variance_partition_METAB.csv",
 "results_frozen/13_gtex/accuracy_overall.csv",
 "results_frozen/13_gtex/conformal_transfer.csv",
 "results_multiomic/01_rii/diagnostic_accuracy_summary.csv",
@@ -147,15 +148,18 @@
 "results_multiomic/01_rii/rna_protein_panel_genes.csv",
 "results_multiomic/01_rii/rna_protein_panel_summary.csv",
 "results_multiomic/01_rii/stability_k20_summary.csv",
+"results_multiomic/01_rii/tissue_summary.csv",
 "results_multiomic/01_rii/variance_partition.csv",
 "results_multiomic/01_rii/variance_partition_complete.csv",
 "results_multiomic/01_rii/variance_partition_ratio.csv",
 "results_multiomic/03_prot_transfer/accuracy_overall.csv",
 "results_multiomic/03_prot_transfer/conformal_transfer.csv",
 "results_multiomic/03_prot_transfer/coverage_ci.csv",
+"results_multiomic/03_prot_transfer/panel_gene_check.csv",
 "results_multiomic/03_prot_transfer/rawppm/accuracy_overall.csv",
 "results_multiomic/03_prot_transfer/rawppm/conformal_transfer.csv",
 "results_multiomic/03_prot_transfer/rawppm/coverage_ci.csv",
+"results_multiomic/04_metab_transfer/deep_mw/accuracy_by_tissue.csv",
 "results_multiomic/04_metab_transfer/deep_mw/conformal_transfer.csv",
 "results_multiomic/04_metab_transfer/deep_sato/conformal_transfer.csv",
 "results_multiomic/04_metab_transfer/hilic_sato/conformal_transfer.csv",
@@ -8170,6 +8174,94 @@
 "tol": 1e-06
 },
 {
+"id": "mo_hilic_mw_src_metabolites",
+"value": 129,
+"file": "results_multiomic/04_metab_transfer/legs_summary.csv",
+"where": {
+"leg": "hilic_mw"
+},
+"column": "source_metabolites",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_how_n_tissues_prot",
+"value": 7,
+"file": "results_multiomic/01_rii/join_summary.csv",
+"where": {
+"assay": "prot-pr"
+},
+"column": "n_tissues",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_how_n_tissues_rna",
+"value": 19,
+"file": "results_multiomic/06_external_identifiability/design_comparison.csv",
+"where": {
+"dataset": "MoTrPAC TRNSCRPT"
+},
+"column": "n_tissues",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_how_min_peptides",
+"value": 2,
+"file": "results_multiomic/01_rii/join_summary.csv",
+"where": {
+"assay": "prot-pr"
+},
+"column": "min_peptides",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_how_norm",
+"value": "total",
+"file": "results_multiomic/01_rii/join_summary.csv",
+"where": {
+"assay": "prot-pr"
+},
+"column": "norm",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_how_release",
+"value": "c1.0",
+"file": "results_multiomic/01_rii/join_summary.csv",
+"where": {
+"assay": "prot-pr"
+},
+"column": "release",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_metab_r2_tissue_PC1",
+"value": 0.9918259316942318,
+"file": "results_frozen/03_eda/variance_partition_METAB.csv",
+"where": {
+"PC": "PC1"
+},
+"column": "R2_tissue",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_metab_explained_PC1",
+"value": 0.1850194464224741,
+"file": "results_frozen/03_eda/variance_partition_METAB.csv",
+"where": {
+"PC": "PC1"
+},
+"column": "explained",
+"agg": "value",
+"tol": 1e-06
+},
+{
 "id": "mo_b1_n_rna_k20",
 "value": 20,
 "file": "results_multiomic/09_extensions/overlap_summary.csv",
@@ -9047,6 +9139,28 @@
 "json_file": "multiomic.json",
 "json_path": "per_tissue_k20",
 "n_rows": 32
+},
+{
+"id": "mo_how_prot_tissues",
+"file": "results_multiomic/01_rii/tissue_summary.csv",
+"json_file": "multiomic.json",
+"json_path": "how.prot_tissues",
+"n_rows": 7
+},
+{
+"id": "mo_how_transfer_panel",
+"file": "results_multiomic/03_prot_transfer/panel_gene_check.csv",
+"json_file": "multiomic.json",
+"json_path": "how.transfer_panel",
+"n_rows": 20
+},
+{
+"id": "mo_deep_mw_by_tissue_k20",
+"file": "results_multiomic/04_metab_transfer/deep_mw/accuracy_by_tissue.csv",
+"json_file": "multiomic.json",
+"json_path": "deep_mw_by_tissue_k20",
+"n_rows": 36,
+"quantised": true
 }
 ]
 }

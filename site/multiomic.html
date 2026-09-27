@@ -32,11 +32,23 @@
 <main id="main" class="wrap">
   <h1>The proteome and metabolome carry the fingerprint too — on the right scale</h1>
   <p id="status-line" class="small"></p>
+  <div id="plain-words"></div>
   <p class="lede" id="lede">Loading the numbers from <code>site/data/multiomic.json</code>…</p>
 
   <div class="tiles" id="tiles"></div>
 
   <div id="callout-caveats"></div>
+
+  <section class="section" id="how">
+    <h2>How it was done</h2>
+    <p id="p-how-tissues"></p>
+    <p id="p-how-matrix"></p>
+    <p id="p-how-select"></p>
+    <h3>The 20-protein panel that was sent to the human atlas</h3>
+    <p id="p-how-panel" class="small"></p>
+    <div id="tbl-how-panel"></div>
+    <p id="p-how-lack"></p>
+  </section>
 
   <section class="section" id="scales">
     <h2>1. Same proteins, two scales</h2>
@@ -48,6 +60,8 @@
     <h2>2. The protein ladder beside the RNA ladder</h2>
     <p id="p-ladder"></p>
     <div id="fig-ladder"></div>
+    <h3>Per human tissue, 20-protein panel</h3>
+    <p id="p-per-tissue"></p>
     <div id="tbl-per-tissue"></div>
   </section>
 
@@ -85,12 +99,29 @@
   <section class="section" id="metabolites">
     <h2>7. Metabolites: two mouse atlases, and exercise</h2>
     <p id="p-metab"></p>
+    <p id="p-metab-within"></p>
+    <h3>Mouse aging atlas, 20-metabolite panel, per organ</h3>
+    <div id="tbl-metab-tissue"></div>
+    <p id="p-metab-why"></p>
     <div id="tbl-metab"></div>
   </section>
 
   <section class="section prose" id="provenance">
     <h2>Where the numbers come from</h2>
     <p id="p-prov"></p>
+  </section>
+
+  <section class="section prose" id="data-sources">
+    <h2>Data sources</h2>
+    <ul class="refs">
+      <li><b>MoTrPAC reporter-ion files.</b> MoTrPAC Study Group, rat 6-month endurance-training study (pass1b-06), untargeted proteomics, peptide-level reporter-ion intensities and vial metadata from the Data Hub quant-id folders <code>rat-training-06/&lt;release&gt;/proteomics-untargeted/&lt;tissue&gt;/prot-pr/</code> (files <code>motrpac_pass1b-06_&lt;tissue&gt;_prot-pr_rii-results.txt</code> and <code>_vial-metadata.txt</code>; <code>_v2.0</code> suffix in c2.0), releases c1.0 (rn6, the main analysis) and c2.0 (rn7, the robustness run). <a href="https://motrpac-data.org/">motrpac-data.org</a>; MoTrPAC Study Group, <i>Nature</i> 629:174–183 (2024). Used under the consortium's data-use terms.</li>
+      <li><b>Human TMT proteome of GTEx tissues.</b> Jiang L, Wang M, Lin S, et al. A quantitative proteome map of the human body. <i>Cell</i> 183:269–283.e19 (2020). <a href="https://doi.org/10.1016/j.cell.2020.08.036">doi:10.1016/j.cell.2020.08.036</a>; PRIDE <a href="https://www.ebi.ac.uk/pride/archive/projects/PXD016999">PXD016999</a>. Supplementary tables S1–S7 (mmc2–mmc8) from the journal site.</li>
+      <li><b>Human label-free tissue atlas.</b> Wang D, Eraslan B, Wieland T, et al. A deep proteome and transcriptome abundance atlas of 29 healthy human tissues. <i>Mol Syst Biol</i> 15:e8503 (2019). <a href="https://doi.org/10.15252/msb.20188503">doi:10.15252/msb.20188503</a>; PRIDE <a href="https://www.ebi.ac.uk/pride/archive/projects/PXD010154">PXD010154</a>. Tables EV1–EV8 from Europe PMC (PMC6379049).</li>
+      <li><b>Mouse SILAC tissue proteome.</b> Geiger T, Velic A, Macek B, et al. Initial quantitative proteomic map of 28 mouse tissues using the SILAC mouse. <i>Mol Cell Proteomics</i> 12:1709–1722 (2013). <a href="https://doi.org/10.1074/mcp.M112.024919">doi:10.1074/mcp.M112.024919</a>. Supplementary table S1 (mmc1).</li>
+      <li><b>Mouse exercise metabolome.</b> Sato S, Dyar KA, Treebak JT, et al. Atlas of exercise metabolism reveals time-dependent signatures of metabolic homeostasis. <i>Cell Metab</i> 34:329–345.e8 (2022). <a href="https://doi.org/10.1016/j.cmet.2021.12.016">doi:10.1016/j.cmet.2021.12.016</a>. Supplementary tables (mmc2–mmc8).</li>
+      <li><b>Mouse aging metabolome.</b> A metabolic atlas of mouse aging. Metabolomics Workbench study <a href="https://www.metabolomicsworkbench.org/data/DRCCMetadata.php?Mode=Study&amp;StudyID=ST003188">ST003188</a> (analysis AN005236), project PR001984, Mullen Lab, Keck School of Medicine, University of Southern California; released 2025-11-18. <a href="https://doi.org/10.21228/M88J0W">doi:10.21228/M88J0W</a>. CC BY 4.0. Metabolomics Workbench is supported by NIH grant U2C-DK119886.</li>
+    </ul>
+    <p class="small">Download URLs and sha256 of every external file: <code>results_multiomic/02_discovery/download_log.csv</code> and the README data table.</p>
   </section>
 </main>
 <footer class="site-footer"></footer>

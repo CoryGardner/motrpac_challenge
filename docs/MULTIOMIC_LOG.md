@@ -118,3 +118,13 @@ Timestamped log of decisions, downloads (URL, size, sha256, date), failures and 
 - 09:12Z **D**: `make test` (71 passed, 1 skipped; JS conformal port 2,713 assertions; score tool 1,075; verify-frozen 179 files ok), `tools/linkcheck.py` clean (10 pages, 9.23 MB), `tests/test_site_data.py` 24 passed incl. the multiomic checks. Report rebuilt (`build_report.py --complete`): findings list (8), "Verification (run 2, part A)", "What B found (run 2, part B)", "Merge checklist" (from `git diff --name-status main` at build time). Wording changes applied through the phase scripts (set sizes beside every recalibrated coverage; Sato 'exercised'; Jiang = GTEx pattern). Committed and pushed to `origin/multiomic-overnight`.
 - Run 2 elapsed ≈ 20 min of the 5 h box (START 08:53Z; first START 06:45Z); nothing skipped.
 - 09:14Z Fix: the `.git/info/exclude` line `data` (meant for the top-level `data` symlink) also matched `site/data/multiomic.json`, so the page's data file was missing from the first run-2 commit; anchored to `/data`, the file added, merge checklist and report regenerated, committed and pushed again.
+
+## v9 site pass — 2026-09-27 (no new analysis, no phase re-run)
+
+- Page clarity and citations only; every new number is read from an existing CSV through `scripts/multiomic/export_site_data.py`.
+- Citations verified before writing: Crossref returned the expected title, first author, journal, volume and pages for
+  doi:10.1016/j.cell.2020.08.036 (Jiang 2020), doi:10.15252/msb.20188503 (Wang 2019), doi:10.1074/mcp.M112.024919
+  (Geiger 2013) and doi:10.1016/j.cmet.2021.12.016 (Sato 2022); the PRIDE API returned PXD016999 and PXD010154 with
+  those DOIs as references; the Metabolomics Workbench REST summary and study page returned ST003188 "A metabolic atlas
+  of mouse aging" (USC, Mullen Lab), project PR001984, project DOI 10.21228/M88J0W, CC BY 4.0, released 2025-11-18, and no
+  linked publication. No DOI failed to verify.

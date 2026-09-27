@@ -1,6 +1,6 @@
-// The multiomic follow-up page (branch multiomic-overnight). Every number is read from site/data/multiomic.json, whose values
+// The multiomic follow-up page (merged into main from branch multiomic-overnight). Every number is read from site/data/multiomic.json, whose values
 // trace to results_multiomic/ and results_frozen/ files through the mo_* entries of site/data/provenance.json.
-import { mountChrome, loadJSON, el, fmt, statTile, callout, tableFrom, segmented, control, badge } from "../site.js";
+import { mountChrome, loadJSON, el, fmt, pct, statTile, callout, tableFrom, segmented, control, badge } from "../site.js";
 import { figure, bar, line, refLine, tokens, palette, hexAlpha, template, CONFIG, TISSUE_NAMES } from "../charts.js";
 
 const MODEL_LABEL = { k20: "20 features", k50: "50 features", full: "all features" };
@@ -24,6 +24,51 @@ async function main() {
   const DJ = M.design_jiang;
 
   document.getElementById("status-line").replaceChildren(badge("ambiguous", "◔", "follow-up, pre-registered and run after the core analysis; the RNA results on the other pages do not depend on it"));
+  // ---- in plain words ------------------------------------------------------------------------------
+  const p42w = pick(X, (r) => r.layer === "protein" && r.target.startsWith("protein, 7-class") && r.model === "k20");
+  const late20 = FU.find((r) => r.model === "k20" && r.layer === "late_mean");
+  document.getElementById("plain-words").replaceChildren(callout("note", "In plain words", [
+    `MoTrPAC distributes proteomics as each sample divided by a reference pool made from the same tissue. That subtracts the tissue's own average, so tissue differences vanish (tissue explains R² ${fmt(pc1.r2_ratio, 4)} of the first principal component); it is the right design for training effects within a tissue, the consortium's question.`,
+    `The portal also ships the reporter-ion intensities; divided by each sample's total signal instead, tissue returns as the dominant axis (R² ${fmt(pc1.r2_rii)}).`,
+    `Inside MoTrPAC each plex holds one tissue, so the proof is external: a 20-protein panel chosen in rat names the right tissue for ${pct(jr20.accuracy)} of ${jr20.n_samples} human samples from another lab, against ${pct(1 / jr20.n_classes)} by chance.`,
+    `It is weaker than RNA (${pct(p42w.accuracy)} vs ${pct(rna42.accuracy)} correct on the same ${p42w.n_samples} human samples), and fusing it with RNA does not help (${pct(late20.accuracy)}), which is why the core fingerprint is RNA.`,
+    `Metabolites show the same pattern, less strongly: a 20-metabolite panel names the right organ for ${pct(mw.acc_k20)} of ${mw.n_mapped} samples in another lab's mouse atlas, against ${pct(mw.chance)} by chance.`,
+  ]));
+
+  // ---- how it was done ------------------------------------------------------------------------------
+  const HOW = M.how;
+  const tname = (c) => TISSUE_NAMES[c] || c;
+  const listNames = (codes) => codes.length > 1 ? `${codes.slice(0, -1).join(", ")} and ${codes[codes.length - 1]}` : codes.join("");
+  document.getElementById("p-how-tissues").replaceChildren(
+    `Why ${HOW.n_tissues_prot} tissues: MoTrPAC ran global proteomics on only ${HOW.n_tissues_prot} of the ${HOW.n_tissues_rna} tissues it sequenced — ${listNames(HOW.prot_tissues.map((r) => tname(r.tissue)))} — ${HOW.prot_tissues[0].n_animals} animals and ${HOW.prot_tissues[0].n_plexes} TMT plexes per tissue. The RNA fingerprint on the other pages covers all ${HOW.n_tissues_rna}; every protein result here has ${HOW.n_tissues_prot} classes.`);
+  document.getElementById("p-how-matrix").replaceChildren(
+    `How the protein matrix was built (portal release ${HOW.release}): within each plex, peptides are summed to proteins and proteins with fewer than ${HOW.min_peptides} quantified peptides are dropped; the reference-pool channel is dropped; each sample channel is divided by its total signal and expressed as log2 parts per million; only proteins quantified in every tissue are kept. That leaves ${S.n_proteins_inner} proteins on ${S.n_vials} vials from ${S.n_animals} animals.`);
+  const perTissue = {};
+  for (const r of HOW.transfer_panel) perTissue[r.marker_tissue] = (perTissue[r.marker_tissue] || 0) + 1;
+  const order = Object.keys(perTissue).sort();
+  const counts = order.map((t) => perTissue[t]);
+  const maxC = Math.max(...counts), minC = Math.min(...counts);
+  const nMax = counts.filter((c) => c === maxC).length;
+  const shortT = order.filter((t) => perTissue[t] === minC);
+  document.getElementById("p-how-select").replaceChildren(
+    "How proteins are chosen: every protein is z-scored; for each tissue its score is |mean in the tissue − mean in the other tissues| divided by the pooled standard deviation, so a protein can be picked for being unusually high or unusually low there. ",
+    `The tissues then take turns in the alphabetical order of their MoTrPAC codes (${order.join(", ")}), each taking its best remaining protein, until the panel is full: at ${HOW.transfer_panel.length} proteins ${nMax} tissues get ${maxC} and ${listNames(shortT.map(tname))} ${shortT.length > 1 ? "get" : "gets"} ${minC}. `,
+    "An L2-penalised logistic regression then classifies the samples. Selection, scaling and the classifier are all fit inside animal-grouped folds, so a held-out animal never informs its own panel; the panel shown below is the one fit on all MoTrPAC animals and sent to the human atlas.");
+  const noHuman = order.filter((t) => HOW.transfer_panel.filter((r) => r.marker_tissue === t).every((r) => r.effect_human_z === null));
+  document.getElementById("p-how-panel").replaceChildren(
+    `Effects are z-score differences (tissue mean minus the mean of the other tissues); human effects are in the Jiang 2020 atlas for the matching tissue. ${listNames(noHuman.map(tname)).replace(/^./, (c) => c.toUpperCase())} ${noHuman.length > 1 ? "have" : "has"} no human target in that atlas.`);
+  const panelRows = HOW.transfer_panel.map((r) => ({ code: r.marker_tissue, protein: r.protein, "tissue that picked it": tname(r.marker_tissue), "in that tissue": r.direction, "effect in rat (z)": r.effect_rat_z, "effect in human (z)": r.effect_human_z === null ? "no human target" : r.effect_human_z }));
+  panelRows.sort((a, b) => a.code.localeCompare(b.code) || a.protein.localeCompare(b.protein));
+  const z2 = (v) => fmt(v, 2);
+  const panelTbl = tableFrom({ columns: ["protein", "tissue that picked it", "in that tissue", "effect in rat (z)", "effect in human (z)"], rows: panelRows, format: { "effect in rat (z)": z2, "effect in human (z)": z2 } });
+  panelTbl.style.maxHeight = "none";
+  document.getElementById("tbl-how-panel").replaceChildren(panelTbl,
+    el("p", { class: "source" }, [el("b", {}, "Source: "), "results_multiomic/03_prot_transfer/panel_gene_check.csv (gene_symbol, marker_tissue, sign of source_effect_z, source_effect_z, target_effect_z; mo_how_transfer_panel)"]));
+  const tnameLong = (c) => (c === "SKM-GN" ? "skeletal muscle" : tname(c));
+  const lackT = order.filter((t) => HOW.transfer_panel.filter((r) => r.marker_tissue === t).every((r) => r.direction === "lower"));
+  document.getElementById("p-how-lack").replaceChildren(
+    `${listNames(lackT.map(tnameLong)).replace(/^./, (c) => c.toUpperCase())} are identified by proteins they lack: every protein picked for ${lackT.length > 1 ? "these tissues" : "this tissue"} is lower there than elsewhere.`);
+
   document.getElementById("lede").replaceChildren(
     `The submission left proteomics and metabolomics out of the cross-tissue fingerprint because the distributed proteomics are ratios to per-tissue reference pools. On the portal's reporter-ion intensities tissue explains R² ${fmt(pc1.r2_rii)} of the first principal component (${fmt(pc1.r2_ratio, 4)} on the ratios). `,
     `A 20-protein panel selected on that scale names the tissue of ${fmt(jr20.accuracy)} of ${jr20.n_samples} human TMT samples from ${jr20.n_individuals} GTEx donors (chance ${fmt(1 / 7)}; ${fmt(jw20.accuracy)} of ${jw20.n_samples} when both sides are processed the same way), and its 90 % sets cover ${fmt(jr20.coverage)} with MoTrPAC calibration and ${fmt(jrec5.coverage_recalibrated)} after recalibrating on five donors — at ${perSet(jrec5.set_size_recalibrated, jrec5.n_classes_label_space)}: the GTEx pattern, not the BodyMap one. `,
@@ -114,10 +159,22 @@ async function main() {
     height: "tall",
   });
   ladFig.rerender = async () => { const b = ladBuild(); ladFig.traces = b.traces; ladFig.table = b.table; await window.Plotly.react(ladFig.chart, b.traces, { ...template(), ...b.layout }, CONFIG); };
-  const ptRows = M.per_tissue_k20.filter((r) => ["jiang_relative_k20", "jiang_rawppm_k20", "same42_RNA_k20", "same42_protein_k20"].includes(r.run));
-  document.getElementById("tbl-per-tissue").replaceChildren(el("details", { class: "fig-notes" }, [el("summary", {}, "Per-tissue accuracy at k20 with n samples and n donors (verification table)"),
-    tableFrom({ columns: ["run", "layer", "rat_class", "jiang_tissue", "n_samples", "n_donors", "accuracy", "top_prediction"], rows: ptRows }),
-    el("p", {}, [el("b", {}, "Source: "), "results_multiomic/08_verification/per_tissue_k20.csv"])]));
+  const PT = M.per_tissue_k20;
+  const ptRel = PT.filter((r) => r.run === "jiang_relative_k20"), ptRaw = PT.filter((r) => r.run === "jiang_rawppm_k20");
+  const heartRel = ptRel.filter((r) => r.rat_class === "HEART");
+  const heartRelN = heartRel.reduce((a, r) => a + r.n_samples, 0), heartRelOk = heartRel.reduce((a, r) => a + Math.round(r.accuracy * r.n_samples), 0);
+  const lvRaw = ptRaw.find((r) => r.jiang_tissue.includes("Left Ventricle"));
+  const rnaSame = PT.filter((r) => r.run === "same42_RNA_k20");
+  document.getElementById("p-per-tissue").replaceChildren(
+    `On the authors' relative scale the panel calls ${heartRelOk} of ${heartRelN} heart samples correctly (the top call is ${tname(heartRel[0].top_prediction).toLowerCase()}); on the same raw-ppm scale as the rat side, left ventricle reaches ${pct(lvRaw.accuracy)} of ${lvRaw.n_samples} samples from ${lvRaw.n_donors} donors. `,
+    `The raw-ppm run keeps technical replicates as samples, so its n samples exceeds its n donors. For comparison, the ${HOW.n_tissues_prot}-class RNA fingerprint is ${rnaSame.every((r) => r.accuracy === 1) ? "correct on every sample of every tissue" : "shown in the fusion section"} on the same human samples.`);
+  const ptByT = {};
+  for (const r of ptRel) ptByT[r.jiang_tissue] = { "human tissue": r.jiang_tissue, "rat class": tname(r.rat_class), "relative: acc.": r.accuracy, "relative: n / donors": `${r.n_samples} / ${r.n_donors}`, "relative: call": tname(r.top_prediction) };
+  for (const r of ptRaw) Object.assign(ptByT[r.jiang_tissue] || (ptByT[r.jiang_tissue] = { "human tissue": r.jiang_tissue, "rat class": tname(r.rat_class) }), { "same scale: acc.": r.accuracy, "same scale: n / donors": `${r.n_samples} / ${r.n_donors}`, "same scale: call": tname(r.top_prediction) });
+  document.getElementById("tbl-per-tissue").replaceChildren(
+    tableFrom({ columns: ["human tissue", "rat class", "relative: acc.", "relative: n / donors", "relative: call", "same scale: acc.", "same scale: n / donors", "same scale: call"], rows: Object.values(ptByT), format: { "relative: acc.": z2, "same scale: acc.": z2 } }),
+    el("p", { class: "source" }, [el("b", {}, "Source: "), "results_multiomic/08_verification/per_tissue_k20.csv (runs jiang_relative_k20 and jiang_rawppm_k20; mo_per_tissue_k20). Relative: the authors' cleaned relative abundances; same scale: raw reporter-ion ppm processed like the rat side; n: samples; call: the most frequent prediction."]));
+
 
   // ---- 3. recalibration -----------------------------------------------------------------------------
   const SRC = [["Phase 3 protein → Jiang 2020 (cleaned relative)", "protein → Jiang (cleaned relative), 7 classes", 1], ["Phase 3 protein → Jiang 2020 (raw ppm)", "protein → Jiang (raw ppm), 7 classes", 3],
@@ -234,17 +291,30 @@ async function main() {
   // ---- 7. metabolites --------------------------------------------------------------------------------
   const stopped = M.metabolites_stopped;
   document.getElementById("p-metab").replaceChildren(
-    `Metabolites are matched by RefMet name. The HILIC+ platform runs in all 19 MoTrPAC tissues but only 129 named metabolites are common to every tissue, and just ${stopped.matched} of them are in the mouse aging atlas, so that leg stopped under the pre-registered rule (< ${stopped.min_overlap}). The six-platform source on the 9 core tissues matches ${mw.matched} names and names the organ of ${fmt(mw.acc_k20)}${ci(mw.acc_k20_ci)} of ${mw.n_mapped} samples from ${mw.n_individuals} mice (chance ${fmt(mw.chance)}); the Sato 2022 legs are lower. `,
+    `Metabolites are matched by RefMet name. The HILIC+ platform runs in all 19 MoTrPAC tissues but only ${stopped.source_metabolites} named metabolites are common to every tissue, and just ${stopped.matched} of them are in the mouse aging atlas, so that leg stopped under the pre-registered rule (< ${stopped.min_overlap}). The six-platform source on the 9 core tissues matches ${mw.matched} names and names the organ of ${fmt(mw.acc_k20)}${ci(mw.acc_k20_ci)} of ${mw.n_mapped} samples from ${mw.n_individuals} mice (chance ${fmt(mw.chance)}); the Sato 2022 legs are lower. `,
     `Exercise: Sato's mice ran a single acute bout (tissues collected right after; ${SA.n_sedentary_mice_union} sedentary and ${SA.n_exercised_mice_union} exercised mice, ${SA.n_sedentary_samples_total} and ${SA.n_exercised_samples_total} samples). A native metabolite panel fit and calibrated on the sedentary mice keeps accuracy ${fmt(SA.invariance_full_accuracy)} and coverage ${fmt(SA.invariance_full_coverage)} at ${perSet(SA.invariance_full_set_size, SA.invariance_n_classes)} on the exercised mice (all features; k20 ${fmt(SA.invariance_k20_accuracy)} / ${fmt(SA.invariance_k20_coverage)} at ${fmt(SA.invariance_k20_set_size, 2)}). The mice are exercised, not trained: this is not the same shift as the RNA controls → 8-week-trained rung.`,
   );
+  const MWT = M.deep_mw_by_tissue_k20, MI = M.metab_within;
+  document.getElementById("p-metab-within").replaceChildren(
+    `Inside MoTrPAC, tissue explains R² ${fmt(MI.r2_tissue_pc1)} of the first metabolite principal component (the value on the Identifiability page). MoTrPAC's metabolomics tables carry no batch variable, so, unlike RNA and proteomics, tissue and batch cannot even be audited inside the study; the external atlas is the only check.`);
+  const inScope = MWT.filter((r) => r.rat_classes !== "OOD"), ood = MWT.filter((r) => r.rat_classes === "OOD");
+  document.getElementById("tbl-metab-tissue").replaceChildren(
+    tableFrom({ columns: ["mouse organ", "rat class", "samples", "mice", "accuracy", "top call", "top call share"],
+                rows: [...inScope, ...ood].map((r) => ({ "mouse organ": r.target_tissue, "rat class": r.rat_classes === "OOD" ? "none (out of scope)" : tname(r.rat_classes), samples: r.n, mice: r.n_individuals, accuracy: r.accuracy === null ? "—" : r.accuracy, "top call": tname(r.top_prediction), "top call share": r.top_prediction_frac })),
+                format: { accuracy: z2, "top call share": z2 } }),
+    el("p", { class: "source" }, [el("b", {}, "Source: "), "results_multiomic/04_metab_transfer/deep_mw/accuracy_by_tissue.csv, model k20 rows (mo_deep_mw_by_tissue_k20). Organs with no MoTrPAC counterpart have no accuracy; their top call is shown."]));
+  const legs = M.metabolites;
+  const minMatched = Math.min(...legs.map((m) => m.matched)), maxMatched = Math.max(...legs.map((m) => m.matched));
+  document.getElementById("p-metab-why").replaceChildren(
+    `Why metabolites are not the core fingerprint: metabolites are matched across platforms by name, not as identical measurements; only ${minMatched}–${maxMatched} names are shared per transfer (${stopped.matched} on the HILIC+ leg, which stopped); and the organ maps are imperfect (serum vs plasma, whole brain vs rat brain regions, quadriceps vs gastrocnemius). RNA has none of these three problems.`);
   document.getElementById("tbl-metab").replaceChildren(el("details", { class: "fig-notes", open: "" }, [el("summary", {}, "Metabolite transfer legs (k20 unless stated), with set sizes and label-space sizes"),
     tableFrom({ columns: ["leg", "source_tissues", "matched", "n_mapped", "n_individuals", "chance", "acc_k20", "acc_full", "coverage_k20", "coverage_k20_recal5", "set_size_k20_recal5", "n_classes"], rows: M.metabolites.map((m) => ({ ...m, acc_k20: m.acc_k20 })) }),
     el("p", {}, [el("b", {}, "Source: "), "results_multiomic/04_metab_transfer/legs_summary.csv; results_multiomic/08_verification/sato_invariance_design.csv (exercise design and counts)"]),
-    el("p", {}, [el("b", {}, "What it does not show: "), "identical analyte measurements — MoTrPAC HILIC+ / six platforms vs a triple-quad RP-negative panel vs Metabolon HD4; serum vs plasma, whole brain vs three rat regions and quadriceps vs gastrocnemius are imperfect maps; the recalibrated Sato coverages hold 5–12 of 9–19 classes per set."])]));
+    el("p", {}, [el("b", {}, "What it does not show: "), "identical analyte measurements — MoTrPAC HILIC+ / six platforms vs a triple-quad RP-negative panel vs Metabolon HD4; serum vs plasma, whole brain vs three rat regions and quadriceps vs gastrocnemius are imperfect maps; the recalibrated Sato coverages hold " + M.metabolites.filter((m) => m.leg.endsWith("sato")).map((m) => `${fmt(m.set_size_k20_recal5, 1)} of ${m.n_classes}`).join(" and ") + " classes per set."])]));
 
   document.getElementById("p-prov").replaceChildren(
-    `Every value on this page is read from site/data/multiomic.json, exported by scripts/multiomic/export_site_data.py from the CSVs under results_multiomic/ (branch multiomic-overnight) and results_frozen/ (the RNA comparison rows), and recorded in site/data/provenance.json as mo_* entries (${M._meta.sources.length} source files; git ${M._meta.git_hash}, ${M._meta.generated}). `,
-    "The full report with its pre-registration, log and per-phase READMEs is docs/MULTIOMIC_REPORT.md on the branch.",
+    `Every value on this page is read from site/data/multiomic.json, exported by scripts/multiomic/export_site_data.py from the CSVs under results_multiomic/ and results_frozen/ (the RNA comparison rows), and recorded in site/data/provenance.json as mo_* entries (${M._meta.sources.length} source files; git ${M._meta.git_hash}, ${M._meta.generated}). `,
+    "The follow-up is merged into main. The full write-up is docs/MULTIOMIC_REPORT.md, the pre-registered predictions and rules are docs/PREREGISTRATION_MULTIOMIC.md, and the time-stamped run log is docs/MULTIOMIC_LOG.md.",
   );
 }
 

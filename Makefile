@@ -163,6 +163,7 @@ verify-frozen: ## check results_frozen/ against its manifest
 
 site-data: ## export site/data with provenance from results/ (or RESULTS=<dir>, or the snapshot); check the anchors
 	$(PY) scripts/30_export_site_data.py --check-anchors --reconciliation $(if $(RESULTS),--results $(RESULTS),)
+	$(PY) scripts/multiomic/export_site_data.py   # re-appends the mo_* provenance entries the main export rewrites
 
 site-test: ## the site tests: provenance, regeneration, JS conformal port, links
 	$(PY) -m pytest -q tests/test_site_data.py tests/test_regen_scores.py tests/test_frozen_results.py

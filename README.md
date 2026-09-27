@@ -10,7 +10,7 @@ of processing effects on the consortium's bridging standards, an exercise-specif
 every number carries provenance and whose Explorer scores new samples with the panel in the browser.
 
 [![tests](https://github.com/CoryGardner/motrpac_challenge/actions/workflows/tests.yml/badge.svg)](https://github.com/CoryGardner/motrpac_challenge/actions/workflows/tests.yml)
-**Live site:** https://corygardner.github.io/motrpac_challenge/ · **Release:** tag `hackathon-submission-v8` (version 1.7.0) · **Licence:** MIT
+**Live site:** https://corygardner.github.io/motrpac_challenge/ · **Release:** tag `hackathon-submission-v9` (version 1.8.0) · **Licence:** MIT
 
 ![The home page: the question, the tiles, the one-picture diagram and the transfer ladder](figures/home.png)
 
@@ -152,6 +152,12 @@ of about 100 genes).
 | Rat BodyMap, GEO GSE53960 | Bioconductor `bodymapRat` 1.28.0 (ExperimentHub) | 2026-09-17 | `make bodymap` (`R/export_bodymap.R` → `data/external/bodymap_*.csv`) | CC BY 4.0 |
 | GTEx v8 open access (release 2017-06-05, RNASeQCv1.1.9) | gene TPM, gene reads, sample attributes | 2026-09-17 (TPM, attributes), 2026-09-18 (reads) | download the three files below into `data/external/gtex/`, check the checksums, `make gtex` | GTEx data-use policy |
 | Rat–human orthologs | `RAT_TO_HUMAN_GENE` as shipped in the MoTrPAC package (one-to-one pairs) | with the package | `data/raw/rat_to_human_gene.csv` | as the package |
+| MoTrPAC proteomics reporter-ion files (multiomic follow-up) | Data Hub quant-id folders `rat-training-06/<release>/proteomics-untargeted/<tissue>/prot-pr/` (`motrpac_pass1b-06_<tissue>_prot-pr_rii-results.txt` and `_vial-metadata.txt`, suffix `_v2.0` in c2.0), 7 tissues, releases c1.0 (rn6, main) and c2.0 (rn7, robustness) | 2026-09-26 | `MOTRPAC_QUANT_ID=<dir>`; read by `src/tfp/rii.py` (`scripts/multiomic/01_rii_rescue.py`) | consortium data-use terms |
+| Jiang et al. 2020, *Cell* 183:269, [doi:10.1016/j.cell.2020.08.036](https://doi.org/10.1016/j.cell.2020.08.036) (the GTEx tissue proteome, TMT) | supplementary tables S1–S7 (mmc2–mmc8); PRIDE [PXD016999](https://www.ebi.ac.uk/pride/archive/projects/PXD016999) | 2026-09-27 | URLs and sha256 below | journal terms (Elsevier supplementary material) |
+| Wang et al. 2019, *Mol Syst Biol* 15:e8503, [doi:10.15252/msb.20188503](https://doi.org/10.15252/msb.20188503) | Tables EV1–EV8 (Europe PMC PMC6379049); PRIDE [PXD010154](https://www.ebi.ac.uk/pride/archive/projects/PXD010154) | 2026-09-27 | URL and sha256 below | CC BY 4.0 |
+| Geiger et al. 2013, *Mol Cell Proteomics* 12:1709, [doi:10.1074/mcp.M112.024919](https://doi.org/10.1074/mcp.M112.024919) | supplementary table S1 (mmc1) | 2026-09-27 | URL and sha256 below | journal terms |
+| Sato et al. 2022, *Cell Metab* 34:329, [doi:10.1016/j.cmet.2021.12.016](https://doi.org/10.1016/j.cmet.2021.12.016) | supplementary tables mmc2–mmc8 (Metabolon HD4) | 2026-09-27 | URLs and sha256 below | journal terms |
+| Metabolomics Workbench [ST003188](https://www.metabolomicsworkbench.org/data/DRCCMetadata.php?Mode=Study&StudyID=ST003188), "A metabolic atlas of mouse aging" (Mullen Lab, USC; project PR001984, [doi:10.21228/M88J0W](https://doi.org/10.21228/M88J0W)) | analysis AN005236 data table, study data and mwTab, released 2025-11-18 | 2026-09-27 | URLs and sha256 below | CC BY 4.0 |
 
 GTEx files (sha256):
 
@@ -161,8 +167,36 @@ https://storage.googleapis.com/adult-gtex/bulk-gex/v8/rna-seq/GTEx_Analysis_2017
 https://storage.googleapis.com/adult-gtex/annotations/v8/metadata-files/GTEx_Analysis_v8_Annotations_SampleAttributesDS.txt  74f6ab4c34ed2648d708a0ae6e6dff324f6c86ea723ae7d1c37d76f5221148f0
 ```
 
+Multiomic follow-up external files (sha256; `results_multiomic/02_discovery/download_log.csv`, which also records sizes
+and times):
+
+```
+https://ars.els-cdn.com/content/image/1-s2.0-S0092867420310783-mmc1.pdf  430d560ef913f81951642c89b548f8c850e114e8f4d4dccf324d383b92ce9f69
+https://ars.els-cdn.com/content/image/1-s2.0-S0092867420310783-mmc2.xlsx  31404e50e86828c09778fc6bb2f6bcea3131b7ebe8f6e647e204f7cdc9c17193
+https://ars.els-cdn.com/content/image/1-s2.0-S0092867420310783-mmc3.xlsx  f278d406990059a625cb0d5c4c29e56dd8634052138a38bd053bc0d61124af80
+https://ars.els-cdn.com/content/image/1-s2.0-S0092867420310783-mmc4.xlsx  4e816a8ced85c723f5901a6e292f614fb1238e0375419c05237e23d90ff75733
+https://ars.els-cdn.com/content/image/1-s2.0-S0092867420310783-mmc5.xlsx  caee46fbee430aef4759c07a951dd2d55848184a0a8f789054ad2ea8b7b710ac
+https://ars.els-cdn.com/content/image/1-s2.0-S0092867420310783-mmc6.xlsx  27f42aa61207a810631da861af5d23a826ea261373b60655b0fe80a5f7a328d6
+https://ars.els-cdn.com/content/image/1-s2.0-S0092867420310783-mmc7.xlsx  4b9c3040a3c79f44196776739fb7e6dfd54f1c4bbabb4dddcfad15ce87c13d5f
+https://ars.els-cdn.com/content/image/1-s2.0-S0092867420310783-mmc8.xlsx  75eb216a16910c1474c7f257f06caeb6ba447e930a77c969e3feee81d128b169
+https://ars.els-cdn.com/content/image/1-s2.0-S1550413121006355-mmc2.zip  e801d4c41248fd7062cfc5176f6685634845854a8fd33a8b99120ac822848616
+https://ars.els-cdn.com/content/image/1-s2.0-S1550413121006355-mmc3.xlsx  229867c83bf28194fc46b5180bb7b385f9f17b01de583ae2c5a08c9951192b14
+https://ars.els-cdn.com/content/image/1-s2.0-S1550413121006355-mmc4.xlsx  558c34e505edc9d3b9130045fd3b3c96874b08c2a080e27eeba7b3c9b2a4fa63
+https://ars.els-cdn.com/content/image/1-s2.0-S1550413121006355-mmc5.xlsx  ed09e1de8a8d321771c7d29a91320f1cac7f14348737c184e5b2c93ce5d803d7
+https://ars.els-cdn.com/content/image/1-s2.0-S1550413121006355-mmc6.xlsx  b62a234ee601976f678f24a00cb0c42ca337c976aa99ff88954116f022259a19
+https://ars.els-cdn.com/content/image/1-s2.0-S1550413121006355-mmc7.xlsx  e5b03bf4b70785cda00cc6c51dbd2686722bb02f5422d96365f0b1daaa8b7675
+https://ars.els-cdn.com/content/image/1-s2.0-S1550413121006355-mmc8.xlsx  294da2ddd4c23011259dee6cfa2c7f6e8e5c7d2fb680e88d3ee53804b6dc4631
+https://www.metabolomicsworkbench.org/rest/study/analysis_id/AN005236/datatable  b48e92c7f516863b3ea7617ba508aa214e411ecb12952751305fab1cbe6d806a
+https://www.metabolomicsworkbench.org/rest/study/study_id/ST003188/data  3d2a87ba7cc5f727ebaac05933d033e63cb6ce4a6242011d5a976b24e09c998e
+https://www.metabolomicsworkbench.org/rest/study/study_id/ST003188/mwtab  27bfc8cc41086cb7e34746a6026cfdc0499111649cbf06146ffb95841c873023
+https://ars.els-cdn.com/content/image/1-s2.0-S1535947620310860-mmc1.zip  379cc94cbc80b066531e19bb99b79eb23301bf51bf981ef2780d8b96096eb4b5
+https://www.ebi.ac.uk/europepmc/webservices/rest/PMC6379049/supplementaryFiles  e954c237408bd687cd9806a07a127840015d1e8a28fab0b971af82ff33bcd5fc
+```
+
 Citations: MoTrPAC Study Group, *Nature* 629, 174–183 (2024); Yu et al., *Nat Commun* 5, 3230 (2014); GTEx
-Consortium, *Science* 369, 1318–1330 (2020). The data acknowledgement sentence MoTrPAC asks for is in
+Consortium, *Science* 369, 1318–1330 (2020); for the multiomic follow-up, Jiang et al., *Cell* 183, 269–283 (2020);
+Wang et al., *Mol Syst Biol* 15, e8503 (2019); Geiger et al., *Mol Cell Proteomics* 12, 1709–1722 (2013); Sato et al.,
+*Cell Metab* 34, 329–345 (2022); Metabolomics Workbench study ST003188, doi:10.21228/M88J0W. The data acknowledgement sentence MoTrPAC asks for is in
 `docs/DATA_GUIDE.md`.
 
 ## Inputs and outputs
@@ -223,7 +257,7 @@ Known failure modes and limits (details on the site's Limitations page):
 ## Reuse
 
 - **Licence:** MIT for code, site and derived tables (`LICENSE`); the data keep their own terms (table above).
-- **Cite:** `CITATION.cff` (version 1.7.0, tag `hackathon-submission-v8`) and the three data papers.
+- **Cite:** `CITATION.cff` (version 1.8.0, tag `hackathon-submission-v9`), the three data papers, and the multiomic sources in the Data section.
 - **Score your samples:** the Explorer's *Score your own samples* tool takes a CSV of log2 CPM for the 20 panel genes
   (a template is provided) and returns tissue calls and 90 % prediction sets in the browser, with optional recalibration
   on labelled samples; the panel card (`site/data/panel_card.csv`, `.json`) lists the genes with their mean expression per

@@ -422,3 +422,67 @@ def test_multiomic_page_is_wired():
     import re
     literals = {float(x) for x in re.findall(r"(?<![\w.])(0\.\d+)(?![\w.])", page_js)}
     assert not (literals - {0.9, 0.095, 0.08, 0.1, 0.3, 0.35}), f"numeric literals in multiomic.js that are not layout constants: {sorted(literals)}"
+
+
+@pytest.mark.skipif(not MO.exists(), reason="site/data/multiomic.json absent")
+def test_multiomic_how_and_tables_match_their_csvs():
+    """v9: the 'How it was done' counts, the 20-protein transfer panel, the metabolite PC1 R² and the deep_mw per-organ
+    table equal their CSVs; the panel carries no fails_in_target / weakened columns (they assume high markers)."""
+    m = _load("multiomic.json")
+    prov = _load("provenance.json")
+    ids = {e["id"] for e in prov["entries"]} | {t["id"] for t in prov["tables"]}
+    for i in ("mo_how_n_tissues_prot", "mo_how_n_tissues_rna", "mo_how_min_peptides", "mo_how_norm", "mo_how_release", "mo_how_prot_tissues",
+              "mo_how_transfer_panel", "mo_metab_r2_tissue_PC1", "mo_metab_explained_PC1", "mo_deep_mw_by_tissue_k20", "mo_hilic_mw_src_metabolites"):
+        assert i in ids, i
+    R = ROOT / "results_multiomic"
+    js = pd.read_csv(R / "01_rii" / "join_summary.csv")
+    dc = pd.read_csv(R / "06_external_identifiability" / "design_comparison.csv")
+    ts = pd.read_csv(R / "01_rii" / "tissue_summary.csv")
+    h = m["how"]
+    assert h["n_tissues_prot"] == int(js["n_tissues"].iloc[0]) == len(ts) == len(h["prot_tissues"])
+    assert h["n_tissues_rna"] == int(dc.loc[dc["dataset"] == "MoTrPAC TRNSCRPT", "n_tissues"].iloc[0])
+    assert [r["tissue"] for r in h["prot_tissues"]] == list(ts["tissue"])
+    pg = pd.read_csv(R / "03_prot_transfer" / "panel_gene_check.csv")
+    assert len(h["transfer_panel"]) == len(pg)
+    for r, (_, c) in zip(h["transfer_panel"], pg.iterrows()):
+        assert set(r) == {"protein", "marker_tissue", "direction", "effect_rat_z", "effect_human_z"}, r
+        assert r["protein"] == c["gene_symbol"] and r["marker_tissue"] == c["marker_tissue"]
+        assert r["direction"] == ("higher" if c["source_effect_z"] > 0 else "lower")
+        assert math.isclose(r["effect_rat_z"], c["source_effect_z"], abs_tol=1e-9)
+        assert (r["effect_human_z"] is None) == bool(pd.isna(c["target_effect_z"]))
+        if r["effect_human_z"] is not None:
+            assert math.isclose(r["effect_human_z"], c["target_effect_z"], abs_tol=1e-9)
+    vpm = pd.read_csv(ROOT / "results_frozen" / "03_eda" / "variance_partition_METAB.csv")
+    assert math.isclose(m["metab_within"]["r2_tissue_pc1"], vpm.loc[vpm["PC"] == "PC1", "R2_tissue"].iloc[0], abs_tol=1e-12)
+    eda = SITE / "eda.json"
+    if eda.exists():   # the Identifiability page quotes the same value
+        e = json.loads(eda.read_text())
+        pc1 = next(r for r in e["variance_METAB"] if r["PC"] == "PC1")
+        assert math.isclose(pc1["R2_tissue"], m["metab_within"]["r2_tissue_pc1"], abs_tol=1e-9)
+    ab = pd.read_csv(R / "04_metab_transfer" / "deep_mw" / "accuracy_by_tissue.csv")
+    ab = ab[ab["model"] == "k20"]
+    assert [r["target_tissue"] for r in m["deep_mw_by_tissue_k20"]] == list(ab["target_tissue"])
+    for r, (_, c) in zip(m["deep_mw_by_tissue_k20"], ab.iterrows()):
+        assert (r["accuracy"] is None) == bool(pd.isna(c["accuracy"])) and r["n"] == c["n"] and r["top_prediction"] == c["top_prediction"]
+    runs = {r["run"] for r in m["per_tissue_k20"]}
+    assert {"jiang_relative_k20", "jiang_rawppm_k20"} <= runs
+
+
+@pytest.mark.skipif(not MO.exists(), reason="site/data/multiomic.json absent")
+def test_multiomic_page_v9_sections_and_citations():
+    html = (ROOT / "site" / "multiomic.html").read_text()
+    for i in ('id="plain-words"', 'id="how"', 'id="tbl-how-panel"', 'id="tbl-per-tissue"', 'id="tbl-metab-tissue"', 'id="data-sources"'):
+        assert i in html, i
+    assert html.index('id="how"') < html.index('id="scales"'), "How it was done must precede section 1"
+    for doi in ("10.1016/j.cell.2020.08.036", "10.15252/msb.20188503", "10.1074/mcp.M112.024919", "10.1016/j.cmet.2021.12.016", "10.21228/M88J0W"):
+        assert doi in html, doi
+    for acc in ("PXD016999", "PXD010154", "ST003188", "prot-pr", "c1.0", "c2.0"):
+        assert acc in html, acc
+    js = (ROOT / "site" / "assets" / "pages" / "multiomic.js").read_text()
+    assert "fails_in_target" not in js and "weakened" not in js
+    assert 'el("details", { class: "fig-notes" }, [el("summary", {}, "Per-tissue' not in js, "per-tissue table must be visible"
+    assert "multiomic-overnight)" not in js.split("p-prov")[1], "source note still points to the branch"
+    home = (ROOT / "site" / "index.html").read_text()
+    assert 'href="multiomic.html"' in home.split('id="sec-tour"')[1]
+    methods = (ROOT / "site" / "methods.html").read_text()
+    assert 'id="multiomic"' in methods and '"data/multiomic.json"' in (ROOT / "site" / "assets" / "pages" / "methods.js").read_text()

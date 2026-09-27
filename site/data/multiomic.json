@@ -2504,8 +2504,316 @@
 "metabolites_stopped": {
 "leg": "hilic_mw",
 "matched": 25,
-"min_overlap": 30
+"min_overlap": 30,
+"source_metabolites": 129
 },
+"how": {
+"n_tissues_prot": 7,
+"n_tissues_rna": 19,
+"min_peptides": 2,
+"norm": "total",
+"release": "c1.0",
+"prot_tissues": [
+{
+"tissue": "CORTEX",
+"n_vials": 60,
+"n_animals": 60,
+"n_plexes": 6
+},
+{
+"tissue": "HEART",
+"n_vials": 60,
+"n_animals": 60,
+"n_plexes": 6
+},
+{
+"tissue": "KIDNEY",
+"n_vials": 60,
+"n_animals": 60,
+"n_plexes": 6
+},
+{
+"tissue": "LIVER",
+"n_vials": 60,
+"n_animals": 60,
+"n_plexes": 6
+},
+{
+"tissue": "LUNG",
+"n_vials": 60,
+"n_animals": 60,
+"n_plexes": 6
+},
+{
+"tissue": "SKM-GN",
+"n_vials": 60,
+"n_animals": 60,
+"n_plexes": 6
+},
+{
+"tissue": "WAT-SC",
+"n_vials": 60,
+"n_animals": 60,
+"n_plexes": 6
+}
+],
+"transfer_panel": [
+{
+"protein": "Tubb3",
+"marker_tissue": "CORTEX",
+"direction": "higher",
+"effect_rat_z": 2.55398391159405,
+"effect_human_z": 3.5711102531175123
+},
+{
+"protein": "Metap2",
+"marker_tissue": "WAT-SC",
+"direction": "lower",
+"effect_rat_z": -2.8548807378431085,
+"effect_human_z": null
+},
+{
+"protein": "Cryz",
+"marker_tissue": "KIDNEY",
+"direction": "higher",
+"effect_rat_z": 1.8760328803588264,
+"effect_human_z": null
+},
+{
+"protein": "Ctnna1",
+"marker_tissue": "SKM-GN",
+"direction": "lower",
+"effect_rat_z": -3.0547246470613647,
+"effect_human_z": -2.1898069782547256
+},
+{
+"protein": "Diaph1",
+"marker_tissue": "HEART",
+"direction": "lower",
+"effect_rat_z": -3.336755351465726,
+"effect_human_z": -2.4023523433432072
+},
+{
+"protein": "Dnm1",
+"marker_tissue": "CORTEX",
+"direction": "higher",
+"effect_rat_z": 1.9095045736768697,
+"effect_human_z": 4.770318536992169
+},
+{
+"protein": "Bzw2",
+"marker_tissue": "LIVER",
+"direction": "lower",
+"effect_rat_z": -3.191653328263599,
+"effect_human_z": -2.904630896802651
+},
+{
+"protein": "Idi1",
+"marker_tissue": "HEART",
+"direction": "lower",
+"effect_rat_z": -2.7820700965708296,
+"effect_human_z": -3.010199363292092
+},
+{
+"protein": "Acat1",
+"marker_tissue": "KIDNEY",
+"direction": "higher",
+"effect_rat_z": 2.444374876060236,
+"effect_human_z": null
+},
+{
+"protein": "Arhgap1",
+"marker_tissue": "SKM-GN",
+"direction": "lower",
+"effect_rat_z": -3.2583434777424287,
+"effect_human_z": -2.381704330081676
+},
+{
+"protein": "Oxct1",
+"marker_tissue": "LIVER",
+"direction": "lower",
+"effect_rat_z": -3.4228745989136504,
+"effect_human_z": -3.814470917197476
+},
+{
+"protein": "Pdpr",
+"marker_tissue": "LIVER",
+"direction": "lower",
+"effect_rat_z": -3.0551646828011023,
+"effect_human_z": -4.374820222963472
+},
+{
+"protein": "S100a8",
+"marker_tissue": "LUNG",
+"direction": "higher",
+"effect_rat_z": 1.7766211381999342,
+"effect_human_z": 0.7580119845639571
+},
+{
+"protein": "S100a9",
+"marker_tissue": "LUNG",
+"direction": "higher",
+"effect_rat_z": 1.610593880515927,
+"effect_human_z": 0.6923909315255207
+},
+{
+"protein": "Stim1",
+"marker_tissue": "HEART",
+"direction": "lower",
+"effect_rat_z": -3.132935290125908,
+"effect_human_z": -3.286228036312626
+},
+{
+"protein": "Uchl1",
+"marker_tissue": "CORTEX",
+"direction": "higher",
+"effect_rat_z": 2.12467510604186,
+"effect_human_z": 3.1571934865540907
+},
+{
+"protein": "Col14a1",
+"marker_tissue": "WAT-SC",
+"direction": "higher",
+"effect_rat_z": 2.057835215257645,
+"effect_human_z": null
+},
+{
+"protein": "Vwf",
+"marker_tissue": "LUNG",
+"direction": "higher",
+"effect_rat_z": 1.4644004898512062,
+"effect_human_z": 0.6691471759101044
+},
+{
+"protein": "Hip1r",
+"marker_tissue": "SKM-GN",
+"direction": "lower",
+"effect_rat_z": -3.2427040320815315,
+"effect_human_z": -1.9680549369692304
+},
+{
+"protein": "Pter",
+"marker_tissue": "KIDNEY",
+"direction": "higher",
+"effect_rat_z": 1.806385633194287,
+"effect_human_z": null
+}
+]
+},
+"metab_within": {
+"r2_tissue_pc1": 0.9918259316942318,
+"explained_pc1": 0.1850194464224741
+},
+"deep_mw_by_tissue_k20": [
+{
+"target_tissue": "Bladder",
+"rat_classes": "OOD",
+"n": 70,
+"n_individuals": 70,
+"accuracy": null,
+"top_prediction": "KIDNEY",
+"top_prediction_frac": 0.6285714285714286
+},
+{
+"target_tissue": "Brain",
+"rat_classes": "HIPPOC",
+"n": 70,
+"n_individuals": 70,
+"accuracy": 1.0,
+"top_prediction": "HIPPOC",
+"top_prediction_frac": 1.0
+},
+{
+"target_tissue": "Heart",
+"rat_classes": "HEART",
+"n": 70,
+"n_individuals": 70,
+"accuracy": 0.9571428571428572,
+"top_prediction": "HEART",
+"top_prediction_frac": 0.9571428571428572
+},
+{
+"target_tissue": "Kidney",
+"rat_classes": "KIDNEY",
+"n": 70,
+"n_individuals": 70,
+"accuracy": 0.0571428571428571,
+"top_prediction": "LIVER",
+"top_prediction_frac": 0.9
+},
+{
+"target_tissue": "Liver",
+"rat_classes": "LIVER",
+"n": 70,
+"n_individuals": 70,
+"accuracy": 1.0,
+"top_prediction": "LIVER",
+"top_prediction_frac": 1.0
+},
+{
+"target_tissue": "Lung",
+"rat_classes": "LUNG",
+"n": 70,
+"n_individuals": 70,
+"accuracy": 0.5142857142857142,
+"top_prediction": "LUNG",
+"top_prediction_frac": 0.5142857142857142
+},
+{
+"target_tissue": "Muscle (Quad)",
+"rat_classes": "SKM-GN",
+"n": 70,
+"n_individuals": 70,
+"accuracy": 0.2714285714285714,
+"top_prediction": "BAT",
+"top_prediction_frac": 0.4
+},
+{
+"target_tissue": "Pancreas",
+"rat_classes": "OOD",
+"n": 70,
+"n_individuals": 70,
+"accuracy": null,
+"top_prediction": "LUNG",
+"top_prediction_frac": 0.7285714285714285
+},
+{
+"target_tissue": "Plasma",
+"rat_classes": "PLASMA",
+"n": 70,
+"n_individuals": 70,
+"accuracy": 0.6571428571428571,
+"top_prediction": "PLASMA",
+"top_prediction_frac": 0.6571428571428571
+},
+{
+"target_tissue": "Spleen",
+"rat_classes": "OOD",
+"n": 70,
+"n_individuals": 70,
+"accuracy": null,
+"top_prediction": "BAT",
+"top_prediction_frac": 0.4142857142857143
+},
+{
+"target_tissue": "Thymus",
+"rat_classes": "OOD",
+"n": 70,
+"n_individuals": 70,
+"accuracy": null,
+"top_prediction": "BAT",
+"top_prediction_frac": 0.9571428571428572
+},
+{
+"target_tissue": "Tongue",
+"rat_classes": "OOD",
+"n": 70,
+"n_individuals": 70,
+"accuracy": null,
+"top_prediction": "KIDNEY",
+"top_prediction_frac": 0.3428571428571428
+}
+],
 "b1": {
 "n_rna_k20": 20,
 "n_protein_k20": 20,
@@ -2519,10 +2827,11 @@
 "genes_in_both": null
 },
 "_meta": {
-"generated": "2026-09-27 09:11 UTC",
-"git_hash": "ed32bbe",
-"branch": "multiomic-overnight",
+"generated": "2026-09-27 15:00 UTC",
+"git_hash": "18d98c2",
+"branch": "main",
 "sources": [
+"results_frozen/03_eda/variance_partition_METAB.csv",
 "results_frozen/13_gtex/accuracy_overall.csv",
 "results_frozen/13_gtex/conformal_transfer.csv",
 "results_multiomic/01_rii/diagnostic_accuracy_summary.csv",
@@ -2534,15 +2843,18 @@
 "results_multiomic/01_rii/rna_protein_panel_genes.csv",
 "results_multiomic/01_rii/rna_protein_panel_summary.csv",
 "results_multiomic/01_rii/stability_k20_summary.csv",
+"results_multiomic/01_rii/tissue_summary.csv",
 "results_multiomic/01_rii/variance_partition.csv",
 "results_multiomic/01_rii/variance_partition_complete.csv",
 "results_multiomic/01_rii/variance_partition_ratio.csv",
 "results_multiomic/03_prot_transfer/accuracy_overall.csv",
 "results_multiomic/03_prot_transfer/conformal_transfer.csv",
 "results_multiomic/03_prot_transfer/coverage_ci.csv",
+"results_multiomic/03_prot_transfer/panel_gene_check.csv",
 "results_multiomic/03_prot_transfer/rawppm/accuracy_overall.csv",
 "results_multiomic/03_prot_transfer/rawppm/conformal_transfer.csv",
 "results_multiomic/03_prot_transfer/rawppm/coverage_ci.csv",
+"results_multiomic/04_metab_transfer/deep_mw/accuracy_by_tissue.csv",
 "results_multiomic/04_metab_transfer/deep_mw/conformal_transfer.csv",
 "results_multiomic/04_metab_transfer/deep_sato/conformal_transfer.csv",
 "results_multiomic/04_metab_transfer/hilic_sato/conformal_transfer.csv",
@@ -2556,6 +2868,6 @@
 "results_multiomic/09_extensions/ladder_side_by_side.csv",
 "results_multiomic/09_extensions/overlap_summary.csv"
 ],
-"note": "follow-up work on branch multiomic-overnight; every value traces to a results_multiomic/ or results_frozen/ file through the mo_* entries of provenance.json"
+"note": "follow-up work, merged into main (developed on branch multiomic-overnight); every value traces to a results_multiomic/ or results_frozen/ file through the mo_* entries of provenance.json"
 }
 }
