@@ -31,11 +31,16 @@ export function ladderBuild(H, state) {
   const hoverAcc = rows.map((r) => (r && !r.pending ? `accuracy ${fmt(r.accuracy)}${r.accuracy_sd ? " ± " + fmt(r.accuracy_sd) + " (sd over folds)" : ""}${r.accuracy_ci ? " 95 % CI" + ci(r.accuracy_ci) : ""}<br>n = ${r.n_samples} samples, ${r.n_individuals} individuals${r.n_source_animals ? "<br>source: " + r.n_source_animals + " animals, " + r.n_calibration_animals + " of them calibration" : ""}${r.accuracy_cv40 ? "<br>same panel size under the 40-animal CV of the Fingerprint page: " + fmt(r.accuracy_cv40) : ""}${r.accuracy_refit !== null && r.accuracy_refit !== undefined ? "<br>the refit model that carries the sets: " + fmt(r.accuracy_refit) : ""}${r.accuracy_seen !== null && r.accuracy_seen !== undefined ? "<br>the unseen sex-specific tissue's vials count as wrong; balanced accuracy over seen classes " + fmt(r.accuracy_seen) : ""}` : "pending"));
   const hoverCov = rows.map((r) => (r && !r.pending ? `coverage ${fmt(r.coverage)}${r.coverage_sd ? " ± " + fmt(r.coverage_sd) + " (sd over folds)" : ""}${r.coverage_ci ? " 95 % CI" + ci(r.coverage_ci) : ""}${r.n_samples_coverage ? " (n = " + r.n_samples_coverage + " seen-class vials)" : ""}<br>empty sets ${r.empty === null || r.empty === undefined ? "—" : fmt(r.empty)}${r.wrong_non_empty !== null && r.wrong_non_empty !== undefined ? ", non-empty but wrong " + fmt(r.wrong_non_empty) : ""}<br>mean set size ${fmt(r.set_size, 2)}${r.n_classes_seen && r.set_size >= r.n_classes_seen ? " — every seen tissue in every set (per-class thresholds +∞)" : ""}${r.recal_n3 !== null && r.recal_n3 !== undefined ? "<br>recalibrated on 3 target individuals: " + fmt(r.recal_n3) : ""}` : "pending"));
   const traces = [
-    { ...bar(x, acc, { name: "accuracy", slot: 1, text: acc.map((v) => (v === null ? "" : fmt(v))), hover: "%{customdata}<extra>accuracy</extra>" }), customdata: hoverAcc, error_y: err("accuracy", "accuracy_ci", "accuracy_sd") },
-    { ...bar(x, cov, { name: `coverage of the 90 % set (${state.variant})`, slot: 2, text: cov.map((v) => (v === null ? "" : fmt(v))), hover: "%{customdata}<extra>coverage</extra>" }), customdata: hoverCov, error_y: err("coverage", "coverage_ci", "coverage_sd") },
+    { ...bar(x, acc, { name: "accuracy", slot: 1, hover: "%{customdata}<extra>accuracy</extra>" }), customdata: hoverAcc, error_y: err("accuracy", "accuracy_ci", "accuracy_sd") },
+    { ...bar(x, cov, { name: `coverage of the 90 % set (${state.variant})`, slot: 2, hover: "%{customdata}<extra>coverage</extra>" }), customdata: hoverCov, error_y: err("coverage", "coverage_ci", "coverage_sd") },
   ];
   const ref = refLine(0.9, "1 − α = 0.90");
   const annotations = [...ref.annotations];
+  // value labels above the whisker, not on it: grouped bars sit at ±0.2 category units from the tick
+  const top = (key, ciKey, sdKey) => rows.map((r) => (r && !r.pending ? (r[ciKey] ? r[ciKey][1] : r[key] + (r[sdKey] || 0)) : null));
+  [[acc, top("accuracy", "accuracy_ci", "accuracy_sd"), -0.2], [cov, top("coverage", "coverage_ci", "coverage_sd"), 0.2]].forEach(([vals, tops, dx]) => {
+    vals.forEach((v, i) => { if (v !== null) annotations.push({ x: i + dx, y: Math.max(v, tops[i] ?? v) + 0.01, xref: "x", yref: "y", text: fmt(v), showarrow: false, yanchor: "bottom", font: { color: t.ink2, size: 11 } }); });
+  });
   rows.forEach((r, i) => {
     if (!r || r.pending) annotations.push({ x: x[i], y: 0.5, xref: "x", yref: "y", text: "pending:<br>" + ((r && r.reason) || "not run"), showarrow: false, font: { color: t.muted, size: 11 } });
   });
@@ -43,7 +48,7 @@ export function ladderBuild(H, state) {
                   rows: rows.map((r, i) => (r ? { shift: RUNGS[i].short, model: r.model, variant: r.variant, calibration: r.calibration, accuracy: r.accuracy, accuracy_ci: r.accuracy_ci ? r.accuracy_ci.map((v) => v.toFixed(3)).join(" – ") : "", accuracy_sd: r.accuracy_sd, accuracy_refit: r.accuracy_refit, accuracy_seen: r.accuracy_seen, coverage: r.coverage,
                                                   coverage_ci: r.coverage_ci ? r.coverage_ci.map((v) => v.toFixed(3)).join(" – ") : "", coverage_sd: r.coverage_sd, empty: r.empty, wrong_non_empty: r.wrong_non_empty, set_size: r.set_size, recal_n3: r.recal_n3, n_samples: r.n_samples, n_samples_coverage: r.n_samples_coverage ?? r.n_samples, n_individuals: r.n_individuals,
                                                   source: r.pending ? r.reason : (r.source || []).join("; ") } : { shift: RUNGS[i].short })) };
-  return { traces, layout: { yaxis: { range: [0, 1.08], title: { text: "fraction" }, tickformat: ".1f" }, xaxis: { tickfont: { size: 11 } }, shapes: ref.shapes, annotations, barmode: "group",
+  return { traces, layout: { yaxis: { range: [0, 1.12], title: { text: "fraction" }, tickformat: ".1f" }, xaxis: { tickfont: { size: 11 } }, shapes: ref.shapes, annotations, barmode: "group",
                             legend: { y: 1.14 }, margin: { t: 40, b: 60 } }, table };
 }
 

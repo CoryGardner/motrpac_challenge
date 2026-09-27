@@ -1,7 +1,7 @@
 {
 "_meta": {
-"generated": "2026-09-27 05:51 UTC",
-"git_hash": "66d05ef",
+"generated": "2026-09-27 06:22 UTC",
+"git_hash": "35acb4c",
 "sources": [
 "results/03_eda/batch_partition_METAB.csv",
 "results/03_eda/batch_partition_PROT.csv",
@@ -126,8 +126,8 @@
 "results/34_panel_model/validation.csv"
 ],
 "reconciliation": {
-"changed": 113,
-"comparable": 204,
+"changed": 115,
+"comparable": 206,
 "document": "docs/NUMBERS_RECONCILIATION.md"
 }
 },
@@ -809,6 +809,65 @@
 "tol": 1e-06
 },
 {
+"id": "tile_bodymap_recal_draws_k20",
+"value": 20,
+"file": "results/12_bodymap/recalibration.csv",
+"where": {
+"model": "k20",
+"n_recal": 3
+},
+"column": "draws",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "tile_bodymap_recal_size_k20",
+"value": 0.997912262156448,
+"file": "results/12_bodymap/recalibration.csv",
+"where": {
+"model": "k20",
+"n_recal": 3
+},
+"column": "set_size_recalibrated",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "tile_bodymap_recal_n_test_k20",
+"value": 5,
+"file": "results/12_bodymap/recalibration.csv",
+"where": {
+"model": "k20",
+"n_recal": 3
+},
+"column": "n_test_individuals",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "tile_bodymap_recal_n3_samples",
+"value": 25.4,
+"file": null,
+"files": [
+"results/31_site_regen/12_bodymap/recal_thresholds.csv"
+],
+"agg": "recomputed",
+"note": "mean number of calibration samples over the three-animal draws (model k20)"
+},
+{
+"id": "tile_bodymap_recal_k20",
+"value": 0.9426243330313098,
+"file": "results/12_bodymap/recalibration.csv",
+"where": {
+"model": "k20",
+"n_recal": 3
+},
+"column": "coverage_recalibrated",
+"agg": "value",
+"tol": 1e-06,
+"note": "coverage of the \u03b1 = 0.10 sets on the 21-week BodyMap mapped organs after recalibrating the threshold on 3 of its animals; mean over the draws"
+},
+{
 "id": "tile_estimable",
 "value": 1,
 "file": "results/16_identifiability/estimable_pairs.csv",
@@ -942,6 +1001,36 @@
 "agg": "value",
 "tol": 1e-06,
 "note": "batch as a share of the tissue-separating variance: \u03a3 V_batch / \u03a3 V_tissue over all genes, reference pool 99 run on 6 plates at both sites"
+},
+{
+"id": "tile_bridge_pools_min",
+"value": 0.0164901614097426,
+"file": null,
+"files": [
+"results/16_identifiability/bridge_variance.csv"
+],
+"agg": "recomputed",
+"note": "smallest \u03a3 V_batch / \u03a3 V_tissue (all genes) over the bridging pools"
+},
+{
+"id": "tile_bridge_pools_max",
+"value": 0.0533374868924547,
+"file": null,
+"files": [
+"results/16_identifiability/bridge_variance.csv"
+],
+"agg": "recomputed",
+"note": "largest \u03a3 V_batch / \u03a3 V_tissue (all genes) over the bridging pools"
+},
+{
+"id": "tile_bridge_n_pools",
+"value": 6,
+"file": null,
+"files": [
+"results/16_identifiability/bridge_variance.csv"
+],
+"agg": "recomputed",
+"note": "bridging pools with a row in bridge_variance.csv"
 },
 {
 "id": "acc06_k20",

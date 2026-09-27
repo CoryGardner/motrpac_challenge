@@ -4,6 +4,18 @@ All notable changes to this repository. The format follows [Keep a Changelog](ht
 dates are UTC. Each section is a `hackathon-submission-v<n>` git tag; the version numbers are those of `CITATION.cff`
 and `pyproject.toml`.
 
+## [1.6.0] — 2026-09-27 (tag `hackathon-submission-v7`)
+
+### Changed
+- Home tiles: 0.976 accuracy, 1.000 mapped organs, 0.943 coverage after recalibrating on three BodyMap animals
+  (new `tile_bodymap_recal_k20`, from `results/12_bodymap/recalibration.csv`), 1.6 % batch on the bridging pools
+  (relabelled, with the 1.6–5.3 % range). `headline.json` carries `home_tiles`; the 0.618 coverage tile stays in
+  `tiles` for the Identifiability page.
+- README key results: the in-distribution coverage row is labelled all genes and the 20-gene row (0.900 / 0.924) is
+  added, from the generator.
+- Ladder value labels sit above the whiskers; the abstain chart's labels on hatched segments have a background.
+- Scoring tool counter reads "k labelled (minimum N)". `CITATION.cff` release description fixed.
+
 ## [1.5.0] — 2026-09-27 (tag `hackathon-submission-v6`)
 
 ### Changed
@@ -23,7 +35,7 @@ and `pyproject.toml`.
   normal-width tile; the Home ladder title is one line with the rest in the subtitle; `make screenshots` renders
   1440, 1024 and 390 px.
 
-## [1.4.0] — 2026-09-26 (tag `hackathon-submission-v5`)
+## [1.4.0] — 2026-09-27 (tag `hackathon-submission-v5`)
 
 ### Added
 - "Score your own samples" on the Explorer: paste or upload log2 CPM for the 20 panel genes (template provided) and

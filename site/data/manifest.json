@@ -1,6 +1,6 @@
 {
- "generated": "2026-09-27 05:51 UTC",
- "git_hash": "66d05ef",
+ "generated": "2026-09-27 06:22 UTC",
+ "git_hash": "35acb4c",
  "results_dir": "results",
  "results_snapshot": null,
  "phases": {
@@ -807,7 +807,7 @@
   },
   {
    "name": "headline.json",
-   "bytes": 53208,
+   "bytes": 53953,
    "regenerated": true
   },
   {
@@ -827,12 +827,12 @@
   },
   {
    "name": "panel_model.json",
-   "bytes": 28250,
+   "bytes": 28194,
    "regenerated": true
   },
   {
    "name": "provenance.json",
-   "bytes": 143866,
+   "bytes": 145826,
    "regenerated": true
   },
   {

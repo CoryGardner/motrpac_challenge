@@ -24,7 +24,7 @@ const base = args.base || "http://localhost:8765";
 const out = args.out || "site/_screenshots";
 const pages = (args.pages ? String(args.pages).split(",") : ["index", "explore", "transfer", "exercise", "fingerprint", "identifiability", "methods", "limitations", "about"]);
 // visible-word budgets per page (main.innerText), enforced with --strict-words
-const BUDGET = { index: 1150, explore: 1750, transfer: 1850, exercise: 1750, fingerprint: 1100, identifiability: 1150, methods: 1000, limitations: 700, about: 650 };
+const BUDGET = { index: 1200, explore: 1750, transfer: 1850, exercise: 1750, fingerprint: 1100, identifiability: 1150, methods: 1000, limitations: 700, about: 650 };
 const strictWords = !!args["strict-words"];
 const sizes = [{ name: "desktop", width: 1440, height: 900 }, { name: "tablet", width: 1024, height: 768 }, { name: "phone", width: 390, height: 844 }];
 const themes = ["light", "dark"];

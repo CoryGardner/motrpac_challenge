@@ -98,7 +98,7 @@ async function scoreTool(exprP) {
       const k = labelledCount();
       btnRecal.textContent = `Recalibrate on the labelled samples (needs ≥ ${N} at α = ${state.alpha.toFixed(2)})`;
       btnRecal.disabled = k < N;
-      counter.textContent = `${k} of ${N} labelled`;
+      counter.textContent = `${k} labelled (minimum ${N})`;
     };
     // a tissue picker per row (pre-filled from a true_tissue column or earlier choices)
     table.querySelectorAll("tbody tr").forEach((tr, i) => {

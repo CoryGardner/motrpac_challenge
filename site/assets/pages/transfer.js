@@ -44,9 +44,11 @@ async function main() {
     const empty = rows.map(([, r]) => (r.empty === null || r.empty === undefined ? null : r.empty));
     const wrong = rows.map(([, r], i) => (r.wrong_non_empty !== null && r.wrong_non_empty !== undefined ? r.wrong_non_empty : (empty[i] === null ? null : Math.max(0, 1 - r.coverage - empty[i]))));
     const mk = (name, vals, color, pattern) => ({ type: "bar", orientation: "h", y, x: vals, name, marker: { color, line: { color: t.surface, width: 2 }, pattern: pattern ? { shape: "/", fgcolor: t.ink2, bgcolor: t.surface, size: 6, solidity: 0.35 } : undefined },
-                                                  hovertemplate: "%{y}: %{x:.3f}<extra>" + name + "</extra>", text: vals.map((v) => (v !== null && v >= 0.12 ? fmt(v, 2) : "")), textposition: "inside", insidetextanchor: "middle", textfont: { color: pattern ? t.ink : "#fff", size: 12 }, cliponaxis: false });
+                                                  hovertemplate: "%{y}: %{x:.3f}<extra>" + name + "</extra>", text: pattern ? undefined : vals.map((v) => (v !== null && v >= 0.12 ? fmt(v, 2) : "")), textposition: "inside", insidetextanchor: "middle", textfont: { color: "#fff", size: 12 }, cliponaxis: false });
+    // labels on the hatched (empty-set) segments sit in a small surface-coloured box so the hatching does not cut through them
+    const emptyLabels = y.map((label, i) => (empty[i] !== null && empty[i] >= 0.12 ? { x: covered[i] + (wrong[i] || 0) + empty[i] / 2, y: label, xref: "x", yref: "y", text: fmt(empty[i], 2), showarrow: false, font: { color: t.ink, size: 12 }, bgcolor: t.surface, bordercolor: t.grid, borderpad: 2 } : null)).filter(Boolean);
     return { traces: [mk("true tissue in the set (covered)", covered, p[0]), mk("non-empty but wrong", wrong, p[7]), mk("empty set (abstains)", empty, t.grid, true)],
-             layout: { barmode: "stack", xaxis: { range: [0, 1], title: { text: "fraction of test samples" } }, yaxis: { autorange: "reversed", automargin: true }, margin: { t: 40, l: 10 }, bargap: 0.4, legend: { y: 1.18 } },
+             layout: { barmode: "stack", xaxis: { range: [0, 1], title: { text: "fraction of test samples" } }, yaxis: { autorange: "reversed", automargin: true }, margin: { t: 40, l: 10 }, bargap: 0.4, legend: { y: 1.18 }, annotations: emptyLabels },
              table: { columns: ["shift", "model", "covered", "wrong_non_empty", "empty", "n_samples"], rows: rows.map(([l, r], i) => ({ shift: l, model: r.model, covered: covered[i], wrong_non_empty: wrong[i], empty: empty[i], n_samples: r.n_samples })) } };
   };
   const emptyFig = await figure(document.getElementById("fig-empty"), {

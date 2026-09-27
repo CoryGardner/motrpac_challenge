@@ -1,6 +1,6 @@
 # Numbers reconciliation — what the site shows, where it comes from, and what moved with the conformal-quantile fix
 
-Generated 2026-09-27 06:00 UTC by `scripts/30_export_site_data.py --reconciliation` from `site/data/provenance.json`.
+Generated 2026-09-27 06:24 UTC by `scripts/30_export_site_data.py --reconciliation` from `site/data/provenance.json`.
 `results/` (post-fix, 2026-09-25) is the truth; the pre-fix values come from `docs/reconciliation/pre_quantile_fix_values.csv`, generated once from the pre-fix results of 2026-09-25 (not in the repository). Values are shown to 4 decimals; the JSON holds them unrounded.
 
 ## 1. Headline numbers (the home-page tiles and the transfer ladder)
@@ -15,6 +15,8 @@ Generated 2026-09-27 06:00 UTC by `scripts/30_export_site_data.py --reconciliati
 | `tile_bodymap_k20` | 1.0000 | 1.0000 | no | `results/12_bodymap/age_shift_accuracy.csv` | `{"stage_weeks": 21}` | `k20` | value |
 | `tile_bodymap_cov_k20` | 0.6176 | 0.6176 | no | `results/12_bodymap/conformal_transfer.csv` | `{"stage_weeks": 21, "model": "k20", "conformal": "marginal"}` | `coverage_mapped` | value |
 | `tile_bodymap_empty_k20` | 0.3824 | 0.3824 | no | `results/12_bodymap/conformal_transfer.csv` | `{"stage_weeks": 21, "model": "k20", "conformal": "marginal"}` | `frac_empty_mapped` | value |
+| `tile_bodymap_recal_k20` | 0.9426 | 0.9696 | yes | `results/12_bodymap/recalibration.csv` | `{"model": "k20", "n_recal": 3}` | `coverage_recalibrated` | value |
+| `tile_bridge` | 0.0165 |  |  | `results/16_identifiability/bridge_variance.csv` | `{"gene_set": "all_genes", "pool_bid": 80001}` | `sum_ratio_batch_over_tissue` | value |
 | `bodymap_floored_k20` | 0.6912 | 0.6912 | no | `results/12_bodymap/conformal_transfer.csv` | `{"stage_weeks": 21, "model": "k20", "conformal": "floored"}` | `coverage_mapped` | value |
 | `recal3_bodymap_k20` | 0.9426 | 0.9696 | yes | `results/12_bodymap/recalibration.csv` | `{"model": "k20", "n_recal": 3}` | `coverage_recalibrated` | value |
 | `recal3size_bodymap_k20` | 0.9979 | 1.1058 | yes | `results/12_bodymap/recalibration.csv` | `{"model": "k20", "n_recal": 3}` | `set_size_recalibrated` | value |
@@ -40,10 +42,12 @@ Generated 2026-09-27 06:00 UTC by `scripts/30_export_site_data.py --reconciliati
 | `qc_composition` | 0.9516 |  |  | `results/16_identifiability/qc_only_summary.csv` | `{"features": "composition"}` | `bal_acc_mean` | value |
 | `qc_all` | 0.9758 |  |  | `results/16_identifiability/qc_only_summary.csv` | `{"features": "all"}` | `bal_acc_mean` | value |
 
-## 2. Every exported number that moved with the fix (113 of 204 comparable entries)
+## 2. Every exported number that moved with the fix (115 of 206 comparable entries)
 
 | id | post-fix | pre-fix | source | selector | column |
 |---|---|---|---|---|---|
+| `tile_bodymap_recal_size_k20` | 0.9979 | 1.1058 | `results/12_bodymap/recalibration.csv` | `{"model": "k20", "n_recal": 3}` | `set_size_recalibrated` |
+| `tile_bodymap_recal_k20` | 0.9426 | 0.9696 | `results/12_bodymap/recalibration.csv` | `{"model": "k20", "n_recal": 3}` | `coverage_recalibrated` |
 | `cov_id_full_marginal_pooled` | 0.9077 | 0.9110 | `results/06_conformal/TRNSCRPT/coverage.csv` | `{"calibration": "pooled", "conformal": "marginal", "method": "lac", "alpha": 0.1}` | `coverage` |
 | `cov_id_full_marginal_pooled_sd` | 0.0334 | 0.0402 | `results/06_conformal/TRNSCRPT/coverage.csv` | `{"calibration": "pooled", "conformal": "marginal", "method": "lac", "alpha": 0.1}` | `coverage` |
 | `empty_id_full_marginal_pooled` | 0.0901 | 0.0867 | `results/06_conformal/TRNSCRPT/coverage.csv` | `{"calibration": "pooled", "conformal": "marginal", "method": "lac", "alpha": 0.1}` | `frac_empty` |
@@ -177,6 +181,10 @@ Generated 2026-09-27 06:00 UTC by `scripts/30_export_site_data.py --reconciliati
 | `gtex_recal_infinite_draws` | table | `results/31_site_regen/13_gtex/recal_thresholds.csv`: fraction of recalibration draws whose threshold is +∞ (too few mapped samples for a finite rank), from the per-draw thresholds |
 | `n_trnscrpt_animals` | 50 | `results/04_baselines/TRNSCRPT/per_fold.csv`: train + test animals of one fold |
 | `n_bodymap_adult_animals` | 8 | `results/12_bodymap/recalibration.csv`: recalibration + test individuals |
+| `tile_bodymap_recal_n3_samples` | 25.4000 | `results/31_site_regen/12_bodymap/recal_thresholds.csv`: mean number of calibration samples over the three-animal draws (model k20) |
+| `tile_bridge_pools_min` | 0.0165 | `results/16_identifiability/bridge_variance.csv`: smallest Σ V_batch / Σ V_tissue (all genes) over the bridging pools |
+| `tile_bridge_pools_max` | 0.0533 | `results/16_identifiability/bridge_variance.csv`: largest Σ V_batch / Σ V_tissue (all genes) over the bridging pools |
+| `tile_bridge_n_pools` | 6 | `results/16_identifiability/bridge_variance.csv`: bridging pools with a row in bridge_variance.csv |
 | `acc06_k20` | 0.9779 | `results/31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv`: balanced accuracy of the phase-06 k20 models (18 fit animals per fold) on their 10 test animals, mean over 5 folds |
 | `acc06_k50` | 0.9821 | `results/31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv`: balanced accuracy of the phase-06 k50 models (18 fit animals per fold) on their 10 test animals, mean over 5 folds |
 | `acc06_full` | 0.9916 | `results/31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv`: balanced accuracy of the phase-06 full models (18 fit animals per fold) on their 10 test animals, mean over 5 folds |

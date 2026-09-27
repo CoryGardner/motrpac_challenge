@@ -50,10 +50,26 @@ def test_manifest_lists_phases_and_hash():
 def test_home_tiles_have_provenance():
     h = _load("headline.json")
     prov = {p["id"]: p for p in _load("provenance.json")["entries"]}
-    assert len(h["tiles"]) == 4
+    ids = [t["id"] for t in h["tiles"]]
+    assert h["home_tiles"] == ["tile_acc_k20", "tile_bodymap_k20", "tile_bodymap_recal_k20", "tile_bridge"]
+    assert set(h["home_tiles"]) <= set(ids) and "tile_bodymap_cov_k20" in ids   # the coverage tile stays for the Identifiability page
     for t in h["tiles"]:
         assert t["id"] in prov, f"tile {t['id']} has no provenance entry"
         assert t["value"] == prov[t["id"]]["value"]
+
+
+def test_recalibration_tile_matches_the_table():
+    """The home tile's 0.943 / 1.00 tissue per set are the k20, n_recal = 3 row of results/12_bodymap/recalibration.csv."""
+    import pandas as pd
+    h = _load("headline.json")
+    t = next(t for t in h["tiles"] if t["id"] == "tile_bodymap_recal_k20")
+    r = pd.read_csv(_res("results/12_bodymap/recalibration.csv"))
+    r = r[(r["model"] == "k20") & (r["n_recal"] == 3)].iloc[0]
+    assert abs(t["value"] - r["coverage_recalibrated"]) < 1e-9
+    assert t["line"] == f"mean of {int(r['draws'])} draws · {r['set_size_recalibrated']:.2f} tissue per set"
+    assert f"{int(r['n_test_individuals'])} test animals" in t["sub"]
+    prov = {p["id"]: p for p in _load("provenance.json")["entries"]}
+    assert prov["tile_bodymap_recal_size_k20"]["value"] == r["set_size_recalibrated"]
 
 
 def test_ladder_rungs_are_complete_with_n_and_uncertainty():

@@ -637,6 +637,24 @@ def export_headline(w: Writer, prov: Prov, rec: pd.DataFrame | None):
          "empty": P.val("tile_bodymap_empty_k20", "12_bodymap/conformal_transfer.csv", "frac_empty_mapped", where={"stage_weeks": 21, "model": "k20", "conformal": "marginal"}),
          "label": "coverage of the 90 % guarantee there", "sub": "sets calibrated on MoTrPAC animals, α = 0.10; the shortfall is empty sets", "format": "3",
          "source": "results/12_bodymap/conformal_transfer.csv (stage 21, k20, marginal)"},
+    ]
+    cov_tile = tiles[-1]
+    rt3 = P.read("31_site_regen/12_bodymap/recal_thresholds.csv")
+    rt3 = rt3[(rt3["model"] == "k20") & (rt3["n_recal"] == 3)]
+    recal_where = {"model": "k20", "n_recal": 3}
+    recal_draws = P.val("tile_bodymap_recal_draws_k20", "12_bodymap/recalibration.csv", "draws", where=recal_where)
+    recal_size = P.val("tile_bodymap_recal_size_k20", "12_bodymap/recalibration.csv", "set_size_recalibrated", where=recal_where)
+    recal_n_test = P.val("tile_bodymap_recal_n_test_k20", "12_bodymap/recalibration.csv", "n_test_individuals", where=recal_where)
+    recal_n_samples = P.recomputed("tile_bodymap_recal_n3_samples", float(rt3["n_cal_scores"].mean()), ["31_site_regen/12_bodymap/recal_thresholds.csv"],
+                                   "mean number of calibration samples over the three-animal draws (model k20)")
+    ci_txt = f" [{cov_tile['ci'][0]:.2f}, {cov_tile['ci'][1]:.2f}]" if cov_tile.get("ci") else ""
+    tiles += [
+        {"id": "tile_bodymap_recal_k20", "value": P.val("tile_bodymap_recal_k20", "12_bodymap/recalibration.csv", "coverage_recalibrated", where=recal_where,
+                                                        note="coverage of the α = 0.10 sets on the 21-week BodyMap mapped organs after recalibrating the threshold on 3 of its animals; mean over the draws"),
+         "line": f"mean of {int(recal_draws)} draws · {recal_size:.2f} tissue per set",
+         "label": "coverage of the 90 % guarantee in another lab after recalibrating on three of its animals",
+         "sub": f"sets calibrated on MoTrPAC animals cover {cov_tile['value']:.3f} there{ci_txt}, the shortfall empty sets; 3 calibration animals (≈ {round(recal_n_samples)} samples), {int(recal_n_test)} test animals, α = 0.10",
+         "format": "3", "source": "results/12_bodymap/recalibration.csv (k20, n_recal 3: coverage_recalibrated, set_size_recalibrated, draws)"},
         {"id": "tile_estimable", "value": P.val("tile_estimable", "16_identifiability/estimable_pairs.csv", "n_pairs_estimable", where={"assay": "TRNSCRPT"}),
          "total": P.val("tile_estimable_total", "16_identifiability/estimable_pairs.csv", "n_pairs_total", where={"assay": "TRNSCRPT"}),
          "pairs": P.val("tile_estimable_pairs", "16_identifiability/estimable_pairs.csv", "estimable_pairs", where={"assay": "TRNSCRPT"}),
@@ -661,12 +679,18 @@ def export_headline(w: Writer, prov: Prov, rec: pd.DataFrame | None):
         tiles.append({"id": "tile_bridge",
                       "value": P.val("tile_bridge", bridge_file, "sum_ratio_batch_over_tissue", where={"gene_set": "all_genes", "pool_bid": 80001},
                                      note="batch as a share of the tissue-separating variance: Σ V_batch / Σ V_tissue over all genes, reference pool 99 run on 6 plates at both sites"),
-                      "label": "batch, measured on MoTrPAC's bridging reference pools", "format": "pct1",
-                      "sub": "share of the variance that separates tissues: reference RNA pool 99, sequenced on 6 extraction plates at both sites, all genes",
+                      "label": "of the tissue signal is batch, measured directly on MoTrPAC's bridging reference pools", "format": "pct1",
+                      "sub": (lambda ba: f"between-plate variance of gastrocnemius reference pool 99 over the variance separating the 19 tissues, all genes; 6 extraction plates, both sequencing sites; "
+                                         f"{100 * P.recomputed('tile_bridge_pools_min', float(ba.min()), [bridge_file], 'smallest Σ V_batch / Σ V_tissue (all genes) over the bridging pools'):.1f}–"
+                                         f"{100 * P.recomputed('tile_bridge_pools_max', float(ba.max()), [bridge_file], 'largest Σ V_batch / Σ V_tissue (all genes) over the bridging pools'):.1f} % across all "
+                                         f"{P.recomputed('tile_bridge_n_pools', int(len(ba)), [bridge_file], 'bridging pools with a row in bridge_variance.csv')} pools")
+                             (P.read(bridge_file).query("gene_set == 'all_genes'")["sum_ratio_batch_over_tissue"]),
                       "source": "results/16_identifiability/bridge_variance.csv (gene_set all_genes, pool 80001, Σ V_batch / Σ V_tissue)"})
     else:
         tiles.append({"id": "tile_bridge", "label": "batch, measured on MoTrPAC's bridging reference pools", "format": "pct1",
                       **P.pending("tile_bridge", "bridge measurement not computed (scripts/16_identifiability.py --bridge with the portal files)")})
+    # the home page renders these four, in this order; the coverage tile stays in `tiles` for the Identifiability page
+    home_tiles = ["tile_acc_k20", "tile_bodymap_k20", "tile_bodymap_recal_k20", "tile_bridge"]
     ladder = []
 
     def rung(**kw):
@@ -929,7 +953,7 @@ def export_headline(w: Writer, prov: Prov, rec: pd.DataFrame | None):
             P.pending(k, "phase 15 design table flagged_vials.csv or the phase-06 regeneration missing")
     extras["n_tissues"] = int(P.val("n_tissues", "16_identifiability/estimable_pairs.csv", "n_tissues", where={"assay": "TRNSCRPT"}))
     w.write("headline.json", {"question": "Can a molecular signature identify a tissue reliably?",
-                              "tiles": tiles, "tiles_identifiability": tiles_identifiability, "accuracy": {m: {"mean": a[0], "sd": a[1]} for m, a in acc.items()}, "ladder": ladder, "extras": extras, "design": design,
+                              "tiles": tiles, "home_tiles": home_tiles, "tiles_identifiability": tiles_identifiability, "accuracy": {m: {"mean": a[0], "sd": a[1]} for m, a in acc.items()}, "ladder": ladder, "extras": extras, "design": design,
                               "rung_order": ["in_distribution", "train_control_test_trained", "train_male_test_female", "train_female_test_male", "different_lab", "different_species"]},
             sorted(prov.sources))
 
@@ -1599,7 +1623,7 @@ def reconciliation(prov_entries: list[dict], out_md: Path, prefix_table: Path = 
              "`results/` (post-fix, 2026-09-25) is the truth; the pre-fix values come from `docs/reconciliation/pre_quantile_fix_values.csv`, "
              "generated once from the pre-fix results of 2026-09-25 (not in the repository). Values are shown to 4 decimals; the JSON holds them unrounded.", "",
              "## 1. Headline numbers (the home-page tiles and the transfer ladder)", ""]
-    head_ids = ["tile_acc_k20", "tile_acc_k20_sd", "acc_k50", "acc_full", "acc_fclassif_k20", "tile_bodymap_k20", "tile_bodymap_cov_k20", "tile_bodymap_empty_k20",
+    head_ids = ["tile_acc_k20", "tile_acc_k20_sd", "acc_k50", "acc_full", "acc_fclassif_k20", "tile_bodymap_k20", "tile_bodymap_cov_k20", "tile_bodymap_empty_k20", "tile_bodymap_recal_k20", "tile_bridge",
                 "bodymap_floored_k20", "recal3_bodymap_k20", "recal3size_bodymap_k20", "tile_estimable", "tile_estimable_total",
                 "cov_id_full_marginal_pooled", "cov_id_full_marginal_one_per_animal", "cov_id_full_mondrian_pooled", "cov_id_full_floored_pooled",
                 "cov_train_male_test_female_k20_marginal", "cov_train_male_test_female_full_marginal", "cov_train_female_test_male_k20_marginal",
@@ -1637,7 +1661,8 @@ def readme_table(prov_entries: list[dict]) -> str:
         ("20-gene panel, balanced accuracy (19 tissues, 5 animal-grouped folds)", f"{f('acc_k20')} ± {f('acc_k20_sd')}", "results/05_panels/TRNSCRPT/panel_curve.csv"),
         ("50-gene panel / all genes", f"{f('acc_k50')} / {f('acc_full')}", "results/05_panels/TRNSCRPT/panel_curve.csv, results/04_baselines/TRNSCRPT/summary.csv"),
         ("F-test selector at k = 20 (why the selector matters)", f('acc_fclassif_k20'), "results/05_panels/TRNSCRPT/panel_curve_fclassif.csv"),
-        ("Coverage of 90 % sets in-distribution (pooled / one vial per animal)", f"{f('cov_id_full_marginal_pooled')} / {f('cov_id_full_marginal_one_per_animal')}", "results/06_conformal/TRNSCRPT/coverage.csv"),
+        ("Coverage of 90 % sets in-distribution, all genes (pooled / one vial per animal)", f"{f('cov_id_full_marginal_pooled')} / {f('cov_id_full_marginal_one_per_animal')}", "results/06_conformal/TRNSCRPT/coverage.csv"),
+        ("Coverage of 90 % sets in-distribution, 20-gene panel (pooled / one vial per animal)", f"{f('cov_id_k20_marginal_pooled')} / {f('cov_id_k20_marginal_one_per_animal')}", "results/31_site_regen/06_conformal/TRNSCRPT/scores_*.csv (recomputed)"),
         ("Trained animals, panel fit on the sedentary controls only: accuracy k20 / coverage", f"{f('acc_train_control_test_trained_k20')} / {f('cov_train_control_test_trained_k20_marginal')}", "results/08_shift/TRNSCRPT/shift_table.csv"),
         ("BodyMap adults (another lab): accuracy k20 / coverage / empty sets", f"{f('acc_bodymap_k20')} / {f('cov_bodymap_k20_marginal')} / {f('empty_bodymap_k20_marginal')}", "results/12_bodymap/"),
         ("BodyMap recalibrated on 3 animals: coverage at set size", f"{f('recal3_bodymap_k20')} at {f('recal3size_bodymap_k20', 2)}", "results/12_bodymap/recalibration.csv"),

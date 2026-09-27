@@ -122,6 +122,7 @@ export function statTile(t) {
   if (t.value !== null && t.value !== undefined && t.format !== "of") {
     if (t.sd !== undefined && t.sd !== null) tile.append(el("div", { class: "ci" }, `± ${fmt(t.sd, 3)} sd over folds`));
     else if (t.ci) tile.append(el("div", { class: "ci" }, `95 % interval [${fmt(t.ci[0], 2)}, ${fmt(t.ci[1], 2)}]`));
+    else if (t.line) tile.append(el("div", { class: "ci" }, t.line));
   }
   tile.append(el("div", { class: "label" }, t.label), el("div", { class: "sub" }, t.sub || ""),
     el("details", { class: "tile-src" }, [el("summary", {}, "Source"), el("div", {}, t.source || "pending")]));
