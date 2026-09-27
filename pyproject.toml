@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tfp-tissue-fingerprint-pipeline"
-version = "1.8.1"
+version = "2.0.0"
 description = "Calibrated, leakage-safe evaluation of MoTrPAC multi-omic tissue fingerprints"
 requires-python = ">=3.10"
 license = {text = "MIT"}

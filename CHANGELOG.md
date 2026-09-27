@@ -4,6 +4,36 @@ All notable changes to this repository. The format follows [Keep a Changelog](ht
 dates are UTC. Each section is a `hackathon-submission-v<n>` git tag; the version numbers are those of `CITATION.cff`
 and `pyproject.toml`.
 
+## [2.0.0] — 2026-09-27 (tag `hackathon-submission-v10`)
+
+### Added
+- **Check samples** (`site/index.html`, `site/assets/pages/check.js`), the product: "Is this sample the tissue you think
+  it is?" Input as a 20-gene log2 CPM table or a full raw-count matrix (either orientation, Ensembl IDs or symbols,
+  parsed in a Web Worker with progress, converted with the pipeline's `io.log_cpm`), with an optional claimed-tissue
+  column mapped through synonyms to the 19 classes. Per sample: call, calibrated 90 % set, status (Confident / Ambiguous
+  / Unknown), claim status (Consistent / Mismatch / Can't confirm / Not in reference); an α slider; a sortable,
+  keyboard-operable table with a flagged-only filter; a reference map (PCA of the 20-gene z-space fitted on the MoTrPAC
+  vials); a sample drawer with probabilities against the threshold, "why X, not Y" per-gene contributions and gene values
+  against the reference tissues' median and IQR, and a generated sentence; "Calibrate to my lab"; CSV (spreadsheet
+  formula injection neutralised) and printable HTML report downloads; species and scaling guards with banners.
+- `site/assets/check-core.js` (pure functions) and `site/assets/check-worker.js`; `tests/test_check_core.js` (status
+  rules, count → log2 CPM parity with Python on real BodyMap counts in both orientations, projection parity, contributions
+  + intercept = logit, synonyms, species and scaling guards, CSV safety, the example's swap detection).
+- `scripts/40_product_validation.py` → `results_product/40_product/` (scaling on BodyMap in three modes, flag rates at
+  α ∈ {0.05, 0.10, 0.20} in-study and on BodyMap with 1,000 simulated swaps, the vena cava → brown fat cases, the reference
+  PCA, parity fixtures in `tests/fixtures/`); `scripts/41_export_product_data.py` → `site/data/product.json` with `pv_*`
+  provenance entries; `tests/test_product_data.py`. `make product-validation`, `make product-data`.
+
+### Changed
+- Information architecture: `index.html` is the product; the former Home is `site/science.html` ("The science"). Primary
+  nav: Check samples · Reference atlas · The science · About; the science pages carry a secondary row (Overview, Panel,
+  Transfer, Identifiability, Exercise, Multiomic, Methods, Limitations). Every existing URL still works; the Explorer's
+  scoring tool moved to Check samples (the `explore.html#score-tool` anchor links there).
+- README opens with "Use it"; the track outputs map to the product.
+- CI: the site-data comparison now re-runs the multiomic and product exports on the fresh copy (it had failed since
+  v8 because `multiomic.json` was only in the committed data); the JS job runs `test_check_core.js`. `make test` no longer
+  reports a failing JS test as "skipped". `make site-data` also re-runs the product export.
+
 ## [1.8.1] — 2026-09-27 (tag `hackathon-submission-v9.1`)
 
 ### Added

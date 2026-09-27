@@ -10,9 +10,32 @@ of processing effects on the consortium's bridging standards, an exercise-specif
 every number carries provenance and whose Explorer scores new samples with the panel in the browser.
 
 [![tests](https://github.com/CoryGardner/motrpac_challenge/actions/workflows/tests.yml/badge.svg)](https://github.com/CoryGardner/motrpac_challenge/actions/workflows/tests.yml)
-**Live site:** https://corygardner.github.io/motrpac_challenge/ · **Release:** tag `hackathon-submission-v9.1` (version 1.8.1) · **Licence:** MIT
+**Live site:** https://corygardner.github.io/motrpac_challenge/ · **Release:** tag `hackathon-submission-v10` (version 2.0.0) · **Licence:** MIT
 
-![The home page: the question, the tiles, the one-picture diagram and the transfer ladder](figures/home.png)
+## Use it
+
+**[Check samples](https://corygardner.github.io/motrpac_challenge/)**: *is this sample the tissue you think it is?* Drop a rat RNA-seq table (the 20 panel genes in
+log2 CPM, or a full raw-count matrix in either orientation) with an optional claimed-tissue column. The page returns, per
+sample, a tissue call with a calibrated 90 % prediction set, a status (Confident / Ambiguous / Unknown), a claim check
+(Consistent / Mismatch / Can't confirm), a gene-level "why X, not Y", its place on a map of the MoTrPAC reference tissues,
+and a CSV and printable report. It runs in the browser; nothing is uploaded. "Try the example" loads 80 rat BodyMap
+samples from another laboratory with two labels deliberately swapped: both are flagged.
+
+How good the flag is, measured on existing held-out scores at α = 0.10 (`results_product/40_product/flag_rates.csv`,
+`scripts/40_product_validation.py`):
+
+| data | samples | correct labels flagged Mismatch | correct labels Can't confirm | swapped labels flagged Mismatch | swaps with ≥ 1 of the pair flagged |
+|---|---|---|---|---|---|
+| MoTrPAC held-out animals | 899 | 0.9 % | 9.1 % | 91.5 % | 99.8 % |
+| rat BodyMap 21-week adults (another lab) | 68 | 0 % | 38.2 % | 62.7 % | 89.2 % |
+
+The scaling guard, measured on the same BodyMap adults (`results_product/40_product/scaling.csv`): the whole mixed set
+z-scored together names 100 % of mapped organs (coverage 61.8 %); MoTrPAC reference scaling 98.5 % (coverage 85.3 %, but
+unseen thymus is no longer left empty); each organ z-scored alone 4.4 %. So a small or single-tissue upload is never
+z-scored within itself. The science behind it is **[The science](https://corygardner.github.io/motrpac_challenge/science.html)**; the per-sample reference data are the
+**[Reference atlas](https://corygardner.github.io/motrpac_challenge/explore.html)**.
+
+![The Check samples page](figures/home.png)
 
 | | |
 |---|---|
@@ -45,10 +68,10 @@ contrast on every panel gene (see the Exercise page).
 
 | output the track names | what it is | where |
 |---|---|---|
-| A classifier | the 20-gene logistic regression with calibrated 90 % prediction sets | [Explorer tissue card](https://corygardner.github.io/motrpac_challenge/explore.html#tissue-card); `site/data/panel_model.json` (the model the browser runs); [`src/tfp/models.py`](https://github.com/CoryGardner/motrpac_challenge/blob/main/src/tfp/models.py) |
+| A classifier | the 20-gene logistic regression with calibrated 90 % prediction sets, applied to your samples | [Check samples](https://corygardner.github.io/motrpac_challenge/) (calls, sets, claim checks, CSV and report); `site/data/panel_model.json` (the model the browser runs); [`src/tfp/models.py`](https://github.com/CoryGardner/motrpac_challenge/blob/main/src/tfp/models.py) |
 | Minimal tissue-signature panel | the 20 genes and the 10-gene stable core | [Panel page](https://corygardner.github.io/motrpac_challenge/fingerprint.html); `site/data/panel_card.csv`, `site/data/panel_card.json` |
 | Feature-selection workflow | the class-aware round-robin selector, fitted inside animal-grouped folds | [Methods: the selector](https://corygardner.github.io/motrpac_challenge/methods.html#selector); [Explorer panel builder](https://corygardner.github.io/motrpac_challenge/explore.html#panel-builder); [`RoundRobinSelector`](https://github.com/CoryGardner/motrpac_challenge/blob/main/src/tfp/models.py#L58) in `src/tfp/models.py` |
-| Interactive model-explanation tool | the Explorer: why a sample is called, gene by gene, and scoring of new samples | [tissue card](https://corygardner.github.io/motrpac_challenge/explore.html#tissue-card), [gene explorer](https://corygardner.github.io/motrpac_challenge/explore.html#gene-explorer), [panel builder](https://corygardner.github.io/motrpac_challenge/explore.html#panel-builder), [Score your own samples](https://corygardner.github.io/motrpac_challenge/explore.html#score-tool) |
+| Interactive model-explanation tool | per sample: probabilities against the calibrated threshold, per-gene contributions ("why X, not Y"), gene values against the reference tissues, a reference map | [Check samples](https://corygardner.github.io/motrpac_challenge/) (the sample drawer); [Reference atlas](https://corygardner.github.io/motrpac_challenge/explore.html): [tissue card](https://corygardner.github.io/motrpac_challenge/explore.html#tissue-card), [gene explorer](https://corygardner.github.io/motrpac_challenge/explore.html#gene-explorer), [panel builder](https://corygardner.github.io/motrpac_challenge/explore.html#panel-builder) |
 
 ## Key results
 
@@ -266,7 +289,7 @@ Known failure modes and limits (details on the site's Limitations page):
 ## Reuse
 
 - **Licence:** MIT for code, site and derived tables (`LICENSE`); the data keep their own terms (table above).
-- **Cite:** `CITATION.cff` (version 1.8.1, tag `hackathon-submission-v9.1`), the three data papers, and the multiomic sources in the Data section.
+- **Cite:** `CITATION.cff` (version 2.0.0, tag `hackathon-submission-v10`), the three data papers, and the multiomic sources in the Data section.
 - **Score your samples:** the Explorer's *Score your own samples* tool takes a CSV of log2 CPM for the 20 panel genes
   (a template is provided) and returns tissue calls and 90 % prediction sets in the browser, with optional recalibration
   on labelled samples; the panel card (`site/data/panel_card.csv`, `.json`) lists the genes with their mean expression per

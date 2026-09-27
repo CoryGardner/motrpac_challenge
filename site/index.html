@@ -3,17 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tissue Fingerprints — can a molecular signature identify a tissue reliably?</title>
-<meta name="description" content="A 20-gene panel identifies 19 rat tissues and names the mapped organs of another laboratory's rats; its 90 % guarantee holds within the study, abstains rather than guesses under shift, and is restored by recalibrating on three animals. MoTrPAC × rat BodyMap × GTEx.">
+<title>Check samples — is this sample the tissue you think it is?</title>
+<meta name="description" content="Drop a rat RNA-seq expression table and get a tissue call with a calibrated 90 % confidence set, a gene-level explanation, and flags for label swaps, contamination and unknown tissue. Runs in your browser; nothing is uploaded.">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/brand/badge-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="assets/brand/badge-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/brand/badge-180.png">
 <meta name="theme-color" content="#f9f9f7">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Tissue Fingerprints — The Rat PAC">
-<meta property="og:title" content="Tissue Fingerprints — can a molecular signature identify a tissue reliably?">
-<meta property="og:description" content="A 20-gene panel identifies 19 rat tissues and names the mapped organs of another laboratory's rats; its 90 % guarantee holds within the study, abstains rather than guesses under shift, and is restored by recalibrating on three animals. MoTrPAC × rat BodyMap × GTEx.">
-<meta property="og:url" content="https://corygardner.github.io/motrpac_challenge/index.html">
+<meta property="og:title" content="Is this sample the tissue you think it is?">
+<meta property="og:description" content="A tissue call with a calibrated 90 % confidence set, a gene-level explanation, and flags for swaps, contamination and unknown tissue. Runs in your browser.">
+<meta property="og:url" content="https://corygardner.github.io/motrpac_challenge/">
 <meta property="og:image" content="https://corygardner.github.io/motrpac_challenge/assets/brand/badge-og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -21,83 +21,86 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="assets/theme.css">
 <script>
-  // theme before first paint (no flash): ?theme=, then the stored choice, else the system setting
   (function () { try { var p = new URLSearchParams(location.search).get("theme") || localStorage.getItem("tfp-theme"); if (p === "dark" || p === "light") document.documentElement.setAttribute("data-theme", p); } catch (e) {} })();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/plotly.js-cartesian-dist-min@2.35.2/plotly-cartesian.min.js" integrity="sha384-gKF7EaMDoWW1zLWkouldmVWF5jqEKrAswAciW73iNzqlomabVVPO60XkJvL5q/Ie" crossorigin="anonymous"
         onerror="this.onerror=null;var s=document.createElement('script');s.src='vendor/plotly-cartesian-2.35.2.min.js';document.head.appendChild(s);"></script>
-<script type="module" src="assets/pages/home.js"></script>
+<script type="module" src="assets/pages/check.js"></script>
 </head>
 <body>
 <header class="site-header"></header>
 <main id="main" class="wrap">
-  <h1>Can a molecular signature identify a tissue reliably?</h1>
-  <p class="lede" id="lede">Loading the numbers from <code>site/data</code>…</p>
-
-  <div class="tiles" id="tiles"></div>
-
-  <section class="section" id="deliverables" aria-labelledby="deliverables-h">
-    <h2 id="deliverables-h">What this submission delivers</h2>
-    <div class="tiles">
-      <div class="tile"><h3>A classifier</h3>
-        <p class="small">The 20-gene logistic regression with calibrated 90 % prediction sets.</p>
-        <p class="small"><a href="explore.html#tissue-card">Explorer tissue card</a> · <a href="data/panel_model.json">panel_model.json</a> (the model the browser runs) · <a href="https://github.com/CoryGardner/motrpac_challenge/blob/main/src/tfp/models.py">src/tfp/models.py</a></p></div>
-      <div class="tile"><h3>Minimal tissue-signature panel</h3>
-        <p class="small">The 20 genes and the 10-gene stable core.</p>
-        <p class="small"><a href="fingerprint.html">Panel page</a> · <a href="data/panel_card.csv">panel card CSV</a> · <a href="data/panel_card.json">JSON</a></p></div>
-      <div class="tile"><h3>Feature-selection workflow</h3>
-        <p class="small">The class-aware round-robin selector, fitted inside animal-grouped folds.</p>
-        <p class="small"><a href="methods.html#selector">Methods: the selector</a> · <a href="explore.html#panel-builder">Explorer panel builder</a> · <a href="https://github.com/CoryGardner/motrpac_challenge/blob/main/src/tfp/models.py#L58">RoundRobinSelector</a></p></div>
-      <div class="tile"><h3>Interactive model-explanation tool</h3>
-        <p class="small">The Explorer: see why a sample is called, gene by gene, and score your own data.</p>
-        <p class="small"><a href="explore.html#tissue-card">Tissue card</a> · <a href="explore.html#gene-explorer">Gene explorer</a> · <a href="explore.html#panel-builder">Panel builder</a> · <a href="explore.html#score-tool">Score your own samples</a></p></div>
+  <section class="hero" id="hero">
+    <h1>Is this sample the tissue you think it is?</h1>
+    <p class="lede">Drop an expression table; get a tissue call with a calibrated 90 % confidence, a gene-level explanation, and flags for swaps, contamination and unknown tissue. Runs in your browser; nothing is uploaded.</p>
+    <div class="hero-actions">
+      <button class="btn primary" type="button" id="btn-example">Try the example</button>
+      <button class="btn" type="button" id="btn-upload">Upload / paste</button>
     </div>
+    <div class="trust" id="trust" aria-label="How far to trust it"></div>
   </section>
 
-  <section class="overview" id="overview">
-    <div class="figure" id="fig-overview">
-      <div class="fig-head"><h3>The study in one picture</h3></div>
-      <div id="overview-svg"></div>
-      <p class="small" id="overview-caption"></p>
+  <section class="section" id="input" aria-labelledby="input-h">
+    <h2 id="input-h">Your samples</h2>
+    <p id="input-help" class="small">Rat RNA-seq. Either a table of the 20 panel genes in log2 CPM (samples in rows, genes as columns), or a full raw-count matrix in either orientation with Ensembl IDs or gene symbols; counts are converted to log2 CPM here with the pipeline's transform. An optional column <code>claimed_tissue</code> (or <code>tissue</code>, <code>true_tissue</code>) holds the tissue you think each sample is.</p>
+    <div class="controls" id="input-controls">
+      <label class="control" for="in-file"><span>File (CSV or TSV)</span><input id="in-file" type="file" accept=".csv,.tsv,.txt,.tab,text/csv,text/tab-separated-values,text/plain"></label>
+      <label class="control" for="in-format"><span>Input</span>
+        <select id="in-format">
+          <option value="auto">detect</option>
+          <option value="log2cpm">20-gene log2 CPM</option>
+          <option value="counts">raw counts (full matrix)</option>
+        </select>
+      </label>
     </div>
+    <label class="control block" for="in-text"><span>Or paste the table</span></label>
+    <textarea id="in-text" rows="6" spellcheck="false" placeholder="sample,Cyp21a1,Pmch,Dbh,…,claimed_tissue&#10;my_sample_1,4.21,0.12,…,liver"></textarea>
+    <div class="hero-actions"><button class="btn primary" type="button" id="btn-check">Check the pasted table</button></div>
+    <div id="progress" class="small" role="status" aria-live="polite"></div>
+    <div id="example-note"></div>
+    <details class="fig-notes" id="accepted"><summary>Accepted tissue names (the 19 reference tissues)</summary><div id="accepted-list"></div></details>
   </section>
 
-  <div id="fig-ladder"></div>
+  <div id="banners" aria-live="polite"></div>
 
-  <ul class="key-points" id="key-points"></ul>
-
-  <section class="section" id="sec-accuracy">
-    <h2>1. Twenty genes are enough</h2>
-    <p id="p-accuracy"></p>
-    <div id="fig-curve"></div>
-    <p><a href="fingerprint.html">The panel →</a></p>
+  <section class="section" id="results" hidden aria-labelledby="results-h">
+    <h2 id="results-h">Results</h2>
+    <div class="controls" id="result-controls"></div>
+    <div class="tiles compact" id="summary"></div>
+    <div class="controls" id="table-controls"></div>
+    <div id="tbl-results"></div>
+    <p class="small" id="status-key"></p>
   </section>
 
-  <section class="section" id="sec-guarantee">
-    <h2>2. The guarantee travels honestly</h2>
-    <p id="p-guarantee"></p>
-    <div id="fig-empty"></div>
-    <p><a href="transfer.html">Does it transfer? →</a></p>
+  <section class="section" id="drawer" hidden aria-labelledby="drawer-h" tabindex="-1">
+    <div class="drawer-head"><h2 id="drawer-h">Sample</h2><button class="btn" type="button" id="drawer-close">Close</button></div>
+    <div id="drawer-body"></div>
+    <div class="grid-2">
+      <div id="fig-probs"></div>
+      <div id="fig-contrib"></div>
+    </div>
+    <div id="fig-genes"></div>
   </section>
 
-  <section class="section" id="sec-identifiability">
-    <h2>3. It is biology, not processing</h2>
-    <p id="p-identifiability"></p>
-    <div id="fig-bridge"></div>
-    <p><a href="identifiability.html">What is the fingerprint identifying? →</a></p>
+  <section class="section" id="map-sec" hidden>
+    <div id="fig-map"></div>
   </section>
 
-  <section class="section" id="sec-tour">
-    <h2>The five-minute tour</h2>
-    <ol class="tour">
-      <li><a href="explore.html#tissue-card">Open the Explorer</a> on a <b>BodyMap thymus</b>, an organ the fingerprint never saw: it abstains.</li>
-      <li>Pick the <b>GTEx heart</b> it opens on, compare its two calls, then switch models.</li>
-      <li><a href="explore.html#gene-explorer">Open the gene explorer</a> on <b>Pgk2</b>: the testis marker not yet expressed at two weeks.</li>
-      <li><a href="transfer.html#recalibration">Transfer page</a>, recalibration scatter: three BodyMap animals restore the guarantee at one tissue per set.</li>
-      <li><a href="identifiability.html">Identifiability page</a>, nesting heatmap: each tissue processed as a unit; an independent laboratory settles it.</li>
-      <li><a href="explore.html#score-tool">Score your own samples</a>: load the example, score it, label the pre-filled rows, recalibrate: the sets become singletons.</li>
-      <li><a href="multiomic.html">Multiomic page</a>: the same proteins on two scales — why the fingerprint is RNA, and where proteins and metabolites stand.</li>
-    </ol>
+  <section class="section" id="calibrate" hidden aria-labelledby="cal-h">
+    <h2 id="cal-h">Calibrate to my lab</h2>
+    <p id="cal-intro"></p>
+    <div class="controls" id="cal-controls"></div>
+    <div id="cal-status" role="status" aria-live="polite"></div>
+  </section>
+
+  <section class="section" id="expect" aria-labelledby="expect-h">
+    <h2 id="expect-h">What to expect</h2>
+    <div id="expect-body"></div>
+  </section>
+
+  <section class="section" id="flag" aria-labelledby="flag-h">
+    <h2 id="flag-h">How good is the flag?</h2>
+    <div id="flag-body"></div>
   </section>
 </main>
 <footer class="site-footer"></footer>

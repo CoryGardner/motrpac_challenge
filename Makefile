@@ -137,7 +137,9 @@ smoke: ## synthetic data → phases 02, 04, 05, 06 in --quick mode → results_s
 
 test: ## Python tests (results-dependent ones read results/ or results_frozen/), the JS conformal test, the snapshot check
 	$(PY) -m pytest -q
-	@command -v node >/dev/null 2>&1 && test -f site/data/conformal_fixtures.json && node tests/test_site_conformal.js && node tests/test_score_tool.js || echo "(node or site/data absent: JS conformal test skipped)"
+	@if command -v node >/dev/null 2>&1 && test -f site/data/conformal_fixtures.json; then \
+	  node tests/test_site_conformal.js && node tests/test_score_tool.js && node tests/test_check_core.js; \
+	else echo "(node or site/data absent: JS tests skipped)"; fi
 	$(MAKE) verify-frozen PY=$(PY)
 
 # ---- the site ------------------------------------------------------------------------------------------
@@ -161,14 +163,22 @@ freeze-results: ## copy every result file the site reads into results_frozen/ (c
 verify-frozen: ## check results_frozen/ against its manifest
 	$(PY) scripts/33_freeze_results.py --verify
 
+product-validation: ## phase 40: the Check samples page's validation numbers → results_product/40_product (needs data/external)
+	$(PY) scripts/40_product_validation.py
+
+product-data: ## site/data/product.json and the pv_* provenance entries from results_product/
+	$(PY) scripts/41_export_product_data.py
+
 site-data: ## export site/data with provenance from results/ (or RESULTS=<dir>, or the snapshot); check the anchors
 	$(PY) scripts/30_export_site_data.py --check-anchors --reconciliation $(if $(RESULTS),--results $(RESULTS),)
 	$(PY) scripts/multiomic/export_site_data.py   # re-appends the mo_* provenance entries the main export rewrites
+	$(PY) scripts/41_export_product_data.py       # and the pv_* entries of the Check samples page
 
 site-test: ## the site tests: provenance, regeneration, JS conformal port, links
 	$(PY) -m pytest -q tests/test_site_data.py tests/test_regen_scores.py tests/test_frozen_results.py
 	node tests/test_site_conformal.js
 	node tests/test_score_tool.js
+	node tests/test_check_core.js
 	$(PY) tools/linkcheck.py
 
 site: site-data site-test ## export the site data and run the site tests

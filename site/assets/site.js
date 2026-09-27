@@ -2,10 +2,11 @@
 // All text goes through textContent (never innerHTML with data).
 
 export const REPO_URL = "https://github.com/CoryGardner/motrpac_challenge";
-const PAGES = [
-  ["index.html", "Home"], ["explore.html", "Explorer"], ["fingerprint.html", "Panel"], ["transfer.html", "Transfer"],
-  ["identifiability.html", "Identifiability"], ["exercise.html", "Exercise"], ["multiomic.html", "Multiomic"], ["methods.html", "Methods"], ["limitations.html", "Limitations"],
-  ["about.html", "About"],
+// primary nav: the product first, the science second; the science pages carry a secondary row
+const PAGES = [["index.html", "Check samples"], ["explore.html", "Reference atlas"], ["science.html", "The science"], ["about.html", "About"]];
+export const SCIENCE_PAGES = [
+  ["science.html", "Overview"], ["fingerprint.html", "Panel"], ["transfer.html", "Transfer"], ["identifiability.html", "Identifiability"],
+  ["exercise.html", "Exercise"], ["multiomic.html", "Multiomic"], ["methods.html", "Methods"], ["limitations.html", "Limitations"],
 ];
 const cache = new Map();
 
@@ -77,13 +78,25 @@ export async function mountChrome(page) {
   const header = document.querySelector("header.site-header") || document.body.insertBefore(el("header", { class: "site-header" }), document.body.firstChild);
   const logo = el("img", { class: "mark", src: "assets/brand/badge-192.png", alt: "", width: 72, height: 72, decoding: "async" });
   const nav = el("nav", { class: "primary", "aria-label": "Site" });
+  const isScience = SCIENCE_PAGES.some(([h]) => h === page);
   for (const [href, label] of PAGES) {
     const a = el("a", { href }, label);
     if (href === page) a.setAttribute("aria-current", "page");
+    else if (href === "science.html" && isScience) a.setAttribute("aria-current", "true");
     nav.appendChild(a);
   }
   const toggle = el("button", { class: "theme-toggle", type: "button", "aria-label": "Toggle colour theme", onclick: toggleTheme }, "");
-  header.replaceChildren(el("div", { class: "wrap" }, [el("a", { class: "brand", href: "index.html" }, [logo, "Tissue Fingerprints"]), nav, toggle]));
+  const rows = [el("div", { class: "wrap" }, [el("a", { class: "brand", href: "index.html" }, [logo, "Tissue Fingerprints"]), nav, toggle])];
+  if (isScience) {
+    const sub = el("nav", { class: "secondary", "aria-label": "The science" });
+    for (const [href, label] of SCIENCE_PAGES) {
+      const a = el("a", { href }, label);
+      if (href === page) a.setAttribute("aria-current", "page");
+      sub.appendChild(a);
+    }
+    rows.push(el("div", { class: "wrap subnav" }, [sub]));
+  }
+  header.replaceChildren(...rows);
   updateToggle();
   document.body.insertBefore(el("a", { class: "skip", href: "#main" }, "Skip to content"), document.body.firstChild);
   const footer = document.querySelector("footer.site-footer") || document.body.appendChild(el("footer", { class: "site-footer" }));

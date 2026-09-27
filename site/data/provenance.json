@@ -131,8 +131,8 @@
 "document": "docs/NUMBERS_RECONCILIATION.md"
 },
 "multiomic": {
-"generated": "2026-09-27 15:00 UTC",
-"git_hash": "18d98c2",
+"generated": "2026-09-27 16:06 UTC",
+"git_hash": "03f3d6a",
 "n_entries": 236,
 "n_tables": 11,
 "sources": [
@@ -172,6 +172,21 @@
 "results_multiomic/08_verification/sato_invariance_design.csv",
 "results_multiomic/09_extensions/ladder_side_by_side.csv",
 "results_multiomic/09_extensions/overlap_summary.csv"
+]
+},
+"product": {
+"generated": "2026-09-27 16:06 UTC",
+"git_hash": "03f3d6a",
+"n_entries": 101,
+"n_tables": 5,
+"sources": [
+"results_frozen/12_bodymap/ood_sets.csv",
+"results_product/40_product/flag_rates.csv",
+"results_product/40_product/pca_loadings.csv",
+"results_product/40_product/pca_reference_coords.csv",
+"results_product/40_product/pca_summary.csv",
+"results_product/40_product/scaling.csv",
+"results_product/40_product/venacv_cases.csv"
 ]
 }
 },
@@ -8352,6 +8367,1252 @@
 "tol": 1e-06,
 "pending": true,
 "reason": "empty cell in results_multiomic/09_extensions/overlap_summary.csv (genes_in_both)"
+},
+{
+"id": "pv_scaling_adult_21wk_within_all_accuracy",
+"value": 1.0,
+"file": "results_product/40_product/scaling.csv",
+"where": {
+"subset": "adult_21wk",
+"mode": "within_all",
+"organ": "ALL_MAPPED"
+},
+"column": "accuracy",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_scaling_adult_21wk_within_all_coverage",
+"value": 0.6176470588235294,
+"file": "results_product/40_product/scaling.csv",
+"where": {
+"subset": "adult_21wk",
+"mode": "within_all",
+"organ": "ALL_MAPPED"
+},
+"column": "coverage",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_scaling_adult_21wk_within_all_frac_empty",
+"value": 0.3823529411764705,
+"file": "results_product/40_product/scaling.csv",
+"where": {
+"subset": "adult_21wk",
+"mode": "within_all",
+"organ": "ALL_MAPPED"
+},
+"column": "frac_empty",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_scaling_adult_21wk_within_all_n",
+"value": 68,
+"file": "results_product/40_product/scaling.csv",
+"where": {
+"subset": "adult_21wk",
+"mode": "within_all",
+"organ": "ALL_MAPPED"
+},
+"column": "n",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_scaling_adult_21wk_reference_accuracy",
+"value": 0.9852941176470588,
+"file": "results_product/40_product/scaling.csv",
+"where": {
+"subset": "adult_21wk",
+"mode": "reference",
+"organ": "ALL_MAPPED"
+},
+"column": "accuracy",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_scaling_adult_21wk_reference_coverage",
+"value": 0.8529411764705882,
+"file": "results_product/40_product/scaling.csv",
+"where": {
+"subset": "adult_21wk",
+"mode": "reference",
+"organ": "ALL_MAPPED"
+},
+"column": "coverage",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_scaling_adult_21wk_reference_frac_empty",
+"value": 0.1470588235294117,
+"file": "results_product/40_product/scaling.csv",
+"where": {
+"subset": "adult_21wk",
+"mode": "reference",
+"organ": "ALL_MAPPED"
+},
+"column": "frac_empty",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_scaling_adult_21wk_reference_n",
+"value": 68,
+"file": "results_product/40_product/scaling.csv",
+"where": {
+"subset": "adult_21wk",
+"mode": "reference",
+"organ": "ALL_MAPPED"
+},
+"column": "n",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_scaling_adult_21wk_within_organ_alone_accuracy",
+"value": 0.0441176470588235,
+"file": "results_product/40_product/scaling.csv",
+"where": {
+"subset": "adult_21wk",
+"mode": "within_organ_alone",
+"organ": "ALL_MAPPED"
+},
+"column": "accuracy",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_scaling_adult_21wk_within_organ_alone_coverage",
+"value": 0.0,
+"file": "results_product/40_product/scaling.csv",
+"where": {
+"subset": "adult_21wk",
+"mode": "within_organ_alone",
+"organ": "ALL_MAPPED"
+},
+"column": "coverage",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_scaling_adult_21wk_within_organ_alone_frac_empty",
+"value": 0.9705882352941176,
+"file": "results_product/40_product/scaling.csv",
+"where": {
+"subset": "adult_21wk",
+"mode": "within_organ_alone",
+"organ": "ALL_MAPPED"
+},
+"column": "frac_empty",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_scaling_adult_21wk_within_organ_alone_n",
+"value": 68,
+"file": "results_product/40_product/scaling.csv",
+"where": {
+"subset": "adult_21wk",
+"mode": "within_organ_alone",
+"organ": "ALL_MAPPED"
+},
+"column": "n",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_scaling_adult_21wk_within_all_Thymus_frac_empty",
+"value": 0.75,
+"file": "results_product/40_product/scaling.csv",
+"where": {
+"subset": "adult_21wk",
+"mode": "within_all",
+"organ": "Thymus"
+},
+"column": "frac_empty",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_scaling_adult_21wk_within_all_Uterus_frac_empty",
+"value": 1.0,
+"file": "results_product/40_product/scaling.csv",
+"where": {
+"subset": "adult_21wk",
+"mode": "within_all",
+"organ": "Uterus"
+},
+"column": "frac_empty",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_scaling_adult_21wk_reference_Thymus_frac_empty",
+"value": 0.0,
+"file": "results_product/40_product/scaling.csv",
+"where": {
+"subset": "adult_21wk",
+"mode": "reference",
+"organ": "Thymus"
+},
+"column": "frac_empty",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_scaling_adult_21wk_reference_Uterus_frac_empty",
+"value": 1.0,
+"file": "results_product/40_product/scaling.csv",
+"where": {
+"subset": "adult_21wk",
+"mode": "reference",
+"organ": "Uterus"
+},
+"column": "frac_empty",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_scaling_all_ages_within_all_accuracy",
+"value": 0.9253731343283582,
+"file": "results_product/40_product/scaling.csv",
+"where": {
+"subset": "all_ages",
+"mode": "within_all",
+"organ": "ALL_MAPPED"
+},
+"column": "accuracy",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_scaling_all_ages_within_all_coverage",
+"value": 0.4365671641791044,
+"file": "results_product/40_product/scaling.csv",
+"where": {
+"subset": "all_ages",
+"mode": "within_all",
+"organ": "ALL_MAPPED"
+},
+"column": "coverage",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_scaling_all_ages_within_all_frac_empty",
+"value": 0.5485074626865671,
+"file": "results_product/40_product/scaling.csv",
+"where": {
+"subset": "all_ages",
+"mode": "within_all",
+"organ": "ALL_MAPPED"
+},
+"column": "frac_empty",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_scaling_all_ages_within_all_n",
+"value": 268,
+"file": "results_product/40_product/scaling.csv",
+"where": {
+"subset": "all_ages",
+"mode": "within_all",
+"organ": "ALL_MAPPED"
+},
+"column": "n",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_scaling_all_ages_reference_accuracy",
+"value": 0.9626865671641792,
+"file": "results_product/40_product/scaling.csv",
+"where": {
+"subset": "all_ages",
+"mode": "reference",
+"organ": "ALL_MAPPED"
+},
+"column": "accuracy",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_scaling_all_ages_reference_coverage",
+"value": 0.6977611940298507,
+"file": "results_product/40_product/scaling.csv",
+"where": {
+"subset": "all_ages",
+"mode": "reference",
+"organ": "ALL_MAPPED"
+},
+"column": "coverage",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_scaling_all_ages_reference_frac_empty",
+"value": 0.3022388059701492,
+"file": "results_product/40_product/scaling.csv",
+"where": {
+"subset": "all_ages",
+"mode": "reference",
+"organ": "ALL_MAPPED"
+},
+"column": "frac_empty",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_scaling_all_ages_reference_n",
+"value": 268,
+"file": "results_product/40_product/scaling.csv",
+"where": {
+"subset": "all_ages",
+"mode": "reference",
+"organ": "ALL_MAPPED"
+},
+"column": "n",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_scaling_all_ages_within_organ_alone_accuracy",
+"value": 0.1007462686567164,
+"file": "results_product/40_product/scaling.csv",
+"where": {
+"subset": "all_ages",
+"mode": "within_organ_alone",
+"organ": "ALL_MAPPED"
+},
+"column": "accuracy",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_scaling_all_ages_within_organ_alone_coverage",
+"value": 0.003731343283582,
+"file": "results_product/40_product/scaling.csv",
+"where": {
+"subset": "all_ages",
+"mode": "within_organ_alone",
+"organ": "ALL_MAPPED"
+},
+"column": "coverage",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_scaling_all_ages_within_organ_alone_frac_empty",
+"value": 0.9216417910447762,
+"file": "results_product/40_product/scaling.csv",
+"where": {
+"subset": "all_ages",
+"mode": "within_organ_alone",
+"organ": "ALL_MAPPED"
+},
+"column": "frac_empty",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_scaling_all_ages_within_organ_alone_n",
+"value": 268,
+"file": "results_product/40_product/scaling.csv",
+"where": {
+"subset": "all_ages",
+"mode": "within_organ_alone",
+"organ": "ALL_MAPPED"
+},
+"column": "n",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_scaling_all_ages_within_all_Thymus_frac_empty",
+"value": 0.84375,
+"file": "results_product/40_product/scaling.csv",
+"where": {
+"subset": "all_ages",
+"mode": "within_all",
+"organ": "Thymus"
+},
+"column": "frac_empty",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_scaling_all_ages_within_all_Uterus_frac_empty",
+"value": 0.8125,
+"file": "results_product/40_product/scaling.csv",
+"where": {
+"subset": "all_ages",
+"mode": "within_all",
+"organ": "Uterus"
+},
+"column": "frac_empty",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_scaling_all_ages_reference_Thymus_frac_empty",
+"value": 0.25,
+"file": "results_product/40_product/scaling.csv",
+"where": {
+"subset": "all_ages",
+"mode": "reference",
+"organ": "Thymus"
+},
+"column": "frac_empty",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_scaling_all_ages_reference_Uterus_frac_empty",
+"value": 1.0,
+"file": "results_product/40_product/scaling.csv",
+"where": {
+"subset": "all_ages",
+"mode": "reference",
+"organ": "Uterus"
+},
+"column": "frac_empty",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_motrpac_heldout_0.05_false_mismatch_rate",
+"value": 0.014460511679644,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "motrpac_heldout",
+"alpha": 0.05
+},
+"column": "false_mismatch_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_motrpac_heldout_0.05_cant_confirm_rate",
+"value": 0.0300333704115684,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "motrpac_heldout",
+"alpha": 0.05
+},
+"column": "cant_confirm_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_motrpac_heldout_0.05_swap_vial_detection_rate",
+"value": 0.9665,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "motrpac_heldout",
+"alpha": 0.05
+},
+"column": "swap_vial_detection_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_motrpac_heldout_0.05_swap_pair_detection_rate",
+"value": 1.0,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "motrpac_heldout",
+"alpha": 0.05
+},
+"column": "swap_pair_detection_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_motrpac_heldout_0.05_swap_vial_missed_rate",
+"value": 0.0,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "motrpac_heldout",
+"alpha": 0.05
+},
+"column": "swap_vial_missed_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_motrpac_heldout_0.05_n_samples",
+"value": 899,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "motrpac_heldout",
+"alpha": 0.05
+},
+"column": "n_samples",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_motrpac_heldout_0.05_n_swaps",
+"value": 1000,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "motrpac_heldout",
+"alpha": 0.05
+},
+"column": "n_swaps",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_motrpac_heldout_0.1_false_mismatch_rate",
+"value": 0.0088987764182424,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "motrpac_heldout",
+"alpha": 0.1
+},
+"column": "false_mismatch_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_motrpac_heldout_0.1_cant_confirm_rate",
+"value": 0.0912124582869855,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "motrpac_heldout",
+"alpha": 0.1
+},
+"column": "cant_confirm_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_motrpac_heldout_0.1_swap_vial_detection_rate",
+"value": 0.9145,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "motrpac_heldout",
+"alpha": 0.1
+},
+"column": "swap_vial_detection_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_motrpac_heldout_0.1_swap_pair_detection_rate",
+"value": 0.998,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "motrpac_heldout",
+"alpha": 0.1
+},
+"column": "swap_pair_detection_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_motrpac_heldout_0.1_swap_vial_missed_rate",
+"value": 0.0,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "motrpac_heldout",
+"alpha": 0.1
+},
+"column": "swap_vial_missed_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_motrpac_heldout_0.1_n_samples",
+"value": 899,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "motrpac_heldout",
+"alpha": 0.1
+},
+"column": "n_samples",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_motrpac_heldout_0.1_n_swaps",
+"value": 1000,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "motrpac_heldout",
+"alpha": 0.1
+},
+"column": "n_swaps",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_motrpac_heldout_0.2_false_mismatch_rate",
+"value": 0.0033370411568409,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "motrpac_heldout",
+"alpha": 0.2
+},
+"column": "false_mismatch_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_motrpac_heldout_0.2_cant_confirm_rate",
+"value": 0.2013348164627363,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "motrpac_heldout",
+"alpha": 0.2
+},
+"column": "cant_confirm_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_motrpac_heldout_0.2_swap_vial_detection_rate",
+"value": 0.8005,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "motrpac_heldout",
+"alpha": 0.2
+},
+"column": "swap_vial_detection_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_motrpac_heldout_0.2_swap_pair_detection_rate",
+"value": 0.974,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "motrpac_heldout",
+"alpha": 0.2
+},
+"column": "swap_pair_detection_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_motrpac_heldout_0.2_swap_vial_missed_rate",
+"value": 0.0,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "motrpac_heldout",
+"alpha": 0.2
+},
+"column": "swap_vial_missed_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_motrpac_heldout_0.2_n_samples",
+"value": 899,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "motrpac_heldout",
+"alpha": 0.2
+},
+"column": "n_samples",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_motrpac_heldout_0.2_n_swaps",
+"value": 1000,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "motrpac_heldout",
+"alpha": 0.2
+},
+"column": "n_swaps",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_all_ages_0.05_false_mismatch_rate",
+"value": 0.0186567164179104,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_all_ages",
+"alpha": 0.05
+},
+"column": "false_mismatch_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_all_ages_0.05_cant_confirm_rate",
+"value": 0.376865671641791,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_all_ages",
+"alpha": 0.05
+},
+"column": "cant_confirm_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_all_ages_0.05_swap_vial_detection_rate",
+"value": 0.617,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_all_ages",
+"alpha": 0.05
+},
+"column": "swap_vial_detection_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_all_ages_0.05_swap_pair_detection_rate",
+"value": 0.861,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_all_ages",
+"alpha": 0.05
+},
+"column": "swap_pair_detection_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_all_ages_0.05_swap_vial_missed_rate",
+"value": 0.0005,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_all_ages",
+"alpha": 0.05
+},
+"column": "swap_vial_missed_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_all_ages_0.05_n_samples",
+"value": 268,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_all_ages",
+"alpha": 0.05
+},
+"column": "n_samples",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_all_ages_0.05_n_swaps",
+"value": 1000,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_all_ages",
+"alpha": 0.05
+},
+"column": "n_swaps",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_all_ages_0.1_false_mismatch_rate",
+"value": 0.0149253731343283,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_all_ages",
+"alpha": 0.1
+},
+"column": "false_mismatch_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_all_ages_0.1_cant_confirm_rate",
+"value": 0.5485074626865671,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_all_ages",
+"alpha": 0.1
+},
+"column": "cant_confirm_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_all_ages_0.1_swap_vial_detection_rate",
+"value": 0.4435,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_all_ages",
+"alpha": 0.1
+},
+"column": "swap_vial_detection_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_all_ages_0.1_swap_pair_detection_rate",
+"value": 0.696,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_all_ages",
+"alpha": 0.1
+},
+"column": "swap_pair_detection_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_all_ages_0.1_swap_vial_missed_rate",
+"value": 0.0,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_all_ages",
+"alpha": 0.1
+},
+"column": "swap_vial_missed_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_all_ages_0.1_n_samples",
+"value": 268,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_all_ages",
+"alpha": 0.1
+},
+"column": "n_samples",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_all_ages_0.1_n_swaps",
+"value": 1000,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_all_ages",
+"alpha": 0.1
+},
+"column": "n_swaps",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_all_ages_0.2_false_mismatch_rate",
+"value": 0.0,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_all_ages",
+"alpha": 0.2
+},
+"column": "false_mismatch_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_all_ages_0.2_cant_confirm_rate",
+"value": 0.7761194029850746,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_all_ages",
+"alpha": 0.2
+},
+"column": "cant_confirm_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_all_ages_0.2_swap_vial_detection_rate",
+"value": 0.224,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_all_ages",
+"alpha": 0.2
+},
+"column": "swap_vial_detection_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_all_ages_0.2_swap_pair_detection_rate",
+"value": 0.405,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_all_ages",
+"alpha": 0.2
+},
+"column": "swap_pair_detection_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_all_ages_0.2_swap_vial_missed_rate",
+"value": 0.0,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_all_ages",
+"alpha": 0.2
+},
+"column": "swap_vial_missed_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_all_ages_0.2_n_samples",
+"value": 268,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_all_ages",
+"alpha": 0.2
+},
+"column": "n_samples",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_all_ages_0.2_n_swaps",
+"value": 1000,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_all_ages",
+"alpha": 0.2
+},
+"column": "n_swaps",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_adult_21wk_0.05_false_mismatch_rate",
+"value": 0.0,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_adult_21wk",
+"alpha": 0.05
+},
+"column": "false_mismatch_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_adult_21wk_0.05_cant_confirm_rate",
+"value": 0.2941176470588235,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_adult_21wk",
+"alpha": 0.05
+},
+"column": "cant_confirm_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_adult_21wk_0.05_swap_vial_detection_rate",
+"value": 0.7185,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_adult_21wk",
+"alpha": 0.05
+},
+"column": "swap_vial_detection_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_adult_21wk_0.05_swap_pair_detection_rate",
+"value": 0.947,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_adult_21wk",
+"alpha": 0.05
+},
+"column": "swap_pair_detection_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_adult_21wk_0.05_swap_vial_missed_rate",
+"value": 0.0,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_adult_21wk",
+"alpha": 0.05
+},
+"column": "swap_vial_missed_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_adult_21wk_0.05_n_samples",
+"value": 68,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_adult_21wk",
+"alpha": 0.05
+},
+"column": "n_samples",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_adult_21wk_0.05_n_swaps",
+"value": 1000,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_adult_21wk",
+"alpha": 0.05
+},
+"column": "n_swaps",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_adult_21wk_0.1_false_mismatch_rate",
+"value": 0.0,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_adult_21wk",
+"alpha": 0.1
+},
+"column": "false_mismatch_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_adult_21wk_0.1_cant_confirm_rate",
+"value": 0.3823529411764705,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_adult_21wk",
+"alpha": 0.1
+},
+"column": "cant_confirm_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_adult_21wk_0.1_swap_vial_detection_rate",
+"value": 0.6265,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_adult_21wk",
+"alpha": 0.1
+},
+"column": "swap_vial_detection_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_adult_21wk_0.1_swap_pair_detection_rate",
+"value": 0.892,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_adult_21wk",
+"alpha": 0.1
+},
+"column": "swap_pair_detection_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_adult_21wk_0.1_swap_vial_missed_rate",
+"value": 0.0,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_adult_21wk",
+"alpha": 0.1
+},
+"column": "swap_vial_missed_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_adult_21wk_0.1_n_samples",
+"value": 68,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_adult_21wk",
+"alpha": 0.1
+},
+"column": "n_samples",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_adult_21wk_0.1_n_swaps",
+"value": 1000,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_adult_21wk",
+"alpha": 0.1
+},
+"column": "n_swaps",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_adult_21wk_0.2_false_mismatch_rate",
+"value": 0.0,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_adult_21wk",
+"alpha": 0.2
+},
+"column": "false_mismatch_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_adult_21wk_0.2_cant_confirm_rate",
+"value": 0.6029411764705882,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_adult_21wk",
+"alpha": 0.2
+},
+"column": "cant_confirm_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_adult_21wk_0.2_swap_vial_detection_rate",
+"value": 0.401,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_adult_21wk",
+"alpha": 0.2
+},
+"column": "swap_vial_detection_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_adult_21wk_0.2_swap_pair_detection_rate",
+"value": 0.672,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_adult_21wk",
+"alpha": 0.2
+},
+"column": "swap_pair_detection_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_adult_21wk_0.2_swap_vial_missed_rate",
+"value": 0.0,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_adult_21wk",
+"alpha": 0.2
+},
+"column": "swap_vial_missed_rate",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_adult_21wk_0.2_n_samples",
+"value": 68,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_adult_21wk",
+"alpha": 0.2
+},
+"column": "n_samples",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_flag_bodymap_adult_21wk_0.2_n_swaps",
+"value": 1000,
+"file": "results_product/40_product/flag_rates.csv",
+"where": {
+"setting": "bodymap_adult_21wk",
+"alpha": 0.2
+},
+"column": "n_swaps",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_pca_explained_PC1",
+"value": 0.1470242189984986,
+"file": "results_product/40_product/pca_summary.csv",
+"where": {
+"PC": "PC1"
+},
+"column": "explained",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_pca_explained_PC2",
+"value": 0.110527166684093,
+"file": "results_product/40_product/pca_summary.csv",
+"where": {
+"PC": "PC2"
+},
+"column": "explained",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_ood_Thymus_n",
+"value": 8,
+"file": "results_frozen/12_bodymap/ood_sets.csv",
+"where": {
+"model": "k20",
+"conformal": "marginal",
+"organ": "Thymus"
+},
+"column": "n",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_ood_Thymus_frac_empty",
+"value": 0.75,
+"file": "results_frozen/12_bodymap/ood_sets.csv",
+"where": {
+"model": "k20",
+"conformal": "marginal",
+"organ": "Thymus"
+},
+"column": "frac_empty",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_ood_Uterus_n",
+"value": 4,
+"file": "results_frozen/12_bodymap/ood_sets.csv",
+"where": {
+"model": "k20",
+"conformal": "marginal",
+"organ": "Uterus"
+},
+"column": "n",
+"agg": "value",
+"tol": 1e-09
+},
+{
+"id": "pv_ood_Uterus_frac_empty",
+"value": 1.0,
+"file": "results_frozen/12_bodymap/ood_sets.csv",
+"where": {
+"model": "k20",
+"conformal": "marginal",
+"organ": "Uterus"
+},
+"column": "frac_empty",
+"agg": "value",
+"tol": 1e-09
 }
 ],
 "tables": [
@@ -9161,6 +10422,43 @@
 "json_path": "deep_mw_by_tissue_k20",
 "n_rows": 36,
 "quantised": true
+},
+{
+"id": "pv_scaling",
+"file": "results_product/40_product/scaling.csv",
+"json_file": "product.json",
+"json_path": "scaling",
+"n_rows": 72
+},
+{
+"id": "pv_flag_rates",
+"file": "results_product/40_product/flag_rates.csv",
+"json_file": "product.json",
+"json_path": "flag",
+"n_rows": 9
+},
+{
+"id": "pv_venacv_cases",
+"file": "results_product/40_product/venacv_cases.csv",
+"json_file": "product.json",
+"json_path": "venacv",
+"n_rows": 7
+},
+{
+"id": "pv_pca_loadings",
+"file": "results_product/40_product/pca_loadings.csv",
+"json_file": "product.json",
+"json_path": "pca.loadings",
+"n_rows": 20,
+"matrix": true
+},
+{
+"id": "pv_pca_reference",
+"file": "results_product/40_product/pca_reference_coords.csv",
+"json_file": "product.json",
+"json_path": "pca.reference",
+"n_rows": 899,
+"matrix": true
 }
 ]
 }
