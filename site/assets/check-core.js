@@ -204,6 +204,20 @@ export function parseUpload(text, model, { format = "auto", orientation = "auto"
     s.values = out.format === "counts" ? countsToLog2Cpm(s.raw, s.libSize) : { ...s.raw };
   }
   out.missing = model.genes.filter((g) => out.samples.every((s) => s.values[g.id] === null));
+  if (!out.samples.length) return { error: "no sample rows or columns were found" };
+  if (out.missing.length === model.genes.length) {
+    return { error: `none of the ${model.genes.length} panel genes (${model.genes.slice(0, 3).map((g) => g.symbol).join(", ")}, …) was found in the header or the first column, as a gene symbol or an Ensembl ID. Check that the table has one column (or row) per gene and a header row.` };
+  }
+  if (out.missing.length > model.genes.length / 2) {
+    warnings.push(`only ${model.genes.length - out.missing.length} of the ${model.genes.length} panel genes were found; the calls rest on those alone and are unreliable.`);
+  }
+  // samples with a missing value in a gene the table does have (a blank or NA cell), not a gene absent from the table
+  const present = model.genes.filter((g) => !out.missing.includes(g));
+  out.partialMissing = out.samples.filter((s) => present.some((g) => s.values[g.id] === null)).map((s) => s.id);
+  if (out.partialMissing.length) {
+    const names = out.partialMissing.slice(0, 5).join(", ") + (out.partialMissing.length > 5 ? ` and ${out.partialMissing.length - 5} more` : "");
+    warnings.push(`${out.partialMissing.length} sample${out.partialMissing.length === 1 ? " has" : "s have"} an empty or non-numeric panel-gene value (${names}); each such gene is scored at the reference mean, which weakens that sample's call. They are marked in the table's "missing" column.`);
+  }
   out.species = guessSpecies(out.geneIds);
   if (out.shortRows.length) {
     const names = out.shortRows.slice(0, 5).join(", ") + (out.shortRows.length > 5 ? ` and ${out.shortRows.length - 5} more` : "");
@@ -259,6 +273,20 @@ export function claimStatus(set, claim) {
   if (claim.kind === "not_in_reference") return "Not in reference";
   if (!set.length) return "Can't confirm";
   return claim.classes.some((c) => set.includes(c)) ? "Consistent" : "Mismatch";
+}
+
+/** Display order of the results table: the most actionable first (Mismatch, then Can't confirm, Not in reference, Unknown
+ *  without a claim, Ambiguous, Consistent / Confident), keeping the upload order within each group. */
+export function priority(r) {
+  if (r.claimStatus === "Mismatch") return 0;
+  if (r.claimStatus === "Can't confirm") return 1;
+  if (r.claimStatus === "Not in reference") return 2;
+  if (r.status === "Unknown") return 3;
+  if (r.status === "Ambiguous") return 4;
+  return 5;
+}
+export function orderByPriority(results) {
+  return results.map((r, i) => [r, i]).sort((a, b) => priority(a[0]) - priority(b[0]) || a[1] - b[1]).map(([r]) => r);
 }
 
 export function isFlagged(r) {

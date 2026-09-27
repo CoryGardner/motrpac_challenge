@@ -102,7 +102,7 @@ async function main() {
       return { traces,
                layout: { xaxis: { title: { text: "mean set size (tissues per set)" }, range: [0.5, 13] }, yaxis: { title: { text: "coverage after recalibration" }, range: [0.8, 1.02] },
                          shapes: [{ type: "rect", x0: 0.5, x1: 1.5, y0: 0.9, y1: 1.02, xref: "x", yref: "y", fillcolor: hexAlpha(p[0], 0.08), line: { width: 0 } }],
-                         annotations: [{ x: 1.0, y: 1.015, xref: "x", yref: "y", text: "target: guaranteed and informative", showarrow: false, font: { color: t.ink2, size: 11 } }, ...clusterNotes], legend: { y: 1.14 }, margin: { t: 40 } },
+                         annotations: [{ x: 1.0, y: 1.015, xref: "x", yref: "y", text: "target: ≥ 0.90 observed coverage, about one tissue per set", showarrow: false, font: { color: t.ink2, size: 11 } }, ...clusterNotes], legend: { y: 1.14 }, margin: { t: 40 } },
                table: { columns: ["target", "model", "n_recal", "coverage_recalibrated", "coverage_source_cal_same_test", "set_size_recalibrated", "draws"],
                         rows: [...rb.map((r) => ({ target: "BodyMap", ...r })), ...rg.map((r) => ({ target: "GTEx", ...r })), ...shiftRows.map((r) => ({ target: r.split, model: r.model, n_recal: r.n_recal_animals, coverage_recalibrated: r.coverage_recalibrated, coverage_source_cal_same_test: r.coverage_source_cal_same_test, set_size_recalibrated: r.set_size_recalibrated, draws: r.repeats }))] } };
     },

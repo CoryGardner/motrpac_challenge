@@ -294,6 +294,9 @@ img.shot { max-width: 100%; height: auto; border: 1px solid var(--grid); border-
 #in-text { width: 100%; font-family: var(--mono, ui-monospace, monospace); font-size: 0.8rem; border: 1px solid var(--axis); border-radius: var(--radius); background: var(--surface); color: var(--ink); padding: 0.5rem; }
 #table-controls { align-items: center; }
 .tiles.compact .tile { min-height: 0; }
+.table-wrap.wrap-head th { white-space: normal; vertical-align: bottom; min-width: 5.5rem; }
+.table-wrap.wrap-head td { white-space: nowrap; }
+.missing-mark { font-size: 0.8rem; color: var(--serious); white-space: nowrap; }
 .tiles.compact .tile .value { font-size: clamp(1.4rem, 3vw, 1.9rem); }
 table.results th button.sort { font: inherit; font-weight: 600; background: none; border: 0; color: inherit; cursor: pointer; padding: 0; }
 table.results tr.clickable { cursor: pointer; }
@@ -312,3 +315,13 @@ table.results .badge { padding: 0.1rem 0.5rem; font-size: 0.8rem; font-weight: 5
 .pca-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem 0.9rem; font-size: 0.82rem; color: var(--ink-2); align-self: end; }
 .pca-legend .legend-item { display: inline-flex; align-items: center; gap: 0.35rem; }
 .pca-legend .swatch { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+/* glossary (The science) */
+dl.glossary { margin: 0.5rem 0 0; }
+dl.glossary dt { font-weight: 650; margin-top: 0.8rem; color: var(--ink); }
+dl.glossary dd { margin: 0.15rem 0 0; color: var(--ink-2); max-width: var(--measure); }
+
+/* Check samples results table: wrap long cells so every column fits at 1024–1440 px */
+table.results th, table.results td { white-space: normal; }
+table.results td:first-child { overflow-wrap: anywhere; min-width: 9rem; }
+table.results td .badge, table.results .missing-mark { white-space: nowrap; }

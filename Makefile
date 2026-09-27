@@ -154,7 +154,7 @@ regen-scores: ## per-sample score regenerations of phases 06, 08 (k = 20, 50), 1
 	MOTRPAC_NO_REPORT=1 $(PY) scripts/13_gtex_transfer.py --out $(REGEN)/13_gtex --save-scores
 	$(PY) -m pytest -q tests/test_regen_scores.py
 
-panel-model: ## phase 34: export the 20-gene transfer model for the Explorer's scoring tool (needs data/ and regen-scores)
+panel-model: ## phase 34: export the 20-gene transfer model for the Check samples page (needs data/ and regen-scores)
 	MOTRPAC_NO_REPORT=1 $(PY) scripts/34_panel_model.py
 
 freeze-results: ## copy every result file the site reads into results_frozen/ (committed snapshot)

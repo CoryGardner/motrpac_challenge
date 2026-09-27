@@ -4,9 +4,9 @@
 // product.json with its pv_* provenance entries, expr_motrpac.json, expr_bodymap.json).
 import { mountChrome, loadJSON, el, fmt, pct, callout, tableFrom, control, slider, select, badge } from "../site.js";
 import { figure, tokens, palette, organSystem, template, CONFIG } from "../charts.js";
-import { exampleRows, recalibrate, minLabelled } from "../score.js";
-import { compositionNote } from "../notes.js";
-import { parseUpload, runCheck, resultsToCsv, exampleTable, acceptedList, CLASS_NAMES, contrast, explainSentence, project, referenceStats,
+import { exampleRows, recalibrate, minLabelled, templateCsv } from "../score.js";
+import { compositionNote, modelNote } from "../notes.js";
+import { parseUpload, runCheck, resultsToCsv, exampleTable, acceptedList, CLASS_NAMES, contrast, explainSentence, project, referenceStats, orderByPriority,
          WITHIN_MIN_SAMPLES, WITHIN_MIN_TISSUES } from "../check-core.js";
 
 const nm = (c) => CLASS_NAMES[c] || c;
@@ -19,6 +19,7 @@ async function main() {
   state.model = model; state.alpha = model.alpha_default ?? 0.1;
   D = { H, PR };
   trustStrip();
+  document.getElementById("model-note").textContent = modelNote(model, H.extras.n_animals);
   acceptedNames();
   expectNote();
   flagNote();
@@ -36,6 +37,7 @@ async function main() {
     state.swapped = []; document.getElementById("example-note").replaceChildren();
     parseInWorker({ file: f }, f.name);
   });
+  document.getElementById("btn-template").addEventListener("click", () => download("tissue_check_template.csv", templateCsv(model).replace(",true_tissue", ",claimed_tissue"), "text/csv"));
   document.getElementById("drawer-close").addEventListener("click", closeDrawer);
   document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !document.getElementById("drawer").hidden) closeDrawer(); });
   if (new URLSearchParams(location.search).get("example") === "1") runExample();
@@ -49,9 +51,9 @@ function trustStrip() {
   const nEmpty = Math.round(ood.Thymus.frac_empty * ood.Thymus.n) + Math.round(ood.Uterus.frac_empty * ood.Uterus.n);
   const item = (value, label, href) => el("a", { class: "trust-item", href }, [el("span", { class: "trust-value" }, value), el("span", { class: "trust-label" }, label)]);
   document.getElementById("trust").replaceChildren(
-    item(fmt(t.tile_acc_k20.value, 3), `balanced accuracy of the ${state.model.genes.length}-gene panel across ${state.model.classes.length} rat tissues, held-out animals`, "science.html#sec-accuracy"),
+    item(fmt(t.tile_acc_k20.value, 3), `balanced accuracy of ${state.model.genes.length}-gene panels selected inside animal-grouped folds, ${state.model.classes.length} rat tissues, held-out animals`, "science.html#sec-accuracy"),
     item(fmt(t.tile_bodymap_k20.value, 3), "of adult organs named correctly in another laboratory's rats", "transfer.html"),
-    item(`${nEmpty} of ${nOod}`, "samples from organs it never saw (thymus, uterus) get no tissue: it fails safe", "transfer.html"),
+    item(`${nEmpty} of ${nOod}`, "samples from organs it never saw (thymus, uterus) get an empty prediction set in a mixed upload: it fails safe (not under the reference scaling used for small uploads; see What to expect)", "#expect"),
   );
 }
 
@@ -81,13 +83,19 @@ async function runExample() {
   parseInWorker({ text: exTbl.csv }, "the example");
 }
 
+function clearResults() {
+  for (const id of ["results", "map-sec", "calibrate", "drawer"]) document.getElementById(id).hidden = true;
+  document.getElementById("banners").replaceChildren();
+  state.check = null; state.samples = null;
+}
+
 function parseInWorker(payload, sourceName) {
   state.source = sourceName;
   setProgress(`Reading ${sourceName}…`);
   const format = document.getElementById("in-format").value;
   const opts = { format };
   const done = (r) => {
-    setProgress(`Read ${sourceName}: ${r.samples.length} samples, ${r.format === "counts" ? `${r.nFeatures} gene features (raw counts, converted to log2 CPM)` : "20-gene log2 CPM"}, ${r.orientation === "genes_x_samples" ? "genes in rows" : "samples in rows"}.`);
+    setProgress(`Read ${sourceName}: ${r.samples.length} sample${r.samples.length === 1 ? "" : "s"}, ${r.format === "counts" ? `${r.nFeatures} gene features (raw counts, converted to log2 CPM)` : "20-gene log2 CPM"}, ${r.orientation === "genes_x_samples" ? "genes in rows" : "samples in rows"}.`);
     state.parsed = r; state.samples = r.samples; state.recal = null; state.selected = null;
     closeDrawer();
     analyse();
@@ -95,17 +103,17 @@ function parseInWorker(payload, sourceName) {
   let w = null;
   try { w = new Worker(new URL("../check-worker.js", import.meta.url), { type: "module" }); } catch (e) { w = null; }
   if (!w) {   // no module workers: parse on the main thread
-    const go = async () => { const text = payload.text ?? (await payload.file.text()); const r = parseUpload(text, state.model, opts); if (r.error) setProgress(`Could not read ${sourceName}: ${r.error}`); else done(r); };
+    const go = async () => { const text = payload.text ?? (await payload.file.text()); const r = parseUpload(text, state.model, opts); if (r.error) { clearResults(); setProgress(`Could not read ${sourceName}: ${r.error}`); } else done(r); };
     go();
     return;
   }
   w.onmessage = (e) => {
     const m = e.data;
     if (m.type === "progress") setProgress(m.stage === "reading" ? `Reading ${sourceName}…` : `Parsing ${sourceName}: ${Math.round(100 * m.f)} %`);
-    else if (m.type === "error") { setProgress(`Could not read ${sourceName}: ${m.message}`); w.terminate(); }
+    else if (m.type === "error") { clearResults(); setProgress(`Could not read ${sourceName}: ${m.message}`); w.terminate(); }
     else if (m.type === "done") { w.terminate(); done(m.result); }
   };
-  w.onerror = (e) => { setProgress(`Could not read ${sourceName}: ${e.message || "worker error"}`); w.terminate(); };
+  w.onerror = (e) => { clearResults(); setProgress(`Could not read ${sourceName}: ${e.message || "worker error"}`); w.terminate(); };
   w.postMessage({ ...payload, model: state.model, opts });
 }
 
@@ -118,6 +126,7 @@ function analyse() {
   document.getElementById("map-sec").hidden = false;
   document.getElementById("calibrate").hidden = false;
   resultControls();
+  guide();
   summary();
   table();
   map();
@@ -158,6 +167,31 @@ const CLAIM_BADGE = { Consistent: ["correct", "✓"], Mismatch: ["wrong", "✗"]
 const sBadge = (s) => badge(...STATUS_BADGE[s], s);
 const cBadge = (s) => (s ? badge(...CLAIM_BADGE[s], s) : el("span", { class: "small" }, "no claim"));
 
+// What to look at first: the swapped pair of the example, and a one-click recalibration when most sets are empty.
+function guide() {
+  const C = state.check, c = C.counts, out = [];
+  const mism = C.results.filter((r) => r.claimStatus === "Mismatch");
+  if (state.swapped.length) {
+    const hit = state.swapped.filter((id) => mism.some((r) => r.id === id));
+    out.push(el("p", {}, [el("b", {}, `The two swapped samples ${hit.length === state.swapped.length ? "are both flagged Mismatch" : `: ${hit.length} of ${state.swapped.length} flagged Mismatch`}`),
+      ` and sit at the top of the table (${state.swapped.join(" and ")}); select one to see why.`]));
+  } else if (mism.length) {
+    out.push(el("p", {}, [el("b", {}, `${mism.length} claimed label${mism.length === 1 ? " does" : "s do"} not match the call`), "; they sit at the top of the table."]));
+  }
+  const nLab = Object.keys(labelledMap()).length, need = minLabelled(state.alpha);
+  if (!state.recal && c.Unknown > c.total / 2) {
+    const b = el("button", { class: "btn primary", type: "button" }, "Recalibrate on my labelled samples");
+    if (nLab < need) b.setAttribute("disabled", "");
+    b.addEventListener("click", () => { state.recal = recalFor(); analyse(); document.getElementById("results").scrollIntoView({ behavior: "smooth" }); });
+    out.push(el("p", {}, [el("b", {}, `${c.Unknown} of ${c.total} prediction sets are empty.`),
+      " That is the expected first result for samples from another laboratory: the threshold was calibrated on MoTrPAC animals, so the model abstains rather than guess. ",
+      nLab >= need ? `Recalibrating on your ${nLab} labelled samples adapts the threshold to your lab (see “Calibrate to my lab” below). ` : `Label at least ${need} samples to recalibrate to your lab. `]), b);
+  } else if (state.recal && !state.recal.error) {
+    out.push(el("p", {}, `Recalibrated on ${state.recal.n} of your labelled samples: the flags below use your lab's threshold (observed coverage ${fmt(state.recal.coverage, 3)} on those samples, not a guarantee for new ones).`));
+  }
+  document.getElementById("results-guide").replaceChildren(...(out.length ? [callout("note", "Start here", out)] : []));
+}
+
 function summary() {
   const c = state.check.counts;
   const tile = (value, label, sub) => el("div", { class: "tile" }, [el("div", { class: "value" }, String(value)), el("div", { class: "label" }, label), sub ? el("div", { class: "sub" }, sub) : null]);
@@ -178,11 +212,11 @@ function table() {
   const rp = el("button", { class: "btn", type: "button" }, "Download report");
   rp.addEventListener("click", () => download("tissue_check_report.html", reportHtml(), "text/html"));
   document.getElementById("table-controls").replaceChildren(el("label", { class: "control inline", for: "flagged-only" }, [onlyFlag, el("span", {}, "Flagged only")]), dl, rp);
-  const cols = [["id", "sample"], ["label", "claimed"], ["call", "call"], ["set", "90 % set"], ["status", "status"], ["claimStatus", "claim"], ["callProb", "top p"], ["runnerUp", "runner-up"]];
-  let rows = C.results.filter((r) => !state.filterFlagged || r.flagged);
+  const cols = [["id", "sample"], ["label", "claimed"], ["call", "call"], ["set", "90 % prediction set"], ["status", "status"], ["claimStatus", "claim"], ["callProb", "top p"], ["runnerUp", "runner-up"], ["missing", "missing"]];
+  let rows = orderByPriority(C.results.filter((r) => !state.filterFlagged || r.flagged));
   if (state.sort.key) {
     const k = state.sort.key, d = state.sort.dir;
-    const val = (r) => (k === "set" ? r.set.length : k === "runnerUp" ? r.runnerUpProb : r[k] ?? "");
+    const val = (r) => (k === "set" ? r.set.length : k === "runnerUp" ? r.runnerUpProb : k === "missing" ? r.missingGenes.length : r[k] ?? "");
     rows = [...rows].sort((a, b) => (val(a) < val(b) ? -d : val(a) > val(b) ? d : 0));
   }
   const thead = el("thead", {}, el("tr", {}, cols.map(([k, lab]) => {
@@ -199,6 +233,7 @@ function table() {
       el("td", {}, r.set.length ? r.set.map(nm).join("; ") : "none"),
       el("td", {}, sBadge(r.status)), el("td", {}, cBadge(r.claimStatus)),
       el("td", { class: "num" }, fmt(r.callProb, 2)), el("td", {}, `${nm(r.runnerUp)} (${fmt(r.runnerUpProb, 2)})`),
+      el("td", {}, r.missingGenes.length ? el("span", { class: "missing-mark", title: `missing: ${r.missingGenes.join(", ")}` }, `⚠ ${r.missingGenes.length} gene${r.missingGenes.length === 1 ? "" : "s"}`) : ""),
     ]);
     const open = () => openDrawer(r.id, true);
     tr.addEventListener("click", open);
@@ -207,7 +242,7 @@ function table() {
   }
   const wrap = el("div", { class: "table-wrap" }, el("table", { class: "data results" }, [thead, tbody]));
   document.getElementById("tbl-results").replaceChildren(rows.length ? wrap : el("p", {}, "No flagged samples."));
-  document.getElementById("status-key").textContent = "Status: Confident = one tissue in the 90 % set; Ambiguous = several; Unknown = none (the model abstains). Claim: Consistent = your label is in the set; Mismatch = the set is not empty and your label is not in it; Can't confirm = empty set. Select a row (click, or Enter) for the explanation.";
+  document.getElementById("status-key").textContent = "Rows are ordered with the most actionable first (Mismatch, Can't confirm, not in reference, Unknown); click a column header to sort. The 90 % prediction set is a conformal prediction set: every tissue whose probability clears a threshold calibrated on held-out MoTrPAC animals (see the glossary on The science page). Status: Confident = one tissue in the 90 % set; Ambiguous = several; Unknown = none (the model abstains). Claim: Consistent = your label is in the set; Mismatch = the set is not empty and your label is not in it; Can't confirm = empty set. Select a row (click, or Enter) for the explanation.";
 }
 
 // ---- reference map ------------------------------------------------------------------------------------------------------
@@ -388,7 +423,7 @@ function flagNote() {
   const nV = V.length, nFl = V.filter((v) => v.consortium_flagged).length, nMis = V.filter((v) => v.status_claimed_venacv === "mismatch").length, nCc = V.filter((v) => v.status_claimed_venacv === "cant_confirm").length;
   document.getElementById("flag-body").replaceChildren(
     el("p", {}, `A correctly labelled sample should almost never be flagged Mismatch, and a swapped label should be. We measured both on existing held-out scores: every correctly labelled sample, and ${F["motrpac_heldout.0.1.n_swaps"]} simulated swaps between two samples of different tissues (fixed seed), at three error rates.`),
-    tableFrom({ columns: ["data", "α", "samples", "false Mismatch (correct label)", "Can't confirm (correct label)", "swapped labels flagged Mismatch", "swaps with ≥ 1 of the pair flagged"], rows }),
+    (() => { const t = tableFrom({ columns: ["data", "α", "samples", "false Mismatch (correct label)", "Can't confirm (correct label)", "swapped labels flagged Mismatch", "swaps with ≥ 1 of the pair flagged"], rows }); t.classList.add("wrap-head"); return t; })(),
     el("p", {}, `${maxMiss === 0 ? "A swapped label is never called Consistent in these data" : `At most ${pct(maxMiss, 2)} of swapped labels are called Consistent in any row`}; the swaps that are not flagged Mismatch mostly get an empty set (Can't confirm), so they are still not confirmed. In another laboratory the price is more Can't confirm on correct labels; recalibrating on a few of your own labelled samples raises coverage (see the Transfer page).`),
     el("p", {}, `A real case: of the ${D.H.extras.venacv_vials} held-out MoTrPAC vena cava vials, the model calls ${nV} brown fat, and the consortium had flagged ${nFl} of those ${nV} as contaminated with brown fat. Checked with the claimed label “vena cava” at α = 0.10, ${nMis} are flagged Mismatch and ${nCc} Can't confirm${nMis + nCc === nV ? ": none is passed as consistent" : ""}.`),
     el("p", { class: "small" }, "Source: results_product/40_product/flag_rates.csv and venacv_cases.csv (scripts/40_product_validation.py). MoTrPAC rows use the pipeline's held-out 20-gene models (panel re-selected in each animal-grouped fold, each fold's own calibration scores; results_frozen/31_site_regen/06_conformal/TRNSCRPT/scores_*.csv): the same method as the model on this page, not the identical fit. BodyMap rows use this page's model exactly. Provenance: pv_flag_*, pv_venacv_cases."),

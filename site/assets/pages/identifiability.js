@@ -76,17 +76,17 @@ async function main() {
   const geneBase = PC.baselines.find((r) => r.model === "logreg_l2");
   document.getElementById("p-qc").replaceChildren(
     `A multinomial logistic regression that sees only the per-library QC numbers, never a gene, identifies the tissue on the fingerprint's animal-grouped folds (balanced accuracy): ${fmt(qs.technical.bal_acc_mean)} ± ${fmt(qs.technical.bal_acc_sd)} from ${qs.technical.n_features} technical numbers (RIN, adapter and duplication rates, GC, depth), ${fmt(qs.composition.bal_acc_mean)} ± ${fmt(qs.composition.bal_acc_sd)} from ${qs.composition.n_features} composition fractions and ${fmt(qs.all.bal_acc_mean)} ± ${fmt(qs.all.bal_acc_sd)} from both, against ${fmt(Q.info.chance)} by chance and ${fmt(geneBase.balanced_accuracy_mean)} for the all-gene model. `,
-    `Library QC numbers alone identify the tissue at ${fmt(ex.qc_all)} — partly because tissues genuinely differ in composition (see the note below).`,
+    `With the composition fractions added the QC numbers reach ${fmt(ex.qc_all)}, partly because tissues genuinely differ in composition (see the note below); within the study that cannot be told apart from batch, which is why the external laboratory and the bridging pools below decide it.`,
   );
   await figure(document.getElementById("fig-qc"), {
-    title: `Library QC numbers alone identify the tissue at ${fmt(qs.all.bal_acc_mean)}: technical numbers, composition fractions, and both together`,
+    title: `Library QC numbers alone identify the tissue: ${fmt(qs.technical.bal_acc_mean)} from technical numbers, more with composition fractions`,
     subtitle: "Balanced accuracy per fold (dots) and mean ± sd (bars) by feature set; chance and the all-gene model for reference.",
     build: () => {
       const t = tokens(); const p = palette();
       const sets = ["technical", "composition", "all"];
       const x = [...sets.map((s) => `${s} (${qs[s].n_features})`), "gene-based model"];
-      const y = [...sets.map((s) => qs[s].acc_mean), geneBase.balanced_accuracy_mean];
-      const sdv = [...sets.map((s) => qs[s].acc_sd), geneBase.balanced_accuracy_std];
+      const y = [...sets.map((s) => qs[s].bal_acc_mean), geneBase.balanced_accuracy_mean];
+      const sdv = [...sets.map((s) => qs[s].bal_acc_sd), geneBase.balanced_accuracy_std];
       const dots = strip(pf.map((r) => sets.indexOf(r.features) + (r.fold - 2) * 0.05), pf.map((r) => r.balanced_accuracy), { color: t.ink2, size: 7, name: "per fold", hover: "%{customdata}<extra></extra>" });
       dots.customdata = pf.map((r) => `${r.features}, fold ${r.fold}: ${fmt(r.balanced_accuracy)} (${r.n_test_animals} test animals, ${r.n_test_vials} vials)`);
       dots.x = pf.map((r) => r.features === "technical" ? 0 + (r.fold - 2) * 0.06 : r.features === "composition" ? 1 + (r.fold - 2) * 0.06 : 2 + (r.fold - 2) * 0.06);

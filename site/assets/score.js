@@ -1,5 +1,5 @@
 // "Score your own samples": pure functions (no DOM) that turn a pasted table of log2 CPM values into tissue calls and
-// conformal prediction sets with the exported 20-gene transfer model (site/data/panel_model.json). Used by the Explorer
+// conformal prediction sets with the exported 20-gene transfer model (site/data/panel_model.json). Used by Check samples (via check-core.js)
 // page and by tests/test_score_tool.js, which checks that the rat BodyMap samples come out exactly as the pipeline
 // scored them. The arithmetic is the pipeline's: z-score each gene within the uploaded set (population sd, as
 // scikit-learn's StandardScaler does), then softmax(z · Wᵀ + b); sets use conformal.js with the 15-animal calibration.

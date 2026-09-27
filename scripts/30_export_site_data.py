@@ -1667,7 +1667,7 @@ def readme_table(prov_entries: list[dict]) -> str:
         ("BodyMap adults (another lab): accuracy k20 / coverage / empty sets", f"{f('acc_bodymap_k20')} / {f('cov_bodymap_k20_marginal')} / {f('empty_bodymap_k20_marginal')}", "results/12_bodymap/"),
         ("BodyMap recalibrated on 3 animals: coverage at set size", f"{f('recal3_bodymap_k20')} at {f('recal3size_bodymap_k20', 2)}", "results/12_bodymap/recalibration.csv"),
         ("GTEx (human): accuracy k20 / k50 / full", f"{f('acc_gtex_k20')} / {f('acc_gtex_k50')} / {f('acc_gtex_full')}", "results/13_gtex/accuracy_overall.csv"),
-        ("GTEx coverage k20 / empty; recalibrated on 3 donors: coverage at set size", f"{f('cov_gtex_k20_marginal')} / {f('empty_gtex_k20_marginal')}; {f('recal3_gtex_k20')} at {f('recal3size_gtex_k20', 2)}", "results/13_gtex/"),
+        ("GTEx coverage k20 / empty; recalibrated on 3 donors (all 20 draws, 9 with no finite threshold): coverage at set size", f"{f('cov_gtex_k20_marginal')} / {f('empty_gtex_k20_marginal')}; {f('recal3_gtex_k20')} at {f('recal3size_gtex_k20', 2)}", "results/13_gtex/"),
         ("Estimable tissue pairs within study (RNA-seq)", f"{f('tile_estimable')} of {f('tile_estimable_total')} ({' and '.join(t.lower() for t in str(byid.get('tile_estimable_pairs', '')).split('|'))})", "results/16_identifiability/estimable_pairs.csv"),
         ("Sedentary vs 8-week-trained within tissue: mean best single-omic AUROC / fusion beats single / attributable to training", f"{f('taskB_mean_auroc_8w')} / {f('fusion_n_beats_single', 0)} of {f('fusion_n_tissues', 0)} / {f('verdict_n_training', 0)} of {f('verdict_n_tissues', 0)}", "results/07_fusion/"),
         ("Trained animals, 8-week group only (cohort-matched with the controls): accuracy k20 / coverage", f"{f('fbd_acc_k20_8w')} / {f('fbd_cov_k20_8w')}", "results/31_site_regen/08_shift_k20/scores_target_vials.csv"),
@@ -1685,12 +1685,12 @@ def abstract(prov_entries: list[dict]) -> str:
         f"In the MoTrPAC rat endurance-training transcriptomes (19 tissues, 899 vials, 50 animals), a 20-gene panel selected "
         f"inside each fold by a class-aware round-robin rule reaches {g('acc_k20')} balanced accuracy over animal-grouped folds "
         f"(50 genes {g('acc_k50')}; all genes {g('acc_full')}; a univariate F-test at the same size {g('acc_fclassif_k20')}). "
-        f"A split-conformal set promising the true tissue 90 % of the time covers {g('cov_id_full_marginal_one_per_animal')} of held-out "
+        f"A split-conformal prediction set promising the true tissue 90 % of the time covers {g('cov_id_k20_marginal_one_per_animal')} of held-out "
         f"animals and, with the panel fit on sedentary controls only, {g('cov_train_control_test_trained_k20_marginal')} of trained animals. "
         f"Beyond the study it abstains rather than errs: {g('cov_bodymap_k20_marginal')} of rat BodyMap organs from another laboratory, "
         f"where the panel names every mapped organ correctly, and {g('cov_gtex_k20_marginal')} of human GTEx samples (accuracy {g('acc_gtex_k20')}). "
-        f"Three target animals restore the guarantee within species ({g('recal3_bodymap_k20')} at {g('recal3size_bodymap_k20', 2)} tissues per set); "
-        f"across species three donors restore the number, not the information ({g('recal3_gtex_k20')} at {g('recal3size_gtex_k20', 1)} tissues per set). "
+        f"Three target animals restore observed coverage within species ({g('recal3_bodymap_k20')}; {g('pv_recal_bodymap_3_min_coverage', 2)}–{g('pv_recal_bodymap_3_max_coverage', 2)} per draw); "
+        f"across species five donors restore the number, not the information ({g('pv_recal_gtex_5_mean_coverage_all_draws')} at {g('pv_recal_gtex_5_mean_set_size_finite', 1)} tissues per set). "
         f"As in any multi-tissue design, each tissue was processed as a unit: {g('tile_estimable')} of {g('tile_estimable_total')} tissue pairs "
         f"({pairs}) can be contrasted inside one batch, and library QC numbers alone classify tissue at {g('qc_all')}. "
         f"Two external facts establish the fingerprint as biology: the independent laboratory, and batch measured directly on the consortium's "

@@ -2,15 +2,15 @@ cff-version: 1.2.0
 message: "If you use this code or site, please cite it as below, and cite the data sources listed in the README and under references."
 title: "Molecular Tissue Fingerprints: a 20-gene panel, its conformal guarantee, and what a within-study fingerprint can identify"
 type: software
-version: "2.0.2"
+version: "2.0.3"
 date-released: 2026-09-27
 license: MIT
 repository-code: "https://github.com/CoryGardner/motrpac_challenge"
 url: "https://corygardner.github.io/motrpac_challenge/"
 identifiers:
   - type: url
-    value: "https://github.com/CoryGardner/motrpac_challenge/releases/tag/hackathon-submission-v10.2"
-    description: "Release tag hackathon-submission-v10.2 (version 2.0.2)"
+    value: "https://github.com/CoryGardner/motrpac_challenge/releases/tag/hackathon-submission-v10.2.1"
+    description: "Release tag hackathon-submission-v10.2.1 (version 2.0.3)"
 # team "The Rat PAC"; members in no particular order
 authors:
   - given-names: Erol

@@ -6,7 +6,7 @@ export const REPO_URL = "https://github.com/CoryGardner/motrpac_challenge";
 const PAGES = [["index.html", "Check samples"], ["explore.html", "Reference atlas"], ["science.html", "The science"], ["about.html", "About"]];
 export const SCIENCE_PAGES = [
   ["science.html", "Overview"], ["fingerprint.html", "Panel"], ["transfer.html", "Transfer"], ["identifiability.html", "Identifiability"],
-  ["exercise.html", "Exercise"], ["multiomic.html", "Multiomic"], ["methods.html", "Methods"], ["limitations.html", "Limitations"],
+  ["exercise.html", "Exercise"], ["multiomic.html", "Multiomic"], ["methods.html", "Methods"], ["limitations.html", "Limitations"], ["science.html#glossary", "Glossary"],
 ];
 const cache = new Map();
 

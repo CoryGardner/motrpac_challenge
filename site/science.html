@@ -41,15 +41,15 @@
     <div class="tiles">
       <div class="tile"><h3>A classifier</h3>
         <p class="small">The 20-gene logistic regression with calibrated 90 % prediction sets.</p>
-        <p class="small"><a href="index.html">Check samples</a> · <a href="explore.html#tissue-card">Explorer tissue card</a> · <a href="data/panel_model.json">panel_model.json</a> (the model the browser runs) · <a href="https://github.com/CoryGardner/motrpac_challenge/blob/main/src/tfp/models.py">src/tfp/models.py</a></p></div>
+        <p class="small"><a href="index.html">Check samples</a> · <a href="explore.html#tissue-card">Reference atlas: tissue card</a> · <a href="data/panel_model.json">panel_model.json</a> (the model the browser runs) · <a href="https://github.com/CoryGardner/motrpac_challenge/blob/main/src/tfp/models.py">src/tfp/models.py</a></p></div>
       <div class="tile"><h3>Minimal tissue-signature panel</h3>
         <p class="small">The 20 genes and the 10-gene stable core.</p>
         <p class="small"><a href="fingerprint.html">Panel page</a> · <a href="data/panel_card.csv">panel card CSV</a> · <a href="data/panel_card.json">JSON</a></p></div>
       <div class="tile"><h3>Feature-selection workflow</h3>
         <p class="small">The class-aware round-robin selector, fitted inside animal-grouped folds.</p>
-        <p class="small"><a href="methods.html#selector">Methods: the selector</a> · <a href="explore.html#panel-builder">Explorer panel builder</a> · <a href="https://github.com/CoryGardner/motrpac_challenge/blob/main/src/tfp/models.py#L58">RoundRobinSelector</a></p></div>
+        <p class="small"><a href="methods.html#selector">Methods: the selector</a> · <a href="explore.html#panel-builder">Reference atlas: panel builder</a> · <a href="https://github.com/CoryGardner/motrpac_challenge/blob/main/src/tfp/models.py#L58">RoundRobinSelector</a></p></div>
       <div class="tile"><h3>Interactive model-explanation tool</h3>
-        <p class="small">Check samples: why a sample is called, gene by gene, with claim checks; the Explorer for the reference data.</p>
+        <p class="small">Check samples: why a sample is called, gene by gene, with claim checks; the Reference atlas for the reference data.</p>
         <p class="small"><a href="explore.html#tissue-card">Tissue card</a> · <a href="explore.html#gene-explorer">Gene explorer</a> · <a href="explore.html#panel-builder">Panel builder</a> · <a href="index.html">Check samples</a></p></div>
     </div>
   </section>
@@ -74,7 +74,7 @@
   </section>
 
   <section class="section" id="sec-guarantee">
-    <h2>2. The guarantee travels honestly</h2>
+    <h2>2. The guarantee holds in the study; coverage travels honestly</h2>
     <p id="p-guarantee"></p>
     <div id="fig-empty"></div>
     <p><a href="transfer.html">Does it transfer? →</a></p>
@@ -87,10 +87,30 @@
     <p><a href="identifiability.html">What is the fingerprint identifying? →</a></p>
   </section>
 
+  <section class="section prose" id="glossary" aria-labelledby="glossary-h">
+    <h2 id="glossary-h">Glossary</h2>
+    <dl class="glossary">
+      <dt>Panel (fingerprint)</dt><dd>The small set of genes the classifier reads, here 20. Chosen by the <b>round-robin selector</b>: each tissue in turn takes its best remaining gene, ranked by how far the tissue's mean is from the other tissues' mean in pooled standard deviations, so a gene can be picked for being unusually high or low.</dd>
+      <dt>Animal-grouped folds</dt><dd>Cross-validation in which all samples of an animal fall in the same fold, so a tested animal never contributed to gene selection, scaling or fitting. This is what prevents animal-level leakage.</dd>
+      <dt>Balanced accuracy</dt><dd>The mean of the per-tissue accuracies, so every tissue counts equally however many samples it has. Compared with tuned simple baselines (nearest centroid, L1 and L2 logistic regression, random forest) on the same folds.</dd>
+      <dt>Conformal prediction set (the “90 % set”)</dt><dd>Instead of one guess, the list of every tissue whose probability clears a threshold. The threshold is set on held-out <b>calibration animals</b> so that, for new samples exchangeable with them, the set contains the true tissue at least 90 % of the time (split conformal prediction with the LAC score, 1 − p(true tissue)).</dd>
+      <dt>α (error rate)</dt><dd>The allowed miss rate of the sets: α = 0.10 gives 90 % sets. A smaller α gives larger, safer sets.</dd>
+      <dt>Confident, ambiguous, empty (abstain)</dt><dd>A set with one tissue is a confident call; several tissues, ambiguous; no tissue, the model abstains rather than guess. On organs the model never saw, an empty set is the correct outcome.</dd>
+      <dt>Coverage</dt><dd>The fraction of samples whose set contains the true tissue (for a super-class, any of its tissues). The guarantee is about coverage, not about accuracy.</dd>
+      <dt>Exchangeable</dt><dd>The condition behind the guarantee: calibration and test samples behave like draws from the same population. Samples from another laboratory or species are not, which is why coverage there falls below 90 %.</dd>
+      <dt>Recalibration</dt><dd>Re-setting the threshold on a few labelled samples from the new laboratory. It restores <b>observed coverage</b> across repeated draws; with only a few animals, pooled over their tissues, it is not a finite-sample guarantee for new animals (see Limitations).</dd>
+      <dt>Mondrian and floored sets</dt><dd>Variants with one threshold per tissue (Mondrian), or per tissue but never below the overall threshold (floored). They protect tissues that the overall threshold serves poorly, at the cost of larger sets.</dd>
+      <dt>Mapped organ, super-class, out of distribution</dt><dd>An external organ with a MoTrPAC counterpart is mapped (BodyMap liver → LIVER); brain and skeletal muscle map to any of their MoTrPAC tissues (super-classes); thymus and uterus have none and are out of distribution.</dd>
+      <dt>log2 CPM, z-score, within-set and reference scaling</dt><dd>Counts per million on the total library, log2(CPM + 1). Before scoring, each gene is z-scored: within the uploaded set (the pipeline's choice for a new mixed dataset) or with the MoTrPAC means and scales (reference scaling, used for small or single-tissue uploads).</dd>
+      <dt>Batch nested in tissue; bridging pools</dt><dd>MoTrPAC processed each tissue as one batch, so within the study tissue and batch cannot be separated. Reference RNA pools run on every plate measure the batch effect directly.</dd>
+      <dt>Reporter-ion intensity vs ratio (proteomics)</dt><dd>MoTrPAC distributes TMT proteomics as each sample divided by a same-tissue reference pool (ratios), which removes tissue differences; the reporter-ion intensities divided by each sample's total signal keep them (Multiomic page).</dd>
+    </dl>
+  </section>
+
   <section class="section" id="sec-tour">
     <h2>The five-minute tour</h2>
     <ol class="tour">
-      <li><a href="explore.html#tissue-card">Open the Explorer</a> on a <b>BodyMap thymus</b>, an organ the fingerprint never saw: it abstains.</li>
+      <li><a href="explore.html#tissue-card">Open the Reference atlas</a> on a <b>BodyMap thymus</b>, an organ the fingerprint never saw: it abstains.</li>
       <li>Pick the <b>GTEx heart</b> it opens on, compare its two calls, then switch models.</li>
       <li><a href="explore.html#gene-explorer">Open the gene explorer</a> on <b>Pgk2</b>: the testis marker not yet expressed at two weeks.</li>
       <li><a href="transfer.html#recalibration">Transfer page</a>, recalibration scatter: three BodyMap animals restore observed coverage at one tissue per set.</li>

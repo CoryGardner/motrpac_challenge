@@ -4,6 +4,30 @@ All notable changes to this repository. The format follows [Keep a Changelog](ht
 dates are UTC. Each section is a `hackathon-submission-v<n>` git tag; the version numbers are those of `CITATION.cff`
 and `pyproject.toml`.
 
+## [2.0.3] — 2026-09-27 (tag `hackathon-submission-v10.2.1`)
+
+### Changed (audit fixes)
+- Check samples: the results table puts the most actionable rows first (Mismatch, Can't confirm, not in reference,
+  Unknown), a "Start here" note names the swapped pair of the example and, when most sets are empty, explains why and
+  offers a one-click recalibration; a "missing" column marks samples with blank panel-gene cells.
+- Input checks: a table with none of the panel genes is refused with a message; fewer than half the genes, and blank or
+  non-numeric panel-gene cells (naming the samples), warn; "1 sample" grammar. A template of the 20 genes can be downloaded.
+- The flag-quality table wraps its headers instead of clipping at 1440 px.
+- "90 % set" is introduced as a conformal prediction set on Check samples, with a link to a new Glossary (The science
+  page, also in the science sub-navigation).
+- Naming: the Explorer is the Reference atlas everywhere; its leftover scoring stub is removed (the old
+  `explore.html#score-tool` link forwards to Check samples); stale "Explorer" and "Home page" references fixed in the
+  README, the compliance doc, Methods and the Makefile; the compliance doc's snapshot count is 179.
+- Meaning: the browser model, the panel card and the per-fold panels are named as three fits of one method (14 of the
+  browser model's 20 genes are on the panel card) on Check samples and the Panel page; the trust strip's "fails safe" is
+  qualified (mixed uploads, not reference scaling); the science heading, the ladder subtitle, the Transfer target zone and
+  the abstract no longer say the guarantee is restored by recalibration (the abstract now quotes the 20-gene panel's
+  one-vial coverage and the five-donor GTEx result); the batch tile names its pool and gives the range and the panel-gene
+  value; the Identifiability QC chart plots balanced accuracy, as its text and label say (it plotted accuracy).
+- README: Validation rows for the Check samples tests, quick-start output, repository map, full-run recipe
+  (`make panel-model product-validation`), the GTEx three-donor row label, and a note that `results/` paths are
+  committed under `results_frozen/`.
+
 ## [2.0.2] — 2026-09-27 (tag `hackathon-submission-v10.2`)
 
 ### Fixed

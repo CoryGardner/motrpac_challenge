@@ -6,6 +6,7 @@ const AGE_ORDER = [2, 6, 21, 104];
 let DATA = {};
 
 async function main() {
+  if (location.hash === "#score-tool") { location.replace("index.html"); return; }   // the scoring tool moved to Check samples
   await mountChrome("explore.html");
   const [M, B, G, GENES, PC, CERT] = await Promise.all([
     loadJSON("data/samples_motrpac.json"), loadJSON("data/samples_bodymap.json"), loadJSON("data/samples_gtex.json"),

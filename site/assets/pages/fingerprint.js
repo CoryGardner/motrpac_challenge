@@ -1,4 +1,5 @@
 import { mountChrome, loadJSON, el, fmt, segmented, control, tableFrom, callout } from "../site.js";
+import { modelNote } from "../notes.js";
 import { figure, bar, line, band, heatmap, strip, tokens, palette, organSystem, tissueLabel, template, CONFIG, jitter } from "../charts.js";
 
 /** One sentence on the vena cava → brown fat calls, from headline.json extras; empty when the extras are missing. */
@@ -12,6 +13,7 @@ function batSentence(ex) {
 async function main() {
   await mountChrome("fingerprint.html");
   const [H, PC, SC, CM, GENES] = await Promise.all([loadJSON("data/headline.json"), loadJSON("data/panel_curve.json"), loadJSON("data/stable_core.json"), loadJSON("data/confusion_motrpac.json"), loadJSON("data/genes.json")]);
+  loadJSON("data/panel_model.json").then((PM) => { document.getElementById("model-note").textContent = modelNote(PM, H.extras.n_animals); }).catch((e) => console.error(e));
   const ex = H.extras;
   const k20 = PC.curve.find((r) => r.k === 20), k15 = PC.curve.find((r) => r.k === 15), k10 = PC.curve.find((r) => r.k === 10), k50 = PC.curve.find((r) => r.k === 50);
   const base = Object.fromEntries(PC.baselines.map((r) => [r.model, r]));

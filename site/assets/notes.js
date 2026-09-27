@@ -12,3 +12,10 @@ export function compositionNote(PR) {
   const c = PR.composition;
   return `Measured on ${c.n_subsets} random subsets (${c.size_min}–${c.size_max} samples, at least three organs) of the rat BodyMap 21-week adults: with within-set scaling the coverage of the 90 % sets ranged ${pc(c["within.coverage.p05"])}–${pc(c["within.coverage.p95"])} and the accuracy ${pc(c["within.accuracy.p05"])}–${pc(c["within.accuracy.p95"])} (5th–95th percentile), depending only on which other samples were uploaded; reference scaling scores each sample alone, so its calls do not change with the upload (coverage ${pc(c["reference.coverage.p05"])}–${pc(c["reference.coverage.p95"])} across the same subsets, varying only with which samples each subset contains).`;
 }
+
+/** Which 20 genes: the panel card (all animals), the per-fold panels (the reported accuracy) and the browser model. */
+export function modelNote(model, nAnimals) {
+  const nCal = model.calibration.n_animals, shared = model.n_genes_shared_with_all_animal_panel, k = model.genes.length;
+  const own = model.genes.filter((g) => !g.in_all_animal_panel).map((g) => g.symbol);
+  return `One method, three fits of it. The balanced accuracy is for ${k}-gene panels re-selected inside each animal-grouped fold; the panel card on the Panel page is the ${k} genes selected on all ${nAnimals} MoTrPAC animals; Check samples runs the transfer model fit on ${nAnimals - nCal} animals and calibrated on the other ${nCal}, which shares ${shared} of its ${k} genes with the panel card (its own: ${own.join(", ")}). Upload the browser model's genes (listed in the template and in site/data/panel_model.json); a gene it needs but your table lacks is scored at the reference mean.`;
+}

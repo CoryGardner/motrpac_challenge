@@ -161,4 +161,24 @@ check(K.parseCell("") === null && K.parseCell("  ") === null && K.parseCell("NA"
   check(ph.nMissing === 1 && ph.warnings.some((w) => w.includes("left out of the library size")), "an empty count cell is left out of the library size, with a warning");
 }
 
+// ---- input checks and the display order ----------------------------------------------------------------------------
+check(K.parseUpload("a,b\n1,2", model).error && K.parseUpload("a,b\n1,2", model).error.includes("none of the"), "a table without any panel gene is refused");
+{
+  const lines = ex.csv.trim().split("\n");
+  const few = lines.map((l) => l.split(",").filter((_, j) => j === 0 || j > 12).join(",")).join("\n");     // keeps 8 of the 20 genes + the claim
+  check(K.parseUpload(few, model).warnings.some((w) => w.includes("of the 20 panel genes were found")), "fewer than half the panel genes warns");
+  const holed = [lines[0], ...lines.slice(1).map((l, k) => (k === 0 ? l.split(",").map((x, j) => (j === 3 ? "" : x)).join(",") : l))].join("\n");
+  const ph = K.parseUpload(holed, model);
+  check(ph.partialMissing.length === 1 && ph.warnings.some((w) => w.includes("empty or non-numeric panel-gene value") && w.includes(ph.partialMissing[0])), "a blank panel-gene cell is named in a warning");
+  check(K.parseUpload(ex.csv, model).partialMissing.length === 0, "the example has no partial missing values");
+}
+{
+  const ord = K.orderByPriority(res.results);
+  const pr = ord.map(K.priority);
+  check(pr.every((v, i) => i === 0 || pr[i - 1] <= v), "priority order is non-decreasing");
+  check(ex.swapped.every((id) => ord.slice(0, ex.swapped.length).some((r) => r.id === id)), "the swapped samples come first in the example");
+  const same = ord.filter((r) => K.priority(r) === 5).map((r) => res.results.indexOf(r));
+  check(same.every((v, i) => i === 0 || same[i - 1] < v), "upload order kept within a priority group");
+}
+
 console.log(`ok: ${n} assertions (count → CPM max |Δ| ${maxD.toExponential(1)}, projection max |Δ| ${maxP.toExponential(1)}, ${res.results.length} example samples)`);

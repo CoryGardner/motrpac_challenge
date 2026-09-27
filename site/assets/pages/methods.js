@@ -12,7 +12,7 @@ async function main() {
   const row = (model, calib) => H.ladder.find((r) => r.rung_id === "in_distribution" && r.model === model && r.variant === "marginal" && r.calibration === calib);
   const opa = row("full", "one_per_animal"), pooled = row("full", "pooled"), opa20 = row("k20", "one_per_animal"), pooled20 = row("k20", "pooled");
   document.getElementById("p-coverage").replaceChildren(
-    `On this design the α = 0.10 sets of the all-gene model cover ${fmt(opa?.coverage)} of held-out vials with one vial per animal and ${fmt(pooled?.coverage)} with pooled vials (the 20-gene panel, the model on the Home page: ${fmt(opa20?.coverage)} and ${fmt(pooled20?.coverage)} on the same design).`,
+    `On this design the α = 0.10 sets of the all-gene model cover ${fmt(opa?.coverage)} of held-out vials with one vial per animal and ${fmt(pooled?.coverage)} with pooled vials (the 20-gene panel, the model on The science page: ${fmt(opa20?.coverage)} and ${fmt(pooled20?.coverage)} on the same design).`,
   );
 }
 

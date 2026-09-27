@@ -33,7 +33,11 @@ async function main() {
 
   // ---- tiles --------------------------------------------------------------------------------------------------
   const tiles = document.getElementById("tiles");
-  for (const id of H.home_tiles || H.tiles.map((t) => t.id)) tiles.appendChild(statTile(tile[id]));
+  // the bridge tile: say which pool the headline value is, and give the range and the panel-gene value beside it
+  const bridgeTile = tile.tile_bridge && typeof ex.bridge_pools_max_sum_ratio_all_genes === "number"
+    ? { ...tile.tile_bridge, label: `of the tissue signal is batch on the best-measured bridging reference pool, all genes (${pct(ex.bridge_pools_min_sum_ratio_all_genes, 1)}–${pct(ex.bridge_pools_max_sum_ratio_all_genes, 1)} across all ${ex.bridge_n_pools} pools; ${pct(ex.bridge_sum_ratio_panel_expressed_pool99, 1)} on the ${ex.bridge_n_panel_expressed_pool99} panel genes that pool expresses)` }
+    : tile.tile_bridge;
+  for (const id of H.home_tiles || H.tiles.map((t) => t.id)) tiles.appendChild(statTile(id === "tile_bridge" ? bridgeTile : tile[id]));
 
   // ---- the study in one picture (labels ≤ 4 lines of 17 characters, units ≤ 2 lines of 19, so every box reads in full)
   {
@@ -94,7 +98,7 @@ async function main() {
       };
     },
     source: "results/05_panels/TRNSCRPT/panel_curve.csv, results/05_panels/TRNSCRPT/panel_curve_fclassif.csv",
-    notShow: "which genes: the selection changes per fold (see the Panel page for the stable core and the Explorer's panel builder).",
+    notShow: "which genes: the selection changes per fold (see the Panel page for the stable core and the Reference atlas's panel builder).",
   });
 
   // ---- 2. the guarantee travels honestly: paragraph + empty-set stack ------------------------------------------

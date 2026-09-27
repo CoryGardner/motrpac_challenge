@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Check samples — is this sample the tissue you think it is?</title>
-<meta name="description" content="Drop a rat RNA-seq expression table and get a tissue call with a calibrated 90 % confidence set, a gene-level explanation, and flags for label swaps, contamination and unknown tissue. Runs in your browser; nothing is uploaded.">
+<meta name="description" content="Drop a rat RNA-seq expression table and get a tissue call with a 90 % conformal prediction set, a gene-level explanation, and flags for label swaps, contamination and unknown tissue. Runs in your browser; nothing is uploaded.">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/brand/badge-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="assets/brand/badge-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/brand/badge-180.png">
@@ -12,7 +12,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Tissue Fingerprints — The Rat PAC">
 <meta property="og:title" content="Is this sample the tissue you think it is?">
-<meta property="og:description" content="A tissue call with a calibrated 90 % confidence set, a gene-level explanation, and flags for swaps, contamination and unknown tissue. Runs in your browser.">
+<meta property="og:description" content="A tissue call with a 90 % conformal prediction set, a gene-level explanation, and flags for swaps, contamination and unknown tissue. Runs in your browser.">
 <meta property="og:url" content="https://corygardner.github.io/motrpac_challenge/">
 <meta property="og:image" content="https://corygardner.github.io/motrpac_challenge/assets/brand/badge-og.png">
 <meta property="og:image:width" content="1200">
@@ -32,7 +32,8 @@
 <main id="main" class="wrap">
   <section class="hero" id="hero">
     <h1>Is this sample the tissue you think it is?</h1>
-    <p class="lede">Drop an expression table; get a tissue call with a calibrated 90 % confidence, a gene-level explanation, and flags for swaps, contamination and unknown tissue. Runs in your browser; nothing is uploaded.</p>
+    <p class="lede">Drop an expression table; get a tissue call with a 90 % conformal prediction set, a gene-level explanation, and flags for swaps, contamination and unknown tissue. Runs in your browser; nothing is uploaded.</p>
+    <p class="small">A <a href="science.html#glossary">conformal prediction set</a> is the list of tissues the model cannot rule out: on samples like its held-out calibration animals it contains the true tissue at least 90 % of the time. One tissue is a confident call, several is ambiguous, none means the model abstains.</p>
     <div class="hero-actions">
       <button class="btn primary" type="button" id="btn-example">Try the example</button>
       <button class="btn" type="button" id="btn-upload">Upload / paste</button>
@@ -55,8 +56,9 @@
     </div>
     <label class="control block" for="in-text"><span>Or paste the table</span></label>
     <textarea id="in-text" rows="6" spellcheck="false" placeholder="sample,Cyp21a1,Pmch,Dbh,…,claimed_tissue&#10;my_sample_1,4.21,0.12,…,liver"></textarea>
-    <div class="hero-actions"><button class="btn primary" type="button" id="btn-check">Check the pasted table</button></div>
+    <div class="hero-actions"><button class="btn primary" type="button" id="btn-check">Check the pasted table</button><button class="btn" type="button" id="btn-template">Download a template (the 20 genes)</button></div>
     <div id="progress" class="small" role="status" aria-live="polite"></div>
+    <p class="small" id="model-note"></p>
     <div id="example-note"></div>
     <details class="fig-notes" id="accepted"><summary>Accepted tissue names (the 19 reference tissues)</summary><div id="accepted-list"></div></details>
   </section>
@@ -65,6 +67,7 @@
 
   <section class="section" id="results" hidden aria-labelledby="results-h">
     <h2 id="results-h">Results</h2>
+    <div id="results-guide"></div>
     <div class="controls" id="result-controls"></div>
     <div class="tiles compact" id="summary"></div>
     <div class="controls" id="table-controls"></div>

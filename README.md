@@ -7,10 +7,10 @@
 A leakage-safe, calibrated evaluation of compact tissue fingerprints in the MoTrPAC rat multi-tissue transcriptomes,
 replicated in an independent laboratory's rats (rat BodyMap) and across species (human GTEx), with a direct measurement
 of processing effects on the consortium's bridging standards, an exercise-specific follow-up, and a static site on which
-every number carries provenance and whose Explorer scores new samples with the panel in the browser.
+every number carries provenance and whose Check samples page scores new samples in the browser.
 
 [![tests](https://github.com/CoryGardner/motrpac_challenge/actions/workflows/tests.yml/badge.svg)](https://github.com/CoryGardner/motrpac_challenge/actions/workflows/tests.yml)
-**Live site:** https://corygardner.github.io/motrpac_challenge/ · **Release:** tag `hackathon-submission-v10.2` (version 2.0.2) · **Licence:** MIT
+**Live site:** https://corygardner.github.io/motrpac_challenge/ · **Release:** tag `hackathon-submission-v10.2.1` (version 2.0.3) · **Licence:** MIT
 
 ## Use it
 
@@ -51,7 +51,7 @@ panel identifies 19 rat tissues at 0.976 ± 0.008 balanced accuracy (50 genes 0.
 all animals names every mapped adult organ correctly in another laboratory's rats (rat BodyMap: 9 of 11 organs have a
 MoTrPAC counterpart; 68 samples from 8 animals).
 
-**The guarantee travels honestly.** Its 90 % conformal guarantee holds within the study and on trained animals (fit on
+**The guarantee holds in the study; coverage travels honestly.** Its 90 % conformal guarantee holds within the study and on trained animals (fit on
 the 10 sedentary controls alone, the panel names the tissue of all 40 trained animals at 0.961 with coverage 0.903).
 Beyond the study it abstains rather than errs: calibrated on MoTrPAC it covers 0.618 of the BodyMap adults and 0.364 of
 human GTEx samples, and the shortfall is empty sets, not confident error. Three animals from the new laboratory restore
@@ -73,7 +73,7 @@ contrast on every panel gene (see the Exercise page).
 |---|---|---|
 | A classifier | the 20-gene logistic regression with calibrated 90 % prediction sets, applied to your samples | [Check samples](https://corygardner.github.io/motrpac_challenge/) (calls, sets, claim checks, CSV and report); `site/data/panel_model.json` (the model the browser runs); [`src/tfp/models.py`](https://github.com/CoryGardner/motrpac_challenge/blob/main/src/tfp/models.py) |
 | Minimal tissue-signature panel | the 20 genes and the 10-gene stable core | [Panel page](https://corygardner.github.io/motrpac_challenge/fingerprint.html); `site/data/panel_card.csv`, `site/data/panel_card.json` |
-| Feature-selection workflow | the class-aware round-robin selector, fitted inside animal-grouped folds | [Methods: the selector](https://corygardner.github.io/motrpac_challenge/methods.html#selector); [Explorer panel builder](https://corygardner.github.io/motrpac_challenge/explore.html#panel-builder); [`RoundRobinSelector`](https://github.com/CoryGardner/motrpac_challenge/blob/main/src/tfp/models.py#L58) in `src/tfp/models.py` |
+| Feature-selection workflow | the class-aware round-robin selector, fitted inside animal-grouped folds | [Methods: the selector](https://corygardner.github.io/motrpac_challenge/methods.html#selector); [Reference atlas: panel builder](https://corygardner.github.io/motrpac_challenge/explore.html#panel-builder); [`RoundRobinSelector`](https://github.com/CoryGardner/motrpac_challenge/blob/main/src/tfp/models.py#L58) in `src/tfp/models.py` |
 | Interactive model-explanation tool | per sample: probabilities against the calibrated threshold, per-gene contributions ("why X, not Y"), gene values against the reference tissues, a reference map | [Check samples](https://corygardner.github.io/motrpac_challenge/) (the sample drawer); [Reference atlas](https://corygardner.github.io/motrpac_challenge/explore.html): [tissue card](https://corygardner.github.io/motrpac_challenge/explore.html#tissue-card), [gene explorer](https://corygardner.github.io/motrpac_challenge/explore.html#gene-explorer), [panel builder](https://corygardner.github.io/motrpac_challenge/explore.html#panel-builder) |
 
 ## Key results
@@ -92,12 +92,15 @@ Every number below is read from `results/` by `scripts/30_export_site_data.py` a
 | BodyMap adults (another lab): accuracy k20 / coverage / empty sets | 1.000 / 0.618 / 0.382 | `results/12_bodymap/` |
 | BodyMap recalibrated on 3 animals: coverage at set size | 0.943 at 1.00 | `results/12_bodymap/recalibration.csv` |
 | GTEx (human): accuracy k20 / k50 / full | 0.654 / 0.781 / 0.855 | `results/13_gtex/accuracy_overall.csv` |
-| GTEx coverage k20 / empty; recalibrated on 3 donors: coverage at set size | 0.364 / 0.616; 0.954 at 11.70 | `results/13_gtex/` |
+| GTEx coverage k20 / empty; recalibrated on 3 donors (all 20 draws, 9 with no finite threshold): coverage at set size | 0.364 / 0.616; 0.954 at 11.70 | `results/13_gtex/` |
 | Estimable tissue pairs within study (RNA-seq) | 1 of 171 (ovary and testes) | `results/16_identifiability/estimable_pairs.csv` |
 | Sedentary vs 8-week-trained within tissue: mean best single-omic AUROC / fusion beats single / attributable to training | 0.994 / 0 of 7 / 4 of 7 | `results/07_fusion/` |
 | Trained animals, 8-week group only (cohort-matched with the controls): accuracy k20 / coverage | 0.972 / 0.917 | `results/31_site_regen/08_shift_k20/scores_target_vials.csv` |
 | Batch measured on a bridging reference pool run on 6 plates (Σ V_batch / Σ V_tissue, all genes) | 0.016 | `results/16_identifiability/bridge_variance.csv` |
 | QC covariates alone, balanced accuracy: technical / composition / all | 0.874 / 0.952 / 0.976 | `results/16_identifiability/qc_only_summary.csv` |
+
+The `results/…` sources are the live pipeline outputs (git-ignored); the same relative paths are committed under
+`results_frozen/` (for example `results_frozen/05_panels/TRNSCRPT/panel_curve.csv`).
 
 ![Summary figure: the transfer ladder, the ten-gene stable core, and batch nested in tissue](figures/summary_figure.png)
 
@@ -138,7 +141,7 @@ flowchart TD
   I --> E
   X --> E
   E --> S["Static site — site/ · GitHub Pages"]
-  E --> T["Tests and CI<br/>pytest · JS conformal port (2,700 cases) · anchors · snapshot checksums"]
+  E --> T["Tests and CI<br/>pytest · JS conformal port (2,700 cases) · Check samples core · anchors · snapshot checksums"]
 ```
 
 Every data-dependent step (imputation, prefilter, scaling, selection, tuning) runs inside the training fold; the
@@ -156,8 +159,9 @@ python -m http.server -d site 8000                              # open http://lo
 make smoke         # synthetic data → phases 02, 04, 05, 06 in --quick mode → results_smoke/
 ```
 
-Expected: pytest ends with every test passed (one comparison against a live `results/` run is skipped when none is present); the JS test prints
-`ok: 2713 assertions, 2700 fixture cases (540 with infinite threshold)`; `make site` ends with `all anchors ok`;
+Expected: pytest ends with every test passed (one comparison against a live `results/` run is skipped when none is present); the JS tests print
+`ok: 2713 assertions, 2700 fixture cases (540 with infinite threshold)`, `ok: 1075 assertions in all` and
+`ok: 3395 assertions (count → CPM max |Δ| 0.0e+0, …)`; `make site` ends with `all anchors ok`;
 `make smoke` ends with `wrote results_smoke/06_conformal/TRNSCRPT` and every banner says the data are synthetic.
 A fresh export from the snapshot is byte-identical to the committed `site/data/` apart from its `_meta` block
 (`python tools/compare_site_data.py site/data <fresh export dir>`); CI runs exactly this comparison on every push.
@@ -271,6 +275,8 @@ were verified by the team.
 | unit, leakage and I/O tests; snapshot; site provenance | `make test` | every test passed; `verify-frozen` prints `ok` |
 | JS conformal port against Python | `node tests/test_site_conformal.js` | `ok: 2713 assertions, 2700 fixture cases (540 with infinite threshold)` |
 | the browser scoring tool against the pipeline's BodyMap scores, and its example recalibration | `node tests/test_score_tool.js` | `ok: 976 assertions over 316 BodyMap samples; max \|Δp\| = 2.59e-4` … `ok: 1075 assertions in all` |
+| Check samples core: parsing and missing values, count → log2 CPM parity with Python on real counts, map projection parity, contributions = logit, status rules, synonyms, guards | `node tests/test_check_core.js` | `ok: 3395 assertions (count → CPM max \|Δ\| 0.0e+0, projection max \|Δ\| 5.0e-7, 80 example samples)` |
+| Check samples validation numbers, the reference map and per-draw recalibration against their CSVs | `PYTHONPATH=src pytest -q tests/test_product_data.py` | passed |
 | every site number against the result files | `PYTHONPATH=src pytest -q tests/test_site_data.py` | passed (runs from `results/` or `results_frozen/`) |
 | regeneration reproduces the published tables cell for cell | `PYTHONPATH=src pytest -q tests/test_regen_scores.py` | passed |
 | sanity anchors of the headline numbers | `make site-data` | `all anchors ok` |
@@ -292,10 +298,10 @@ Known failure modes and limits (details on the site's Limitations page):
 ## Reuse
 
 - **Licence:** MIT for code, site and derived tables (`LICENSE`); the data keep their own terms (table above).
-- **Cite:** `CITATION.cff` (version 2.0.2, tag `hackathon-submission-v10.2`), the three data papers, and the multiomic sources in the Data section.
-- **Score your samples:** the Explorer's *Score your own samples* tool takes a CSV of log2 CPM for the 20 panel genes
-  (a template is provided) and returns tissue calls and 90 % prediction sets in the browser, with optional recalibration
-  on labelled samples; the panel card (`site/data/panel_card.csv`, `.json`) lists the genes with their mean expression per
+- **Cite:** `CITATION.cff` (version 2.0.3, tag `hackathon-submission-v10.2.1`), the three data papers, and the multiomic sources in the Data section.
+- **Score your samples:** the Check samples page (`site/index.html`) takes a table of log2 CPM for the 20 panel genes or a
+  full raw-count matrix and returns tissue calls, 90 % conformal prediction sets and claimed-label checks in the browser,
+  with optional recalibration on labelled samples; the panel card (`site/data/panel_card.csv`, `.json`) lists the genes with their mean expression per
   tissue, and `site/data/panel_model.json` holds the coefficients (`scripts/34_panel_model.py`, `make panel-model`).
 - **Extend:** the library is `src/tfp/`; a new phase is a numbered script with a Makefile target; if the site shows its
   numbers, add provenance entries in `scripts/30_export_site_data.py` and re-freeze (`make freeze-results`).
@@ -332,7 +338,8 @@ make check all external                         # phases 02–08, 11–14: about
 MOTRPAC_PORTAL=/path/to/portal make identifiability   # phase 16 (bridge needs the portal subset)
 make time-course panel-training                 # phase 15 and the panel genes' training response
 make regen-scores                               # per-sample score reruns of phases 06, 08, 12, 13
-make site freeze-results figures                # export, tests, refresh results_frozen/, figures
+make panel-model product-validation             # phase 34 (the browser model) and phase 40 (Check samples validation)
+make site freeze-results figures                # export (incl. multiomic and product), tests, refresh results_frozen/, figures
 ```
 
 Phase timings of the reference run (2026-09-18, 20 cores): baselines 196 s, panels 389 s, conformal 525 s, fusion
@@ -341,15 +348,22 @@ Phase timings of the reference run (2026-09-18, 20 cores): baselines 196 s, pane
 ## Repository map
 
 ```
-site/                 the static site: index, exercise, explore, transfer, fingerprint, identifiability, methods, limitations, about
+site/                 the static site: index (Check samples), explore (Reference atlas), science (The science overview), fingerprint
+                      (Panel), transfer, identifiability, exercise, multiomic, methods, limitations, about
   data/               JSON exported from the results, with provenance.json and manifest.json
-  assets/             theme.css, charts.js, site.js, conformal.js (the port), ladder.js, overview.js, pages/, brand/
-src/tfp/              the library: config, io, splits (frozen), models, conformal, transfer, batch, plots, report, cli
-scripts/              numbered phases 02–16 (07, 15, 05b feed the Exercise page), 30 site export, 32 summary figure, 33 freeze
+  assets/             theme.css, charts.js, site.js, conformal.js (the port), score.js and check-core.js (scoring and Check samples,
+                      pure functions), check-worker.js (upload parsing), notes.js, ladder.js, overview.js, pages/, brand/
+src/tfp/              the library: config, io, splits (frozen), models, conformal, transfer, batch, rii, plots, report, cli
+scripts/              numbered phases 02–16 (07, 15, 05b feed the Exercise page), 30 site export, 32 summary figure, 33 freeze,
+                      34 browser model, 40 product validation, 41 product export; multiomic/ (the follow-up, incl. 01b PCA scores)
 results_frozen/       the result files the site reads, with MANIFEST.json (sha256)
-tests/                leakage, I/O, conformal, batch, config, regeneration, snapshot, site provenance; the JS conformal test
+results_product/      Check samples validation (scaling, composition, flag rates, recalibration draws, reference map)
+results_multiomic/    the multiomic follow-up's results and slide figures
+tests/                leakage, I/O, conformal, batch, config, regeneration, snapshot, site and product provenance; JS tests of the
+                      conformal port, the scoring tool and the Check samples core; fixtures/ (a small real BodyMap counts subset)
 docs/                 EVALUATION_RULES (frozen), DATA_GUIDE, EXTERNAL_VALIDATION, GTEX_TRANSFER, ABSTRACT_SUBMISSION,
-                      COMPETITION_COMPLIANCE, NUMBERS_RECONCILIATION + reconciliation/ (what moved when the conformal rule was corrected before release)
+                      COMPETITION_COMPLIANCE, MULTIOMIC_REPORT, PREREGISTRATION_MULTIOMIC, MULTIOMIC_LOG,
+                      NUMBERS_RECONCILIATION + reconciliation/ (what moved when the conformal rule was corrected before release)
 tools/                linkcheck.py, screenshot.js, compare_site_data.py, make_logo_assets.py
 R/                    install_deps.R, export_motrpac.R, export_bodymap.R
 figures/              summary_figure.png, home.png

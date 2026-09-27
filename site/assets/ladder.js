@@ -60,8 +60,8 @@ export function ladderTitle(H) {
   const list = (ms) => ms.map((m) => name[m]).join(ms.length === 2 ? " and " : ", ").replace(/, ([^,]*)$/, " and $1");
   // "well above chance" is literally true on every rung (chance is 1/19; the lowest rung is the human one)
   const head = "Accuracy stays well above chance at every rung; the 90 % guarantee ";
-  const tail = " and is restored beyond it by recalibrating on three target animals (within species)";
-  if (keep.length === 0) return head + "is restored beyond the calibration data by recalibrating on three target animals (within species)";
+  const tail = "; beyond it, recalibrating on three target animals restores observed coverage (within species; an observed coverage over draws, not a guarantee)";
+  if (keep.length === 0) return head + "holds on the calibration population; beyond it, recalibrating on three target animals restores observed coverage (within species; not a guarantee)";
   if (keep.length === 3) return head + "holds within the study for every model" + tail;
   return head + `holds within the study for ${list(keep)}` + tail;
 }
