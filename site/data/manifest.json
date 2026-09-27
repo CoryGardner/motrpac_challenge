@@ -1,6 +1,6 @@
 {
- "generated": "2026-09-27 00:23 UTC",
- "git_hash": "3a751bb",
+ "generated": "2026-09-27 00:42 UTC",
+ "git_hash": "3b2f63f",
  "results_dir": "results",
  "phases": {
   "02_inventory": {
@@ -2237,7 +2237,7 @@
   },
   {
    "name": "headline.json",
-   "bytes": 33067
+   "bytes": 34064
   },
   {
    "name": "inventory.json",
@@ -2257,7 +2257,7 @@
   },
   {
    "name": "provenance.json",
-   "bytes": 83378
+   "bytes": 86660
   },
   {
    "name": "qc_baseline.json",

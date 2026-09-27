@@ -3,7 +3,7 @@ message: "If you use this code or site, please cite it as below, and cite the da
 title: "Molecular Tissue Fingerprints: a 20-gene panel, its conformal guarantee, and what a within-study fingerprint can identify"
 type: software
 version: "1.0.0"
-date-released: "2026-09-27"
+date-released: "2026-09-26"
 license: MIT
 authors:
   - name: "[team name — edit CITATION.cff and site/about.html]"

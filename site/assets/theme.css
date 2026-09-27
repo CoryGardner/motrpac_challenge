@@ -223,3 +223,5 @@ img.shot { max-width: 100%; height: auto; border: 1px solid var(--grid); border-
 @media print {
   .site-header, .theme-toggle, .fig-toolbar { display: none; }
 }
+
+.answer-hidden select { filter: blur(5px); pointer-events: none; }

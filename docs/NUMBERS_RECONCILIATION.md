@@ -1,6 +1,6 @@
 # Numbers reconciliation — what the site shows, where it comes from, and what moved with the conformal-quantile fix
 
-Generated 2026-09-27 00:23 UTC by `scripts/30_export_site_data.py --reconciliation` from `site/data/provenance.json`.
+Generated 2026-09-27 00:42 UTC by `scripts/30_export_site_data.py --reconciliation` from `site/data/provenance.json`.
 `results/` (post-fix, 2026-09-25) is the truth; the pre-fix snapshot is `../../backup/pipeline_history/results_pre_quantile_fix_2026-09-25/`. Values are shown to 4 decimals; the JSON holds them unrounded.
 
 ## 1. Headline numbers (the home-page tiles and the transfer ladder)
@@ -40,7 +40,7 @@ Generated 2026-09-27 00:23 UTC by `scripts/30_export_site_data.py --reconciliati
 | `qc_composition` | 0.9488 |  |  | `results/16_identifiability/qc_only_summary.csv` | `{"features": "composition"}` | `acc_mean` | value |
 | `qc_all` | 0.9755 |  |  | `results/16_identifiability/qc_only_summary.csv` | `{"features": "all"}` | `acc_mean` | value |
 
-## 2. Every exported number that moved with the fix (102 of 182 comparable entries)
+## 2. Every exported number that moved with the fix (102 of 187 comparable entries)
 
 | id | post-fix | pre-fix | source | selector | column |
 |---|---|---|---|---|---|
@@ -170,6 +170,8 @@ These documents are not edited (a banner at the top of each points here). For ea
 | id | value | files / reason |
 |---|---|---|
 | `gtex_recal_infinite_draws` | table | `results/31_site_regen/13_gtex/recal_thresholds.csv`: fraction of recalibration draws whose threshold is +∞ (too few mapped samples for a finite rank), from the per-draw thresholds |
+| `n_trnscrpt_animals` | 50 | `results/04_baselines/TRNSCRPT/per_fold.csv`: train + test animals of one fold |
+| `n_bodymap_adult_animals` | 8 | `results/12_bodymap/recalibration.csv`: recalibration + test individuals |
 | `cov_id_k20_marginal_pooled` | 0.8999 | `results/31_site_regen/06_conformal/TRNSCRPT/scores_calibration.csv`, `results/31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv`: mean over 5 folds of the coverage recomputed from the phase-06 design scores (k20, marginal, pooled) |
 | `cov_id_k20_marginal_one_per_animal` | 0.9242 | `results/31_site_regen/06_conformal/TRNSCRPT/scores_calibration.csv`, `results/31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv`: mean over 5 folds of the coverage recomputed from the phase-06 design scores (k20, marginal, one_per_animal) |
 | `cov_id_k20_mondrian_pooled` | 0.9166 | `results/31_site_regen/06_conformal/TRNSCRPT/scores_calibration.csv`, `results/31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv`: mean over 5 folds of the coverage recomputed from the phase-06 design scores (k20, mondrian, pooled) |
@@ -184,11 +186,15 @@ These documents are not edited (a banner at the top of each points here). For ea
 | `cov_id_k50_floored_one_per_animal` | 0.9566 | `results/31_site_regen/06_conformal/TRNSCRPT/scores_calibration.csv`, `results/31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv`: mean over 5 folds of the coverage recomputed from the phase-06 design scores (k50, floored, one_per_animal) |
 | `cov_id_full_mondrian_one_per_animal` | 0.9643 | `results/31_site_regen/06_conformal/TRNSCRPT/scores_calibration.csv`, `results/31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv`: mean over 5 folds of the coverage recomputed from the phase-06 design scores (full, mondrian, one_per_animal) |
 | `cov_id_full_floored_one_per_animal` | 0.9643 | `results/31_site_regen/06_conformal/TRNSCRPT/scores_calibration.csv`, `results/31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv`: mean over 5 folds of the coverage recomputed from the phase-06 design scores (full, floored, one_per_animal) |
+| `nseen_train_male_test_female_k20` | 425 | `results/08_shift/TRNSCRPT/shift_table.csv`: target vials of seen classes = n_test × coverage_target_all / coverage_target_seen (the unseen sex-specific tissue's vials cannot be covered) |
 | `cov_train_male_test_female_k50_marginal` | pending | phase 08 ran the k = 20 panel and the full model only |
 | `cov_train_male_test_female_k50_mondrian` | pending | phase 08 ran the k = 20 panel and the full model only |
 | `cov_train_male_test_female_k50_floored` | pending | phase 08 ran the k = 20 panel and the full model only |
+| `nseen_train_male_test_female_full` | 425 | `results/08_shift/TRNSCRPT/shift_table.csv`: target vials of seen classes = n_test × coverage_target_all / coverage_target_seen (the unseen sex-specific tissue's vials cannot be covered) |
+| `nseen_train_female_test_male_k20` | 425 | `results/08_shift/TRNSCRPT/shift_table.csv`: target vials of seen classes = n_test × coverage_target_all / coverage_target_seen (the unseen sex-specific tissue's vials cannot be covered) |
 | `cov_train_female_test_male_k50_marginal` | pending | phase 08 ran the k = 20 panel and the full model only |
 | `cov_train_female_test_male_k50_mondrian` | pending | phase 08 ran the k = 20 panel and the full model only |
 | `cov_train_female_test_male_k50_floored` | pending | phase 08 ran the k = 20 panel and the full model only |
+| `nseen_train_female_test_male_full` | 425 | `results/08_shift/TRNSCRPT/shift_table.csv`: target vials of seen classes = n_test × coverage_target_all / coverage_target_seen (the unseen sex-specific tissue's vials cannot be covered) |
 | `gtex_heart_k20_to_skm_frac` | 0.9067 | `results/13_gtex/confusion_k20.csv`: fraction of GTEx heart samples called either skeletal muscle class (SKM-GN + SKM-VL) by the k20 panel |
 | `gtex_recal_k20_n3_frac_inf` | 0.4500 | `results/31_site_regen/13_gtex/recal_thresholds.csv`: fraction of the 20 three-donor recalibration draws (k20) whose threshold is +∞ |

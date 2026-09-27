@@ -28,7 +28,7 @@ async function main() {
   document.getElementById("p-accuracy").replaceChildren(
     `Under five animal-grouped folds the round-robin selector reaches ${fmt(H.accuracy.k20.mean)} ± ${fmt(H.accuracy.k20.sd)} balanced accuracy at 20 genes, `,
     `${fmt(H.accuracy.k50.mean)} at 50 and ${fmt(H.accuracy.full.mean)} with all genes. The selector, not the classifier, was the hard part: `,
-    `a univariate F-test at the same k picks markers of the same easy tissues and reaches ${fmt(ex.acc_fclassif_k20 ?? tileValue(H, "acc_fclassif_k20"))}.`,
+    `a univariate F-test at the same k picks markers of the same easy tissues and reaches ${fmt(ex.acc_fclassif_k20)}.`,
   );
   await figure(document.getElementById("fig-curve"), {
     title: "The panel curve saturates by 15–20 genes with a class-aware selector; the F-test never gets there",
@@ -101,8 +101,8 @@ async function main() {
       : []),
   );
   await figure(document.getElementById("fig-nesting"), {
-    title: "One tissue pair in 171 can be contrasted inside a processing batch",
-    subtitle: "Number of the 171 RNA-seq tissue pairs that share at least one level of each processing variable, and the pairs sharing a level of all three.",
+    title: `${est.n_pairs_estimable} tissue pair${est.n_pairs_estimable === 1 ? "" : "s"} in ${est.n_pairs_total} can be contrasted inside a processing batch`,
+    subtitle: `Number of the ${est.n_pairs_total} RNA-seq tissue pairs that share at least one level of each processing variable, and the pairs sharing a level of all three.`,
     build: () => {
       const vars = [["RNA_extr_plate_ID", "RNA extraction plate"], ["Lib_batch_ID", "library batch"], ["Seq_flowcell_ID", "flowcell"]];
       const y = [...vars.map(([, l]) => l), "all three (estimable)"];
@@ -118,7 +118,5 @@ async function main() {
     height: "short",
   });
 }
-
-function tileValue(H, id) { return H.extras && H.extras[id]; }
 
 main().catch((e) => { console.error(e); document.getElementById("lede").textContent = "Failed to load site data: " + e.message; });

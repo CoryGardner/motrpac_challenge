@@ -530,14 +530,20 @@ def export_aggregates(w: Writer, prov: Prov, rec: pd.DataFrame | None):
 # ---------------------------------------------------------------------------------------------
 def export_headline(w: Writer, prov: Prov, rec: pd.DataFrame | None):
     P = prov
+    n_vials = P.val("n_trnscrpt_vials", "04_baselines/TRNSCRPT/per_fold.csv", "n_test", where={"model": "logreg_l2"}, agg="sum", note="the five test folds partition the vials")
+    n_animals = P.recomputed("n_trnscrpt_animals", int(P.read("04_baselines/TRNSCRPT/per_fold.csv").query("model == 'logreg_l2'").iloc[0][["n_train_animals", "n_test_animals"]].sum()),
+                             ["04_baselines/TRNSCRPT/per_fold.csv"], "train + test animals of one fold")
+    rc12_ = P.read("12_bodymap/recalibration.csv")
+    n_bm_animals = P.recomputed("n_bodymap_adult_animals", int(rc12_["n_recal"].iloc[0] + rc12_["n_test_individuals"].iloc[0]), ["12_bodymap/recalibration.csv"], "recalibration + test individuals")
+    n_bm_mapped = P.val("n_bodymap_adult_mapped", "12_bodymap/conformal_transfer.csv", "n_mapped", where={"stage_weeks": 21, "model": "k20", "conformal": "marginal"})
     tiles = [
         {"id": "tile_acc_k20", "value": P.val("tile_acc_k20", "05_panels/TRNSCRPT/panel_curve.csv", "balanced_accuracy", where={"k": 20}, agg="mean",
                                              note="mean over 5 animal-grouped folds; round-robin selector + logreg_l2"),
          "sd": P.val("tile_acc_k20_sd", "05_panels/TRNSCRPT/panel_curve.csv", "balanced_accuracy", where={"k": 20}, agg="std"),
-         "label": "balanced accuracy of a 20-gene panel", "sub": "19 rat tissues, 899 vials, 50 animals, 5 animal-grouped folds", "format": "3",
+         "label": "balanced accuracy of a 20-gene panel", "sub": f"19 rat tissues, {n_vials} vials, {n_animals} animals, 5 animal-grouped folds", "format": "3",
          "source": "results/05_panels/TRNSCRPT/panel_curve.csv (k = 20, mean ± sd over folds)"},
         {"id": "tile_bodymap_k20", "value": P.val("tile_bodymap_k20", "12_bodymap/age_shift_accuracy.csv", "k20", where={"stage_weeks": 21}),
-         "label": "adult organs named correctly in another lab's rats", "sub": "rat BodyMap, 21-week adults, 68 mapped samples, 8 animals, 20-gene panel", "format": "3",
+         "label": "adult organs named correctly in another lab's rats", "sub": f"rat BodyMap, 21-week adults, {n_bm_mapped} mapped samples, {n_bm_animals} animals, 20-gene panel", "format": "3",
          "source": "results/12_bodymap/age_shift_accuracy.csv (stage 21, k20)"},
         {"id": "tile_bodymap_cov_k20", "value": P.val("tile_bodymap_cov_k20", "12_bodymap/conformal_transfer.csv", "coverage_mapped",
                                                       where={"stage_weeks": 21, "model": "k20", "conformal": "marginal"}),
@@ -557,7 +563,7 @@ def export_headline(w: Writer, prov: Prov, rec: pd.DataFrame | None):
                    P.val("acc_k50_sd", "05_panels/TRNSCRPT/panel_curve.csv", "balanced_accuracy", where={"k": 50}, agg="std")),
            "full": (P.val("acc_full", "04_baselines/TRNSCRPT/summary.csv", "balanced_accuracy_mean", where={"model": "logreg_l2"}),
                     P.val("acc_full_sd", "04_baselines/TRNSCRPT/summary.csv", "balanced_accuracy_std", where={"model": "logreg_l2"}))}
-    P.val("acc_fclassif_k20", "05_panels/TRNSCRPT/panel_curve_fclassif.csv", "balanced_accuracy", where={"k": 20}, agg="mean", note="F-test selector at the same k")
+    acc_fclassif_k20 = P.val("acc_fclassif_k20", "05_panels/TRNSCRPT/panel_curve_fclassif.csv", "balanced_accuracy", where={"k": 20}, agg="mean", note="F-test selector at the same k")
     ladder = []
 
     def rung(**kw):
@@ -602,8 +608,15 @@ def export_headline(w: Writer, prov: Prov, rec: pd.DataFrame | None):
                 where = {"split": split, "arm": arm}
                 cov = P.val(f"cov_{split}_{model}_{variant}", "08_shift/TRNSCRPT/shift_table.csv", col, where=where)
                 size_col = {"marginal": "avg_set_size_target", "mondrian": "avg_set_size_target_mondrian", "floored": "avg_set_size_target_floored"}[variant]
+                srow = st[(st["split"] == split) & (st["arm"] == arm)].iloc[0]
+                n_seen = int(round(srow["n_test"] * srow["coverage_target_all"] / srow["coverage_target_seen"]))
+                if variant == "marginal":
+                    P.recomputed(f"nseen_{split}_{model}", n_seen, ["08_shift/TRNSCRPT/shift_table.csv"],
+                                 "target vials of seen classes = n_test × coverage_target_all / coverage_target_seen (the unseen sex-specific tissue's vials cannot be covered)")
                 rung(rung_id=split, label=label, model=model, variant=variant, calibration="pooled",
                      accuracy=P.val(f"acc_{split}_{model}", "08_shift/TRNSCRPT/shift_table.csv", "accuracy_all", where=where) if variant == "marginal" else acc_cache[(split, model)],
+                     accuracy_seen=P.val(f"accseen_{split}_{model}", "08_shift/TRNSCRPT/shift_table.csv", "bal_acc_seen", where=where, note="balanced accuracy over the seen classes") if variant == "marginal" else accseen_cache[(split, model)],
+                     n_samples_coverage=n_seen, n_classes_seen=18,
                      accuracy_sd=None, coverage=cov, coverage_sd=None,
                      empty=P.val(f"empty_{split}_{model}", "08_shift/TRNSCRPT/shift_table.csv", "lac_frac_empty_target", where=where) if variant == "marginal" else None,
                      set_size=P.val(f"size_{split}_{model}_{variant}", "08_shift/TRNSCRPT/shift_table.csv", size_col, where=where),
@@ -616,6 +629,7 @@ def export_headline(w: Writer, prov: Prov, rec: pd.DataFrame | None):
                      source=["results/08_shift/TRNSCRPT/shift_table.csv"])
                 if variant == "marginal":
                     acc_cache[(split, model)] = ladder[-1]["accuracy"]
+                    accseen_cache[(split, model)] = ladder[-1]["accuracy_seen"]
     # 3. different lab: BodyMap adults
     rc12 = P.read("12_bodymap/recalibration.csv")
     n_adult_animals = int(rc12["n_recal"].iloc[0] + rc12["n_test_individuals"].iloc[0])
@@ -649,6 +663,7 @@ def export_headline(w: Writer, prov: Prov, rec: pd.DataFrame | None):
                  source=["results/13_gtex/accuracy_overall.csv", "results/13_gtex/conformal_transfer.csv", "results/13_gtex/recalibration.csv"])
     # a few more headline numbers used in prose
     extras = {
+        "acc_fclassif_k20": acc_fclassif_k20,
         "gtex_heart_k20": P.val("gtex_heart_k20", "13_gtex/accuracy_by_tissue.csv", "accuracy", where={"model": "k20", "gtex_tissue": "Heart - Left Ventricle"}),
         "gtex_heart_k20_top": P.val("gtex_heart_k20_top", "13_gtex/accuracy_by_tissue.csv", "top_prediction", where={"model": "k20", "gtex_tissue": "Heart - Left Ventricle"}),
         "gtex_heart_k20_top_frac": P.val("gtex_heart_k20_top_frac", "13_gtex/accuracy_by_tissue.csv", "top_prediction_frac", where={"model": "k20", "gtex_tissue": "Heart - Left Ventricle"}),
@@ -721,6 +736,7 @@ def export_headline(w: Writer, prov: Prov, rec: pd.DataFrame | None):
 
 
 acc_cache: dict = {}
+accseen_cache: dict = {}
 
 
 # ---------------------------------------------------------------------------------------------
@@ -1131,6 +1147,7 @@ def reconciliation(prov_entries: list[dict], out_md: Path):
             lines.append(f"| `{e['id']}` | {fmt(e['value']) if not isinstance(e['value'], dict) else 'table'} | {', '.join('`' + f + '`' for f in e['files'])}: {e['note']} |")
     out_md.write_text("\n".join(lines) + "\n")
     print(f"  wrote {out_md} ({len(ch)} changed entries)")
+    return {"changed": int(len(ch)), "comparable": int((df["changed"] != "").sum()), "document": "docs/NUMBERS_RECONCILIATION.md"}
 
 
 def readme_table(prov_entries: list[dict]) -> str:
@@ -1236,7 +1253,11 @@ def main():
     print(f"== {len(prov.entries)} provenance entries, {len(prov.tables)} tables; site/data total {total / 1e6:.2f} MB; largest "
           f"{max(SITE.glob('*.json'), key=lambda p: p.stat().st_size).name}")
     if args.reconciliation:
-        reconciliation(prov.entries, ROOT / "docs" / "NUMBERS_RECONCILIATION.md")
+        counts = reconciliation(prov.entries, ROOT / "docs" / "NUMBERS_RECONCILIATION.md")
+        pp = SITE / "provenance.json"
+        pj = json.loads(pp.read_text())
+        pj["_meta"]["reconciliation"] = counts
+        pp.write_text(json.dumps(pj, indent=0))
     if args.check_anchors:
         ok = check_anchors(prov.entries)
         if not ok:

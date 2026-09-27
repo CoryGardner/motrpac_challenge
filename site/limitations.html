@@ -35,7 +35,7 @@
       <li><b>BodyMap animal ids are assumed.</b> GEO carries no animal identifier; the animal is taken to be the replicate index within organ × age × sex, and every BodyMap split is grouped on that assumption. If replicates were re-indexed across organs, BodyMap recalibration would have leaked animals across calibration and test.</li>
       <li><b>Super-class scoring.</b> BodyMap “Muscle” counts as correct for either skeletal muscle and “Brain” for any of the three brain regions; GTEx “Muscle – Skeletal” likewise. Artery – Aorta → vena cava is an imperfect mapping, and thymus and uterus have no MoTrPAC tissue at all (they are scored for abstention only).</li>
       <li><b>Seven panel markers have no BodyMap organ</b> (ovary, adipose, blood, brown fat, small intestine, colon, vena cava): their only external check is the human transfer, where orthology and species confound it.</li>
-      <li><b>GTEx is scored on 1:1 orthologs only</b> (14,569 of 21,193 genes), and the human panel is re-selected in that space; the recalibration draws include infinite thresholds (45 % of the three-donor draws for the 20-gene panel), so the recalibrated GTEx coverage must be read with its set size.</li>
+      <li><b>GTEx is scored on 1:1 orthologs only</b> (<span id="n-orth">pending</span> genes), and the human panel is re-selected in that space; the recalibration draws include infinite thresholds (<span id="n-inf">pending</span> of the three-donor draws for the 20-gene panel), so the recalibrated GTEx coverage must be read with its set size.</li>
     </ul>
   </section>
 
@@ -43,7 +43,7 @@
     <h2>Design and data</h2>
     <ul>
       <li><b>Sex is confounded with arrival cohort</b> in every group (males and females arrived about a month apart), and only the 8-week animals share arrival cohort and sacrifice dates with the controls; 1-, 2- and 4-week contrasts also compare seasons. Ovary and testes are single-sex tissues, so the held-out-sex shift is also a label shift.</li>
-      <li><b>One data release.</b> Everything here is portal release c1.0 (rn6, the R package MotrpacRatTraining6moData 2.0.0). The rn7 reprocessing (c2.0) shares 21,651 of 32,883 gene ids and changes the training-regulated gene sets; the tissue fingerprint was not rerun on it.</li>
+      <li><b>One data release.</b> Everything here is portal release c1.0 (rn6, the R package MotrpacRatTraining6moData 2.0.0). The rn7 reprocessing (c2.0) shares 21,651 of 32,883 gene ids and changes the training-regulated gene sets (background: the workspace data inventory, docs/data/DATA_INVENTORY.md, not a results/ number); the tissue fingerprint was not rerun on it.</li>
       <li><b>Consortium outliers remain in the matrices</b>, including the female 1- and 2-week vena cava vials flagged as brown-fat contaminated; they account for most vena cava → brown fat errors.</li>
       <li><b>Proteomics is within-tissue only</b> (ratios to per-tissue reference pools; missingness identifies the tissue), so no cross-tissue protein fingerprint is claimed.</li>
     </ul>

@@ -35,9 +35,11 @@ def _same_csv(a: Path, b: Path, tol: float = 1e-6):
 def test_06_regen_reproduces_published_coverage():
     d = REGEN / "06_conformal" / "TRNSCRPT"
     assert (d / "coverage.csv").exists(), "regeneration of phase 06 with --save-scores has not been run"
-    _same_csv(d / "coverage.csv", RES / "06_conformal" / "TRNSCRPT" / "coverage.csv")
-    _same_csv(d / "per_tissue_marginal_vs_mondrian_alpha0.1.csv",
-              RES / "06_conformal" / "TRNSCRPT" / "per_tissue_marginal_vs_mondrian_alpha0.1.csv")
+    # tables computed before AND after the extra --save-scores panel fit: none may move
+    for f in ("coverage.csv", "per_tissue_marginal_vs_mondrian_alpha0.1.csv", "coverage_marginal_vs_mondrian.csv", "per_class_coverage.csv",
+              "certificate_validity.csv", "certificate_by_fold.csv", "certificate_distribution.csv", "certificate_final.csv",
+              "certificate_final_repeats.csv", "certificate_alpha_delta_grid.csv", "sizing_table.csv"):
+        _same_csv(d / f, RES / "06_conformal" / "TRNSCRPT" / f)
 
 
 def test_06_scores_recompute_full_model_marginal_coverage():
@@ -64,8 +66,11 @@ def test_06_scores_recompute_full_model_marginal_coverage():
 
 
 @pytest.mark.parametrize("phase,files", [
-    ("12_bodymap", ["conformal_transfer.csv", "recalibration.csv", "age_shift_accuracy.csv", "coverage_by_organ.csv"]),
-    ("13_gtex", ["conformal_transfer.csv", "recalibration.csv", "accuracy_overall.csv", "coverage_by_tissue.csv"]),
+    ("12_bodymap", ["conformal_transfer.csv", "recalibration.csv", "age_shift_accuracy.csv", "age_shift.csv", "coverage_by_organ.csv", "ood_sets.csv",
+                    "accuracy_by_organ.csv", "panel_gene_check.csv", "panel_survival.csv", "native_panel.csv", "gene_overlap.csv",
+                    "confusion_k20_adult.csv", "confusion_k50_adult.csv", "confusion_full_adult.csv"]),
+    ("13_gtex", ["conformal_transfer.csv", "recalibration.csv", "accuracy_overall.csv", "accuracy_by_tissue.csv", "coverage_by_tissue.csv",
+                 "panel_gene_check.csv", "panel_survival.csv", "native_panel.csv", "gene_overlap.csv", "confusion_k20.csv", "confusion_k50.csv", "confusion_full.csv"]),
 ])
 def test_transfer_regen_reproduces_published_tables(phase, files):
     d = REGEN / phase

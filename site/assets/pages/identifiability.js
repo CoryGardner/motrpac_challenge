@@ -13,7 +13,7 @@ async function main() {
   document.getElementById("p-nesting").replaceChildren(
     `In RNA-seq, ${ex.n_plates} extraction plates, ${ex.n_lib_batches} library batches and ${ex.n_flowcells} flowcells each hold whole tissues: the median tissue spans one level of every processing variable. `,
     `A tissue pair is estimable when the two tissues share a level of every one of them, so that a contrast exists inside a batch; ${rna.n_pairs_estimable} of ${rna.n_pairs_total} RNA-seq pairs does (${rna.estimable_pairs.replace("|", " vs ").toLowerCase()}, the one pair that is also the sex contrast, since each is single-sex). `,
-    `Methylation and ATAC-seq have none of 28. TMT proteomics is nested by construction: a plex is ten samples plus one tissue's reference pool. The immunoassays are the exception: their Luminex plates hold two to four tissues, so ${est.IMMUNO.n_pairs_estimable} of ${est.IMMUNO.n_pairs_total} pairs are estimable there. Metabolomics carries no batch variable in the export.`,
+    `Methylation has ${est.METHYL.n_pairs_estimable} of ${est.METHYL.n_pairs_total} and ATAC-seq ${est.ATAC.n_pairs_estimable} of ${est.ATAC.n_pairs_total}. TMT proteomics is nested by construction (${est.PROT.n_pairs_estimable} of ${est.PROT.n_pairs_total}): a plex is ten samples plus one tissue's reference pool. The immunoassays are the exception: their Luminex plates hold several tissues (up to ${Math.max(...N.nesting.IMMUNO.filter((r) => r.variable === "plate_id").map((r) => r.max_tissues_per_level))} on one plate), so ${est.IMMUNO.n_pairs_estimable} of ${est.IMMUNO.n_pairs_total} pairs are estimable there. Metabolomics carries no batch variable in the export.`,
   );
   // nesting heatmap: rows layer · variable, two columns of colour: Cramér's V and fraction of pairs sharing a level
   const rows = [];
@@ -34,7 +34,7 @@ async function main() {
     notShow: "metabolomics (no batch variable in the export) or the reference-standard vials; colour is a value scale per column, the printed numbers are the data.", height: "tall",
   });
   await figure(document.getElementById("fig-estimable"), {
-    title: "Estimable tissue pairs per layer: one in RNA-seq, none in the epigenome or TMT layers, sixteen in the immunoassays",
+    title: `Estimable tissue pairs per layer: ${est.TRNSCRPT.n_pairs_estimable} in RNA-seq, ${est.METHYL.n_pairs_estimable + est.ATAC.n_pairs_estimable + est.PROT.n_pairs_estimable + est.PHOSPHO.n_pairs_estimable} in the epigenome and TMT layers, ${est.IMMUNO.n_pairs_estimable} in the immunoassays`,
     subtitle: "Pairs of tissues that share a level of every processing variable of the layer (the variables used are listed in the hover), out of all pairs the layer has.",
     build: () => {
       const order = ["TRNSCRPT", "METHYL", "ATAC", "PROT", "PHOSPHO", "ACETYL", "UBIQ", "IMMUNO"].filter((a) => est[a]);

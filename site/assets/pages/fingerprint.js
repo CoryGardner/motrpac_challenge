@@ -39,7 +39,7 @@ async function main() {
         table: { columns: ["k", "roundrobin_mean", "roundrobin_sd", "fclassif_mean", "fclassif_sd", "n_folds", "n_train_animals", "n_test_animals"], rows: c } };
     },
     source: "results/05_panels/TRNSCRPT/panel_curve.csv, results/05_panels/TRNSCRPT/panel_curve_fclassif.csv",
-    notShow: "the certified panel size, which is larger (Methods): with 22 calibration animals a 10 %/90 % certificate lands at 15–20 genes in about half of repeated splits and at no size in a third.",
+    notShow: `the certified panel size, which is larger (Methods): with 22 calibration animals a 10 %/90 % certificate certifies k = 20 in ${(100 * ex.cert_k20_frac).toFixed(0)} % of repeated splits and no size at all in ${(100 * ex.cert_none_frac).toFixed(0)} % (results/06_conformal/TRNSCRPT/certificate_distribution.csv, certificate_alpha_delta_grid.csv).`,
   });
 
   // ---- stable core ------------------------------------------------------------------------------------
@@ -47,7 +47,7 @@ async function main() {
   const core = SC.core;
   document.getElementById("p-core").replaceChildren(
     `Selection was repeated on 50 bootstrap resamples of animals; ${core.length} genes were chosen in at least 80 % of them (Source: results/05_panels/TRNSCRPT/candidate_panel_annotated.csv). `,
-    `They cover ${new Set(core.map((r) => r.marker_tissue)).size} tissues with single markers such as Umod (kidney), Cyp21a1 (adrenal) and Pmch (hypothalamus). Two carry a training-regulated flag and two a QC-correlation flag: annotations, not exclusions.`,
+    `They cover ${new Set(core.map((r) => r.marker_tissue)).size} tissues with single markers such as Umod (kidney), Cyp21a1 (adrenal) and Pmch (hypothalamus). ${core.filter((r) => r.risk_T7_regulated).length} carry a training-regulated flag and ${core.filter((r) => r.risk_qc_correlated).length} a QC-correlation flag: annotations, not exclusions.`,
   );
   const coreRows = core.map((r) => { const g = gi[r.feature_ID] || {}; return {
     gene: r.gene_symbol, tissue: tissueLabel(r.marker_tissue), selection_frequency: r.selection_frequency, effect_size_log2cpm: r.effect_size, next_highest_tissue: r.next_highest_tissue, ovr_score: r.ovr_score,
@@ -103,13 +103,13 @@ async function main() {
   document.getElementById("p-hard").replaceChildren(
     "Every hard tissue is hard for the same reason: its best single marker sits only a little above its anatomical neighbour. ",
     hard.map((r) => `${r.gene_symbol} for ${tissueLabel(r.marker_tissue)} is ${fmt(r.effect_size, 2)} log2 CPM above ${r.next_highest_tissue}`).join("; "),
-    `. Compare the easy tissues, where the best marker is 6–12 log2 CPM above everything else (Umod, Cyp21a1, Pgk2). `,
+    `. Compare the easy tissues, whose best marker sits ${fmt(Math.min(...["KIDNEY", "ADRNL", "TESTES"].map((t) => best[t].effect_size)), 1)}–${fmt(Math.max(...["KIDNEY", "ADRNL", "TESTES"].map((t) => best[t].effect_size)), 1)} log2 CPM above everything else (${["KIDNEY", "ADRNL", "TESTES"].map((t) => best[t].gene_symbol).join(", ")}). `,
     "The muscles share a fibre programme, vena cava carries perivascular brown fat, and the panel has one gene per tissue to tell them apart.",
   );
   const tissuesAll = Object.keys(best).sort((a, b) => best[a].effect_size - best[b].effect_size);
   await figure(document.getElementById("fig-markers"), {
     title: "Marker strength per tissue: the hard tissues have weak single markers",
-    subtitle: "Effect size of each tissue's strongest stability-selected marker: mean log2 CPM in the tissue minus the highest mean of any other tissue (hover for the gene and its runner-up tissue).",
+    subtitle: "Effect size of each tissue's strongest marker among the 51 stability-selected genes (not necessarily the one the k = 20 panel picked in a given fold): mean log2 CPM in the tissue minus the highest mean of any other tissue; hover for the gene and its runner-up tissue.",
     build: () => {
       const t = tokens(); const p = palette();
       const x = tissuesAll.map((tt) => best[tt].effect_size);

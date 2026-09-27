@@ -1,7 +1,7 @@
 {
 "_meta": {
-"generated": "2026-09-27 00:23 UTC",
-"git_hash": "3a751bb",
+"generated": "2026-09-27 00:42 UTC",
+"git_hash": "3b2f63f",
 "sources": [
 "results/02_inventory/inventory.csv",
 "results/02_inventory/tissue_by_assay.csv",
@@ -99,7 +99,12 @@
 "results/31_site_regen/06_conformal/TRNSCRPT/scores_calibration.csv",
 "results/31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv",
 "results/31_site_regen/13_gtex/recal_thresholds.csv"
-]
+],
+"reconciliation": {
+"changed": 102,
+"comparable": 187,
+"document": "docs/NUMBERS_RECONCILIATION.md"
+}
 },
 "entries": [
 {
@@ -525,6 +530,51 @@
 },
 "column": "auroc",
 "agg": "mean",
+"tol": 1e-06
+},
+{
+"id": "n_trnscrpt_vials",
+"value": 899.0,
+"file": "results/04_baselines/TRNSCRPT/per_fold.csv",
+"where": {
+"model": "logreg_l2"
+},
+"column": "n_test",
+"agg": "sum",
+"tol": 1e-06,
+"note": "the five test folds partition the vials"
+},
+{
+"id": "n_trnscrpt_animals",
+"value": 50,
+"file": null,
+"files": [
+"results/04_baselines/TRNSCRPT/per_fold.csv"
+],
+"agg": "recomputed",
+"note": "train + test animals of one fold"
+},
+{
+"id": "n_bodymap_adult_animals",
+"value": 8,
+"file": null,
+"files": [
+"results/12_bodymap/recalibration.csv"
+],
+"agg": "recomputed",
+"note": "recalibration + test individuals"
+},
+{
+"id": "n_bodymap_adult_mapped",
+"value": 68,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "k20",
+"conformal": "marginal"
+},
+"column": "n_mapped",
+"agg": "value",
 "tol": 1e-06
 },
 {
@@ -1089,6 +1139,16 @@
 "tol": 1e-06
 },
 {
+"id": "nseen_train_male_test_female_k20",
+"value": 425,
+"file": null,
+"files": [
+"results/08_shift/TRNSCRPT/shift_table.csv"
+],
+"agg": "recomputed",
+"note": "target vials of seen classes = n_test \u00d7 coverage_target_all / coverage_target_seen (the unseen sex-specific tissue's vials cannot be covered)"
+},
+{
 "id": "acc_train_male_test_female_k20",
 "value": 0.8930957683741648,
 "file": "results/08_shift/TRNSCRPT/shift_table.csv",
@@ -1099,6 +1159,19 @@
 "column": "accuracy_all",
 "agg": "value",
 "tol": 1e-06
+},
+{
+"id": "accseen_train_male_test_female_k20",
+"value": 0.943529411764706,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_male_test_female",
+"arm": "panel_k20"
+},
+"column": "bal_acc_seen",
+"agg": "value",
+"tol": 1e-06,
+"note": "balanced accuracy over the seen classes"
 },
 {
 "id": "empty_train_male_test_female_k20",
@@ -1239,6 +1312,16 @@
 "tol": 1e-06
 },
 {
+"id": "nseen_train_male_test_female_full",
+"value": 425,
+"file": null,
+"files": [
+"results/08_shift/TRNSCRPT/shift_table.csv"
+],
+"agg": "recomputed",
+"note": "target vials of seen classes = n_test \u00d7 coverage_target_all / coverage_target_seen (the unseen sex-specific tissue's vials cannot be covered)"
+},
+{
 "id": "acc_train_male_test_female_full",
 "value": 0.9131403118040088,
 "file": "results/08_shift/TRNSCRPT/shift_table.csv",
@@ -1249,6 +1332,19 @@
 "column": "accuracy_all",
 "agg": "value",
 "tol": 1e-06
+},
+{
+"id": "accseen_train_male_test_female_full",
+"value": 0.9647058823529412,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_male_test_female",
+"arm": "full"
+},
+"column": "bal_acc_seen",
+"agg": "value",
+"tol": 1e-06,
+"note": "balanced accuracy over the seen classes"
 },
 {
 "id": "empty_train_male_test_female_full",
@@ -1371,6 +1467,16 @@
 "tol": 1e-06
 },
 {
+"id": "nseen_train_female_test_male_k20",
+"value": 425,
+"file": null,
+"files": [
+"results/08_shift/TRNSCRPT/shift_table.csv"
+],
+"agg": "recomputed",
+"note": "target vials of seen classes = n_test \u00d7 coverage_target_all / coverage_target_seen (the unseen sex-specific tissue's vials cannot be covered)"
+},
+{
 "id": "acc_train_female_test_male_k20",
 "value": 0.9,
 "file": "results/08_shift/TRNSCRPT/shift_table.csv",
@@ -1381,6 +1487,19 @@
 "column": "accuracy_all",
 "agg": "value",
 "tol": 1e-06
+},
+{
+"id": "accseen_train_female_test_male_k20",
+"value": 0.9529411764705882,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_female_test_male",
+"arm": "panel_k20"
+},
+"column": "bal_acc_seen",
+"agg": "value",
+"tol": 1e-06,
+"note": "balanced accuracy over the seen classes"
 },
 {
 "id": "empty_train_female_test_male_k20",
@@ -1521,6 +1640,16 @@
 "tol": 1e-06
 },
 {
+"id": "nseen_train_female_test_male_full",
+"value": 425,
+"file": null,
+"files": [
+"results/08_shift/TRNSCRPT/shift_table.csv"
+],
+"agg": "recomputed",
+"note": "target vials of seen classes = n_test \u00d7 coverage_target_all / coverage_target_seen (the unseen sex-specific tissue's vials cannot be covered)"
+},
+{
 "id": "acc_train_female_test_male_full",
 "value": 0.9422222222222222,
 "file": "results/08_shift/TRNSCRPT/shift_table.csv",
@@ -1531,6 +1660,19 @@
 "column": "accuracy_all",
 "agg": "value",
 "tol": 1e-06
+},
+{
+"id": "accseen_train_female_test_male_full",
+"value": 0.9976470588235294,
+"file": "results/08_shift/TRNSCRPT/shift_table.csv",
+"where": {
+"split": "train_female_test_male",
+"arm": "full"
+},
+"column": "bal_acc_seen",
+"agg": "value",
+"tol": 1e-06,
+"note": "balanced accuracy over the seen classes"
 },
 {
 "id": "empty_train_female_test_male_full",

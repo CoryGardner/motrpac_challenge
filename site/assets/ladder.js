@@ -22,8 +22,8 @@ export function ladderBuild(H, state) {
   const cov = rows.map((r) => (r && !r.pending ? r.coverage : null));
   const accSd = rows.map((r) => (r && !r.pending && r.accuracy_sd ? r.accuracy_sd : 0));
   const covSd = rows.map((r) => (r && !r.pending && r.coverage_sd ? r.coverage_sd : 0));
-  const hoverAcc = rows.map((r) => (r && !r.pending ? `accuracy ${fmt(r.accuracy)}${r.accuracy_sd ? " ± " + fmt(r.accuracy_sd) : ""}<br>n = ${r.n_samples} samples, ${r.n_individuals} individuals` : "pending"));
-  const hoverCov = rows.map((r) => (r && !r.pending ? `coverage ${fmt(r.coverage)}${r.coverage_sd ? " ± " + fmt(r.coverage_sd) : ""}<br>empty sets ${r.empty === null || r.empty === undefined ? "—" : fmt(r.empty)}<br>mean set size ${fmt(r.set_size, 2)}${r.recal_n3 !== null && r.recal_n3 !== undefined ? "<br>recalibrated on 3 target individuals: " + fmt(r.recal_n3) : ""}` : "pending"));
+  const hoverAcc = rows.map((r) => (r && !r.pending ? `accuracy ${fmt(r.accuracy)}${r.accuracy_sd ? " ± " + fmt(r.accuracy_sd) : ""}<br>n = ${r.n_samples} samples, ${r.n_individuals} individuals${r.accuracy_seen !== null && r.accuracy_seen !== undefined ? "<br>the unseen sex-specific tissue's vials count as wrong; balanced accuracy over seen classes " + fmt(r.accuracy_seen) : ""}` : "pending"));
+  const hoverCov = rows.map((r) => (r && !r.pending ? `coverage ${fmt(r.coverage)}${r.coverage_sd ? " ± " + fmt(r.coverage_sd) : ""}${r.n_samples_coverage ? " (n = " + r.n_samples_coverage + " seen-class vials)" : ""}<br>empty sets ${r.empty === null || r.empty === undefined ? "—" : fmt(r.empty)}<br>mean set size ${fmt(r.set_size, 2)}${r.n_classes_seen && r.set_size >= r.n_classes_seen ? " — every seen tissue in every set (per-class thresholds +∞)" : ""}${r.recal_n3 !== null && r.recal_n3 !== undefined ? "<br>recalibrated on 3 target individuals: " + fmt(r.recal_n3) : ""}` : "pending"));
   const traces = [
     { ...bar(x, acc, { name: "accuracy", slot: 1, sd: accSd.some((v) => v) ? accSd : null, text: acc.map((v) => (v === null ? "" : fmt(v))), hover: "%{customdata}<extra>accuracy</extra>" }), customdata: hoverAcc },
     { ...bar(x, cov, { name: `coverage of the 90 % set (${state.variant})`, slot: 2, sd: covSd.some((v) => v) ? covSd : null, text: cov.map((v) => (v === null ? "" : fmt(v))), hover: "%{customdata}<extra>coverage</extra>" }), customdata: hoverCov },
@@ -33,9 +33,9 @@ export function ladderBuild(H, state) {
   rows.forEach((r, i) => {
     if (!r || r.pending) annotations.push({ x: x[i], y: 0.5, xref: "x", yref: "y", text: "pending:<br>" + ((r && r.reason) || "not run"), showarrow: false, font: { color: t.muted, size: 11 } });
   });
-  const table = { columns: ["shift", "model", "variant", "calibration", "accuracy", "accuracy_sd", "coverage", "coverage_sd", "empty", "set_size", "recal_n3", "n_samples", "n_individuals", "source"],
-                  rows: rows.map((r, i) => (r ? { shift: RUNGS[i].short, model: r.model, variant: r.variant, calibration: r.calibration, accuracy: r.accuracy, accuracy_sd: r.accuracy_sd, coverage: r.coverage,
-                                                  coverage_sd: r.coverage_sd, empty: r.empty, set_size: r.set_size, recal_n3: r.recal_n3, n_samples: r.n_samples, n_individuals: r.n_individuals,
+  const table = { columns: ["shift", "model", "variant", "calibration", "accuracy", "accuracy_seen", "accuracy_sd", "coverage", "coverage_sd", "empty", "set_size", "recal_n3", "n_samples", "n_samples_coverage", "n_individuals", "source"],
+                  rows: rows.map((r, i) => (r ? { shift: RUNGS[i].short, model: r.model, variant: r.variant, calibration: r.calibration, accuracy: r.accuracy, accuracy_seen: r.accuracy_seen, accuracy_sd: r.accuracy_sd, coverage: r.coverage,
+                                                  coverage_sd: r.coverage_sd, empty: r.empty, set_size: r.set_size, recal_n3: r.recal_n3, n_samples: r.n_samples, n_samples_coverage: r.n_samples_coverage ?? r.n_samples, n_individuals: r.n_individuals,
                                                   source: r.pending ? r.reason : (r.source || []).join("; ") } : { shift: RUNGS[i].short })) };
   return { traces, layout: { yaxis: { range: [0, 1.08], title: { text: "fraction" }, tickformat: ".1f" }, xaxis: { tickfont: { size: 11 } }, shapes: ref.shapes, annotations, barmode: "group",
                             legend: { y: 1.14 }, margin: { t: 40, b: 60 } }, table };
@@ -64,7 +64,7 @@ export async function mountLadder(container, H, opts = {}) {
     subtitle: "Balanced accuracy (in-distribution) or accuracy on mapped tissues (shifts), and the coverage of α = 0.10 prediction sets calibrated on the source, per shift. Bars: mean; whiskers: sd over 5 folds where the design has folds.",
     build: () => ladderBuild(H, state),
     source: "results/05_panels/TRNSCRPT/panel_curve.csv, results/04_baselines/TRNSCRPT/summary.csv, results/06_conformal/TRNSCRPT/coverage.csv (full model) and results/31_site_regen/06_conformal/TRNSCRPT/scores_*.csv (k20/k50, recomputed with the same design), results/08_shift/TRNSCRPT/shift_table.csv, results/12_bodymap/{age_shift_accuracy,conformal_transfer}.csv, results/13_gtex/{accuracy_overall,conformal_transfer}.csv",
-    notShow: "why coverage falls: it falls through empty sets, not through wrong confident sets. The held-out-sex rungs exist for the 20-gene panel and the full model only; the in-distribution rung uses pooled-vial calibration unless switched (one vial per animal gives " + fmt(opa?.coverage) + " for the full model). Mondrian and floored sets on the held-out sex are full 18-tissue sets: the source calibration has no vials of the unseen sex-specific tissue.",
+    notShow: "why coverage falls: it falls through empty sets, not through wrong confident sets. The held-out-sex rungs exist for the 20-gene panel and the full model only, and their accuracy counts the unseen sex-specific tissue's vials as wrong (coverage is over seen-class vials; both n in the hover); the in-distribution rung uses pooled-vial calibration unless switched (one vial per animal gives " + fmt(opa?.coverage) + " for the full model). On the held-out sex the Mondrian and floored sets are full 18-tissue sets, which is why they read 1.0: the source calibration holds 8 vials per class, and with 8 scores the α = 0.10 rank ⌈9 × 0.9⌉ = 9 exceeds 8, so every per-class threshold is +∞.",
     toolbar: ctl,
     height: "tall",
   });

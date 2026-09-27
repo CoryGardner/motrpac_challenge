@@ -52,3 +52,73 @@ from the portal count files: for the two gastrocnemius-derived pools on 6 plates
 pages with the definition and the muscle-pool caveat. Whole-branch review dispatched to a fresh-context reviewer.
 **Next.** Review findings, final export, tag `hackathon-submission-v1`, final report.
 **Blockers.** None.
+
+## 2026-09-27 00:40–01:30 — review and fix pass
+**Done.** Fresh-context review of the whole branch: 2 critical, 7 important, 16 minor findings. Fixed in one pass, each
+with a test or a scripted browser check: the F-test number rendering as "pending" on Home (new test: every `extras`
+key a page reads must exist), tour step 2 vs the Explorer's 35-animal refit (card shows both calls; tour rewritten),
+the wrong reason in the ladder caption for Mondrian 1.0 on the held-out sex (8 vials per class → +∞), hand-typed
+result numbers wired to JSON (+ reconciliation counts in provenance.json), Explorer charts reverting on theme toggle,
+held-out-sex denominators (accuracy_seen, n_samples_coverage), hide-the-answer, regen test pins every 06/12/13 table.
+16 minors deferred (listed in the ledger and the final report). Site re-exported (271 provenance entries), full suite
+green, render pass clean.
+**Next.** Tag `hackathon-submission-v1`, final report.
+
+## Appendix — execution ledger (rulings, task completions, review outcome)
+
+```
+# SDD ledger — plan: docs/superpowers/plans/2026-09-26-submission-site-build.md
+Spec: docs/superpowers/specs/2026-09-26-submission-site-spec.md (user brief, verbatim; binding).
+
+Pre-flight (shared interfaces):
+- Task 1 → Task 4: results/16_identifiability/*.csv column names as in Task 1 Interfaces → nesting.json / qc_baseline.json. Clean.
+- Task 2 → Task 4: results/31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv, scores_calibration.csv (fold, model, calibration, p_<class>) → samples_motrpac.json. Clean.
+- Task 3 → Task 4: results/31_site_regen/{12_bodymap,13_gtex}/scores_target_probs.csv, scores_calibration.csv, recal_thresholds.csv → samples_bodymap.json / samples_gtex.json. Clean.
+- Task 4 → Task 7: conformal_fixtures.json computed from the SAME quantised JSON the site ships (6 dp probabilities) so JS equality is exact. Clean.
+- Task 6 → Tasks 8–12: charts.js/site.js exports (figure, statTile, callout, pendingBlock, loadJSON, mountChrome). Clean.
+- Task 14 rename (motrpac → tfp) happens AFTER all scripts have run; scripts 16/30 import from the package name current at run time and are updated by the same rename. Clean.
+
+Rulings:
+- Task 0: Ruling: no git worktree; branch `submission-build` in the same working tree — data/ and results/ are git-ignored and exist only here, a worktree would have neither — cost if wrong: none beyond the usual branch discipline (main is untouched until the final fast-forward).
+- Task 0: Ruling: new phase numbers 16 (identifiability recompute), 30 (site export), 31 (regeneration runs) — 17 and 21–26 are reserved by the spec for parallel work that may land; 30/31 keep the site tooling visibly apart from analysis phases — cost if wrong: a rename of two files.
+Task 1: complete (commits f0288e3..1bd7e3e, tests: /home/cory/miniconda3/envs/motrpac-py/bin/python -m pytest tests/test_batch.py -q → 3 passed in 0.65s)
+Task 2: complete (commits f0288e3..1bd7e3e, tests: /home/cory/miniconda3/envs/motrpac-py/bin/python -m pytest tests/test_regen_scores.py -q -k 06 → 2 passed, 5 deselected in 0.65s)
+Task 3: complete (commits f0288e3..1bd7e3e, tests: /home/cory/miniconda3/envs/motrpac-py/bin/python -m pytest tests/test_regen_scores.py -q -k 'transfer or recal' → 5 passed, 2 deselected in 0.71s)
+Task 4: complete (commits 1bd7e3e..375e78f, tests: bash -c '~/miniconda3/envs/motrpac-py/bin/python -m pytest tests/test_site_data.py -q && node tests/test_site_conformal.js' → ok: 2713 assertions, 2700 fixture cases (540 with infinite threshold))
+Task 5: complete (commits 1bd7e3e..375e78f, tests: bash -c 'test -s docs/NUMBERS_RECONCILIATION.md && grep -q 'Superseded (2026-09-26)' results/SUMMARY.md results/ABSTRACT.md ../../docs/findings/FINDINGS_REPORT.md && echo banners-ok' → banners-ok)
+Task 6: complete (commits 375e78f..97d6032, tests: node tools/screenshot.js --pages=index → all page renders clean)
+Task 7: complete (commits 375e78f..97d6032, tests: node tests/test_site_conformal.js → ok: 2713 assertions, 2700 fixture cases (540 with infinite threshold))
+Task 8: complete (commits 375e78f..97d6032, tests: node tools/screenshot.js --pages=index → all page renders clean)
+Task 9: complete (commits 375e78f..97d6032, tests: node tools/screenshot.js --pages=explore → all page renders clean)
+Task 10: complete (commits 375e78f..97d6032, tests: node tools/screenshot.js --pages=transfer → all page renders clean)
+Task 11: complete (commits 375e78f..97d6032, tests: node tools/screenshot.js --pages=fingerprint,identifiability,beyond → all page renders clean)
+Task 12: complete (commits 375e78f..97d6032, tests: node tools/screenshot.js --pages=methods,limitations,about → all page renders clean)
+- Task 14: Ruling: docs/EVALUATION_RULES.md (frozen) had three module references rewritten motrpac.* → tfp.* by the rename — a name substitution only, no rule changed; leaving them would point at a module that no longer exists — cost if wrong: three words to revert.
+Task 13: complete (commits 97d6032..fb3c3c0, tests: bash -c '~/miniconda3/envs/motrpac-py/bin/python tools/linkcheck.py | tail -1 && node tools/screenshot.js --pages=index,explore --block-cdn | tail -1' → all page renders clean)
+Task 14: complete (commits 97d6032..fb3c3c0, tests: bash -c '~/miniconda3/envs/motrpac-py/bin/python -m pytest -q | tail -1 && node tests/test_site_conformal.js | tail -1' → ok: 2713 assertions, 2700 fixture cases (540 with infinite threshold))
+- Task 6b: Ruling: the bridge-sample measurement is recomputed here with an explicit definition (between-plate variance of a reference pool's log2 CPM over the plates it ran on, as a fraction of the variance of the 19 tissue means; all-gene and expressed-in-pool sets) and labelled as such — the spec allowed 'pending' but the portal count files contain the 36 reference vials and two gastrocnemius-derived pools bridge 6 plates at both sites — cost if wrong: the audit's own definition may differ; the page says so and keeps the pending note for the audit's number.
+Final review: fresh-context reviewer (fable) on 5236735..fb3c3c0 — verdict "with fixes": 2 Critical, 7 Important, 16 Minor.
+Final: fixed C1 F-test number rendered as pending on Home — test_every_extras_key_a_page_reads_is_exported RED→GREEN (extras.acc_fclassif_k20 exported).
+Final: fixed C2 tour step 2 contradicted the Explorer (35-animal refit) — card now shows both calls (refit + all-animal pred_all_animals), design stated, tour rewritten; verified by a Playwright drive (GTEx heart: refit HEART, all-animal SKM-GN).
+Final: fixed I3 ladder caption's wrong reason for Mondrian 1.0 on the held-out sex — caption states the 8-vials-per-class → rank 9 > 8 → +∞ cause; hover flags full sets.
+Final: fixed I4 hand-typed result numbers (limitations orthologs / infinite draws / reconciliation counts; identifiability layer counts; fingerprint certificate fractions, flag counts, easy-tissue range; home 171; tile subtitles) — wired to JSON; test_provenance_records_the_reconciliation_counts RED→GREEN.
+Final: fixed I5 theme toggle reverted Explorer charts — .spec reassigned on every re-render; Playwright drive shows Gnb3 kept after toggle.
+Final: fixed I6 regen test pins the certificate tables and every 12/13 table — test extended (already identical).
+Final: fixed I7 held-out-sex denominators — accuracy_seen and n_samples_coverage exported and shown; test_held_out_sex_rungs_carry_both_denominators RED→GREEN.
+Final: fixed I8 hide-the-answer — picker selects blurred and disabled, hint shown; Playwright drive confirms.
+Final: fixed I9 manifest site_data_files — present (3b2f63f) and pinned by test_manifest_lists_the_site_data_files.
+Final: fixed (minor, factual) CITATION date 2026-09-26 and pyproject version 1.0.0.
+Final: minor (deferred): conformal.js NaN with fallback=null (unreachable from setsFor).
+Final: minor (deferred): α slider and variant stay live in recalibrated mode (note says they do not apply).
+Final: minor (deferred): Mondrian + one-vial-per-animal in the card does not say every per-class threshold is +∞.
+Final: minor (deferred): QC bars are accuracy, gene-model bar balanced accuracy, one axis label (values differ by < 0.001).
+Final: minor (deferred): BodyMap age curve shows no n (age_shift_accuracy.csv has none; accuracy_by_organ has per-organ n).
+Final: minor (deferred): recal "draw0" is iloc[0] after sorting — mislabelled only if draw 0 were skipped (all 20 present).
+Final: minor (deferred): tests/test_site_conformal.js relies on Node's ESM detection (CI Node 20.20 fine; add tests/package.json type=module for older Node).
+Final: minor (deferred): REPO_URL placeholder in site/assets/site.js (unknown until the repo is pushed; documented in README).
+Final: minor (deferred): tile subtitle design constants and methods-page design constants (n = 22/396/59/35/15/20) typed as design parameters.
+Final: minor (deferred): Metabolomics Workbench listed as a CFDE component per the spec; reword as a cross-reference if the organizers object.
+Final: minor (deferred): abstract leads with pooled coverage 0.908; limitations calls one-vial-per-animal 0.916 the honest guarantee (both shown on the ladder).
+Final: minor (deferred): `ad_grid =[` spacing in scripts/06; screenshot tool does not fail on imgsNoAlt (linkcheck does).
+Final: Ruling: the reviewer's "Declined to judge" items (commits after fb3c3c0 incl. the bridge measurement; TMT plex_id construction; quoted phase-15 verdicts; notebooks not re-executed) stand as built — the bridge work carries the plan's "recomputed here, definition: …" label and its own provenance entries and anchor — cost if wrong: the audit's definition may differ; stated on the page.
+```

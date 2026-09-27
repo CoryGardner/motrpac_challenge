@@ -142,3 +142,38 @@ def test_gene_export_covers_the_required_sets():
         e = _load(name)
         assert set(e["genes"]) <= ids
         assert len(e["values"]) == len(e["genes"]) and len(e["values"][0]) == len(e["samples"])
+
+
+def test_every_extras_key_a_page_reads_is_exported():
+    """A page that reads headline.extras.<key> must find it: a missing key would render as 'pending'."""
+    import re
+    ex = _load("headline.json")["extras"]
+    missing = []
+    for js in (ROOT / "site" / "assets" / "pages").glob("*.js"):
+        src = js.read_text()
+        for key in set(re.findall(r"\bex\.([A-Za-z0-9_]+)", src)) | set(re.findall(r"extras\[[\"']([^\"']+)[\"']\]", src)):
+            if key not in ex:
+                missing.append(f"{js.name}: {key}")
+    assert not missing, missing
+
+
+def test_manifest_lists_the_site_data_files():
+    m = _load("manifest.json")
+    names = {f["name"] for f in m.get("site_data_files", [])}
+    assert "headline.json" in names and "provenance.json" in names and len(names) >= 20
+
+
+def test_held_out_sex_rungs_carry_both_denominators():
+    """accuracy_all counts the unseen-class vials (never right); coverage is over seen-class vials: both n's are shown."""
+    h = _load("headline.json")
+    rows = [r for r in h["ladder"] if r["rung_id"].startswith("train_") and not r.get("pending")]
+    assert rows
+    for r in rows:
+        assert r["n_samples_coverage"] < r["n_samples"], r
+        assert 0 <= r["accuracy_seen"] <= 1, r
+
+
+def test_provenance_records_the_reconciliation_counts():
+    meta = _load("provenance.json")["_meta"]
+    rec = meta.get("reconciliation")
+    assert rec and rec["comparable"] > 0 and 0 <= rec["changed"] <= rec["comparable"]

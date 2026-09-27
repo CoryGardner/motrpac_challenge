@@ -61,9 +61,17 @@ function tissueCard(exprP) {
   const sub1Wrap = el("span"), sub2Wrap = el("span"), sampleWrap = el("span");
   const randomBtn = el("button", { class: "btn", type: "button" }, "Random sample");
   const hide = el("input", { type: "checkbox" });
-  hide.addEventListener("change", () => { state.hide = hide.checked; render(); });
+  hide.addEventListener("change", () => { state.hide = hide.checked; applyHide(); render(); });
+  const hideHint = el("span", { class: "small muted" });
+  function applyHide() {
+    for (const w of [sub1Wrap, sub2Wrap, sampleWrap]) {
+      w.classList.toggle("answer-hidden", state.hide);
+      w.querySelectorAll("select").forEach((sel) => { sel.disabled = state.hide; });
+    }
+    hideHint.textContent = state.hide ? "picker hidden: use Random sample" : "";
+  }
   picker.append(control("Source", sourceSel), sub1Wrap, sub2Wrap, sampleWrap, el("span", { class: "control" }, [el("span", {}, " "), randomBtn]),
-                el("label", { class: "check" }, [hide, "hide the answer (for demos)"]));
+                el("label", { class: "check" }, [hide, "hide the answer (for demos)"]), hideHint);
 
   function samplesOf(source) { return source === "motrpac" ? M.samples : source === "bodymap" ? B.samples : G.samples; }
   function buildPicker() {
@@ -84,10 +92,14 @@ function tissueCard(exprP) {
     } else {
       const tissues = [...new Set(G.samples.map((s) => s.tissue))].sort();
       state.sub1 = state.sub1 && tissues.includes(state.sub1) ? state.sub1 : "Heart - Left Ventricle";
+      if (!state.sample) {  // first visit: a heart sample the all-animal 20-gene panel calls skeletal muscle (the Transfer page's story)
+        state.sample = G.samples.find((x) => x.tissue === state.sub1 && /^SKM/.test(x.pred_all_animals.k20)) || null;
+      }
       sub1Wrap.replaceChildren(control("GTEx tissue", select(tissues.map((t) => [t, `${t} → ${(G.organ_map[t] || []).join("/")}`]), state.sub1, (v) => { state.sub1 = v; buildSamples(); })));
       buildSamples();
     }
     buildControls();
+    applyHide();
   }
   function candidates() {
     const src = state.source;
@@ -185,18 +197,25 @@ function tissueCard(exprP) {
     else { kind = "ambiguous"; icon = "◐"; sentence = `Ambiguous. ${chosen.length} tissues clear the threshold; the guarantee is kept by returning all of them.`; }
     const thr = Number.isFinite(q) ? `threshold q̂ = ${fmt(q, 3)}: a tissue enters the set when p ≥ ${fmt(1 - q, 3)}` : "threshold q̂ = +∞ (too few calibration scores for this α): every tissue enters the set";
     const who = el("div", { class: "who" }, [el("b", {}, s.id), " · ", state.source === "motrpac" ? `MoTrPAC vial, ${s.sex}, ${s.group}, out-of-fold (fold ${s.fold})` : state.source === "bodymap" ? `rat BodyMap, ${s.sex}, animal ${s.animal}` : `GTEx v8, donor ${s.donor}`]);
+    const topCall = top[0][0];
+    const calls = state.source === "motrpac" ? null : el("p", { class: "explain" }, [
+      el("b", {}, "Two models, two calls. "),
+      `The sets above come from the model refit on 35 MoTrPAC animals so that the other 15 could calibrate it; its top call is ${tissueLabel(topCall)}. `,
+      `The model fit on all 50 animals, the one the accuracy tables use, calls this sample `, el("b", {}, tissueLabel(s.pred_all_animals[state.model])), ".",
+      s.pred_all_animals[state.model] !== topCall ? " The two disagree here: a panel re-selected on 35 animals is not the same panel." : "",
+    ]);
     const answer = el("div", { class: "answer" + (state.hide ? " hidden-answer" : "") }, [el("b", {}, "True tissue: "), tr.label]);
     const verdict = covered === null ? badge("unmapped", "◌", "no MoTrPAC tissue to be right about — abstention is the desired behaviour")
       : (state.hide ? badge("unmapped", "?", "answer hidden") : covered ? badge("correct", "✓", "the true tissue is in the set") : badge("wrong", "✗", chosen.length ? "the true tissue is not in the set" : "missed by abstaining"));
     card.replaceChildren(who, el("div", {}, [badge(kind, icon, kind[0].toUpperCase() + kind.slice(1))]), chips, el("p", { class: "explain" }, sentence), el("p", { class: "explain" }, thr + (state.variant !== "marginal" && qs && state.calib !== "recal" ? "; Mondrian per-class thresholds shown in the bars' hover" : "")),
-                        answer, el("div", {}, [verdict]), el("p", { class: "explain small" }, note));
+                        answer, el("div", {}, [verdict]), ...(calls ? [calls] : []), el("p", { class: "explain small" }, note));
 
     // top-5 probabilities
     const t = tokens();
     const top5 = top.slice(0, 5);
     const specTop = {
       title: "Top-5 class probabilities and the calibrated threshold",
-      subtitle: `${state.model === "full" ? "all-gene" : state.model.replace("k", "") + "-gene"} model; a tissue enters the set when its probability is at least 1 − q̂.`,
+      subtitle: `${state.model === "full" ? "all-gene" : state.model.replace("k", "") + "-gene"} model${state.source === "motrpac" ? " (fit on the fold's 18 fit animals)" : " (refit on 35 MoTrPAC animals for calibration)"}; a tissue enters the set when its probability is at least 1 − q̂.`,
       build: () => {
         const y = top5.map(([c]) => tissueLabel(c)).reverse(), x = top5.map(([, v]) => v).reverse();
         const inset = top5.map(([c]) => set[classes.indexOf(c)]).reverse();
@@ -246,7 +265,7 @@ function tissueCard(exprP) {
       notShow: "the classifier's weights; the strip is descriptive (z of raw expression), the model uses the same z-scores through logistic regression.",
     };
     if (!figStrip) figStrip = await figure(document.getElementById("fig-strip"), specStrip);
-    else { const b = specStrip.build(); figStrip.traces = b.traces; figStrip.table = b.table; await window.Plotly.react(figStrip.chart, b.traces, { ...template(), ...b.layout }, CONFIG); figStrip.root.querySelector(".fig-sub").textContent = specStrip.subtitle; figStrip.root.querySelector("h3").textContent = specStrip.title; }
+    else { figStrip.spec = specStrip; const b = specStrip.build(); figStrip.traces = b.traces; figStrip.table = b.table; await window.Plotly.react(figStrip.chart, b.traces, { ...template(), ...b.layout }, CONFIG); figStrip.root.querySelector(".fig-sub").textContent = specStrip.subtitle; figStrip.root.querySelector("h3").textContent = specStrip.title; }
   }
   buildPicker();
 }
@@ -350,7 +369,7 @@ function geneExplorer(exprP) {
     };
     for (const [key, id, spec] of [["m", "fig-gene-motrpac", specM], ["b", "fig-gene-bodymap", specB], ["g", "fig-gene-gtex", specG]]) {
       if (!figs[key]) figs[key] = await figure(document.getElementById(id), spec);
-      else { const b = spec.build(); figs[key].traces = b.traces; figs[key].table = b.table; await window.Plotly.react(figs[key].chart, b.traces, { ...template(), ...b.layout }, CONFIG); figs[key].root.querySelector("h3").textContent = spec.title; figs[key].root.querySelector(".fig-sub").textContent = spec.subtitle; }
+      else { figs[key].spec = spec; const b = spec.build(); figs[key].traces = b.traces; figs[key].table = b.table; await window.Plotly.react(figs[key].chart, b.traces, { ...template(), ...b.layout }, CONFIG); figs[key].root.querySelector("h3").textContent = spec.title; figs[key].root.querySelector(".fig-sub").textContent = spec.subtitle; }
     }
   }
   render();
@@ -399,7 +418,7 @@ function panelBuilder() {
       height: "short",
     };
     if (!fig) fig = await figure(document.getElementById("fig-builder"), spec);
-    else { const b = spec.build(); await window.Plotly.react(fig.chart, b.traces, { ...template(), ...b.layout }, CONFIG); }
+    else { fig.spec = spec; const b = spec.build(); fig.traces = b.traces; fig.table = b.table; await window.Plotly.react(fig.chart, b.traces, { ...template(), ...b.layout }, CONFIG); }
   }
   render();
 }
