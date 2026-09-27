@@ -1,6 +1,6 @@
 {
- "generated": "2026-09-27 00:42 UTC",
- "git_hash": "3b2f63f",
+ "generated": "2026-09-27 01:12 UTC",
+ "git_hash": "33b3733",
  "results_dir": "results",
  "phases": {
   "02_inventory": {
@@ -1970,6 +1970,80 @@
     "sha256": "472411abf8197ca23178749474f111d64158458c0ef3b6a3bf3dcc94e9cb0062"
    }
   ],
+  "08_shift_k20": [
+   {
+    "path": "results/31_site_regen/08_shift_k20/coverage_shift.png",
+    "bytes": 56473,
+    "sha256": "f3c3dc7f5b8b4e0a3784d7f49642bbf8a0f1ee4f5bb18bb6c4c4f830197f9e8a"
+   },
+   {
+    "path": "results/31_site_regen/08_shift_k20/scores_calibration.csv",
+    "bytes": 147656,
+    "sha256": "b333bc92f52afadca7a5775854d4c19402fd3a02ce318f053a323b2dd3f3729e"
+   },
+   {
+    "path": "results/31_site_regen/08_shift_k20/scores_target_vials.csv",
+    "bytes": 1992528,
+    "sha256": "2dbc8bf89a59feafea2f8affa4f2baa75428169aee87c1415e84c33d7b4a9cf4"
+   },
+   {
+    "path": "results/31_site_regen/08_shift_k20/shift_per_class.csv",
+    "bytes": 8746,
+    "sha256": "d6c129a80e966740b4de0370b3f4a8f6420e7220159ed8c3ba3d97c0da312c37"
+   },
+   {
+    "path": "results/31_site_regen/08_shift_k20/shift_per_class_variants.csv",
+    "bytes": 33821,
+    "sha256": "18b387c07bc5247e113485c72dca177edbc150c0cc999828c8b09404a4193759"
+   },
+   {
+    "path": "results/31_site_regen/08_shift_k20/shift_recalibration.csv",
+    "bytes": 2818,
+    "sha256": "a4a429c1a2f4096ceb49e6ded8d5c9b21a8e65624fe3444f915a3c10b30b1858"
+   },
+   {
+    "path": "results/31_site_regen/08_shift_k20/shift_table.csv",
+    "bytes": 4987,
+    "sha256": "e345b4cd7eed0fc81fb7ed1064519c3ed4d47d2c387e1ad5dc7cfa7c61699501"
+   }
+  ],
+  "08_shift_k50": [
+   {
+    "path": "results/31_site_regen/08_shift_k50/coverage_shift.png",
+    "bytes": 56497,
+    "sha256": "97acd9c1e5910ccb9202e8b11f697c4b62a1652992c5a31d4af1cee9b96df49a"
+   },
+   {
+    "path": "results/31_site_regen/08_shift_k50/scores_calibration.csv",
+    "bytes": 148183,
+    "sha256": "4d1529f2a6c8afbaac2cde71452396ba06aa267f924930e24abbbb746fbc2b2f"
+   },
+   {
+    "path": "results/31_site_regen/08_shift_k50/scores_target_vials.csv",
+    "bytes": 1997298,
+    "sha256": "9b04569d44890ced899353ac7d029a433be4d1015f9cd3873e4c77e3cbb41c36"
+   },
+   {
+    "path": "results/31_site_regen/08_shift_k50/shift_per_class.csv",
+    "bytes": 8771,
+    "sha256": "dd6fa5f194d21326e69ed97f62f61463d070f9e4079fc1d83ed4711f0166388c"
+   },
+   {
+    "path": "results/31_site_regen/08_shift_k50/shift_per_class_variants.csv",
+    "bytes": 33846,
+    "sha256": "2506da9d656df0ad250b9bb4746f84ba6471d256d96b689bc4fa14543fd2b830"
+   },
+   {
+    "path": "results/31_site_regen/08_shift_k50/shift_recalibration.csv",
+    "bytes": 2828,
+    "sha256": "45f6ecac3d68e0bc6b2af8bebd07be523cabf03cc9d72b9102995aef52d1f18f"
+   },
+   {
+    "path": "results/31_site_regen/08_shift_k50/shift_table.csv",
+    "bytes": 4984,
+    "sha256": "27b56f98d974e643e9eed03a93a27bf087126c4714c20b0d9544ee32b8a884d0"
+   }
+  ],
   "12_bodymap": [
    {
     "path": "results/31_site_regen/12_bodymap/accuracy_by_organ.csv",
@@ -2237,7 +2311,7 @@
   },
   {
    "name": "headline.json",
-   "bytes": 34064
+   "bytes": 44747
   },
   {
    "name": "inventory.json",
@@ -2245,7 +2319,7 @@
   },
   {
    "name": "manifest.json",
-   "bytes": 75688
+   "bytes": 78314
   },
   {
    "name": "nesting.json",
@@ -2257,7 +2331,7 @@
   },
   {
    "name": "provenance.json",
-   "bytes": 86660
+   "bytes": 90076
   },
   {
    "name": "qc_baseline.json",

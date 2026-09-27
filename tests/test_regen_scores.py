@@ -110,3 +110,18 @@ def test_recal_thresholds_exported_for_each_model_and_n():
         assert set(rt["model"]) == {"k20", "k50", "full"}
         assert set(rt["n_recal"]) == {3, 5}
         assert (rt.groupby(["model", "n_recal"])["draw"].min() == 0).all()
+
+
+def test_08_regen_reproduces_shift_table_and_per_vial_sets_agree():
+    d = REGEN / "08_shift_k20"
+    assert (d / "shift_table.csv").exists(), "regeneration of phase 08 (k = 20) with --save-scores has not been run"
+    _same_csv(d / "shift_table.csv", RES / "08_shift" / "TRNSCRPT" / "shift_table.csv")
+    _same_csv(d / "shift_recalibration.csv", RES / "08_shift" / "TRNSCRPT" / "shift_recalibration.csv")
+    v = pd.read_csv(d / "scores_target_vials.csv", dtype={"viallabel": str, "pid": str})
+    st = pd.read_csv(d / "shift_table.csv")
+    for _, r in st.iterrows():
+        seen = v[(v["split"] == r["split"]) & (v["arm"] == r["arm"]) & v["seen"]]
+        assert abs(seen["covered_marginal"].mean() - r["coverage_target_seen"]) < 1e-9, (r["split"], r["arm"])
+    k50 = REGEN / "08_shift_k50" / "shift_table.csv"
+    assert k50.exists(), "the k = 50 shift run is missing"
+    assert set(pd.read_csv(k50)["arm"]) == {"full", "panel_k50"}

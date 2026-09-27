@@ -12,7 +12,7 @@ const { chromium } = require("playwright");
 const args = Object.fromEntries(process.argv.slice(2).map((a) => a.replace(/^--/, "").split("=")).map(([k, v]) => [k, v === undefined ? true : v]));
 const base = args.base || "http://localhost:8765";
 const out = args.out || "site/_screenshots";
-const pages = (args.pages ? String(args.pages).split(",") : ["index", "explore", "transfer", "fingerprint", "identifiability", "beyond", "methods", "limitations", "about"]);
+const pages = (args.pages ? String(args.pages).split(",") : ["index", "explore", "transfer", "fingerprint", "identifiability", "methods", "limitations", "about"]);
 const sizes = [{ name: "desktop", width: 1440, height: 900 }, { name: "phone", width: 390, height: 844 }];
 const themes = ["light", "dark"];
 mkdirSync(out, { recursive: true });

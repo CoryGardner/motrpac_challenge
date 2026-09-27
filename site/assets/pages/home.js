@@ -11,7 +11,7 @@ async function main() {
   // lede
   document.getElementById("lede").replaceChildren(
     el("b", {}, "Yes"),
-    ` — a 20-gene panel identifies 19 rat tissues at ${fmt(tile.tile_acc_k20.value)} balanced accuracy and names ${fmt(tile.tile_bodymap_k20.value, 3)} of adult organs correctly in another laboratory's rats. `,
+    ` — a 20-gene panel identifies 19 rat tissues at ${fmt(tile.tile_acc_k20.value)} balanced accuracy and, fit on all animals, names ${fmt(tile.tile_bodymap_k20.value, 3)} of the mapped adult organs in another laboratory's rats (9 of 11 organs, muscle and brain scored as super-classes). `,
     "But “reliably” has three parts, and only the first survives on its own: the ",
     el("a", { href: "#sec-guarantee" }, "coverage guarantee"), " does not travel, and within one study the ",
     el("a", { href: "#sec-identifiability" }, "tissue axis cannot be separated from processing"), ".",
@@ -74,7 +74,7 @@ async function main() {
       const y = rows.map(([l]) => l);
       const covered = rows.map(([, r]) => r.coverage);
       const empty = rows.map(([, r]) => (r.empty === null || r.empty === undefined ? null : r.empty));
-      const wrong = rows.map(([, r], i) => (empty[i] === null ? null : Math.max(0, 1 - r.coverage - empty[i])));
+      const wrong = rows.map(([, r], i) => (r.wrong_non_empty !== null && r.wrong_non_empty !== undefined ? r.wrong_non_empty : (empty[i] === null ? null : Math.max(0, 1 - r.coverage - empty[i]))));
       const mk = (name, vals, color, pattern) => ({ type: "bar", orientation: "h", y, x: vals, name, marker: { color, line: { color: t.surface, width: 2 }, pattern: pattern ? { shape: "/", fgcolor: t.ink2, bgcolor: t.surface, size: 6, solidity: 0.35 } : undefined },
                                                     hovertemplate: "%{y}: %{x:.3f}<extra>" + name + "</extra>", text: vals.map((v) => (v !== null && v >= 0.12 ? fmt(v, 2) : "")), textposition: "inside", insidetextanchor: "middle", textfont: { color: pattern ? t.ink : "#fff" }, cliponaxis: false });
       return {
@@ -84,7 +84,7 @@ async function main() {
       };
     },
     source: "results/31_site_regen/06_conformal/TRNSCRPT/scores_*.csv (in-distribution k20, recomputed), results/08_shift/TRNSCRPT/shift_table.csv, results/12_bodymap/conformal_transfer.csv, results/13_gtex/conformal_transfer.csv",
-    notShow: "Mondrian and floored sets, which trade abstention for larger sets (Transfer page); the held-out-sex empty-set rate is the LAC rate on the target sex.",
+    notShow: "Mondrian and floored sets, which trade abstention for larger sets (Transfer page). All three fractions are over the same samples: seen-class vials for the held-out sex, mapped samples for BodyMap and GTEx.",
   });
 
   // section 3: identifiability paragraph + nesting mini
@@ -92,7 +92,7 @@ async function main() {
   const nest = Object.fromEntries(N.nesting.TRNSCRPT.map((r) => [r.variable, r]));
   const qc = Object.fromEntries(Q.summary.map((r) => [r.features, r]));
   document.getElementById("p-identifiability").replaceChildren(
-    `Every tissue was extracted, library-prepped and sequenced as its own batch: ${ex.n_plates} RNA plates, ${ex.n_lib_batches} library batches and ${ex.n_flowcells} flowcells, each holding whole tissues. `,
+    `Each tissue sits entirely inside one RNA extraction plate, one library batch and one flowcell: ${ex.n_plates} plates and ${ex.n_lib_batches} library batches holding at most ${Math.max(nest.RNA_extr_plate_ID.max_tissues_per_level, nest.Lib_batch_ID.max_tissues_per_level)} tissues each, ${ex.n_flowcells} flowcells holding up to ${nest.Seq_flowcell_ID.max_tissues_per_level}. `,
     `Only ${est.n_pairs_estimable} of ${est.n_pairs_total} tissue pairs share a level of all three (${est.estimable_pairs.replace("|", " vs ").toLowerCase()}, which is also the sex contrast). `,
     `Library QC numbers alone, with no gene, classify the tissue at ${fmt(qc.all.acc_mean)} ± ${fmt(qc.all.acc_sd)} (technical numbers ${fmt(qc.technical.acc_mean)}, composition fractions ${fmt(qc.composition.acc_mean)}). `,
     "So within-study accuracy is not evidence that the signature is biology. The evidence is external: the panel transfers to a laboratory where none of these batches exist. ",

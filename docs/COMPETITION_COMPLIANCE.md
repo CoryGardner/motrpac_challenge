@@ -17,8 +17,8 @@ Fingerprints — Can molecular signatures identify a tissue reliably?**
   records the file, row selector, column and aggregation of every headline number and the source of every table.
 - `tests/test_site_data.py` checks those entries against the results files; `tests/test_site_conformal.js` checks
   the browser's conformal port against Python-computed sets.
-- Numbers that could not be sourced in this copy render as "pending" with the reason (the bridge-sample
-  measurement; the parallel phases 17 and 21–26).
+- A number that cannot be sourced from `results/` renders as "pending" with the reason rather than being typed in;
+  after the final export none remains on the site.
 - `docs/NUMBERS_RECONCILIATION.md` lists every headline number with its pre-fix value where the 2026-09-25
   conformal-quantile fix moved it.
 

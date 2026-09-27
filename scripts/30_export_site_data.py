@@ -112,6 +112,65 @@ def rel(p: Path) -> str:
         return str(p)
 
 
+def cluster_boot(ok, groups, n_boot: int = 2000, seed: int = C.SEED) -> list[float]:
+    """95 % interval of a mean over individuals (animals / donors): a cluster percentile bootstrap, or, when every
+    individual is at the same boundary (all right or all wrong) and the bootstrap cannot move, the exact
+    Clopper–Pearson interval over the number of individuals whose samples are all right."""
+    from scipy import stats
+    ok = np.asarray(ok, dtype=float)
+    groups = np.asarray(groups)
+    u = np.unique(groups)
+    idx = {g: np.flatnonzero(groups == g) for g in u}
+    per_ind = np.array([ok[idx[g]].mean() for g in u])
+    if np.all(per_ind == per_ind[0]) and per_ind[0] in (0.0, 1.0):
+        k, n = int((per_ind == 1.0).sum()), len(u)
+        lo = float(stats.beta.ppf(0.025, k, n - k + 1)) if k > 0 else 0.0
+        hi = float(stats.beta.ppf(0.975, k + 1, n - k)) if k < n else 1.0
+        return [lo, hi]
+    rng = np.random.default_rng(seed)
+    vals = []
+    for _ in range(n_boot):
+        pick = rng.choice(u, size=len(u), replace=True)
+        sel = np.concatenate([idx[g] for g in pick])
+        vals.append(ok[sel].mean())
+    return [float(np.percentile(vals, 2.5)), float(np.percentile(vals, 97.5))]
+
+
+def load_transfer_scores(phase: str):
+    """The --save-scores outputs of phase 12 or 13: target probabilities (refit models), calibration scores, classes, organ map."""
+    d = REGEN / phase
+    probs = pd.read_csv(d / "scores_target_probs.csv", dtype=str)
+    cal = pd.read_csv(d / "scores_calibration.csv", dtype={"viallabel": str, "pid": str})
+    classes = json.loads((d / "classes.json").read_text())
+    organ_map = json.loads((d / "organ_map.json").read_text())
+    return probs, cal, classes, organ_map
+
+
+def transfer_rung_stats(phase: str, model: str, stage_col: str, primary, indiv_col: str, alpha: float = 0.10):
+    """Per target sample (primary stage, mapped organs): correctness of the all-animal model's call, correctness of the
+    refit model's call, and the α-marginal set (refit model, source calibration): covered / empty / wrong; cluster
+    bootstrap intervals over individuals."""
+    probs, cal, classes, organ_map = load_transfer_scores(phase)
+    pcols = [f"p_{c}" for c in classes]
+    pm = probs[(probs["model"] == model) & (probs[stage_col].astype(str) == str(primary))].copy()
+    mapped = pm["organ"].map(lambda o: bool(organ_map.get(o))).to_numpy()
+    pm = pm[mapped]
+    P = pm[pcols].to_numpy(dtype=float)
+    sc = cal[cal["model"] == model]["score_lac"].to_numpy(dtype=float)
+    q = cp.conformal_quantile(sc, alpha)
+    sets = cp.predict_sets(P, q, "lac")
+    ok_all = np.array([pa in organ_map[o] for pa, o in zip(pm["pred_all_animals"], pm["organ"])])
+    pred_refit = np.array(classes)[P.argmax(axis=1)]
+    ok_refit = np.array([pr in organ_map[o] for pr, o in zip(pred_refit, pm["organ"])])
+    covered = np.array([any(sets[i, classes.index(t)] for t in organ_map[o] if t in classes) for i, o in enumerate(pm["organ"])])
+    size = sets.sum(axis=1)
+    groups = pm[indiv_col].to_numpy()
+    return {"n_samples": int(len(pm)), "n_individuals": int(pm[indiv_col].nunique()),
+            "accuracy": float(ok_all.mean()), "accuracy_ci": cluster_boot(ok_all, groups), "accuracy_refit": float(ok_refit.mean()),
+            "coverage": float(covered.mean()), "coverage_ci": cluster_boot(covered, groups), "empty": float((size == 0).mean()),
+            "wrong_non_empty": float(((~covered) & (size > 0)).mean()), "set_size": float(size.mean())}
+
+
 class Prov:
     """Provenance ledger: one entry per headline number, one per copied table."""
 
@@ -257,6 +316,16 @@ def coverage_from_scores(regen06: Path):
                                      "n": int(len(y_idx)), "n_cal": int(len(sc)), "n_test_animals": int(pt["pid"].nunique()),
                                      "qhat": float(q)})
     rec = pd.DataFrame(rows)
+    # balanced accuracy of the same models (argmax of the exported test probabilities), per fold
+    from sklearn.metrics import balanced_accuracy_score
+    acc_rows = []
+    for fold in sorted(probs["fold"].unique()):
+        for model in MODELS:
+            pt = probs[(probs["fold"] == fold) & (probs["model"] == model)]
+            pred = np.array(classes)[pt[pcols].to_numpy(dtype=float).argmax(axis=1)]
+            acc_rows.append({"fold": int(fold), "model": model, "balanced_accuracy": float(balanced_accuracy_score(pt["tissue"], pred)),
+                             "n_test_animals": int(pt["pid"].nunique()), "n_test": int(len(pt))})
+    rec.attrs["accuracy"] = pd.DataFrame(acc_rows)
     # sanity: the full-model marginal rows reproduce the phase-06 coverage.csv exactly
     ref = cov_ref[(cov_ref["method"] == "lac") & (cov_ref["conformal"] == "marginal")]
     for _, r in ref.iterrows():
@@ -456,57 +525,6 @@ def export_aggregates(w: Writer, prov: Prov, rec: pd.DataFrame | None):
                                                                   "pct_intronic", "pct_intergenic"]},
                                  "caveat": "composition fractions (mitochondrial, globin, rRNA, intronic reads, chrX/chrY) are read biologically by MoTrPAC itself; the technical set is closer to pure processing, but RIN and duplication also depend on the tissue's RNA"},
             [rel(d16 / "qc_only_summary.csv"), rel(d16 / "qc_only_per_fold.csv")])
-    tc = WORKSPACE / "docs" / "TIME_COURSE_INVESTIGATION.md"
-    w.write("batch_verdict.json", {
-        "conclusion": P.table("batch_conclusion", "07_fusion/batch_conclusion.csv", "batch_verdict.json", "conclusion"),
-        "covariate_auroc": P.table("batch_covariate_auroc", "07_fusion/batch_covariate_auroc.csv", "batch_verdict.json", "covariate_auroc"),
-        "time_course_revision": {
-            "status": "interpreted" if tc.exists() else "absent",
-            "source": "../../docs/TIME_COURSE_INVESTIGATION.md §1 (numbers in results/15_time_course/)" if tc.exists() else None,
-            "note": ("The phase-07 verdict rests on a QC covariate set that includes biologically-read composition fractions. The phase-15 "
-                     "time-course investigation (2026-09-26) revises the reading per tissue from the duration profiles of RNA, protein and "
-                     "metabolite separation; its verdicts are interpretations and are quoted, not measured here."),
-            "verdicts": ({"SKM-GN": "training", "HEART": "training in protein; RNA 8w contrast partly unexplained",
-                          "KIDNEY": "RNA and metabolomics: cohort/batch contributes; protein: training-consistent",
-                          "LIVER": "training at 8w", "WAT-SC": "training in protein and metabolites; none in RNA",
-                          "LUNG": "cohort/batch", "CORTEX": "no training signal in RNA"} if tc.exists() else None)},
-        "part5_by_duration": (P.table("tc_part5_by_duration", "15_time_course/5_6_fingerprint/part5_by_duration.csv", "batch_verdict.json", "part5_by_duration")
-                              if (RES / "15_time_course/5_6_fingerprint/part5_by_duration.csv").exists() else None)},
-        [rel(RES / "07_fusion/batch_conclusion.csv"), rel(RES / "07_fusion/batch_covariate_auroc.csv")])
-
-    # ---- fusion and discordance ---------------------------------------------------------------------
-    w.write("fusion.json", {"taskA": P.table("fusion_taskA", "07_fusion/taskA_summary.csv", "fusion.json", "taskA"),
-                            "taskB": P.table("fusion_taskB", "07_fusion/taskB_best_vs_null.csv", "fusion.json", "taskB"),
-                            "taskB_duration": P.table("fusion_taskB_duration", "07_fusion/taskB_duration_summary.csv", "fusion.json", "taskB_duration"),
-                            "n_fusion_beats_single": P.val("fusion_n_beats_single", "07_fusion/taskB_best_vs_null.csv", "fusion_beats_single_by_gt_sd", agg="sum",
-                                                           note="count of tissues where a fusion arm beats the best single omic by more than its fold sd"),
-                            "n_beats_null": P.val("fusion_n_beats_null", "07_fusion/taskB_best_vs_null.csv", "best_beats_null_p95", agg="sum"),
-                            "n_tissues": P.val("fusion_n_tissues", "07_fusion/taskB_best_vs_null.csv", "tissue", agg="count")},
-            [rel(RES / "07_fusion/taskA_summary.csv"), rel(RES / "07_fusion/taskB_best_vs_null.csv")])
-    dr = P.read("09_discordance/discordance_rates.csv")
-    pa = P.read("09_discordance/prediction_auroc.csv")
-    pa = pa[pa["auroc"].notna()]
-    auroc = pa.groupby(["target", "model"])["auroc"].agg(["mean", "std", "count"]).reset_index()
-    w.write("discordance.json", {"summary": P.table("discordance_summary", "09_discordance/summary.csv", "discordance.json", "summary"),
-                                 "rates": P.table("discordance_rates", "09_discordance/discordance_rates.csv", "discordance.json", "rates"),
-                                 "n_sig_either": P.val("disc_n_sig_either", "09_discordance/discordance_rates.csv", "n_sig_either", agg="sum"),
-                                 "n_one_layer_only": P.val("disc_n_one_layer", "09_discordance/discordance_rates.csv", "n_one_layer_only", agg="sum"),
-                                 "n_sign_discordant": P.val("disc_n_sign", "09_discordance/discordance_rates.csv", "n_sign_discordant", agg="sum"),
-                                 "n_concordant": P.val("disc_n_concordant", "09_discordance/discordance_rates.csv", "n_concordant", agg="sum"),
-                                 "auroc": records(auroc),
-                                 "auroc_with_flag_logreg": P.val("disc_auroc_with_flag", "09_discordance/prediction_auroc.csv", "auroc", where={"target": "any_one_layer", "model": "logreg"}, agg="mean"),
-                                 "auroc_without_flag_logreg": P.val("disc_auroc_without_flag", "09_discordance/prediction_auroc.csv", "auroc", where={"target": "any_one_layer (no regulated flag)", "model": "logreg"}, agg="mean")},
-            [rel(RES / "09_discordance/summary.csv"), rel(RES / "09_discordance/discordance_rates.csv"), rel(RES / "09_discordance/prediction_auroc.csv")])
-
-    # ---- inventory ----------------------------------------------------------------------------------
-    inv = json.loads((RES / "02_inventory/summary.json").read_text())
-    w.write("inventory.json", {"summary": inv, "tissue_by_assay": P.table("tissue_by_assay", "02_inventory/tissue_by_assay.csv", "inventory.json", "tissue_by_assay"),
-                               "inventory": P.table("inventory", "02_inventory/inventory.csv", "inventory.json", "inventory"),
-                               "tissues": [{"code": t, "name": TISSUE_NAMES.get(t, t), "system": next((i + 1 for i, (_, ts) in enumerate(ORGAN_SYSTEMS) if t in ts), None),
-                                            "system_name": next((n for n, ts in ORGAN_SYSTEMS if t in ts), None)} for t in C.TISSUES],
-                               "organ_systems": [{"index": i + 1, "name": n, "tissues": ts} for i, (n, ts) in enumerate(ORGAN_SYSTEMS)]},
-            [rel(RES / "02_inventory/summary.json"), rel(RES / "02_inventory/tissue_by_assay.csv")])
-
     # ---- EDA: variance and batch partition of the leading PCs (03) ------------------------------------
     eda = {}
     for assay in ("TRNSCRPT", "PROT", "METAB"):
@@ -515,14 +533,6 @@ def export_aggregates(w: Writer, prov: Prov, rec: pd.DataFrame | None):
     eda["readout_variance"] = P.table("readout_variance_pc", "03_eda/readout_variance_pc1-3.csv", "eda.json", "readout_variance")
     eda["prot_diagnostic"] = P.table("prot_diagnostic_accuracy", "04_baselines/PROT/diagnostic_accuracy.csv", "eda.json", "prot_diagnostic")
     w.write("eda.json", eda, [rel(RES / f"03_eda/variance_partition_{a}.csv") for a in ("TRNSCRPT", "PROT", "METAB")] + [rel(RES / "04_baselines/PROT/diagnostic_accuracy.csv")])
-
-    # ---- beyond: status of the parallel phases ------------------------------------------------------
-    beyond = {"training_transfer": {"phase": "17", "present": bool(list(RES.glob("17_*"))), "dirs": [rel(p) for p in RES.glob("17_*")]},
-              "decomposition": {"phases": "22–26", "present": bool(list(RES.glob("2[2-6]_*"))), "dirs": [rel(p) for p in RES.glob("2[2-6]_*")]},
-              "identifiability_audit": {"phase": "21", "present": bool(list(RES.glob("21_*"))), "dirs": [rel(p) for p in RES.glob("21_*")]},
-              "preregistration": {"present": False, "note": "no pre-registration file exists in this copy of the workspace (searched for 'prereg' and 'pre-registration')"},
-              "time_course": {"phase": "15", "present": (RES / "15_time_course").exists(), "note": "training-axis work: is the fingerprint invariant to training duration? (parts 5–6)"}}
-    w.write("beyond.json", beyond, [])
 
 
 # ---------------------------------------------------------------------------------------------
@@ -540,15 +550,17 @@ def export_headline(w: Writer, prov: Prov, rec: pd.DataFrame | None):
         {"id": "tile_acc_k20", "value": P.val("tile_acc_k20", "05_panels/TRNSCRPT/panel_curve.csv", "balanced_accuracy", where={"k": 20}, agg="mean",
                                              note="mean over 5 animal-grouped folds; round-robin selector + logreg_l2"),
          "sd": P.val("tile_acc_k20_sd", "05_panels/TRNSCRPT/panel_curve.csv", "balanced_accuracy", where={"k": 20}, agg="std"),
-         "label": "balanced accuracy of a 20-gene panel", "sub": f"19 rat tissues, {n_vials} vials, {n_animals} animals, 5 animal-grouped folds", "format": "3",
+         "label": "balanced accuracy of a 20-gene panel", "sub": f"19 rat tissues, {n_vials} vials, {n_animals} animals, 5 animal-grouped folds; the panel is re-selected inside each fold", "format": "3",
          "source": "results/05_panels/TRNSCRPT/panel_curve.csv (k = 20, mean ± sd over folds)"},
         {"id": "tile_bodymap_k20", "value": P.val("tile_bodymap_k20", "12_bodymap/age_shift_accuracy.csv", "k20", where={"stage_weeks": 21}),
-         "label": "adult organs named correctly in another lab's rats", "sub": f"rat BodyMap, 21-week adults, {n_bm_mapped} mapped samples, {n_bm_animals} animals, 20-gene panel", "format": "3",
+         "ci": (transfer_rung_stats("12_bodymap", "k20", "stage_weeks", 21, "animal_id")["accuracy_ci"] if (REGEN / "12_bodymap" / "scores_target_probs.csv").exists() else None),
+         "label": "mapped adult organs named correctly in another lab's rats", "sub": f"rat BodyMap, 21-week adults: 9 of 11 organs have a MoTrPAC counterpart, muscle and brain scored as super-classes; {n_bm_mapped} samples, {n_bm_animals} animals; panel fit on all 50 MoTrPAC animals", "format": "3",
          "source": "results/12_bodymap/age_shift_accuracy.csv (stage 21, k20)"},
         {"id": "tile_bodymap_cov_k20", "value": P.val("tile_bodymap_cov_k20", "12_bodymap/conformal_transfer.csv", "coverage_mapped",
                                                       where={"stage_weeks": 21, "model": "k20", "conformal": "marginal"}),
+         "ci": (transfer_rung_stats("12_bodymap", "k20", "stage_weeks", 21, "animal_id")["coverage_ci"] if (REGEN / "12_bodymap" / "scores_target_probs.csv").exists() else None),
          "empty": P.val("tile_bodymap_empty_k20", "12_bodymap/conformal_transfer.csv", "frac_empty_mapped", where={"stage_weeks": 21, "model": "k20", "conformal": "marginal"}),
-         "label": "coverage of the 90 % guarantee there", "sub": "MoTrPAC-calibrated prediction sets on the same adults, α = 0.10; the shortfall is empty sets", "format": "3",
+         "label": "coverage of the 90 % guarantee there", "sub": "prediction sets calibrated on MoTrPAC animals, scored on the same adults, α = 0.10; the shortfall is empty sets", "format": "3",
          "source": "results/12_bodymap/conformal_transfer.csv (stage 21, k20, marginal)"},
         {"id": "tile_estimable", "value": P.val("tile_estimable", "16_identifiability/estimable_pairs.csv", "n_pairs_estimable", where={"assay": "TRNSCRPT"}),
          "total": P.val("tile_estimable_total", "16_identifiability/estimable_pairs.csv", "n_pairs_total", where={"assay": "TRNSCRPT"}),
@@ -569,8 +581,17 @@ def export_headline(w: Writer, prov: Prov, rec: pd.DataFrame | None):
     def rung(**kw):
         ladder.append(kw)
 
-    # 1. in-distribution: coverage of the full model from phase 06; k20/k50 recomputed from the regeneration
+    # 1. in-distribution: accuracy AND coverage of the same phase-06 models (fit 18 / calibrate 22 / test 10 animals per fold);
+    #    the full model's coverage rows come from coverage.csv, the k20/k50 rows and every accuracy from the regenerated scores
     cov06 = P.read("06_conformal/TRNSCRPT/coverage.csv")
+    acc06 = {}
+    if rec is not None:
+        a6 = rec.attrs["accuracy"]
+        for model in MODELS:
+            d = a6[a6["model"] == model]
+            acc06[model] = (P.recomputed(f"acc06_{model}", float(d["balanced_accuracy"].mean()), ["31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv"],
+                                         f"balanced accuracy of the phase-06 {model} models (18 fit animals per fold) on their 10 test animals, mean over 5 folds"),
+                            float(d["balanced_accuracy"].std()))
     for model in MODELS:
         for variant in VARIANTS:
             for calib in ("pooled", "one_per_animal"):
@@ -591,42 +612,68 @@ def export_headline(w: Writer, prov: Prov, rec: pd.DataFrame | None):
                     rung(rung_id="in_distribution", label="in-distribution (held-out animals)", model=model, variant=variant, calibration=calib,
                          **P.pending(f"cov_id_{model}_{variant}_{calib}", "phase-06 regeneration with --save-scores not available"))
                     continue
+                a_same = acc06.get(model, acc[model])
                 rung(rung_id="in_distribution", label="in-distribution (held-out animals)", model=model, variant=variant, calibration=calib,
-                     accuracy=acc[model][0], accuracy_sd=acc[model][1], coverage=cov, coverage_sd=sd, empty=empty, set_size=size,
-                     n_samples=899, n_individuals=50, n_calibration_animals=22, source=[src, "results/05_panels/TRNSCRPT/panel_curve.csv" if model != "full" else "results/04_baselines/TRNSCRPT/summary.csv"])
-    # 2. held-out sex (phase 08): k20 and full only
+                     accuracy=a_same[0], accuracy_sd=a_same[1], accuracy_cv40=acc[model][0], accuracy_cv40_sd=acc[model][1],
+                     coverage=cov, coverage_sd=sd, empty=empty, wrong_non_empty=max(0.0, 1 - cov - empty), set_size=size,
+                     n_samples=n_vials, n_individuals=n_animals, n_calibration_animals=22,
+                     source=[src, "results/31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv (accuracy of the same models)"])
+    # 2. held-out sex (phase 08). k20 and full rows come from results/08; the k50 rows from the k = 50 rerun under
+    #    results/31_site_regen/08_shift_k50 (same script, --k 50). Empty / wrong rates over SEEN-class vials and the
+    #    cluster-bootstrap intervals come from the per-vial sets the --save-scores reruns export.
     st = P.read("08_shift/TRNSCRPT/shift_table.csv")
+    k50_file = "31_site_regen/08_shift_k50/shift_table.csv"
+    have_k50 = (RES / k50_file).exists()
+    vials = {}
+    for kk in ("k20", "k50"):
+        f = REGEN / f"08_shift_{kk}" / "scores_target_vials.csv"
+        if f.exists():
+            vials[kk] = pd.read_csv(f, dtype={"viallabel": str, "pid": str})
     for split, label in (("train_male_test_female", "held-out sex: trained on males, tested on females"), ("train_female_test_male", "held-out sex: trained on females, tested on males")):
         for model in MODELS:
-            arm = {"k20": "panel_k20", "full": "full"}.get(model)
-            for variant in VARIANTS:
-                if arm is None:
+            arm = {"k20": "panel_k20", "k50": "panel_k50", "full": "full"}[model]
+            tfile = k50_file if model == "k50" else "08_shift/TRNSCRPT/shift_table.csv"
+            if model == "k50" and not have_k50:
+                for variant in VARIANTS:
                     rung(rung_id=split, label=label, model=model, variant=variant, calibration="pooled",
-                         **P.pending(f"cov_{split}_{model}_{variant}", "phase 08 ran the k = 20 panel and the full model only"))
-                    continue
+                         **P.pending(f"cov_{split}_{model}_{variant}", "phase 08 has not been rerun with --k 50 (make regen-scores)"))
+                continue
+            vdf = vials.get("k50" if model == "k50" else "k20")
+            v = vdf[(vdf["split"] == split) & (vdf["arm"] == arm)] if vdf is not None else None
+            seen = v[v["seen"]] if v is not None else None
+            for variant in VARIANTS:
                 col = {"marginal": "coverage_target_seen", "mondrian": "coverage_target_seen_mondrian", "floored": "coverage_target_seen_floored"}[variant]
                 where = {"split": split, "arm": arm}
-                cov = P.val(f"cov_{split}_{model}_{variant}", "08_shift/TRNSCRPT/shift_table.csv", col, where=where)
+                cov = P.val(f"cov_{split}_{model}_{variant}", tfile, col, where=where)
                 size_col = {"marginal": "avg_set_size_target", "mondrian": "avg_set_size_target_mondrian", "floored": "avg_set_size_target_floored"}[variant]
-                srow = st[(st["split"] == split) & (st["arm"] == arm)].iloc[0]
-                n_seen = int(round(srow["n_test"] * srow["coverage_target_all"] / srow["coverage_target_seen"]))
-                if variant == "marginal":
-                    P.recomputed(f"nseen_{split}_{model}", n_seen, ["08_shift/TRNSCRPT/shift_table.csv"],
-                                 "target vials of seen classes = n_test × coverage_target_all / coverage_target_seen (the unseen sex-specific tissue's vials cannot be covered)")
+                srow = P.read(tfile)
+                srow = srow[(srow["split"] == split) & (srow["arm"] == arm)].iloc[0]
+                extra = {}
+                if seen is not None and len(seen):
+                    assert abs(float(seen[f"covered_{variant}"].mean()) - float(cov)) < 1e-9, ("per-vial sets disagree with shift_table", split, model, variant)
+                    sz = seen[f"size_{variant}"].to_numpy()
+                    cv = seen[f"covered_{variant}"].to_numpy(dtype=bool)
+                    extra = {"n_samples_coverage": int(len(seen)), "empty": float((sz == 0).mean()), "wrong_non_empty": float(((~cv) & (sz > 0)).mean()),
+                             "coverage_ci": cluster_boot(cv, seen["pid"].to_numpy()),
+                             "accuracy_ci": cluster_boot((v["y_pred"] == v["tissue"]).to_numpy(), v["pid"].to_numpy())}
+                    if variant == "marginal":
+                        P.recomputed(f"empty_seen_{split}_{model}", extra["empty"], [f"31_site_regen/08_shift_{'k50' if model == 'k50' else 'k20'}/scores_target_vials.csv"],
+                                     "empty-set rate over the target vials of seen classes (the unseen sex-specific tissue's vials excluded)")
+                else:
+                    n_seen = int(round(srow["n_test"] * srow["coverage_target_all"] / srow["coverage_target_seen"]))
+                    extra = {"n_samples_coverage": n_seen, "empty": P.val(f"empty_{split}_{model}", tfile, "lac_frac_empty_target", where=where) if variant == "marginal" else None,
+                             "empty_note": "over all target vials, including the unseen tissue"}
                 rung(rung_id=split, label=label, model=model, variant=variant, calibration="pooled",
-                     accuracy=P.val(f"acc_{split}_{model}", "08_shift/TRNSCRPT/shift_table.csv", "accuracy_all", where=where) if variant == "marginal" else acc_cache[(split, model)],
-                     accuracy_seen=P.val(f"accseen_{split}_{model}", "08_shift/TRNSCRPT/shift_table.csv", "bal_acc_seen", where=where, note="balanced accuracy over the seen classes") if variant == "marginal" else accseen_cache[(split, model)],
-                     n_samples_coverage=n_seen, n_classes_seen=18,
-                     accuracy_sd=None, coverage=cov, coverage_sd=None,
-                     empty=P.val(f"empty_{split}_{model}", "08_shift/TRNSCRPT/shift_table.csv", "lac_frac_empty_target", where=where) if variant == "marginal" else None,
-                     set_size=P.val(f"size_{split}_{model}_{variant}", "08_shift/TRNSCRPT/shift_table.csv", size_col, where=where),
-                     coverage_source=P.val(f"covsrc_{split}_{model}", "08_shift/TRNSCRPT/shift_table.csv", "coverage_source_id", where=where) if variant == "marginal" else None,
-                     recal_n3=P.val(f"recal3_{split}_{model}", "08_shift/TRNSCRPT/shift_table.csv", "cov_target_recal_N3", where=where) if variant == "marginal" else None,
-                     unseen=P.val(f"unseen_{split}_{model}", "08_shift/TRNSCRPT/shift_table.csv", "unseen_classes", where=where) if variant == "marginal" else None,
-                     n_samples=int(st[(st["split"] == split) & (st["arm"] == arm)]["n_test"].iloc[0]),
-                     n_individuals=int(st[(st["split"] == split) & (st["arm"] == arm)]["n_test_animals"].iloc[0]),
-                     n_calibration_animals=int(st[(st["split"] == split) & (st["arm"] == arm)]["n_cal_animals"].iloc[0]),
-                     source=["results/08_shift/TRNSCRPT/shift_table.csv"])
+                     accuracy=P.val(f"acc_{split}_{model}", tfile, "accuracy_all", where=where) if variant == "marginal" else acc_cache[(split, model)],
+                     accuracy_seen=P.val(f"accseen_{split}_{model}", tfile, "bal_acc_seen", where=where, note="balanced accuracy over the seen classes") if variant == "marginal" else accseen_cache[(split, model)],
+                     n_classes_seen=18, accuracy_sd=None, coverage=cov, coverage_sd=None,
+                     set_size=P.val(f"size_{split}_{model}_{variant}", tfile, size_col, where=where),
+                     coverage_source=P.val(f"covsrc_{split}_{model}", tfile, "coverage_source_id", where=where) if variant == "marginal" else None,
+                     recal_n3=P.val(f"recal3_{split}_{model}", tfile, "cov_target_recal_N3", where=where) if variant == "marginal" else None,
+                     unseen=P.val(f"unseen_{split}_{model}", tfile, "unseen_classes", where=where) if variant == "marginal" else None,
+                     n_samples=int(srow["n_test"]), n_individuals=int(srow["n_test_animals"]), n_calibration_animals=int(srow["n_cal_animals"]),
+                     source=[f"results/{tfile}"] + ([f"results/31_site_regen/08_shift_{'k50' if model == 'k50' else 'k20'}/scores_target_vials.csv"] if seen is not None else []),
+                     **extra)
                 if variant == "marginal":
                     acc_cache[(split, model)] = ladder[-1]["accuracy"]
                     accseen_cache[(split, model)] = ladder[-1]["accuracy_seen"]
@@ -635,10 +682,15 @@ def export_headline(w: Writer, prov: Prov, rec: pd.DataFrame | None):
     n_adult_animals = int(rc12["n_recal"].iloc[0] + rc12["n_test_individuals"].iloc[0])
     for model in MODELS:
         a = P.val(f"acc_bodymap_{model}", "12_bodymap/age_shift_accuracy.csv", model, where={"stage_weeks": 21})
+        bstat = transfer_rung_stats("12_bodymap", model, "stage_weeks", 21, "animal_id") if (REGEN / "12_bodymap" / "scores_target_probs.csv").exists() else None
+        if bstat:
+            assert abs(bstat["accuracy"] - a) < 1e-9, ("all-animal accuracy from the exported calls disagrees with age_shift_accuracy.csv", model)
+            P.recomputed(f"acc_bodymap_{model}_ci", bstat["accuracy_ci"], ["31_site_regen/12_bodymap/scores_target_probs.csv"], "95 % cluster bootstrap over the 8 adult animals")
         for variant in VARIANTS:
             where = {"stage_weeks": 21, "model": model, "conformal": variant}
             rung(rung_id="different_lab", label="different laboratory: rat BodyMap adults (same strain)", model=model, variant=variant, calibration="pooled",
-                 accuracy=a, accuracy_sd=None,
+                 accuracy=a, accuracy_sd=None, accuracy_ci=bstat["accuracy_ci"] if bstat else None, accuracy_refit=bstat["accuracy_refit"] if bstat else None,
+                 coverage_ci=bstat["coverage_ci"] if (bstat and variant == "marginal") else None, wrong_non_empty=bstat["wrong_non_empty"] if (bstat and variant == "marginal") else None,
                  coverage=P.val(f"cov_bodymap_{model}_{variant}", "12_bodymap/conformal_transfer.csv", "coverage_mapped", where=where), coverage_sd=None,
                  empty=P.val(f"empty_bodymap_{model}_{variant}", "12_bodymap/conformal_transfer.csv", "frac_empty_mapped", where=where),
                  set_size=P.val(f"size_bodymap_{model}_{variant}", "12_bodymap/conformal_transfer.csv", "avg_set_size_mapped", where=where),
@@ -650,10 +702,15 @@ def export_headline(w: Writer, prov: Prov, rec: pd.DataFrame | None):
     go = P.read("13_gtex/gene_overlap.csv")
     for model in MODELS:
         a = P.val(f"acc_gtex_{model}", "13_gtex/accuracy_overall.csv", "accuracy_sample_weighted", where={"model": model})
+        gstat = transfer_rung_stats("13_gtex", model, "stage", "adult", "donor") if (REGEN / "13_gtex" / "scores_target_probs.csv").exists() else None
+        if gstat:
+            assert abs(gstat["accuracy"] - a) < 1e-9, ("all-animal accuracy from the exported calls disagrees with accuracy_overall.csv", model)
+            P.recomputed(f"acc_gtex_{model}_ci", gstat["accuracy_ci"], ["31_site_regen/13_gtex/scores_target_probs.csv"], "95 % cluster bootstrap over the 862 donors")
         for variant in VARIANTS:
             where = {"stage": "adult", "model": model, "conformal": variant}
             rung(rung_id="different_species", label="different species: human GTEx v8 (1:1 orthologs)", model=model, variant=variant, calibration="pooled",
-                 accuracy=a, accuracy_sd=None,
+                 accuracy=a, accuracy_sd=None, accuracy_ci=gstat["accuracy_ci"] if gstat else None, accuracy_refit=gstat["accuracy_refit"] if gstat else None,
+                 coverage_ci=gstat["coverage_ci"] if (gstat and variant == "marginal") else None, wrong_non_empty=gstat["wrong_non_empty"] if (gstat and variant == "marginal") else None,
                  coverage=P.val(f"cov_gtex_{model}_{variant}", "13_gtex/conformal_transfer.csv", "coverage_mapped", where=where), coverage_sd=None,
                  empty=P.val(f"empty_gtex_{model}_{variant}", "13_gtex/conformal_transfer.csv", "frac_empty_mapped", where=where),
                  set_size=P.val(f"size_gtex_{model}_{variant}", "13_gtex/conformal_transfer.csv", "avg_set_size_mapped", where=where),
@@ -1028,9 +1085,7 @@ ANCHORS = [  # (id in provenance, spec value, tolerance)
     ("recal3size_gtex_k20", 11.70, 0.005), ("gtex_recal_k20_n3_frac_inf", 0.45, 0.005), ("qc_technical", 0.873, 0.0005), ("qc_technical_sd", 0.027, 0.0005),
     ("qc_composition", 0.949, 0.0005), ("qc_composition_sd", 0.011, 0.0005), ("qc_all", 0.975, 0.0005), ("qc_all_sd", 0.020, 0.0005),
     ("n_plates", 17, 0), ("n_lib_batches", 17, 0), ("n_flowcells", 4, 0), ("shared_genes_bodymap", 21040, 0), ("motrpac_genes", 21193, 0),
-    ("orthologs_1to1", 14609, 0), ("orthologs_in_gtex", 14569, 0), ("disc_n_sig_either", 1948, 0), ("disc_n_one_layer", 1899, 0), ("disc_n_sign", 4, 0),
-    ("disc_auroc_with_flag", 0.780, 0.0005), ("disc_auroc_without_flag", 0.742, 0.0005), ("fusion_n_beats_single", 0, 0), ("fusion_n_beats_null", 7, 0),
-    ("tile_estimable", 1, 0), ("tile_estimable_total", 171, 0), ("cov_id_full_marginal_one_per_animal", 0.916, 0.0005), ("cov_id_full_marginal_pooled", 0.908, 0.0005),
+    ("orthologs_1to1", 14609, 0), ("orthologs_in_gtex", 14569, 0), ("tile_estimable", 1, 0), ("tile_estimable_total", 171, 0), ("cov_id_full_marginal_one_per_animal", 0.916, 0.0005), ("cov_id_full_marginal_pooled", 0.908, 0.0005),
     ("bridge_sum_ratio_all_genes_pool99", 0.017, 0.002),   # the brief's "~1.7 % of the variance that separates tissues"
 ]
 
@@ -1175,19 +1230,20 @@ def abstract(prov_entries: list[dict]) -> str:
     byid = {e["id"]: e.get("value") for e in prov_entries}
     g = lambda i, d=3: ("pending" if byid.get(i) is None else (f"{byid[i]:.{d}f}" if isinstance(byid[i], float) else str(byid[i])))
     return (
-        f"Can a compact molecular signature identify a tissue reliably? In the MoTrPAC 6-month rat endurance-training transcriptomes "
-        f"(19 tissues, 899 vials, 50 animals) a 20-gene panel chosen by a class-aware round-robin selector reaches {g('acc_k20')} balanced "
-        f"accuracy under animal-grouped cross-validation (k = 50: {g('acc_k50')}; all genes: {g('acc_full')}); the same k with an F-test "
-        f"selector reaches {g('acc_fclassif_k20')}. Reliability has two further parts. A conformal prediction set that promises the true "
-        f"tissue 90 % of the time covers {g('cov_id_full_marginal_pooled')} of held-out vials in-distribution, but with the same calibration "
-        f"only {g('cov_bodymap_k20_marginal')} of adult rat BodyMap organs from another laboratory, where the panel still names "
-        f"{g('acc_bodymap_k20')} of organs correctly, and {g('cov_gtex_k20_marginal')} of human GTEx samples (accuracy {g('acc_gtex_k20')}); "
-        f"the loss is abstention (empty sets), not confident error. Three target animals restore coverage within species "
-        f"({g('recal3_bodymap_k20')} at {g('recal3size_bodymap_k20', 2)} tissues per set); across species they do not "
-        f"({g('recal3_gtex_k20')} at {g('recal3size_gtex_k20', 1)} tissues per set). Finally, within one multi-tissue study the tissue axis "
-        f"is confounded with processing: only {g('tile_estimable')} of {g('tile_estimable_total')} tissue pairs shares an RNA extraction plate, "
-        f"library batch and flowcell, and library QC numbers alone classify tissue at {g('qc_all')}. Within-study accuracy is therefore not "
-        f"evidence of biology; transfer to an independently processed cohort is. Code and site: MIT."
+        f"In the MoTrPAC 6-month rat endurance-training transcriptomes (19 tissues, 899 vials, 50 animals), a 20-gene panel selected "
+        f"inside each fold by a class-aware round-robin rule reaches "
+        f"{g('acc_k20')} balanced accuracy under animal-grouped cross-validation (50 genes {g('acc_k50')}; all genes {g('acc_full')}; "
+        f"an F-test selector at the same size {g('acc_fclassif_k20')}). A split-conformal set promising the true tissue 90 % of the time "
+        f"covers {g('cov_id_full_marginal_one_per_animal')} of held-out animals in-distribution, but with the same calibration only "
+        f"{g('cov_bodymap_k20_marginal')} of adult rat BodyMap organs from another laboratory, where the panel still names all mapped "
+        f"organs correctly (9 of 11; muscle and brain as super-classes), and {g('cov_gtex_k20_marginal')} of human GTEx samples "
+        f"(accuracy {g('acc_gtex_k20')}); the loss is abstention, not confident error. Three target animals restore coverage within "
+        f"species ({g('recal3_bodymap_k20')} at {g('recal3size_bodymap_k20', 2)} tissues per set); three donors do not across species "
+        f"({g('recal3_gtex_k20')} at {g('recal3size_gtex_k20', 1)} tissues per set). Within one multi-tissue study the tissue axis is "
+        f"confounded with processing: each tissue sits inside one extraction plate, library batch and flowcell, only {g('tile_estimable')} of "
+        f"{g('tile_estimable_total')} tissue pairs shares all three, and library QC numbers alone classify tissue at {g('qc_all')} "
+        f"({g('qc_technical')} from purely technical ones). Within-study accuracy is therefore not evidence of biology; transfer to an "
+        f"independently processed cohort is."
     )
 
 

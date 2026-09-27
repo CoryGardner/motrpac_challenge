@@ -4,7 +4,7 @@
 export const REPO_URL = "https://github.com/"; // set to the repository URL before deploying (see README)
 const PAGES = [
   ["index.html", "Home"], ["explore.html", "Explore"], ["transfer.html", "Transfer"], ["fingerprint.html", "Fingerprint"],
-  ["identifiability.html", "Identifiability"], ["beyond.html", "Beyond"], ["methods.html", "Methods"], ["limitations.html", "Limitations"],
+  ["identifiability.html", "Identifiability"], ["methods.html", "Methods"], ["limitations.html", "Limitations"],
   ["about.html", "About"],
 ];
 const cache = new Map();
@@ -119,6 +119,7 @@ export function statTile(t) {
   } else {
     value.textContent = fmt(t.value, Number(t.format || 3));
     if (t.sd !== undefined && t.sd !== null) value.append(el("span", { class: "of" }, `± ${fmt(t.sd, 3)}`));
+    else if (t.ci) value.append(el("span", { class: "of" }, `[${fmt(t.ci[0], 2)}, ${fmt(t.ci[1], 2)}]`));
   }
   tile.append(value, el("div", { class: "label" }, t.label), el("div", { class: "sub" }, t.sub || ""), el("div", { class: "source" }, `Source: ${t.source || "pending"}`));
   return tile;

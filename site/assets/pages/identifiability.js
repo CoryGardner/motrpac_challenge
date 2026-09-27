@@ -6,7 +6,7 @@ const VAR_LABEL = { GET_site: "site", RNA_extr_plate_ID: "extraction plate", RNA
 
 async function main() {
   await mountChrome("identifiability.html");
-  const [H, N, Q, BV, E, PC] = await Promise.all([loadJSON("data/headline.json"), loadJSON("data/nesting.json"), loadJSON("data/qc_baseline.json"), loadJSON("data/batch_verdict.json"), loadJSON("data/eda.json"), loadJSON("data/panel_curve.json")]);
+  const [H, N, Q, E, PC] = await Promise.all([loadJSON("data/headline.json"), loadJSON("data/nesting.json"), loadJSON("data/qc_baseline.json"), loadJSON("data/eda.json"), loadJSON("data/panel_curve.json")]);
   const ex = H.extras;
   const est = Object.fromEntries(N.estimable_pairs.map((r) => [r.assay, r]));
   const rna = est.TRNSCRPT;
@@ -51,7 +51,7 @@ async function main() {
   document.getElementById("layers-note").replaceChildren(callout("note", "What was recomputed here and what was not", [
     `Recomputed from the metadata export in this repository (scripts/16_identifiability.py): ${Object.entries(N.layers).filter(([, v]) => v.status === "recomputed").map(([k]) => LAYER_LABEL[k]).join(", ")}. `
     + (unavailable.length ? `Not available: ${unavailable.map(([k, v]) => `${LAYER_LABEL[k] || k} (${v.reason})`).join("; ")}. ` : "")
-    + "ATAC-seq is not an exception: its nuclei-extraction, tagmentation and PCR dates cross tissues, but each flowcell holds one tissue, which closes it. The parallel identifiability audit (phase 21) is not present in this copy of the results; its bridge-sample measurement is marked pending below.",
+    + "ATAC-seq is not an exception: its nuclei-extraction, tagmentation and PCR dates cross tissues, but each flowcell holds one tissue, which closes it.",
   ]));
 
   // ---- QC-only ------------------------------------------------------------------------------------------
@@ -89,7 +89,7 @@ async function main() {
   const br = N.bridge;
   const bridgeEl = document.getElementById("bridge-block");
   if (!br || br.status !== "recomputed") {
-    bridgeEl.replaceChildren(pendingBlock("Bridge-sample variance measurement", (br && br.reason) || "not available in this copy"));
+    bridgeEl.replaceChildren(pendingBlock("Bridge-sample variance measurement", (br && br.reason) || "not computed (scripts/16_identifiability.py --bridge)"));
   } else {
     const sum = br.summary;
     const row = (bid, gs) => sum.find((r) => r.pool_bid === bid && r.gene_set === gs);
@@ -105,7 +105,7 @@ async function main() {
       ]),
       callout("note", "Definition, and what this does and does not measure", [
         br.info.definition + ". Study vials and reference vials use the same unit, log2(CPM + 1) on the total library. ",
-        "A muscle-derived pool measures batch only on the genes it expresses: markers of other tissues (Umod, Pgk2, Hbq1b, …) read zero on every plate and contribute no batch variance, which is why the per-gene ratios below are zero for most panel genes and why the expressed-in-pool sets are the fair comparison. This is a recomputation with the stated definition (scripts/16_identifiability.py --bridge); the parallel identifiability audit's own bridge number is not in this copy of the results.",
+        "A muscle-derived pool measures batch only on the genes it expresses: markers of other tissues (Umod, Pgk2, Hbq1b, …) read zero on every plate and contribute no batch variance, which is why the per-gene ratios below are zero for most panel genes and why the expressed-in-pool sets are the fair comparison. The plate-to-plate variance of one pool also contains ordinary technical replicate noise, so it is an upper bound on the systematic batch effect for those genes (scripts/16_identifiability.py --bridge).",
       ]),
     );
     const fig = el("div");
@@ -150,20 +150,6 @@ async function main() {
     },
     source: "results/03_eda/variance_partition_{TRNSCRPT,PROT,METAB}.csv", notShow: "batch covariates (results/03_eda/batch_partition_*.csv): in RNA-seq the plate, library batch and flowcell explain the same PCs as tissue, because they are the same partition.",
   });
-
-  // ---- verdict ---------------------------------------------------------------------------------------------
-  const conc = BV.conclusion;
-  const nUnres = conc.filter((r) => String(r.verdict).startsWith("unresolvable")).length;
-  document.getElementById("p-verdict").replaceChildren(
-    `Within tissue, control vs 8-week-trained animals separate at AUROC ≈ 1 in every omic. Whether that is training or a collection batch was checked with covariate-only classifiers (collection, library, depth, QC, plex): in ${conc.length - nUnres} of ${conc.length} tissues no recorded covariate separates the arms and the omic separation is attributed to training; in ${nUnres} (${conc.filter((r) => String(r.verdict).startsWith("unresolvable")).map((r) => r.tissue).join(", ")}) a processing variable separates them too and the question is unresolvable from the inside.`,
-  );
-  document.getElementById("tbl-verdict").replaceChildren(tableFrom({ columns: ["tissue", "max_auroc_collection_library_plex", "max_auroc_qc_metrics", "max_auroc_all_covariates", "null_p95_logreg_max", "batch_variables_separating", "qc_variables_separating", "verdict"],
-    rows: conc.map((r) => ({ ...r, batch_variables_separating: r.batch_variables_separating || "", qc_variables_separating: (r.qc_variables_separating || "").replace(/;/g, ", ") })), format: { max_auroc_collection_library_plex: (v) => v.toFixed(2), max_auroc_qc_metrics: (v) => v.toFixed(2), max_auroc_all_covariates: (v) => v.toFixed(2), null_p95_logreg_max: (v) => v.toFixed(2) } }),
-    el("p", { class: "small" }, "Source: results/07_fusion/batch_conclusion.csv (AUROC of covariate-only classifiers, animal-grouped CV; null = 95th percentile of a within-sex label permutation)."));
-  const rev = BV.time_course_revision;
-  document.getElementById("verdict-revision").replaceChildren(callout(rev.status === "interpreted" ? "caveat" : "pending", "A revision is pending: the QC set behind this table contains biologically-read covariates", [
-    rev.note + (rev.verdicts ? " Per-tissue readings of the time-course investigation (interpreted, source " + rev.source + "): " + Object.entries(rev.verdicts).map(([t, v]) => `${t}: ${v}`).join("; ") + "." : ""),
-  ]));
 
   // ---- resolution ------------------------------------------------------------------------------------------
   const bm = H.tiles.find((t) => t.id === "tile_bodymap_k20"), cov = H.tiles.find((t) => t.id === "tile_bodymap_cov_k20");

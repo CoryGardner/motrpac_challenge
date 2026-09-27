@@ -3,17 +3,20 @@
 Submission to the Stanford Bioinformatics Center / MoTrPAC Hackathon (September 2026), track *Molecular Tissue
 Fingerprints*. A leakage-safe evaluation pipeline, an interactive site, and an honest answer in three parts.
 
-**Yes, with two qualifications.** A 20-gene panel chosen by a class-aware selector identifies 19 rat tissues in the
-MoTrPAC endurance-training transcriptomes at 0.976 ± 0.008 balanced accuracy under animal-grouped cross-validation,
-and names every adult organ correctly in another laboratory's rats (rat BodyMap). But "reliably" has three parts and
-only the first survives on its own. The 90 % conformal guarantee that comes with the panel does not travel: calibrated
-on MoTrPAC it covers 0.618 of the BodyMap adults and 0.364 of human GTEx samples, failing by *abstaining* (empty sets)
-rather than by confident mistakes; three target animals repair it within species at one tissue per set, three donors
-do not repair it across species (11.7 tissues per set). And within a single multi-tissue study the tissue axis cannot
-be separated from processing: every tissue was extracted, library-prepped and sequenced as its own batch (1 of 171
-RNA-seq tissue pairs shares a plate, library batch and flowcell, and it is the sex contrast), so library QC numbers
-alone classify tissue at 0.975. Within-study accuracy is therefore not evidence that the signature is biology; the
-transfer to an independently processed cohort is.
+**Yes, with two qualifications.** A 20-gene panel, selected inside each fold by a class-aware round-robin rule, identifies
+19 rat tissues in the MoTrPAC endurance-training transcriptomes at 0.976 ± 0.008 balanced accuracy under animal-grouped
+cross-validation, and the panel fit on all animals names every mapped adult organ correctly in another laboratory's rats
+(rat BodyMap: 9 of 11 organs have a MoTrPAC counterpart, muscle and brain are scored as super-classes; 68 samples from
+8 animals). But "reliably" has three parts and only the first survives on its own. The 90 % conformal guarantee that comes
+with the panel does not travel: calibrated on MoTrPAC it covers 0.618 of the BodyMap adults and 0.364 of human GTEx
+samples, failing by *abstaining* (empty sets) rather than by confident mistakes; three target animals repair it within
+species at one tissue per set, three donors do not repair it across species (11.7 tissues per set). And within a single
+multi-tissue study the tissue axis cannot be separated from processing: each tissue sits entirely inside one RNA
+extraction plate, one library batch and one flowcell (1 of 171 tissue pairs shares all three, and it is the sex contrast),
+so library QC numbers alone classify tissue at 0.975 (0.873 from purely technical ones). Within-study accuracy is
+therefore not evidence that the signature is biology; the transfer to an independently processed cohort is, and where
+batch could be measured directly, on a reference RNA pool run on six plates at both sites, it was about 1.6 % of the
+variance that separates tissues.
 
 ![The home page of the site: the question, the answer, four headline tiles and the transfer ladder](figures/home.png)
 
@@ -51,12 +54,12 @@ All numbers below are read from `results/` by `scripts/30_export_site_data.py`; 
 ## Repository map
 
 ```
-site/                    the static site (index, explore, transfer, fingerprint, identifiability, beyond, methods, limitations, about)
+site/                    the static site (index, explore, transfer, fingerprint, identifiability, methods, limitations, about)
   data/                  JSON exported from results/ with provenance.json and manifest.json (derived, small; no matrices)
   assets/                theme.css (design tokens), charts.js (Plotly template), site.js (components), conformal.js (the port), pages/
   vendor/                plotly-cartesian-2.35.2.min.js (offline fallback)
 src/tfp/                 the library: io, splits (frozen), models, conformal, transfer, batch, discordance, plots, report
-scripts/                 numbered phases: 02–14 analysis, 16 identifiability, 30 site export, 32 summary figure
+scripts/                 numbered phases: 02–14 analysis (06, 08, 12, 13 have --save-scores), 16 identifiability, 30 site export, 32 summary figure
 tests/                   leakage / I/O / conformal / batch tests, regeneration checks, site provenance test, JS conformal test
 notebooks/               01_replication.ipynb, 02_transfer.ipynb (self-contained), expected_values.csv (288 self-check keys)
 docs/                    EVALUATION_RULES (frozen), DATA_GUIDE, NUMBERS_RECONCILIATION, COMPETITION_COMPLIANCE, ABSTRACT_SUBMISSION, BUILD_LOG
@@ -70,7 +73,7 @@ data/                    raw/ (R-package export, 1.9 GB) and external/ (GTEx v8 
 
 ```bash
 conda activate motrpac-py                 # Python 3.12, pandas 3, scikit-learn 1.9; specs in ../../docs/setup/
-make test                                 # 46 Python tests + the JS conformal test
+make test                                 # 51 Python tests + the JS conformal test
 make all bodymap gtex                     # phases 02–14 (about 1 h on 20 cores; needs data/)
 make identifiability                      # phase 16: batch nesting, estimable pairs, QC-only baseline
 make regen-scores                         # phases 06/12/13 with --save-scores into results/31_site_regen (checked against results/)
@@ -92,12 +95,6 @@ Nothing under `data/` is in the repository.
 - **Rat BodyMap** GSE53960 via Bioconductor `bodymapRat`: `R/export_bodymap.R` → `data/external/bodymap_*.csv`.
 - **GTEx v8** open-access expression and sample attributes (release 2017-06-05): download the three files named in the
   Makefile into `data/external/gtex/`; `scripts/11_gtex_prepare.py` makes the subsets.
-
-## What is not in this copy
-
-Two analyses running in parallel were not merged here: the training-transfer phase (17) and the identifiability audit
-and exercise decomposition (21–26). The Beyond and Identifiability pages render their status as pending and regenerate
-from `results/` when they land (`make site`). See `docs/BUILD_LOG.md` and `docs/NUMBERS_RECONCILIATION.md`.
 
 ## Licence, citation, compliance
 

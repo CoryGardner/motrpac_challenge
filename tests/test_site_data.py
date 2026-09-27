@@ -49,15 +49,21 @@ def test_home_tiles_have_provenance():
         assert t["value"] == prov[t["id"]]["value"]
 
 
-def test_ladder_rungs_carry_n_and_spread_or_pending():
+def test_ladder_rungs_are_complete_with_n_and_uncertainty():
+    """Every rung × model × variant is present (no pending rows), carries n, and carries a fold sd or a bootstrap interval."""
     h = _load("headline.json")
     assert h["ladder"], "ladder is empty"
+    pending = [r for r in h["ladder"] if r.get("pending")]
+    assert not pending, pending
     for r in h["ladder"]:
-        if r.get("pending"):
-            assert r.get("reason"), r
-            continue
         assert r["n_samples"] > 0 and r["n_individuals"] > 0, r
         assert 0 <= r["accuracy"] <= 1 and 0 <= r["coverage"] <= 1, r
+        if r["variant"] == "marginal":
+            assert (r.get("accuracy_sd") is not None) or (r.get("accuracy_ci") is not None), r
+            assert (r.get("coverage_sd") is not None) or (r.get("coverage_ci") is not None), r
+            assert r.get("wrong_non_empty") is not None and r["coverage"] + r["empty"] + r["wrong_non_empty"] <= 1 + 1e-9, r
+    rungs = {(r["rung_id"], r["model"], r["variant"]) for r in h["ladder"]}
+    assert {("train_male_test_female", "k50", "marginal"), ("different_species", "k50", "floored")} <= rungs
 
 
 @pytest.mark.skipif(not (RES / "06_conformal").exists(), reason="results/ absent")

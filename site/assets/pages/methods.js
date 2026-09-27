@@ -14,8 +14,7 @@ async function main() {
   for (const [k, v] of Object.entries(M.data || {})) row(k, v);
   row("results git hash", M.git_hash);
   row("site data generated", M.generated);
-  row("phases present in results/", Object.keys(M.phases).join(", "));
-  row("absent (parallel work)", Object.keys(M.absent_phases || {}).join(", ") || "none");
+  row("results phases used", Object.keys(M.phases).join(", "));
   row("zero-error sizing (α, δ → n)", CERT.sizing.map((r) => `(${r.alpha}, ${r.delta}) → ${r.n_zero_error_needed}`).join("; "));
 }
 

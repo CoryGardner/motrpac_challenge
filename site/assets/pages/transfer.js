@@ -37,7 +37,7 @@ async function main() {
     const y = rows.map(([l]) => l);
     const covered = rows.map(([, r]) => r.coverage);
     const empty = rows.map(([, r]) => (r.empty === null || r.empty === undefined ? null : r.empty));
-    const wrong = rows.map(([, r], i) => (empty[i] === null ? null : Math.max(0, 1 - r.coverage - empty[i])));
+    const wrong = rows.map(([, r], i) => (r.wrong_non_empty !== null && r.wrong_non_empty !== undefined ? r.wrong_non_empty : (empty[i] === null ? null : Math.max(0, 1 - r.coverage - empty[i]))));
     const mk = (name, vals, color, pattern) => ({ type: "bar", orientation: "h", y, x: vals, name, marker: { color, line: { color: t.surface, width: 2 }, pattern: pattern ? { shape: "/", fgcolor: t.ink2, bgcolor: t.surface, size: 6, solidity: 0.35 } : undefined },
                                                   hovertemplate: "%{y}: %{x:.3f}<extra>" + name + "</extra>", text: vals.map((v) => (v !== null && v >= 0.12 ? fmt(v, 2) : "")), textposition: "inside", insidetextanchor: "middle", textfont: { color: pattern ? t.ink : "#fff", size: 12 }, cliponaxis: false });
     return { traces: [mk("true tissue in the set (covered)", covered, p[0]), mk("non-empty but wrong", wrong, p[7]), mk("empty set (abstains)", empty, t.grid, true)],
@@ -49,7 +49,7 @@ async function main() {
     subtitle: "Fraction of test samples whose α = 0.10 marginal set (source-calibrated) contains the true tissue, is non-empty but wrong, or is empty; per shift.",
     build: emptyBuild, toolbar: emptyCtl,
     source: "results/31_site_regen/06_conformal/TRNSCRPT/scores_*.csv (in-distribution, recomputed), results/08_shift/TRNSCRPT/shift_table.csv, results/12_bodymap/conformal_transfer.csv, results/13_gtex/conformal_transfer.csv",
-    notShow: "Mondrian and floored sets, which replace abstention with larger sets (ladder controls above).",
+    notShow: "Mondrian and floored sets, which replace abstention with larger sets (ladder controls above). All three fractions are over the same samples: seen-class vials for the held-out sex, mapped samples for BodyMap and GTEx.",
   });
   emptyFig.rerender = async () => { const b = emptyBuild(); emptyFig.traces = b.traces; emptyFig.table = b.table; await window.Plotly.react(emptyFig.chart, b.traces, { ...template(), ...b.layout }, CONFIG); };
 

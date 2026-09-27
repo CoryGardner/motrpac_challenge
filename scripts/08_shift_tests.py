@@ -34,7 +34,7 @@ def coverage_with(est, cls, X_te, y_te, qhat, method):
 
 
 def eval_split(name, tr, te, X, y, g, meta, k, alpha, model, prefilter, quick, seed, method="lac",
-               one_per_animal=False, recal_ns=(), recal_repeats=10):
+               one_per_animal=False, recal_ns=(), recal_repeats=10, save_rows=None):
     fit_idx, cal_idx = fit_calibration_split(meta, tr, 0.3, seed)
     cal_used = cp.one_per_group(cal_idx, g, seed) if one_per_animal else cal_idx
     rows, per_class, recal_rows, variant_rows = [], [], [], []
@@ -63,6 +63,18 @@ def eval_split(name, tr, te, X, y, g, meta, k, alpha, model, prefilter, quick, s
             variant_sets[vname], variant_cov[vname] = sv, cv_
         variant_cov["marginal"] = covered
         y_pred = est.predict(X[te])
+        if save_rows is not None:   # --save-scores: per-vial sets and probabilities, and the calibration scores (additive; nothing else changes)
+            vs = pd.DataFrame({"split": name, "arm": arm, "viallabel": meta.index[te].astype(str), "pid": g[te], "tissue": y[te],
+                               "sex": meta.iloc[te]["sex"].to_numpy(), "group": meta.iloc[te]["group"].to_numpy(), "seen": seen_mask, "y_pred": y_pred})
+            for vname, sv in variant_sets.items():
+                vs[f"covered_{vname}"] = variant_cov[vname]
+                vs[f"size_{vname}"] = sv.sum(axis=1)
+            for j, c in enumerate(cls):
+                vs[f"p_{c}"] = p_te[:, j]
+            save_rows["vials"].append(vs)
+            cal_seen_idx = cal_used[seen_cal]
+            save_rows["cal"].append(pd.DataFrame({"split": name, "arm": arm, "viallabel": meta.index[cal_seen_idx].astype(str), "pid": g[cal_seen_idx],
+                                                  "tissue": y[cal_seen_idx], "score_lac": scores, "qhat": qhat}))
         acc_all = float(np.mean(y_pred == y[te]))
         bal_seen = models.balanced_accuracy_score(y[te][seen_mask], y_pred[seen_mask]) if seen_mask.any() else np.nan
         # source in-distribution reference: calibrate on half of the calibration animals, test on the other half
@@ -145,6 +157,7 @@ def main() -> None:
     ap.add_argument("--recalibrate-target", default="", help="comma-separated numbers of target animals to hold out for recalibration, e.g. 3,5")
     ap.add_argument("--recal-repeats", type=int, default=10)
     ap.add_argument("--watch-tissues", default="SMLINT,BAT", help="tissues whose per-class coverage is quoted explicitly")
+    ap.add_argument("--save-scores", action="store_true", help="also write per-vial sets/probabilities and calibration scores (scores_target_vials.csv, scores_calibration.csv)")
     args = ap.parse_args()
     cli.banner("08_shift_tests", args)
     source = cli.resolve_source(args.assay, args.source)
@@ -162,9 +175,10 @@ def main() -> None:
     splits += list(leave_one_group_out(om.meta, "group", [h.strip() for h in args.holdout_groups.split(",")]))
     splits += list(train_controls_test_trained(om.meta))
     rows, pcs, recals, variants = [], [], [], []
+    save = {"vials": [], "cal": []} if args.save_scores else None
     for name, (tr, te) in splits:
         r, pc, rc, vr = eval_split(name, tr, te, X, y, g, om.meta, args.k, args.alpha, args.model, prefilter, args.quick,
-                                   args.seed, one_per_animal=args.one_per_animal, recal_ns=recal_ns, recal_repeats=args.recal_repeats)
+                                   args.seed, one_per_animal=args.one_per_animal, recal_ns=recal_ns, recal_repeats=args.recal_repeats, save_rows=save)
         rows.extend(r); pcs.append(pc); recals.extend(rc); variants.append(vr)
         for rr in r:
             print(f"  {name:28s} {rr['arm']:10s} acc={rr['accuracy_all']:.3f} cov_src={rr['coverage_source_id']:.3f} "
@@ -174,6 +188,10 @@ def main() -> None:
     table["coverage_drop"] = table["coverage_source_id"] - table["coverage_target_seen"]
     table["set_size_change"] = table["avg_set_size_target"] - table["avg_set_size_source"]
     table.to_csv(out / "shift_table.csv", index=False)
+    if save is not None:
+        pd.concat(save["vials"], ignore_index=True).to_csv(out / "scores_target_vials.csv", index=False)
+        pd.concat(save["cal"], ignore_index=True).to_csv(out / "scores_calibration.csv", index=False)
+        print(f"  wrote scores_target_vials.csv, scores_calibration.csv to {out}")
     pc = pd.concat(pcs, ignore_index=True)
     pc.to_csv(out / "shift_per_class.csv", index=False)
     vpc = pd.concat(variants, ignore_index=True)

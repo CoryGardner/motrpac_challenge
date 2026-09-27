@@ -122,3 +122,18 @@ Final: minor (deferred): abstract leads with pooled coverage 0.908; limitations 
 Final: minor (deferred): `ad_grid =[` spacing in scripts/06; screenshot tool does not fail on imgsNoAlt (linkcheck does).
 Final: Ruling: the reviewer's "Declined to judge" items (commits after fb3c3c0 incl. the bridge measurement; TMT plex_id construction; quoted phase-15 verdicts; notebooks not re-executed) stand as built — the bridge work carries the plan's "recomputed here, definition: …" label and its own provenance entries and anchor — cost if wrong: the audit's definition may differ; stated on the page.
 ```
+
+## 2026-09-27 01:30–02:40 — audit fixes, Beyond removed, no pending numbers
+**Done.** Audit of every result claim; fixes: "accuracy survives every shift" → "degrades gracefully"; "every adult organ"
+→ every mapped adult organ (9 of 11, super-class scoring, 68 samples from 8 animals); "sequenced as its own batch" →
+each tissue sits inside one plate, one library batch and one flowcell; the panel is described as re-selected inside each
+fold; the abstract cites the one-vial-per-animal coverage and the technical-only QC number. Ladder made internally
+consistent: the in-distribution rung now pairs the accuracy and coverage of the same phase-06 models (k20 0.978 / k50
+0.982 / full 0.992; the 40-animal CV numbers stay on the tile and Fingerprint page and in the hover); the held-out-sex
+rungs use seen-class denominators for coverage, empty and wrong-but-non-empty from per-vial sets exported by a new
+`--save-scores` flag in phase 08; the k = 50 held-out-sex rows come from a k = 50 rerun (results/31_site_regen/08_shift_k50),
+so no ladder rung is pending; BodyMap and GTEx rungs and tiles carry 95 % cluster-bootstrap intervals over animals or
+donors, with an exact animal-level interval where the bootstrap is degenerate (BodyMap adults: 8 of 8 animals all right,
+lower bound 0.63). Removed as not challenge-relevant: the Beyond page, the training-vs-batch verdict section, the
+fusion / discordance / batch-verdict / inventory exports, and every reference to parallel phases or "this copy".
+51 tests, all anchors, clean render pass.
