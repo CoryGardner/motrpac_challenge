@@ -2,6 +2,8 @@
 
 # Molecular Tissue Fingerprints
 
+*The Rat PAC · Stanford Multi-omics Hackathon 2026, Track 3*
+
 **A 20-gene panel, its conformal guarantee, and what makes it credible as biology.**
 
 A leakage-safe, calibrated evaluation of compact tissue fingerprints in the MoTrPAC rat multi-tissue transcriptomes,
@@ -83,7 +85,7 @@ per-sample reference data are in the **[Reference atlas](https://turbo-guide-2yv
 | Interactive model-explanation tool | per sample: probabilities against the calibrated threshold, per-gene contributions (“why X, not Y”), gene values against the reference tissues, a reference map | [Check samples](https://turbo-guide-2yve4kz.pages.github.io/) (the sample drawer); [Reference atlas](https://turbo-guide-2yve4kz.pages.github.io/explore.html): [tissue card](https://turbo-guide-2yve4kz.pages.github.io/explore.html#tissue-card), [gene explorer](https://turbo-guide-2yve4kz.pages.github.io/explore.html#gene-explorer), [panel builder](https://turbo-guide-2yve4kz.pages.github.io/explore.html#panel-builder) |
 <!-- END generated:outputs -->
 
-## Team
+## Team: The Rat PAC
 
 - Cory Gardner (team lead): the analysis pipeline and the evaluation design (animal-grouped folds, the round-robin panel selector, conformal prediction sets, the shift ladder with the rat BodyMap and GTEx transfers, the batch audit on MoTrPAC's bridging reference pools); the tested repository, provenance and site build.
 - Samuel Montalvo: product and visual design (the Check samples interface and the interactive explorer); the exercise analysis (training effects on the panel, VO2max and body composition).
