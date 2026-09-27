@@ -48,3 +48,45 @@ const labels = Object.fromEntries(bm.samples.slice(0, 6).map((s) => [s.id, model
 const rc = S.recalibrate(model, res.results, labels, 0.1);
 check(rc.n === 6 && rc.q === Infinity, "6 labelled samples at α = 0.10 → rank 7 > 6 → +∞ threshold (full sets), as the pipeline's rule says");
 console.log(`ok: ${n} assertions over ${compared} BodyMap samples; max |Δp| = ${maxDiff.toExponential(2)}`);
+
+// ---- v6: the example template, its labels, and a demonstrable recalibration --------------------------------------
+{
+  const organMap = bm.organ_map;
+  check(organMap && organMap.Adrenal && organMap.Adrenal[0] === "ADRNL", "the BodyMap export carries the organ map");
+  check(S.minLabelled(0.1) === 9 && S.minLabelled(0.05) === 19 && S.minLabelled(0.3) === 3, "labelled samples needed for a finite threshold: ceil(1/α) − 1");
+  const ex = S.exampleRows(model, expr, organMap);
+  const labelled = ex.filter((r) => r.label);
+  check(ex.length === expr.samples.filter((s) => s.age_weeks === 21).length && ex.length >= 60, `example has ${ex.length} rows (every 21-week sample)`);
+  check(labelled.length >= 12 && labelled.length >= S.minLabelled(0.1), `${labelled.length} rows pre-labelled`);
+  check(ex.every((r) => r.organ !== "Thymus" && r.organ !== "Uterus" || !r.label), "thymus and uterus are never labelled");
+  check(labelled.every((r) => organMap[r.organ] && organMap[r.organ].length === 1 && organMap[r.organ][0] === r.label), "labels are the single mapped MoTrPAC tissue of the organ");
+  const csv = S.templateCsv(model, ex);
+  const parsed = S.parseTable(csv);
+  check(parsed.header[parsed.header.length - 1] === "true_tissue", "the template ends with a true_tissue column");
+  check(parsed.rows.length === ex.length && parsed.rows.every((r, i) => (r.label || null) === (ex[i].label || null)), "parseTable reads the labels back");
+  check(parsed.rows.every((r) => !("true_tissue" in r.values) && Object.keys(r.values).length === 20), "the label column is not treated as a gene");
+  const res = S.scoreSamples(model, parsed.rows, { alpha: 0.1 });
+  check(res.mode === "within" && res.missing.length === 0, "the example scores with all 20 genes, z-scored within it");
+  const labels = Object.fromEntries(parsed.rows.filter((r) => r.label).map((r) => [r.id, r.label]));
+  const rc = S.recalibrate(model, res.results, labels, 0.1);
+  check(Number.isFinite(rc.q) && rc.n === labelled.length, `recalibration on ${rc.n} labelled samples gives a finite threshold (${rc.q})`);
+  const res2 = S.scoreSamples(model, parsed.rows, { alpha: 0.1, q: rc.q });
+  const byId = Object.fromEntries(res2.results.map((r) => [r.id, r]));
+  const covered = [], oodEmpty = [];
+  for (const r of ex) {
+    const out = byId[r.id];
+    if (!organMap[r.organ]) oodEmpty.push(out.setSize === 0);
+    else if (!r.label) {
+      const ok = out.set.some((c) => organMap[r.organ].includes(c));
+      covered.push(ok);
+      if (ok && organMap[r.organ].length === 1) check(out.setSize === 1, `${r.id} (${r.organ}, unlabelled, covered): singleton set, got ${out.set.join(";")}`);
+      if (ok) check(out.set.every((c) => organMap[r.organ].includes(c)), `${r.id} (${r.organ}): every set member belongs to the organ (${out.set.join(";")})`);
+    }
+  }
+  const cov = covered.filter(Boolean).length / covered.length;
+  check(covered.length >= 40 && cov >= 0.88, `recalibrated coverage on the ${covered.length} unlabelled mapped-organ samples: ${cov.toFixed(3)} (nominal 0.90)`);
+  const abst = oodEmpty.filter(Boolean).length / oodEmpty.length;
+  check(oodEmpty.length >= 10 && abst >= 0.5, `thymus and uterus still abstain on most samples after recalibration: ${abst.toFixed(2)} of ${oodEmpty.length}`);
+  console.log(`example: ${ex.length} rows, ${labelled.length} labelled, q = ${rc.q.toFixed(3)}, unlabelled mapped coverage ${cov.toFixed(3)}, unmapped abstention ${abst.toFixed(2)}`);
+}
+console.log(`ok: ${n} assertions in all`);

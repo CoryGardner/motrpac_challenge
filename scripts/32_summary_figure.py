@@ -27,11 +27,16 @@ def load(name):
     return json.loads((D / name).read_text())
 
 
+SUB_LINES = 3   # every panel's subtitle is padded to this many lines so the three bold titles sit on one row
+
+
 def title(ax, head, sub):
-    """A one-line panel title (≤ 60 characters) above a smaller wrapped subtitle; the title pad grows with the subtitle."""
-    assert len(head) <= 60, head
+    """A one-line panel title (≤ 60 characters) above a smaller wrapped subtitle; the title pad is the same on every panel."""
+    assert len(head) <= 60, (len(head), head)
     lines = textwrap.wrap(sub, 64)
-    ax.set_title(head, loc="left", fontsize=10, fontweight="bold", pad=10 + 11.5 * len(lines))
+    assert len(lines) <= SUB_LINES, (len(lines), sub)
+    lines += [""] * (SUB_LINES - len(lines))
+    ax.set_title(head, loc="left", fontsize=10, fontweight="bold", pad=10 + 11.5 * SUB_LINES)
     ax.text(0, 1.015, "\n".join(lines), transform=ax.transAxes, fontsize=8, color=T["ink2"], va="bottom", ha="left")
 
 
@@ -62,12 +67,12 @@ def main():
     ax.axhline(0.9, color=T["ink2"], linewidth=1, linestyle="--")
     ax.text(len(rungs) - 0.55, 0.905, "1 − α = 0.90", ha="right", va="bottom", fontsize=8, color=T["ink2"])
     ax.set_xticks(x, [lab for _, lab in rungs], fontsize=7)
-    ax.set_ylim(0, 1.1)
+    ax.set_ylim(0, 1.28)
     ax.set_ylabel("fraction")
     ax.grid(axis="x", visible=False)
     ax.grid(axis="y", color=T["grid"], linewidth=0.8)
-    ax.legend(frameon=False, loc="upper center", fontsize=8, ncol=2, bbox_to_anchor=(0.5, -0.3))
-    title(ax, "a  Accuracy holds at every rung of the shift ladder", "The 90 % guarantee holds within the study and is restored by three animals from a new laboratory (20-gene panel, α = 0.10, calibrated on the source)")
+    ax.legend(frameon=False, loc="upper left", fontsize=8, ncol=2)
+    title(ax, "a  Accuracy holds at every rung of the shift ladder", "The 90 % guarantee holds within the study and is restored by three animals from a new laboratory (20-gene panel, α = 0.10, source-calibrated)")
 
     # (b) stable core: effect size per gene
     core = sorted(SC["core"], key=lambda r: r["effect_size"])
@@ -81,28 +86,25 @@ def main():
     ax.set_xlabel("log2 CPM above the next-highest tissue")
     title(ax, "b  The ten-gene stable core", "Chosen in ≥ 80 % of 50 animal bootstraps: single markers, mostly textbook; bar = log2 CPM above the next-highest tissue")
 
-    # (c) batch measured directly on the bridging reference pools: V_batch / V_tissue per panel gene, pools 99 and 88
+    # (c) batch measured directly on the bridging reference pools: Σ V_batch / Σ V_tissue per pool, all genes
     ax = axes[2]
-    per_gene = N["bridge"]["per_gene"] if N.get("bridge") and N["bridge"].get("per_gene") else []
-    k20 = list(G["sets"]["k20"])
-    marker = {g["id"]: g.get("marker_tissue") for g in G["genes"]}
-    rows99 = {r["feature_ID"]: r for r in per_gene if r["pool_bid"] == 80001 and r["feature_ID"] in k20}
-    rows88 = {r["feature_ID"]: r for r in per_gene if r["pool_bid"] == 80000 and r["feature_ID"] in k20}
-    ids = sorted(rows99, key=lambda i: rows99[i]["ratio_batch_over_tissue"])
-    y = np.arange(len(ids))
-    hgt = 0.38
-    for k, (rows, off, col, lab) in enumerate(((rows99, +hgt / 2, T["c1"], "pool 99"), (rows88, -hgt / 2, T["c2"], "pool 88"))):
-        vals = [rows[i]["ratio_batch_over_tissue"] if i in rows else 0 for i in ids]
-        expressed = [bool(rows[i]["expressed_in_pool"]) if i in rows else False for i in ids]
-        ax.barh(y + off, vals, height=hgt, color=[col if e else "none"] if False else [col if e else T["surface"] for e in expressed],
-                edgecolor=[col for _ in ids], linewidth=1.2, label=lab)
-    ax.set_yticks(y, [f"{rows99[i]['gene_symbol']} · {marker.get(i) or ''}".rstrip(" ·") for i in ids], fontsize=7.5)
-    ax.set_xlabel("V_batch / V_tissue (hollow: not expressed in the pool)")
-    ax.legend(frameon=False, loc="lower right", fontsize=8)
-    bridge = H["extras"].get("bridge_sum_ratio_all_genes_pool99")
-    title(ax, "c  Batch measured on MoTrPAC's bridging pools",
-          (f"~{100 * bridge:.1f} % of the tissue-separating variance over all genes (pool 99); per panel gene the between-plate variance of the "
-           "reference pool over the variance of the 19 tissue means") if isinstance(bridge, (int, float)) else "per panel gene: the between-plate variance of the reference pool over the variance of the 19 tissue means")
+    pools = sorted((N.get("bridge") or {}).get("pools") or [], key=lambda r: r["sum_ratio_batch_over_tissue"])
+    y = np.arange(len(pools))
+    x = [100 * r["sum_ratio_batch_over_tissue"] for r in pools]
+    both = [";" in r["sites"] for r in pools]
+    ax.hlines(y, 0, x, color=T["grid"], linewidth=2)
+    ax.scatter(x, y, s=70, color=[T["c1"] if b else T["c2"] for b in both], edgecolor=T["surface"], linewidth=1.5, zorder=3)
+    for i, r in enumerate(pools):
+        ax.text(x[i] + 0.25, i, f"{x[i]:.1f} %  ·  {r['n_plates']} plates{', both sites' if both[i] else ''}", va="center", fontsize=7.5, color=T["ink2"])
+    ax.set_yticks(y, [f"{r['pool_tissue'].replace(' Powder', '').lower()} pool {r['pool_type']}" for r in pools], fontsize=8)
+    ax.invert_yaxis()
+    ax.set_xlim(0, 10)
+    ax.set_xlabel("batch variance as % of the tissue-separating variance (all genes; tissue signal = 100 %)")
+    ax.scatter([], [], color=T["c1"], label="both sequencing sites")
+    ax.scatter([], [], color=T["c2"], label="one site")
+    ax.legend(frameon=False, loc="center right", fontsize=8)
+    title(ax, "c  Batch is a few percent of the tissue signal",
+          "Between-plate variance of a reference RNA pool over the variance of the 19 tissue means, all genes; the two gastrocnemius pools ran on both sequencing sites")
     fig.text(0.01, 0.01, "Sources: results/05_panels, 06_conformal, 08_shift, 12_bodymap, 13_gtex, 16_identifiability via site/data/*.json (provenance in site/data/provenance.json)", fontsize=7, color=T["muted"])
     OUT.parent.mkdir(exist_ok=True)
     fig.savefig(OUT, dpi=300, bbox_inches="tight", facecolor=T["page"])

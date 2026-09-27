@@ -61,6 +61,14 @@ export function ladderTitle(H) {
   return head + `holds within the study for ${list(keep)}` + tail;
 }
 
+/** The same title split at the semicolon: a one-line head and a tail sentence (capitalised) for the subtitle. */
+export function ladderTitleParts(H) {
+  const full = ladderTitle(H);
+  const i = full.indexOf("; ");
+  const tail = full.slice(i + 2);
+  return { head: full.slice(0, i), tail: tail.charAt(0).toUpperCase() + tail.slice(1) + "." };
+}
+
 /** Which models keep the 90 % coverage on the training-state rung and which do not (for the collapsed notes). */
 export function ladderKeepNote(H) {
   const rows = ["k20", "k50", "full"].map((m) => [m, pick(H.ladder, "train_control_test_trained", m, "marginal")]).filter(([, r]) => r && !r.pending);
@@ -90,8 +98,8 @@ export async function mountLadder(container, H, opts = {}) {
   const tr20 = pick(H.ladder, "train_control_test_trained", "k20", "marginal");
   const sx20 = pick(H.ladder, "train_male_test_female", "k20", "marginal");
   fig = await figure(container, {
-    title: opts.title || ladderTitle(H),
-    subtitle: "Per rung: accuracy and coverage of α = 0.10 sets calibrated on the source; whiskers are fold sd in-distribution and 95 % cluster-bootstrap intervals elsewhere.",
+    title: opts.title || (opts.shortTitle ? ladderTitleParts(H).head : ladderTitle(H)),
+    subtitle: (opts.shortTitle ? ladderTitleParts(H).tail + " " : "") + "Per rung: accuracy and coverage of α = 0.10 sets calibrated on the source; whiskers are fold sd in-distribution and 95 % cluster-bootstrap intervals elsewhere.",
     build: () => ladderBuild(H, state),
     source: "results/05_panels/TRNSCRPT/panel_curve.csv, results/04_baselines/TRNSCRPT/summary.csv, results/06_conformal/TRNSCRPT/coverage.csv (full model) and results/31_site_regen/06_conformal/TRNSCRPT/scores_*.csv (k20/k50, recomputed with the same design), results/08_shift/TRNSCRPT/shift_table.csv, results/12_bodymap/{age_shift_accuracy,conformal_transfer}.csv, results/13_gtex/{accuracy_overall,conformal_transfer}.csv",
     notShow: "why coverage falls: it falls through empty sets, not through wrong confident sets." + ladderKeepNote(H) + " Accuracy is balanced in-distribution and sample-weighted on mapped tissues elsewhere; the whiskers are sd over 5 folds in-distribution and 95 % cluster-bootstrap intervals over animals or donors on the shifts. Each rung pairs the accuracy and the coverage of the same models: in-distribution, the models fit on 18 animals per fold whose sets are calibrated on 22 (the headline 0.976 on the Fingerprint page is the 40-animal CV of the same panel size); on the BodyMap and GTEx rungs the accuracy bar is the panel fit on all 50 animals and the sets come from its 35-animal refit (the refit's own accuracy is in the hover). The held-out-sex accuracy counts the unseen sex-specific tissue's vials as wrong, while coverage is over seen-class vials (both n in the hover); in-distribution calibration is pooled vials unless switched (one vial per animal gives " + fmt(opa?.coverage) + " for the full model). The training-state rung fits the model on " + (tr20 ? tr20.n_source_animals - tr20.n_calibration_animals : "—") + " of the " + (tr20?.n_source_animals ?? "—") + " sedentary control animals, calibrates on the other " + (tr20?.n_calibration_animals ?? "—") + " and tests every vial of the " + (tr20?.n_individuals ?? "—") + " trained animals. On the held-out-sex and training-state rungs the Mondrian and floored sets are full sets (every tissue the model knows), which is why they read 1.0: the source calibration holds " + (sx20?.n_calibration_animals ?? "—") + " (sex) or at most " + (tr20?.n_calibration_animals ?? "—") + " (training state) vials per class, and with n ≤ " + (sx20?.n_calibration_animals ?? "—") + " scores the α = 0.10 rank ⌈(n + 1) × 0.9⌉ exceeds n, so every per-class threshold is +∞.",

@@ -238,6 +238,11 @@ img.shot { max-width: 100%; height: auto; border: 1px solid var(--grid); border-
 .overview-grid ul { padding-left: 1.1rem; margin: .25rem 0 0; }
 .overview-grid li { margin: .45rem 0; }
 
+@media (max-width: 1100px) {
+  nav.primary { gap: 0.15rem 0.55rem; }
+  nav.primary a { font-size: 0.9rem; }
+  .site-header .wrap { gap: 0.6rem; }
+}
 @media (max-width: 640px) {
   .site-header .wrap { gap: 0.5rem; }
   .team-block { grid-template-columns: 1fr; }

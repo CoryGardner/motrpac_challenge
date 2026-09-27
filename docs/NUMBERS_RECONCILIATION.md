@@ -1,6 +1,6 @@
 # Numbers reconciliation — what the site shows, where it comes from, and what moved with the conformal-quantile fix
 
-Generated 2026-09-27 04:45 UTC by `scripts/30_export_site_data.py --reconciliation` from `site/data/provenance.json`.
+Generated 2026-09-27 06:00 UTC by `scripts/30_export_site_data.py --reconciliation` from `site/data/provenance.json`.
 `results/` (post-fix, 2026-09-25) is the truth; the pre-fix values come from `docs/reconciliation/pre_quantile_fix_values.csv`, generated once from the pre-fix results of 2026-09-25 (not in the repository). Values are shown to 4 decimals; the JSON holds them unrounded.
 
 ## 1. Headline numbers (the home-page tiles and the transfer ladder)
@@ -40,7 +40,7 @@ Generated 2026-09-27 04:45 UTC by `scripts/30_export_site_data.py --reconciliati
 | `qc_composition` | 0.9516 |  |  | `results/16_identifiability/qc_only_summary.csv` | `{"features": "composition"}` | `bal_acc_mean` | value |
 | `qc_all` | 0.9758 |  |  | `results/16_identifiability/qc_only_summary.csv` | `{"features": "all"}` | `bal_acc_mean` | value |
 
-## 2. Every exported number that moved with the fix (113 of 203 comparable entries)
+## 2. Every exported number that moved with the fix (113 of 204 comparable entries)
 
 | id | post-fix | pre-fix | source | selector | column |
 |---|---|---|---|---|---|
@@ -210,6 +210,8 @@ Generated 2026-09-27 04:45 UTC by `scripts/30_export_site_data.py --reconciliati
 | `acc_gtex_k50_ci` | [0.7667314563741295, 0.795568797011502] | `results/31_site_regen/13_gtex/scores_target_probs.csv`: 95 % cluster bootstrap over the 862 donors |
 | `acc_gtex_full_ci` | [0.8418673798425484, 0.8681280359103697] | `results/31_site_regen/13_gtex/scores_target_probs.csv`: 95 % cluster bootstrap over the 862 donors |
 | `gtex_heart_k20_to_skm_frac` | 0.9067 | `results/13_gtex/confusion_k20.csv`: fraction of GTEx heart samples called either skeletal muscle class (SKM-GN + SKM-VL) by the k20 panel |
+| `bridge_pools_min_sum_ratio_all_genes` | 0.0165 | `results/16_identifiability/bridge_variance.csv`: smallest Σ V_batch / Σ V_tissue (all genes) over the bridging pools |
+| `bridge_pools_max_sum_ratio_all_genes` | 0.0533 | `results/16_identifiability/bridge_variance.csv`: largest Σ V_batch / Σ V_tissue (all genes) over the bridging pools |
 | `gtex_recal_k20_n3_frac_inf` | 0.4500 | `results/31_site_regen/13_gtex/recal_thresholds.csv`: fraction of the 20 three-donor recalibration draws (k20) whose threshold is +∞ |
 | `venacv_bat_calls` | 7 | `results/31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv`: held-out vena cava vials the 20-gene model calls brown fat (phase-06 design, all folds) |
 | `venacv_bat_calls_flagged` | 7 | `results/31_site_regen/06_conformal/TRNSCRPT/scores_test_probs.csv`, `results/15_time_course/design/flagged_vials.csv`: of those, vials the consortium flagged as brown-fat contaminated |
@@ -238,3 +240,4 @@ Generated 2026-09-27 04:45 UTC by `scripts/30_export_site_data.py --reconciliati
 | `fbd_cov_full_4w` | 0.8883 | `results/31_site_regen/08_shift_k20/scores_target_vials.csv`: coverage of the α = 0.10 marginal sets on the 4w animals' vials |
 | `fbd_acc_full_8w` | 1.0000 | `results/31_site_regen/08_shift_k20/scores_target_vials.csv`: accuracy of the control-fit full model on the 8w animals' vials (train_control_test_trained split) |
 | `fbd_cov_full_8w` | 0.8889 | `results/31_site_regen/08_shift_k20/scores_target_vials.csv`: coverage of the α = 0.10 marginal sets on the 8w animals' vials |
+| `panel_model_recal_n3_mean_cal_samples` | 25.4000 | `results/31_site_regen/12_bodymap/recal_thresholds.csv`: mean number of calibration samples over the three-animal BodyMap recalibration draws (model k20): what 'three animals' meant in the study |

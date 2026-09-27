@@ -1,7 +1,7 @@
 {
 "_meta": {
-"generated": "2026-09-27 04:45 UTC",
-"git_hash": "7d4502a",
+"generated": "2026-09-27 05:51 UTC",
+"git_hash": "66d05ef",
 "sources": [
 "results/03_eda/batch_partition_METAB.csv",
 "results/03_eda/batch_partition_PROT.csv",
@@ -112,6 +112,7 @@
 "results/31_site_regen/08_shift_k20/scores_target_vials.csv",
 "results/31_site_regen/08_shift_k50/scores_target_vials.csv",
 "results/31_site_regen/08_shift_k50/shift_table.csv",
+"results/31_site_regen/12_bodymap/recal_thresholds.csv",
 "results/31_site_regen/12_bodymap/scores_calibration.csv",
 "results/31_site_regen/12_bodymap/scores_target_probs.csv",
 "results/31_site_regen/13_gtex/recal_thresholds.csv",
@@ -126,7 +127,7 @@
 ],
 "reconciliation": {
 "changed": 113,
-"comparable": 203,
+"comparable": 204,
 "document": "docs/NUMBERS_RECONCILIATION.md"
 }
 },
@@ -623,6 +624,84 @@
 "column": "n_genes",
 "agg": "value",
 "tol": 1e-06
+},
+{
+"id": "bridge_pool_80001_sum_ratio_all_genes",
+"value": 0.0164901614097426,
+"file": "results/16_identifiability/bridge_variance.csv",
+"where": {
+"pool_bid": 80001,
+"gene_set": "all_genes"
+},
+"column": "sum_ratio_batch_over_tissue",
+"agg": "value",
+"tol": 1e-06,
+"note": "Gastrocnemius Powder reference pool 80001 (type 99) on 6 plates (MSSM;Stanford): \u03a3 V_batch / \u03a3 V_tissue over all genes"
+},
+{
+"id": "bridge_pool_80000_sum_ratio_all_genes",
+"value": 0.0169045350837373,
+"file": "results/16_identifiability/bridge_variance.csv",
+"where": {
+"pool_bid": 80000,
+"gene_set": "all_genes"
+},
+"column": "sum_ratio_batch_over_tissue",
+"agg": "value",
+"tol": 1e-06,
+"note": "Gastrocnemius Powder reference pool 80000 (type 88) on 6 plates (MSSM;Stanford): \u03a3 V_batch / \u03a3 V_tissue over all genes"
+},
+{
+"id": "bridge_pool_80035_sum_ratio_all_genes",
+"value": 0.0200815837905883,
+"file": "results/16_identifiability/bridge_variance.csv",
+"where": {
+"pool_bid": 80035,
+"gene_set": "all_genes"
+},
+"column": "sum_ratio_batch_over_tissue",
+"agg": "value",
+"tol": 1e-06,
+"note": "Hippocampus Powder reference pool 80035 (type 99) on 3 plates (MSSM): \u03a3 V_batch / \u03a3 V_tissue over all genes"
+},
+{
+"id": "bridge_pool_80003_sum_ratio_all_genes",
+"value": 0.0201735127633334,
+"file": "results/16_identifiability/bridge_variance.csv",
+"where": {
+"pool_bid": 80003,
+"gene_set": "all_genes"
+},
+"column": "sum_ratio_batch_over_tissue",
+"agg": "value",
+"tol": 1e-06,
+"note": "Liver Powder reference pool 80003 (type 99) on 2 plates (MSSM): \u03a3 V_batch / \u03a3 V_tissue over all genes"
+},
+{
+"id": "bridge_pool_80002_sum_ratio_all_genes",
+"value": 0.0253697438968836,
+"file": "results/16_identifiability/bridge_variance.csv",
+"where": {
+"pool_bid": 80002,
+"gene_set": "all_genes"
+},
+"column": "sum_ratio_batch_over_tissue",
+"agg": "value",
+"tol": 1e-06,
+"note": "Liver Powder reference pool 80002 (type 88) on 2 plates (MSSM): \u03a3 V_batch / \u03a3 V_tissue over all genes"
+},
+{
+"id": "bridge_pool_80034_sum_ratio_all_genes",
+"value": 0.0533374868924547,
+"file": "results/16_identifiability/bridge_variance.csv",
+"where": {
+"pool_bid": 80034,
+"gene_set": "all_genes"
+},
+"column": "sum_ratio_batch_over_tissue",
+"agg": "value",
+"tol": 1e-06,
+"note": "Hippocampus Powder reference pool 80034 (type 88) on 3 plates (MSSM): \u03a3 V_batch / \u03a3 V_tissue over all genes"
 },
 {
 "id": "n_trnscrpt_vials",
@@ -4181,6 +4260,26 @@
 "note": "fraction of GTEx heart samples called either skeletal muscle class (SKM-GN + SKM-VL) by the k20 panel"
 },
 {
+"id": "bridge_pools_min_sum_ratio_all_genes",
+"value": 0.0164901614097426,
+"file": null,
+"files": [
+"results/16_identifiability/bridge_variance.csv"
+],
+"agg": "recomputed",
+"note": "smallest \u03a3 V_batch / \u03a3 V_tissue (all genes) over the bridging pools"
+},
+{
+"id": "bridge_pools_max_sum_ratio_all_genes",
+"value": 0.0533374868924547,
+"file": null,
+"files": [
+"results/16_identifiability/bridge_variance.csv"
+],
+"agg": "recomputed",
+"note": "largest \u03a3 V_batch / \u03a3 V_tissue (all genes) over the bridging pools"
+},
+{
 "id": "gtex_recal_k20_n3_frac_inf",
 "value": 0.45,
 "file": null,
@@ -5493,6 +5592,30 @@
 "agg": "count",
 "tol": 1e-06,
 "note": "genes of the scoring model (35-animal refit) that are also in the all-animal 20-gene panel"
+},
+{
+"id": "panel_model_bodymap_coverage_k20",
+"value": 0.6176470588235294,
+"file": "results/12_bodymap/conformal_transfer.csv",
+"where": {
+"stage_weeks": 21,
+"model": "k20",
+"conformal": "marginal"
+},
+"column": "coverage_mapped",
+"agg": "value",
+"tol": 1e-06,
+"note": "coverage of the \u03b1 = 0.10 sets on the 21-week BodyMap mapped organs with the MoTrPAC calibration (the home-page tile)"
+},
+{
+"id": "panel_model_recal_n3_mean_cal_samples",
+"value": 25.4,
+"file": null,
+"files": [
+"results/31_site_regen/12_bodymap/recal_thresholds.csv"
+],
+"agg": "recomputed",
+"note": "mean number of calibration samples over the three-animal BodyMap recalibration draws (model k20): what 'three animals' meant in the study"
 }
 ],
 "tables": [

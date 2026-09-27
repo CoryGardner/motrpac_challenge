@@ -52,7 +52,7 @@ async function main() {
   }
 
   // ---- the transfer ladder (hero; shared with the Transfer page) ----------------------------------------------
-  await mountLadder(document.getElementById("fig-ladder"), H, { full: false });
+  await mountLadder(document.getElementById("fig-ladder"), H, { full: false, shortTitle: true });
 
   // ---- three one-line points under the ladder (full content width, not the 72ch prose measure) -----------------
   const point = (text) => el("li", { style: "max-width: none" }, text);
@@ -131,63 +131,42 @@ async function main() {
     `As in any multi-tissue design, each tissue was processed as a unit: ${ex.n_plates} extraction plates, ${ex.n_lib_batches} library batches and ${ex.n_flowcells} flowcells hold whole tissues, `,
     `${est.n_pairs_estimable} of ${est.n_pairs_total} tissue pairs ${est.n_pairs_estimable === 1 ? "is" : "are"} contrastable inside one batch, so within-study accuracy needs an outside check. `,
     `Two external facts make the fingerprint credible as biology: ${fmt(bmAcc)} of mapped adult organs named in a laboratory with none of these batches, `,
-    `and batch measured at ${pct(bridge, 1)} of tissue-separating variance on bridging pools run on ${ex.bridge_n_plates_pool99} plates at both sites.`,
+    `and batch measured directly on MoTrPAC's reference RNA pools: ${pct(bridge, 1)} of the tissue-separating variance on the pool run on ${ex.bridge_n_plates_pool99} plates at both sites, and ${fmt(100 * ex.bridge_pools_min_sum_ratio_all_genes, 1)}–${pct(ex.bridge_pools_max_sum_ratio_all_genes, 1)} across all ${ex.bridge_n_pools} bridging pools.`,
   );
-  // the two bridging pools that crossed every plate: pool_bid 80001 is reference pool 99 (the headline pool), 80000 is pool 88
-  const k20 = new Set(G.sets.k20);
-  const geneInfo = Object.fromEntries(G.genes.map((g) => [g.id, g]));
-  const poolRows = (bid) => N.bridge.per_gene.filter((r) => r.pool_bid === bid && k20.has(r.feature_ID));
-  const pools = [poolRows(80001), poolRows(80000)].filter((rows) => rows.length);
-  const poolName = (rows) => `pool ${rows[0].pool_type}`;
-  const geneLabel = (r) => `${r.gene_symbol || geneInfo[r.feature_ID]?.symbol || r.feature_ID} · ${geneInfo[r.feature_ID]?.marker_tissue || "—"}`;
-  // rows top to bottom: by the headline pool's ratio, then the other pool's, then symbol
-  const ratioIn = (rows, id) => rows.find((r) => r.feature_ID === id)?.ratio_batch_over_tissue ?? 0;
-  const order = [...k20].filter((id) => pools[0].some((r) => r.feature_ID === id))
-    .sort((a, b) => ratioIn(pools[0], b) - ratioIn(pools[0], a) || (pools[1] ? ratioIn(pools[1], b) - ratioIn(pools[1], a) : 0) || geneLabel(pools[0].find((r) => r.feature_ID === a)).localeCompare(geneLabel(pools[0].find((r) => r.feature_ID === b))));
-  const labels = order.map((id) => geneLabel(pools[0].find((r) => r.feature_ID === id)));
+  // one row per bridging reference pool (all genes): Σ V_batch / Σ V_tissue in %, from nesting.json bridge.pools
+  const pools = [...(N.bridge.pools || [])].sort((a, b) => a.sum_ratio_batch_over_tissue - b.sum_ratio_batch_over_tissue);
+  const poolLabel = (r) => `${r.pool_tissue.replace(" Powder", "").toLowerCase()} pool ${r.pool_type}`;
   await figure(document.getElementById("fig-bridge"), {
-    title: `Batch measured on MoTrPAC's bridging pools: ${pct(bridge, 1)} of tissue-separating variance`,
-    subtitle: "V_batch / V_tissue per panel gene; the all-gene ratio is the headline number.",
+    title: "On every bridging pool, batch is a few percent of the tissue signal",
+    subtitle: "Between-plate variance of a reference RNA pool over the variance of the 19 tissue means, all genes; the two gastrocnemius pools ran on both sequencing sites.",
     build: () => {
       const t = tokens();
       const p = palette();
-      const traces = [];
-      pools.forEach((rows, i) => {
-        const name = poolName(rows), color = p[i];
-        const top = Math.max(...rows.map((r) => r.ratio_batch_over_tissue));
-        for (const expressed of [true, false]) {
-          const sel = order.map((id) => rows.find((r) => r.feature_ID === id)).filter((r) => r && Boolean(r.expressed_in_pool) === expressed);
-          if (!sel.length) continue;
-          traces.push({
-            type: "bar", orientation: "h", name: `${name}${expressed ? "" : ", not expressed (hollow)"}`,
-            y: sel.map(geneLabel), x: sel.map((r) => r.ratio_batch_over_tissue),
-            offsetgroup: name, alignmentgroup: "pools", legendgroup: name,
-            marker: expressed ? { color, line: { color: t.surface, width: 2 }, cornerradius: 4 } : { color: "rgba(0,0,0,0)", line: { color, width: 1.5 }, cornerradius: 4 },
-            text: sel.map((r) => (expressed && r.ratio_batch_over_tissue === top ? fmt(r.ratio_batch_over_tissue, 3) : "")), textposition: "outside", textfont: { color: t.ink2, size: 11 }, cliponaxis: false,
-            customdata: sel.map((r) => [r.v_batch, r.v_tissue, r.mean_log2cpm_in_pool, r.n_plates]),
-            hovertemplate: "%{y}: V_batch / V_tissue = %{x:.4f}<br>V_batch (across plates) %{customdata[0]:.4f}, V_tissue (across tissue means) %{customdata[1]:.3f}<br>mean log2 CPM in the pool %{customdata[2]:.2f}, %{customdata[3]} plates<extra>" + name + "</extra>",
-          });
-        }
-      });
+      const y = pools.map(poolLabel);
+      const x = pools.map((r) => 100 * r.sum_ratio_batch_over_tissue);
+      const both = pools.map((r) => r.sites.includes(";"));
       return {
-        traces,
+        traces: [
+          { type: "bar", orientation: "h", y, x, name: "Σ V_batch / Σ V_tissue", marker: { color: t.grid, line: { color: t.surface, width: 0 } }, width: 0.08, hoverinfo: "skip", showlegend: false },
+          { type: "scatter", mode: "markers+text", y, x, name: "Σ V_batch / Σ V_tissue", marker: { color: both.map((b) => (b ? p[0] : p[1])), size: 12, line: { color: t.surface, width: 2 } },
+            text: pools.map((r) => `${fmt(100 * r.sum_ratio_batch_over_tissue, 1)} % · ${r.n_plates} plates${r.sites.includes(";") ? ", both sites" : ""}`), textposition: "middle right", textfont: { color: t.ink2, size: 11 }, cliponaxis: false,
+            customdata: pools.map((r) => [r.n_plates, r.sites, r.n_genes]), hovertemplate: "%{y}: %{x:.2f} % of the tissue-separating variance<br>%{customdata[0]} plates (%{customdata[1]}), %{customdata[2]} genes<extra></extra>", showlegend: false },
+          // legend-only traces: the marker colour says whether the pool crossed both sequencing sites
+          { type: "scatter", mode: "markers", x: [null], y: [null], name: "both sequencing sites", marker: { color: p[0], size: 12 }, hoverinfo: "skip" },
+          { type: "scatter", mode: "markers", x: [null], y: [null], name: "one site", marker: { color: p[1], size: 12 }, hoverinfo: "skip" },
+        ],
         layout: {
-          barmode: "group", height: 26 * order.length + 130,
-          xaxis: { title: { text: "V_batch / V_tissue per gene" }, rangemode: "tozero" },
-          yaxis: { autorange: "reversed", automargin: true, categoryorder: "array", categoryarray: labels, tickfont: { size: 11 } },
-          shapes: [{ type: "line", xref: "x", x0: bridge, x1: bridge, yref: "paper", y0: 0, y1: 1, line: { color: t.ink2, width: 1, dash: "dash" } }],
-          annotations: [{ xref: "x", x: bridge, xanchor: "left", yref: "paper", y: 0.02, yanchor: "bottom", xshift: 6, text: `all genes, ${poolName(pools[0])}: ${pct(bridge, 1)}`, showarrow: false, font: { color: t.ink2, size: 11 } }],
-          // the four legend entries wrap to four rows on a phone, so the top margin grows there
-          legend: { y: 1.02, yanchor: "bottom" }, margin: { t: window.matchMedia("(max-width: 640px)").matches ? 120 : 64, l: 10, b: 56 },
+          xaxis: { title: { text: "batch variance as % of the tissue-separating variance (all genes)" }, range: [0, 10], ticksuffix: " %" },
+          yaxis: { automargin: true, categoryorder: "array", categoryarray: y, autorange: "reversed" },
+          annotations: [{ xref: "x", x: 10, xanchor: "right", yref: "paper", y: 0, yanchor: "bottom", text: "tissue signal = 100 %", showarrow: false, font: { color: t.muted, size: 11 } }],
+          legend: { orientation: "h", y: 1.02, yanchor: "bottom", x: 0 }, margin: { t: 40, l: 10, r: 20, b: 56 },
         },
-        table: { columns: ["gene", "marker_tissue", "feature_ID", "pool", "ratio_batch_over_tissue", "v_batch", "v_tissue", "mean_log2cpm_in_pool", "expressed_in_pool", "n_plates"],
-                 rows: pools.flatMap((rows) => order.map((id) => rows.find((r) => r.feature_ID === id)).filter(Boolean).map((r) => ({ gene: r.gene_symbol, marker_tissue: geneInfo[r.feature_ID]?.marker_tissue || "", feature_ID: r.feature_ID, pool: `${poolName(rows)} (${r.pool_bid})`, ratio_batch_over_tissue: r.ratio_batch_over_tissue, v_batch: r.v_batch, v_tissue: r.v_tissue, mean_log2cpm_in_pool: r.mean_log2cpm_in_pool, expressed_in_pool: r.expressed_in_pool ? "yes" : "no", n_plates: r.n_plates }))),
-                 format: { ratio_batch_over_tissue: (v) => v.toFixed(4), v_batch: (v) => v.toFixed(4), v_tissue: (v) => v.toFixed(3), mean_log2cpm_in_pool: (v) => v.toFixed(2) } },
+        table: { columns: ["pool_tissue", "pool_type", "n_plates", "sites", "n_genes", "sum_ratio_batch_over_tissue"], rows: pools,
+                 format: { sum_ratio_batch_over_tissue: (v) => v.toFixed(4) } },
       };
     },
-    source: "results/16_identifiability/bridge_variance_per_gene.csv, bridge_variance.csv",
-    notShow: "genes the pool does not express (mean log2 CPM < 1) read zero or near it; the pools are muscle-derived, so batch on other tissues' markers is measurable only where they are expressed.",
-    height: "tall",
+    source: "results/16_identifiability/bridge_variance.csv (gene_set all_genes; one row per reference pool run on more than one extraction plate)",
+    notShow: "the per-gene picture, on the Identifiability page: a muscle-derived pool measures batch only on the genes it expresses, so on markers of other tissues the ratio reads zero. The 100 % reference is the variance that separates the 19 tissue means, which every ratio is taken against.",
   });
 }
 

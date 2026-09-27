@@ -572,6 +572,17 @@ def export_aggregates(w: Writer, prov: Prov, rec: pd.DataFrame | None):
                       note=f"gastrocnemius-derived reference pool {bid} (type {ptype}) on 6 plates at both sites: Σ V_batch / Σ V_tissue over {gs}")
                 P.val(f"bridge_median_ratio_{gs}_pool{ptype}", "16_identifiability/bridge_variance.csv", "median_ratio_batch_over_tissue", where=where)
                 P.val(f"bridge_n_genes_{gs}_pool{ptype}", "16_identifiability/bridge_variance.csv", "n_genes", where=where)
+        # one row per bridging pool (all genes), sorted by the ratio: the home page and the summary figure plot these
+        allg = P.read("16_identifiability/bridge_variance.csv")
+        allg = allg[allg["gene_set"] == "all_genes"].sort_values("sum_ratio_batch_over_tissue")
+        bridge["pools"] = [
+            {"pool_bid": int(r["pool_bid"]), "pool_type": int(r["pool_type"]), "pool_tissue": str(r["pool_tissue"]), "n_vials": int(r["n_vials"]),
+             "n_plates": int(r["n_plates"]), "sites": str(r["sites"]), "n_genes": int(r["n_genes"]),
+             "sum_ratio_batch_over_tissue": P.val(f"bridge_pool_{int(r['pool_bid'])}_sum_ratio_all_genes", "16_identifiability/bridge_variance.csv",
+                                                  "sum_ratio_batch_over_tissue", where={"pool_bid": int(r["pool_bid"]), "gene_set": "all_genes"},
+                                                  note=f"{r['pool_tissue']} reference pool {int(r['pool_bid'])} (type {int(r['pool_type'])}) on {int(r['n_plates'])} plates "
+                                                       f"({r['sites']}): Σ V_batch / Σ V_tissue over all genes")}
+            for _, r in allg.iterrows()]
     w.write("nesting.json", {"nesting": nesting,
                              "estimable_pairs": P.table("estimable_pairs", "16_identifiability/estimable_pairs.csv", "nesting.json", "estimable_pairs"),
                              "batch_counts": P.table("batch_counts", "16_identifiability/batch_counts.csv", "nesting.json", "batch_counts"),
@@ -863,6 +874,12 @@ def export_headline(w: Writer, prov: Prov, rec: pd.DataFrame | None):
         if len(sel) == 1:
             extras["bridge_sum_ratio_all_genes_pool99"] = float(sel["sum_ratio_batch_over_tissue"].iloc[0])
             extras["bridge_n_plates_pool99"] = int(sel["n_plates"].iloc[0])
+        allg = b[b["gene_set"] == "all_genes"]
+        extras["bridge_pools_min_sum_ratio_all_genes"] = P.recomputed("bridge_pools_min_sum_ratio_all_genes", float(allg["sum_ratio_batch_over_tissue"].min()),
+                                                                      ["16_identifiability/bridge_variance.csv"], "smallest Σ V_batch / Σ V_tissue (all genes) over the bridging pools")
+        extras["bridge_pools_max_sum_ratio_all_genes"] = P.recomputed("bridge_pools_max_sum_ratio_all_genes", float(allg["sum_ratio_batch_over_tissue"].max()),
+                                                                      ["16_identifiability/bridge_variance.csv"], "largest Σ V_batch / Σ V_tissue (all genes) over the bridging pools")
+        extras["bridge_n_pools"] = int(len(allg))
         sel = b[(b["pool_bid"] == 80001) & (b["gene_set"] == "panel_k20_expressed_in_pool")]
         if len(sel) == 1:
             extras["bridge_sum_ratio_panel_expressed_pool99"] = float(sel["sum_ratio_batch_over_tissue"].iloc[0])
@@ -1235,7 +1252,16 @@ def export_panel_model(w: Writer, prov: Prov):
     val = P.table("panel_model_validation", f"{d}/validation.csv", "panel_model.json", "validation")
     n_shared = P.val("panel_model_genes_shared", f"{d}/genes.csv", "feature_ID", where={"in_all_animal_panel": True}, agg="count",
                      note="genes of the scoring model (35-animal refit) that are also in the all-animal 20-gene panel")
-    w.write("panel_model.json", {**model, "calibration": calibration, "alpha_default": 0.1, "call_model": call, "validation": val,
+    rt = P.read("31_site_regen/12_bodymap/recal_thresholds.csv")
+    d3 = rt[(rt["model"] == "k20") & (rt["n_recal"] == 3)]
+    context = {"bodymap_coverage_k20": P.val("panel_model_bodymap_coverage_k20", "12_bodymap/conformal_transfer.csv", "coverage_mapped",
+                                             where={"stage_weeks": 21, "model": "k20", "conformal": "marginal"},
+                                             note="coverage of the α = 0.10 sets on the 21-week BodyMap mapped organs with the MoTrPAC calibration (the home-page tile)"),
+               "recal_n3_mean_cal_samples": P.recomputed("panel_model_recal_n3_mean_cal_samples", float(d3["n_cal_scores"].mean()),
+                                                         ["31_site_regen/12_bodymap/recal_thresholds.csv"],
+                                                         "mean number of calibration samples over the three-animal BodyMap recalibration draws (model k20): what 'three animals' meant in the study"),
+               "recal_n3_cal_samples_range": [int(d3["n_cal_scores"].min()), int(d3["n_cal_scores"].max())], "recal_n3_draws": int(len(d3))}
+    w.write("panel_model.json", {**model, "calibration": calibration, "alpha_default": 0.1, "call_model": call, "validation": val, "context": context,
                                  "n_genes_shared_with_all_animal_panel": n_shared,
                                  "design": "PanelModels (scripts/12_bodymap_validate.py): z-score representation, multinomial logistic regression C = 0.1, "
                                            "fit on the 35 MoTrPAC animals outside the calibration split; sets calibrated on the other 15 animals; a new "
@@ -1468,7 +1494,9 @@ ANCHORS = [  # (id in provenance, spec value, tolerance)
     ("fbd_ref_coverage_k20", 0.939, 0.0005), ("ptr_k20_n_regulated_marker_5pct", 6, 0),
     ("n_plates", 17, 0), ("n_lib_batches", 17, 0), ("n_flowcells", 4, 0), ("shared_genes_bodymap", 21040, 0), ("motrpac_genes", 21193, 0),
     ("orthologs_1to1", 14609, 0), ("orthologs_in_gtex", 14569, 0), ("tile_estimable", 1, 0), ("tile_estimable_total", 171, 0), ("cov_id_full_marginal_one_per_animal", 0.916, 0.0005), ("cov_id_full_marginal_pooled", 0.908, 0.0005),
-    ("bridge_sum_ratio_all_genes_pool99", 0.017, 0.002),   # the brief's "~1.7 % of the variance that separates tissues"
+    ("bridge_sum_ratio_all_genes_pool99", 0.017, 0.002),
+    ("bridge_pools_max_sum_ratio_all_genes", 0.053, 0.005),  # hippocampus pool 88 on 3 plates: the largest of the six bridging pools
+    ("panel_model_recal_n3_mean_cal_samples", 25.4, 1.0),   # "three animals" in the BodyMap recalibration ≈ 25 calibration samples   # the brief's "~1.7 % of the variance that separates tissues"
 ]
 
 

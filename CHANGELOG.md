@@ -4,6 +4,25 @@ All notable changes to this repository. The format follows [Keep a Changelog](ht
 dates are UTC. Each section is a `hackathon-submission-v<n>` git tag; the version numbers are those of `CITATION.cff`
 and `pyproject.toml`.
 
+## [1.5.0] — 2026-09-27 (tag `hackathon-submission-v6`)
+
+### Changed
+- Home §3 and panel c of `figures/summary_figure.png` show batch per bridging reference pool (six pools: gastrocnemius
+  99 and 88 on six plates at both sites, liver and hippocampus 99 and 88 at one site) as Σ V_batch / Σ V_tissue over
+  all genes, 1.6–5.3 %; the per-gene chart stays on the Identifiability page. `nesting.json` carries `bridge.pools`
+  with a provenance entry per pool; the summary figure's panel titles are one row.
+- The scoring tool's recalibration is demonstrable: "Load the example" fills the box with every 21-week rat BodyMap
+  sample (80 rows) and a `true_tissue` column pre-filled for 12 of them; the recalibrate button names the number of
+  labelled samples a finite threshold needs at the chosen α (⌈1/α⌉ − 1) and stays disabled until then, with a live
+  counter; the banner explains abstentions with the MoTrPAC calibration (0.618 coverage on the BodyMap) and what
+  "three animals" meant in the study (about 25 labelled samples). `panel_model.json` carries these numbers with
+  provenance. `tests/test_score_tool.js` checks the example: 12 labels give a finite threshold, coverage 0.911 on the
+  68 unlabelled mapped-organ samples with singleton sets wherever a single-tissue organ is covered, and thymus and
+  uterus abstain on most samples.
+- Cosmetic: the theme toggle stays on the nav row at 1024 px; the "1 of 171" tile on the Identifiability page is a
+  normal-width tile; the Home ladder title is one line with the rest in the subtitle; `make screenshots` renders
+  1440, 1024 and 390 px.
+
 ## [1.4.0] — 2026-09-26 (tag `hackathon-submission-v5`)
 
 ### Added

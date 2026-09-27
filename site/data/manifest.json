@@ -1,6 +1,6 @@
 {
- "generated": "2026-09-27 04:45 UTC",
- "git_hash": "7d4502a",
+ "generated": "2026-09-27 05:51 UTC",
+ "git_hash": "66d05ef",
  "results_dir": "results",
  "results_snapshot": null,
  "phases": {
@@ -672,6 +672,11 @@
   ],
   "12_bodymap": [
    {
+    "path": "results/31_site_regen/12_bodymap/recal_thresholds.csv",
+    "bytes": 7132,
+    "sha256": "07caad16437d7874ce8446d7504b392c9789233463caf95708da5099bce6f4c6"
+   },
+   {
     "path": "results/31_site_regen/12_bodymap/scores_calibration.csv",
     "bytes": 42326,
     "sha256": "8cf54033b1ed703152378e9a4a31b25396e4367640c1882b86c6074be47076c6"
@@ -802,12 +807,12 @@
   },
   {
    "name": "headline.json",
-   "bytes": 53073,
+   "bytes": 53208,
    "regenerated": true
   },
   {
    "name": "nesting.json",
-   "bytes": 70200,
+   "bytes": 71264,
    "regenerated": true
   },
   {
@@ -822,12 +827,12 @@
   },
   {
    "name": "panel_model.json",
-   "bytes": 28050,
+   "bytes": 28250,
    "regenerated": true
   },
   {
    "name": "provenance.json",
-   "bytes": 140185,
+   "bytes": 143866,
    "regenerated": true
   },
   {

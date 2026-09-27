@@ -14,17 +14,20 @@ export function parseTable(text) {
   const sep = lines[0].includes("\t") ? "\t" : lines[0].includes(";") && !lines[0].includes(",") ? ";" : ",";
   const split = (l) => l.split(sep).map((c) => c.trim().replace(/^"|"$/g, ""));
   const header = split(lines[0]);
+  const labelCol = header.findIndex((h, i) => i > 0 && /^true[_ ]?tissue$/i.test(h));
   const rows = [];
   for (const l of lines.slice(1)) {
     const cells = split(l);
     if (!cells[0]) continue;
     const values = {};
     header.slice(1).forEach((h, i) => {
+      if (i + 1 === labelCol) return;
       const v = cells[i + 1];
       const num = v === undefined || v === "" || /^(na|nan|null)$/i.test(v) ? null : Number(v);
       values[h] = Number.isFinite(num) ? num : null;
     });
-    rows.push({ id: cells[0], values });
+    const label = labelCol > 0 && cells[labelCol] ? cells[labelCol] : null;
+    rows.push({ id: cells[0], values, label });
   }
   return { header, rows, error: rows.length ? null : "no sample rows" };
 }
@@ -124,9 +127,47 @@ export function recalibrate(model, results, labels, alpha) {
   return { q, n: idx.length, coverage: covered / idx.length, scores };
 }
 
+/** Labelled samples needed for a finite LAC threshold at α: the smallest n with ⌈(n + 1)(1 − α)⌉ ≤ n, i.e. ⌈1/α⌉ − 1. */
+export function minLabelled(alpha) {
+  let n = 1;
+  while (Math.ceil((n + 1) * (1 - alpha)) > n) n += 1;
+  return n;
+}
+
+/**
+ * The example upload: `perOrgan` BodyMap samples per organ from the given ages (sexes and animals interleaved; the
+ * default is every 21-week sample, 80 rows, because z-scoring within a small upload compresses the marker z-scores and
+ * raises the recalibrated threshold), with `true_tissue` pre-filled on `nLabelled` of the
+ * 21-week samples whose organ maps to a single MoTrPAC tissue — the first sample of each such organ, then the second,
+ * and so on. Thymus and uterus (no MoTrPAC tissue) and the super-class organs (muscle, brain) are never labelled, so
+ * the recalibrated sets on them are a genuine test. Returns [{ id, organ, sex, age_weeks, label, values }].
+ */
+export function exampleRows(model, expr, organMap, { perOrgan = 8, nLabelled = 12, ages = [21], labelAges = [21] } = {}) {
+  const gi = Object.fromEntries(expr.genes.map((g, i) => [g, i]));
+  const cands = expr.samples.map((s, j) => ({ s, j })).filter(({ s }) => ages.includes(s.age_weeks));
+  const organs = [...new Set(cands.map(({ s }) => s.organ))].sort();
+  const rows = [];
+  for (const organ of organs) {
+    const pool = cands.filter(({ s }) => s.organ === organ).sort((a, b) => a.s.age_weeks - b.s.age_weeks || a.s.id.localeCompare(b.s.id));
+    // interleave: for each age, alternate sexes and walk the animals in order
+    const byKey = {};
+    pool.forEach((c) => { (byKey[`${c.s.age_weeks}|${c.s.sex}`] ||= []).push(c); });
+    const keys = Object.keys(byKey).sort((a, b) => Number(a.split("|")[0]) - Number(b.split("|")[0]) || a.localeCompare(b));
+    const ordered = [];
+    for (let k = 0; ordered.length < pool.length; k += 1) for (const key of keys) if (byKey[key][k]) ordered.push(byKey[key][k]);
+    ordered.slice(0, perOrgan).forEach(({ s, j }, k) => rows.push({ id: s.id, organ, sex: s.sex, age_weeks: s.age_weeks, rank: k,
+      single: Array.isArray(organMap[organ]) && organMap[organ].length === 1 ? organMap[organ][0] : null,
+      values: Object.fromEntries(model.genes.map((g) => [g.id, gi[g.id] !== undefined ? expr.values[gi[g.id]][j] : null])) }));
+  }
+  let left = nLabelled;
+  const maxRank = Math.max(...rows.map((r) => r.rank));
+  for (let rank = 0; rank <= maxRank; rank += 1) for (const r of rows) if (left > 0 && r.rank === rank && r.single && labelAges.includes(r.age_weeks)) { r.label = r.single; left -= 1; }
+  return rows.map(({ id, organ, sex, age_weeks, label, values }) => ({ id, organ, sex, age_weeks, label: label || null, values }));
+}
+
 export function templateCsv(model, examples = []) {
-  const head = ["sample", ...model.genes.map((g) => g.symbol)].join(",");
-  const lines = examples.map((e) => [e.id, ...model.genes.map((g) => (e.values[g.id] === null || e.values[g.id] === undefined ? "" : Number(e.values[g.id]).toFixed(4)))].join(","));
+  const head = ["sample", ...model.genes.map((g) => g.symbol), "true_tissue"].join(",");
+  const lines = examples.map((e) => [e.id, ...model.genes.map((g) => (e.values[g.id] === null || e.values[g.id] === undefined ? "" : Number(e.values[g.id]).toFixed(4))), e.label || ""].join(","));
   return [head, ...lines].join("\n") + "\n";
 }
 

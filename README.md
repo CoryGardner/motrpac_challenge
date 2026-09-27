@@ -10,7 +10,7 @@ of processing effects on the consortium's bridging standards, an exercise-specif
 every number carries provenance and whose Explorer scores new samples with the panel in the browser.
 
 [![tests](https://github.com/CoryGardner/motrpac_challenge/actions/workflows/tests.yml/badge.svg)](https://github.com/CoryGardner/motrpac_challenge/actions/workflows/tests.yml)
-**Live site:** https://corygardner.github.io/motrpac_challenge/ · **Release:** tag `hackathon-submission-v5` (version 1.4.0) · **Licence:** MIT
+**Live site:** https://corygardner.github.io/motrpac_challenge/ · **Release:** tag `hackathon-submission-v6` (version 1.5.0) · **Licence:** MIT
 
 ![The home page: the question, the tiles, the one-picture diagram and the transfer ladder](figures/home.png)
 
@@ -199,13 +199,13 @@ were verified by the team.
 |---|---|---|
 | unit, leakage and I/O tests; snapshot; site provenance | `make test` | every test passed; `verify-frozen` prints `ok` |
 | JS conformal port against Python | `node tests/test_site_conformal.js` | `ok: 2713 assertions, 2700 fixture cases (540 with infinite threshold)` |
-| the browser scoring tool against the pipeline's BodyMap scores | `node tests/test_score_tool.js` | `ok: 976 assertions over 316 BodyMap samples; max \|Δp\| = 2.59e-4` |
+| the browser scoring tool against the pipeline's BodyMap scores, and its example recalibration | `node tests/test_score_tool.js` | `ok: 976 assertions over 316 BodyMap samples; max \|Δp\| = 2.59e-4` … `ok: 1075 assertions in all` |
 | every site number against the result files | `PYTHONPATH=src pytest -q tests/test_site_data.py` | passed (runs from `results/` or `results_frozen/`) |
 | regeneration reproduces the published tables cell for cell | `PYTHONPATH=src pytest -q tests/test_regen_scores.py` | passed |
 | sanity anchors of the headline numbers | `make site-data` | `all anchors ok` |
 | expected outputs | export from `results_frozen/` and `python tools/compare_site_data.py site/data <dir>` | `identical apart from _meta` |
 | no-data smoke run | `make smoke` | four phases write `results_smoke/`; banners say the data are synthetic |
-| render pass | `make screenshots` (Chrome + playwright) | `all page renders clean` in both themes and widths |
+| render pass | `make screenshots` (Chrome + playwright) | `all page renders clean` in both themes at 1440, 1024 and 390 px |
 
 Known failure modes and limits (details on the site's Limitations page):
 
@@ -221,7 +221,7 @@ Known failure modes and limits (details on the site's Limitations page):
 ## Reuse
 
 - **Licence:** MIT for code, site and derived tables (`LICENSE`); the data keep their own terms (table above).
-- **Cite:** `CITATION.cff` (version 1.4.0, tag `hackathon-submission-v5`) and the three data papers.
+- **Cite:** `CITATION.cff` (version 1.5.0, tag `hackathon-submission-v6`) and the three data papers.
 - **Score your samples:** the Explorer's *Score your own samples* tool takes a CSV of log2 CPM for the 20 panel genes
   (a template is provided) and returns tissue calls and 90 % prediction sets in the browser, with optional recalibration
   on labelled samples; the panel card (`site/data/panel_card.csv`, `.json`) lists the genes with their mean expression per
