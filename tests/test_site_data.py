@@ -18,7 +18,7 @@ RES = C.results_root()          # results/ when a complete run is present, else 
 def _res(file: str) -> Path:
     """A canonical provenance path (results/...) resolved against the results root in use; paths under
     results_multiomic/ or results_frozen/ (the multiomic follow-up page) are repository-relative."""
-    if file.startswith("results_multiomic/") or file.startswith("results_frozen/"):
+    if file.startswith(("results_multiomic/", "results_frozen/", "results_product/")):
         return ROOT / file
     return RES / Path(file).relative_to("results")
 
@@ -278,6 +278,8 @@ def test_no_orphan_site_data_files():
     refs = set()
     for js in (ROOT / "site" / "assets").rglob("*.js"):
         refs |= set(re.findall(r'"data/([\w.-]+\.json)"', js.read_text()))
+    for page in (ROOT / "site").glob("*.html"):   # files a page offers for download count as read
+        refs |= set(re.findall(r'href="data/([\w.-]+\.json)"', page.read_text()))
     orphans = sorted(p.name for p in SITE.glob("*.json") if p.name not in keep and p.name not in refs)
     assert not orphans, orphans
 
@@ -482,7 +484,7 @@ def test_multiomic_page_v9_sections_and_citations():
     assert "fails_in_target" not in js and "weakened" not in js
     assert 'el("details", { class: "fig-notes" }, [el("summary", {}, "Per-tissue' not in js, "per-tissue table must be visible"
     assert "multiomic-overnight)" not in js.split("p-prov")[1], "source note still points to the branch"
-    home = (ROOT / "site" / "index.html").read_text()
+    home = (ROOT / "site" / "science.html").read_text()          # the former Home, now "The science"
     assert 'href="multiomic.html"' in home.split('id="sec-tour"')[1]
     methods = (ROOT / "site" / "methods.html").read_text()
     assert 'id="multiomic"' in methods and '"data/multiomic.json"' in (ROOT / "site" / "assets" / "pages" / "methods.js").read_text()

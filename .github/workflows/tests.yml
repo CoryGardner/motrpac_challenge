@@ -19,6 +19,8 @@ jobs:
       - run: PYTHONPATH=src python scripts/33_freeze_results.py --verify
       # the site data re-exported from the snapshot (anchors checked, reconciliation rebuilt) equals the committed site/data
       - run: PYTHONPATH=src python scripts/30_export_site_data.py --results results_frozen --out /tmp/site_data --check-anchors --reconciliation --prefix-table docs/reconciliation/pre_quantile_fix_values.csv
+      # the follow-on exports (multiomic page, Check samples page) append their provenance entries to the fresh copy
+      - run: PYTHONPATH=src python scripts/multiomic/export_site_data.py --site /tmp/site_data && PYTHONPATH=src python scripts/41_export_product_data.py --site /tmp/site_data
       - run: python tools/compare_site_data.py site/data /tmp/site_data
       # static link, asset and size check of site/
       - run: python tools/linkcheck.py
@@ -30,4 +32,4 @@ jobs:
         with:
           node-version: "20"
       # the browser's conformal port against the Python-computed fixtures committed in site/data
-      - run: node tests/test_site_conformal.js && node tests/test_score_tool.js
+      - run: node tests/test_site_conformal.js && node tests/test_score_tool.js && node tests/test_check_core.js

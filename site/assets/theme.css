@@ -93,6 +93,13 @@ nav.primary { display: flex; flex-wrap: wrap; gap: 0.15rem 0.6rem; margin-left: 
 nav.primary a { color: var(--ink-2); text-decoration: none; padding: 0.35rem 0.1rem; border-bottom: 2px solid transparent; font-size: 0.9rem; }
 nav.primary a[aria-current="page"] { color: var(--ink); border-bottom-color: var(--ink); }
 nav.primary a:hover { color: var(--ink); }
+nav.primary a[aria-current="true"] { color: var(--ink); border-bottom-color: var(--axis); }
+nav.primary a { font-size: 0.95rem; }
+.site-header .wrap.subnav { min-height: 0; padding-top: 0; padding-bottom: 0.2rem; }
+nav.secondary { display: flex; flex-wrap: wrap; gap: 0.1rem 0.9rem; }
+nav.secondary a { color: var(--ink-2); text-decoration: none; padding: 0.2rem 0.05rem; border-bottom: 2px solid transparent; font-size: 0.82rem; }
+nav.secondary a[aria-current="page"] { color: var(--ink); border-bottom-color: var(--ink); }
+nav.secondary a:hover { color: var(--ink); }
 .theme-toggle { border: 1px solid var(--axis); background: var(--surface); color: var(--ink-2); border-radius: 999px; padding: 0.3rem 0.7rem; cursor: pointer; font: inherit; font-size: 0.85rem; }
 .theme-toggle:hover { color: var(--ink); }
 .site-footer { border-top: 1px solid var(--grid); margin-top: 3rem; padding: 1.5rem 0 2.5rem; color: var(--ink-2); font-size: 0.875rem; }
@@ -240,8 +247,7 @@ img.shot { max-width: 100%; height: auto; border: 1px solid var(--grid); border-
 .overview-grid li { margin: .45rem 0; }
 
 @media (max-width: 1100px) {
-  nav.primary { gap: 0.15rem 0.25rem; }
-  nav.primary a { font-size: 0.85rem; }
+  nav.primary { gap: 0.15rem 0.7rem; }
   .theme-toggle { padding: 0.25rem 0.55rem; font-size: 0.8rem; }
   .site-header .wrap { gap: 0.6rem; }
 }
@@ -273,3 +279,31 @@ img.shot { max-width: 100%; height: auto; border: 1px solid var(--grid); border-
 .score-cards .sample-card { padding: 0.7rem 0.8rem; font-size: 0.9rem; }
 .score-cards .sample-card .who { margin-bottom: 0.3rem; }
 #score-results .data td select { font: inherit; font-size: 0.8rem; }
+
+/* ---- check samples (the product page) ---------------------------------------------------------- */
+.hero { padding: 1.25rem 0 0.5rem; }
+.hero h1 { max-width: 22ch; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 0.9rem 0; }
+.hero-actions .btn { font-size: 0.95rem; padding: 0.5rem 1rem; }
+.trust { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 0.75rem; margin: 1.25rem 0 0.5rem; }
+.trust-item { display: flex; flex-direction: column; gap: 0.2rem; padding: 0.75rem 0.9rem; border: 1px solid var(--grid); border-radius: var(--radius); background: var(--surface); color: var(--ink-2); text-decoration: none; font-size: 0.85rem; }
+.trust-item:hover { border-color: var(--ink-2); }
+.trust-value { font-size: 1.6rem; font-weight: 650; color: var(--ink); line-height: 1.1; }
+.control.block { margin-top: 0.6rem; }
+.control.inline { flex-direction: row; align-items: center; gap: 0.4rem; }
+#in-text { width: 100%; font-family: var(--mono, ui-monospace, monospace); font-size: 0.8rem; border: 1px solid var(--axis); border-radius: var(--radius); background: var(--surface); color: var(--ink); padding: 0.5rem; }
+#table-controls { align-items: center; }
+.tiles.compact .tile { min-height: 0; }
+.tiles.compact .tile .value { font-size: clamp(1.4rem, 3vw, 1.9rem); }
+table.results th button.sort { font: inherit; font-weight: 600; background: none; border: 0; color: inherit; cursor: pointer; padding: 0; }
+table.results tr.clickable { cursor: pointer; }
+table.results tr.clickable:hover td, table.results tr.clickable:focus td { background: color-mix(in srgb, var(--c1) 8%, var(--surface)); }
+table.results tr.clickable:focus { outline: 2px solid var(--c1); outline-offset: -2px; }
+table.results tr.selected td { background: color-mix(in srgb, var(--c1) 14%, var(--surface)); }
+table.results tr.flagged td:first-child { box-shadow: inset 3px 0 0 var(--serious); }
+table.results .badge { padding: 0.1rem 0.5rem; font-size: 0.8rem; font-weight: 500; }
+.drawer-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 1rem; }
+.drawer-head h2 { min-width: 0; overflow-wrap: anywhere; }
+.drawer-badges { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.4rem 0; }
+#drawer { border-top: 2px solid var(--c1); }
+#drawer:focus { outline: none; }

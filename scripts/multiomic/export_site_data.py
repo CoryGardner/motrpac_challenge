@@ -85,6 +85,11 @@ def records(df: pd.DataFrame, cols: list[str] | None = None) -> list[dict]:
 
 
 def main():
+    import argparse
+    global SITE
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--site", default=str(SITE), help="site data directory (CI exports to a scratch copy)")
+    SITE = Path(ap.parse_args().site)
     prov = Prov()
     out: dict = {}
     # ---- scales (Phase 1) ---------------------------------------------------------------------------------------------

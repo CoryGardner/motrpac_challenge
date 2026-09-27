@@ -5,7 +5,7 @@ import { mountLadder, pick } from "../ladder.js";
 
 // Every number on this page is read from site/data/*.json; nothing below is typed by hand.
 async function main() {
-  await mountChrome("index.html");
+  await mountChrome("science.html");
   const [H, PC, N, G] = await Promise.all([loadJSON("data/headline.json"), loadJSON("data/panel_curve.json"), loadJSON("data/nesting.json"), loadJSON("data/genes.json")]);
   const ex = H.extras, d = H.design, acc = H.accuracy;
   const tile = Object.fromEntries(H.tiles.map((t) => [t.id, t]));

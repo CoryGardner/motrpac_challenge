@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The science — can a molecular signature identify a tissue reliably?</title>
+<meta name="description" content="A 20-gene panel identifies 19 rat tissues and names the mapped organs of another laboratory's rats; its 90 % guarantee holds within the study, abstains rather than guesses under shift, and is restored by recalibrating on three animals. MoTrPAC × rat BodyMap × GTEx.">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/brand/badge-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/brand/badge-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/brand/badge-180.png">
+<meta name="theme-color" content="#f9f9f7">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Tissue Fingerprints — The Rat PAC">
+<meta property="og:title" content="Tissue Fingerprints — can a molecular signature identify a tissue reliably?">
+<meta property="og:description" content="A 20-gene panel identifies 19 rat tissues and names the mapped organs of another laboratory's rats; its 90 % guarantee holds within the study, abstains rather than guesses under shift, and is restored by recalibrating on three animals. MoTrPAC × rat BodyMap × GTEx.">
+<meta property="og:url" content="https://corygardner.github.io/motrpac_challenge/science.html">
+<meta property="og:image" content="https://corygardner.github.io/motrpac_challenge/assets/brand/badge-og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Rat PAC badge beside the question: can a molecular signature identify a tissue reliably?">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="assets/theme.css">
+<script>
+  // theme before first paint (no flash): ?theme=, then the stored choice, else the system setting
+  (function () { try { var p = new URLSearchParams(location.search).get("theme") || localStorage.getItem("tfp-theme"); if (p === "dark" || p === "light") document.documentElement.setAttribute("data-theme", p); } catch (e) {} })();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/plotly.js-cartesian-dist-min@2.35.2/plotly-cartesian.min.js" integrity="sha384-gKF7EaMDoWW1zLWkouldmVWF5jqEKrAswAciW73iNzqlomabVVPO60XkJvL5q/Ie" crossorigin="anonymous"
+        onerror="this.onerror=null;var s=document.createElement('script');s.src='vendor/plotly-cartesian-2.35.2.min.js';document.head.appendChild(s);"></script>
+<script type="module" src="assets/pages/home.js"></script>
+</head>
+<body>
+<header class="site-header"></header>
+<main id="main" class="wrap">
+  <h1>Can a molecular signature identify a tissue reliably?</h1>
+  <p class="lede" id="lede">Loading the numbers from <code>site/data</code>…</p>
+
+  <div class="tiles" id="tiles"></div>
+
+  <section class="section" id="deliverables" aria-labelledby="deliverables-h">
+    <h2 id="deliverables-h">What this submission delivers</h2>
+    <div class="tiles">
+      <div class="tile"><h3>A classifier</h3>
+        <p class="small">The 20-gene logistic regression with calibrated 90 % prediction sets.</p>
+        <p class="small"><a href="index.html">Check samples</a> · <a href="explore.html#tissue-card">Explorer tissue card</a> · <a href="data/panel_model.json">panel_model.json</a> (the model the browser runs) · <a href="https://github.com/CoryGardner/motrpac_challenge/blob/main/src/tfp/models.py">src/tfp/models.py</a></p></div>
+      <div class="tile"><h3>Minimal tissue-signature panel</h3>
+        <p class="small">The 20 genes and the 10-gene stable core.</p>
+        <p class="small"><a href="fingerprint.html">Panel page</a> · <a href="data/panel_card.csv">panel card CSV</a> · <a href="data/panel_card.json">JSON</a></p></div>
+      <div class="tile"><h3>Feature-selection workflow</h3>
+        <p class="small">The class-aware round-robin selector, fitted inside animal-grouped folds.</p>
+        <p class="small"><a href="methods.html#selector">Methods: the selector</a> · <a href="explore.html#panel-builder">Explorer panel builder</a> · <a href="https://github.com/CoryGardner/motrpac_challenge/blob/main/src/tfp/models.py#L58">RoundRobinSelector</a></p></div>
+      <div class="tile"><h3>Interactive model-explanation tool</h3>
+        <p class="small">Check samples: why a sample is called, gene by gene, with claim checks; the Explorer for the reference data.</p>
+        <p class="small"><a href="explore.html#tissue-card">Tissue card</a> · <a href="explore.html#gene-explorer">Gene explorer</a> · <a href="explore.html#panel-builder">Panel builder</a> · <a href="index.html">Check samples</a></p></div>
+    </div>
+  </section>
+
+  <section class="overview" id="overview">
+    <div class="figure" id="fig-overview">
+      <div class="fig-head"><h3>The study in one picture</h3></div>
+      <div id="overview-svg"></div>
+      <p class="small" id="overview-caption"></p>
+    </div>
+  </section>
+
+  <div id="fig-ladder"></div>
+
+  <ul class="key-points" id="key-points"></ul>
+
+  <section class="section" id="sec-accuracy">
+    <h2>1. Twenty genes are enough</h2>
+    <p id="p-accuracy"></p>
+    <div id="fig-curve"></div>
+    <p><a href="fingerprint.html">The panel →</a></p>
+  </section>
+
+  <section class="section" id="sec-guarantee">
+    <h2>2. The guarantee travels honestly</h2>
+    <p id="p-guarantee"></p>
+    <div id="fig-empty"></div>
+    <p><a href="transfer.html">Does it transfer? →</a></p>
+  </section>
+
+  <section class="section" id="sec-identifiability">
+    <h2>3. It is biology, not processing</h2>
+    <p id="p-identifiability"></p>
+    <div id="fig-bridge"></div>
+    <p><a href="identifiability.html">What is the fingerprint identifying? →</a></p>
+  </section>
+
+  <section class="section" id="sec-tour">
+    <h2>The five-minute tour</h2>
+    <ol class="tour">
+      <li><a href="explore.html#tissue-card">Open the Explorer</a> on a <b>BodyMap thymus</b>, an organ the fingerprint never saw: it abstains.</li>
+      <li>Pick the <b>GTEx heart</b> it opens on, compare its two calls, then switch models.</li>
+      <li><a href="explore.html#gene-explorer">Open the gene explorer</a> on <b>Pgk2</b>: the testis marker not yet expressed at two weeks.</li>
+      <li><a href="transfer.html#recalibration">Transfer page</a>, recalibration scatter: three BodyMap animals restore the guarantee at one tissue per set.</li>
+      <li><a href="identifiability.html">Identifiability page</a>, nesting heatmap: each tissue processed as a unit; an independent laboratory settles it.</li>
+      <li><a href="index.html">Check samples</a>: try the example; the two samples whose labels were swapped are flagged, and thymus and uterus are flagged as not in the reference.</li>
+      <li><a href="multiomic.html">Multiomic page</a>: the same proteins on two scales — why the fingerprint is RNA, and where proteins and metabolites stand.</li>
+    </ol>
+  </section>
+</main>
+<footer class="site-footer"></footer>
+</body>
+</html>
