@@ -147,6 +147,15 @@ def main():
                   "reference": {"id": [str(v) for v in rc["viallabel"]], "tissue": list(rc["tissue"]), "x": [round(float(v), 6) for v in rc["PC1"]], "y": [round(float(v), 6) for v in rc["PC2"]]}}
     P.tables.append({"id": "pv_pca_loadings", "file": rel(PV / "pca_loadings.csv"), "json_file": "product.json", "json_path": "pca.loadings", "n_rows": int(len(ld)), "matrix": True})
     P.tables.append({"id": "pv_pca_reference", "file": rel(PV / "pca_reference_coords.csv"), "json_file": "product.json", "json_path": "pca.reference", "n_rows": int(len(rc)), "matrix": True})
+    # ---- example input table B: real counts (three panel genes × two samples) from the committed BodyMap fixture -----------------------
+    fxp = ROOT / "tests" / "fixtures" / "bodymap_counts_subset.csv.gz"
+    fx = P.read(fxp)
+    model = json.loads((Path(args.site) / "panel_model.json").read_text()) if (Path(args.site) / "panel_model.json").exists() else json.loads((ROOT / "site" / "data" / "panel_model.json").read_text())
+    genes = [g for g in model["genes"] if g["id"] in set(fx["feature_ID"])][:3]
+    samples = [c for c in fx.columns if c != "feature_ID"][:2]
+    out["example_counts"] = {"genes": [g["id"] for g in genes], "symbols": [g["symbol"] for g in genes], "samples": samples,
+                             "counts": [[P.val(f"pv_excounts_{g['id']}_{j}", fxp, smp, {"feature_ID": g["id"]}) for j, smp in enumerate(samples)] for g in genes],
+                             "source": "tests/fixtures/bodymap_counts_subset.csv.gz: raw counts of rat BodyMap samples (Yu et al., Nat Commun 5:3230, 2014; GEO GSE53960; via Bioconductor bodymapRat 1.28.0; CC BY 4.0)"}
     # ---- trust strip: unseen organs in another lab (k20, marginal) ----------------------------------------------------------------------
     ood = FZ / "12_bodymap" / "ood_sets.csv"
     tr = {}

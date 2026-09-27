@@ -449,3 +449,19 @@ export function exampleTable(model, rows, swapOrgans = ["Liver", "Kidney"]) {
   const lines = rows.map((r) => [r.id, ...model.genes.map((g) => (r.values[g.id] === null || r.values[g.id] === undefined ? "" : Number(r.values[g.id]).toFixed(4))), claims[r.id]].join(","));
   return { csv: [head, ...lines].join("\n") + "\n", swapped: a && b ? [a.id, b.id] : [], organs: swapOrgans };
 }
+
+/** The two "example input" tables of the landing page, built from real data (no typed values).
+ *  A: two samples of the example (the first of each of `organs`), the first `nGenes` panel genes in log2 CPM rounded
+ *     to 2 decimals, "…", and the claimed tissue (the organ). rows: from score.js exampleRows (the "Try the example" rows).
+ *  B: the exported real counts (product.json example_counts): genes × samples, Ensembl IDs, then a "…" row. */
+export function exampleInputTables(model, rows, exampleCounts, { organs = ["Adrenal", "Liver"], nGenes = 3 } = {}) {
+  const genes = model.genes.slice(0, nGenes);
+  const picked = organs.map((o) => rows.find((r) => r.organ === o)).filter(Boolean);
+  const a = { columns: ["sample", ...genes.map((g) => g.symbol), "…", "claimed_tissue"],
+              rows: picked.map((r) => Object.fromEntries([["sample", r.id], ...genes.map((g) => [g.symbol, r.values[g.id] === null ? "" : Number(r.values[g.id]).toFixed(2)]), ["…", "…"], ["claimed_tissue", r.organ.toLowerCase()]])) };
+  const ec = exampleCounts;
+  const b = { columns: ["gene_id", ...ec.samples, "…"],
+              rows: [...ec.genes.map((g, i) => Object.fromEntries([["gene_id", g], ...ec.samples.map((smp, j) => [smp, String(ec.counts[i][j])]), ["…", "…"]])),
+                     Object.fromEntries([["gene_id", "…"], ...ec.samples.map((smp) => [smp, "…"]), ["…", ""]])] };
+  return { a, b };
+}

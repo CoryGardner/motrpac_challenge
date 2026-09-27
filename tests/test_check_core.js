@@ -216,4 +216,23 @@ check(K.parseUpload("a,b\n1,2", model).error && K.parseUpload("a,b\n1,2", model)
   check(!au.forced && au.caveat === null && au.mode === "within" && au.reason.includes("within your"), "automatic within: no caveat");
 }
 
+// ---- the landing page's example input tables equal their source data ---------------------------------------------------
+{
+  const T = K.exampleInputTables(model, rows, product.example_counts);
+  check(T.a.columns.length === 6 && T.a.rows.length === 2 && T.a.rows[0].claimed_tissue === "adrenal" && T.a.rows[1].claimed_tissue === "liver", "table A: an adrenal and a liver sample");
+  for (const r of T.a.rows) {
+    const src = rows.find((x) => x.id === r.sample);
+    model.genes.slice(0, 3).forEach((g) => check(r[g.symbol] === Number(src.values[g.id]).toFixed(2), `table A value ${r.sample} ${g.symbol}`));
+    const j = exprB.samples.findIndex((sm) => sm.id === r.sample), gi2 = exprB.genes.indexOf(model.genes[0].id);
+    check(Math.abs(Number(r[model.genes[0].symbol]) - exprB.values[gi2][j]) <= 0.005 + 1e-9, `table A equals expr_bodymap.json (${r.sample})`);
+  }
+  const fxL = gunzipSync(readFileSync(join(here, "fixtures", "bodymap_counts_subset.csv.gz"))).toString("utf8").trim().split("\n").map((l) => l.split(","));
+  const col = Object.fromEntries(fxL[0].map((h, i) => [h, i]));
+  for (const r of T.b.rows.slice(0, -1)) {
+    const line = fxL.find((l) => l[0] === r.gene_id);
+    check(/^ENSRNOG\d{11}$/.test(r.gene_id), `table B uses 11-digit rat Ensembl IDs (${r.gene_id})`);
+    for (const smp of product.example_counts.samples) check(r[smp] === line[col[smp]], `table B count ${r.gene_id} ${smp} equals the fixture`);
+  }
+}
+
 console.log(`ok: ${n} assertions (count → CPM max |Δ| ${maxD.toExponential(1)}, projection max |Δ| ${maxP.toExponential(1)}, ${res.results.length} example samples)`);

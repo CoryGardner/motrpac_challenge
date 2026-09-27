@@ -111,7 +111,7 @@ def main():
         axes[1].plot([p[0] for p in pts], [p[2] for p in pts], marker="o", color=col, label=name, lw=2)
     axes[0].axhline(0.9, color=INK2, lw=1, ls="--"); axes[0].set_ylim(0, 1.05); axes[0].set_ylabel("coverage"); axes[0].set_xlabel("target individuals used to recalibrate"); axes[0].set_xticks([0, 3, 5])
     axes[1].set_ylabel("mean set size (classes per set)"); axes[1].set_xlabel("target individuals used to recalibrate"); axes[1].set_xticks([0, 3, 5]); axes[1].set_ylim(bottom=0)
-    axes[0].set_title("Coverage is restored…", loc="left", color=INK, fontsize=11); axes[1].set_title("…at these set sizes", loc="left", color=INK, fontsize=11)
+    axes[0].set_title("Observed coverage after recalibration…", loc="left", color=INK, fontsize=11); axes[1].set_title("…at these set sizes", loc="left", color=INK, fontsize=11)
     axes[1].legend(frameon=False, fontsize=7, loc="upper right")
     save(fig, "fig3_recalibration_coverage_and_set_size.png")
     # 4 fusion
@@ -145,8 +145,11 @@ def main():
     ax.set_xlabel("Spearman correlation of RNA and protein across the 7 tissues"); ax.set_ylabel("genes"); ax.set_xlim(-1, 1)
     ax.set_title(f"RNA vs protein across tissues, {RP['n_genes']} genes; {RP['n_same_marker']} of {RP['n_testable']} RNA panel markers keep their tissue as proteins", loc="left", color=INK, fontsize=10)
     save(fig, "fig6_rna_markers_at_protein_level.png")
+    # keep any description already written after a figure's name in the README
+    old = (OUT / "README.md").read_text() if (OUT / "README.md").exists() else ""
+    desc = {m.group(1): m.group(2) for m in __import__("re").finditer(r"^- `([^`]+)`(.*)$", old, __import__("re").M)}
     (OUT / "README.md").write_text("# Figures for slides\n\nRendered by `scripts/multiomic/figures_png.py` from `site/data/multiomic.json` (the same numbers as `site/multiomic.html`; provenance in `site/data/provenance.json`, ids `mo_*`).\n\n"
-                                   + "\n".join(f"- `{p.name}`" for p in sorted(OUT.glob("*.png"))) + "\n")
+                                   + "\n".join(f"- `{p.name}`{desc.get(p.name, '')}" for p in sorted(OUT.glob("*.png"))) + "\n")
 
 
 if __name__ == "__main__":

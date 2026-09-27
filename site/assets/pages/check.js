@@ -6,7 +6,7 @@ import { mountChrome, loadJSON, el, fmt, pct, callout, tableFrom, control, slide
 import { figure, tokens, palette, organSystem, template, CONFIG } from "../charts.js";
 import { exampleRows, recalibrate, minLabelled, templateCsv } from "../score.js";
 import { compositionNote, modelNote } from "../notes.js";
-import { parseUpload, runCheck, resultsToCsv, exampleTable, acceptedList, CLASS_NAMES, contrast, explainSentence, project, referenceStats, orderByPriority, labelledForRecal, setLabel, sdLabel,
+import { parseUpload, runCheck, resultsToCsv, exampleTable, acceptedList, CLASS_NAMES, contrast, explainSentence, project, referenceStats, orderByPriority, labelledForRecal, setLabel, sdLabel, exampleInputTables,
          WITHIN_MIN_SAMPLES, WITHIN_MIN_TISSUES } from "../check-core.js";
 
 const nm = (c) => CLASS_NAMES[c] || c;
@@ -16,45 +16,100 @@ let D = {};
 
 async function main() {
   await mountChrome("index.html");
-  const [model, H, PR] = await Promise.all([loadJSON("data/panel_model.json"), loadJSON("data/headline.json"), loadJSON("data/product.json")]);
+  const [model, H, PR, PC] = await Promise.all([loadJSON("data/panel_model.json"), loadJSON("data/headline.json"), loadJSON("data/product.json"), loadJSON("data/panel_curve.json")]);
   state.model = model; state.alpha = model.alpha_default ?? 0.1;
-  D = { H, PR };
+  D = { H, PR, PC };
+  document.getElementById("how-min-labelled").textContent = String(minLabelled(model.alpha_default ?? 0.1));
   trustStrip();
   document.getElementById("model-note").textContent = modelNote(model, H.extras.n_animals);
   acceptedNames();
   expectNote();
   flagNote();
   document.getElementById("btn-example").addEventListener("click", runExample);
-  document.getElementById("btn-upload").addEventListener("click", () => { document.getElementById("input").scrollIntoView({ behavior: "smooth" }); document.getElementById("in-text").focus(); });
+  document.getElementById("btn-upload").addEventListener("click", () => { document.getElementById("input").scrollIntoView({ behavior: "smooth" }); document.getElementById("dropzone").focus({ preventScroll: true }); });
+  document.getElementById("btn-load-example").addEventListener("click", runExample);
+  dropZone();
+  exampleTables();
+  acceptedLink();
   document.getElementById("btn-check").addEventListener("click", () => {
     const text = document.getElementById("in-text").value;
     if (!text.trim()) { setProgress("Paste a table first, or choose a file."); return; }
     state.swapped = []; document.getElementById("example-note").replaceChildren();
     parseInWorker({ text }, "pasted table");
   });
-  document.getElementById("in-file").addEventListener("change", (e) => {
-    const f = e.target.files && e.target.files[0];
-    if (!f) return;
-    state.swapped = []; document.getElementById("example-note").replaceChildren();
-    parseInWorker({ file: f }, f.name);
-  });
+  document.getElementById("in-file").addEventListener("change", (e) => { const f = e.target.files && e.target.files[0]; if (f) readFile(f); });
   document.getElementById("btn-template").addEventListener("click", () => download("tissue_check_template.csv", templateCsv(model).replace(",true_tissue", ",claimed_tissue"), "text/csv"));
   document.getElementById("drawer-close").addEventListener("click", closeDrawer);
   document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !document.getElementById("drawer").hidden) closeDrawer(); });
   if (new URLSearchParams(location.search).get("example") === "1") runExample();
 }
 
+// ---- input: one file at a time, from the file picker or the drop zone (same parse path) ----------------------------------
+function readFile(f, extra = 0) {
+  state.swapped = []; document.getElementById("example-note").replaceChildren();
+  parseInWorker({ file: f }, f.name);
+  if (extra) setTimeout(() => setProgress(`${document.getElementById("progress").textContent} (${extra} more file${extra === 1 ? " was" : "s were"} dropped and ignored: one file at a time.)`), 0);
+}
+
+function dropZone() {
+  const dz = document.getElementById("dropzone"), input = document.getElementById("in-file"), choose = document.getElementById("choose-file");
+  dz.setAttribute("tabindex", "0"); dz.setAttribute("role", "button");
+  dz.setAttribute("aria-label", "Drop a CSV or TSV file here, or press Enter to choose a file");
+  const open = (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); input.click(); } };
+  dz.addEventListener("keydown", (e) => { if (e.target === dz) open(e); });
+  choose.setAttribute("tabindex", "0"); choose.setAttribute("role", "button");
+  choose.addEventListener("keydown", open);
+  const on = (e) => { e.preventDefault(); dz.classList.add("dragover"); };
+  const off = () => dz.classList.remove("dragover");
+  dz.addEventListener("dragenter", on); dz.addEventListener("dragover", on);
+  dz.addEventListener("dragleave", (e) => { if (!dz.contains(e.relatedTarget)) off(); });
+  dz.addEventListener("drop", (e) => {
+    e.preventDefault(); off();
+    const files = [...((e.dataTransfer && e.dataTransfer.files) || [])];
+    if (files.length) readFile(files[0], files.length - 1);
+  });
+}
+
+// ---- "Show example input tables": built from the example rows and the exported real counts --------------------------------
+function exampleTables() {
+  const det = document.getElementById("example-tables");
+  let built = false;
+  det.addEventListener("toggle", async () => {
+    if (!det.open || built) return;
+    built = true;
+    const [expr, bm] = await Promise.all([loadJSON("data/expr_bodymap.json"), loadJSON("data/bodymap.json")]);
+    const rows = exampleRows(state.model, expr, bm.organ_map, { perOrgan: 8, nLabelled: 0 });
+    const T = exampleInputTables(state.model, rows, D.PR.example_counts);
+    document.getElementById("ex-table-a").replaceChildren(tableFrom(T.a));
+    document.getElementById("ex-table-a-src").textContent = `Two samples of the example (rat BodyMap adults), the first ${T.a.columns.length - 3} panel genes, values rounded to 2 decimals; a real table has all ${state.model.genes.length}.`;
+    document.getElementById("ex-table-b").replaceChildren(tableFrom(T.b));
+    document.getElementById("ex-table-b-src").textContent = `Real counts: ${D.PR.example_counts.source}. A real matrix has one row (or column) per gene, every gene.`;
+  });
+}
+
+// ---- the "list of accepted names" link opens and shows the list ---------------------------------------------------------
+function acceptedLink() {
+  const show = () => { const d = document.getElementById("accepted"); d.open = true; d.scrollIntoView({ behavior: "smooth", block: "start" }); };
+  document.getElementById("accepted-link").addEventListener("click", (e) => { e.preventDefault(); show(); history.replaceState(null, "", "#accepted"); });
+  if (location.hash === "#accepted") setTimeout(show, 0);
+  window.addEventListener("hashchange", () => { if (location.hash === "#accepted") show(); });
+}
+
 // ---- trust strip --------------------------------------------------------------------------------------------------
+// percent with one decimal where needed: 97.6 %, 100 %
+const pct1 = (v) => `${(100 * v).toFixed(1).replace(/\.0$/, "")} %`;
+
 function trustStrip() {
   const t = Object.fromEntries(D.H.tiles.map((x) => [x.id, x]));
   const ood = D.PR.ood;
   const nOod = ood.Thymus.n + ood.Uterus.n;
   const nEmpty = Math.round(ood.Thymus.frac_empty * ood.Thymus.n) + Math.round(ood.Uterus.frac_empty * ood.Uterus.n);
-  const item = (value, label, href) => el("a", { class: "trust-item", href }, [el("span", { class: "trust-value" }, value), el("span", { class: "trust-label" }, label)]);
+  const bl = D.PC.baselines.map((b) => b.balanced_accuracy_mean);
   document.getElementById("trust").replaceChildren(
-    item(fmt(t.tile_acc_k20.value, 3), `balanced accuracy of ${state.model.genes.length}-gene panels selected inside animal-grouped folds, ${state.model.classes.length} rat tissues, held-out animals`, "science.html#sec-accuracy"),
-    item(fmt(t.tile_bodymap_k20.value, 3), "of adult organs named correctly in another laboratory's rats", "transfer.html"),
-    item(`${nEmpty} of ${nOod}`, "samples from organs it never saw (thymus, uterus) get an empty prediction set in a mixed upload: it fails safe (not under the reference scaling used for small uploads; see What to expect)", "#expect"),
+    el("b", {}, `${pct1(t.tile_acc_k20.value)} balanced accuracy`), ` across ${D.H.extras.n_tissues} rat tissues on held-out MoTrPAC animals, with the panel selected inside each fold (simple all-gene baselines on the same folds: ${pct1(Math.min(...bl))}–${pct1(Math.max(...bl))}); `,
+    "the panel names ", el("b", {}, pct1(t.tile_bodymap_k20.value)), " of mapped adult organs in another laboratory's rats (rat BodyMap); and on organs it never saw it abstains (",
+    el("b", {}, `${nEmpty} of ${nOod}`), " samples in a mixed upload). ",
+    el("a", { href: "science.html#sec-accuracy" }, "How it was measured"), " · ", el("a", { href: "transfer.html" }, "Transfer to another lab and species"), ".",
   );
 }
 

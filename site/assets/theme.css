@@ -332,3 +332,28 @@ table.results th button.sort { white-space: nowrap; }
 @media (max-width: 700px) {
   .site-header { position: static; }
 }
+
+/* ---- landing (Check samples) cards ------------------------------------------------------------------------ */
+.eyebrow { font-size: 0.78rem; font-weight: 650; text-transform: uppercase; letter-spacing: 0.08em; color: var(--c1); margin: 0 0 0.35rem; }
+.card { background: var(--surface); border: 1px solid var(--grid); border-radius: var(--radius); padding: 1.1rem 1.25rem; margin: 1.25rem 0; }
+.card h2 { margin-top: 0; }
+ol.steps { margin: 0.4rem 0 0.6rem; padding-left: 1.4rem; display: grid; gap: 0.35rem; }
+section.accuracy { border-left: 4px solid var(--c1); padding: 0.4rem 0 0.4rem 1rem; margin: 1.5rem 0; }
+section.accuracy h2 { margin: 0 0 0.3rem; font-size: 1.15rem; }
+section.accuracy p { margin: 0; max-width: none; }
+ul.checklist { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.45rem; }
+ul.checklist li { padding-left: 1.5rem; position: relative; }
+ul.checklist li::before { content: "✓"; position: absolute; left: 0; color: var(--good); font-weight: 700; }
+.optional { border: 1px dashed var(--axis); border-radius: var(--radius); padding: 0.8rem 1rem; }
+.optional p { margin: 0.3rem 0; }
+.optional .info { background: color-mix(in srgb, var(--c1) 8%, var(--surface)); border-radius: var(--radius); padding: 0.5rem 0.7rem; font-size: 0.9rem; }
+.dropzone { border: 2px dashed var(--axis); border-radius: var(--radius); padding: 1.2rem; text-align: center; background: var(--page); transition: background 0.15s, border-color 0.15s; }
+.dropzone p { margin: 0 0 0.6rem; max-width: none; }
+.dropzone:focus { outline: 2px solid var(--c1); outline-offset: 2px; }
+.dropzone.dragover { border-color: var(--c1); background: color-mix(in srgb, var(--c1) 10%, var(--surface)); }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.input-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem; margin: 0.8rem 0 0.4rem; }
+.input-row .control.inline select { width: auto; }
+.local-note { color: var(--ink-2); }
+#example-tables .table-wrap { max-height: none; }
+#example-tables .grid-2 { grid-template-columns: 1fr; gap: 0.8rem; }
