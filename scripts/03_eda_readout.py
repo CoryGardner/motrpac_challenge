@@ -220,8 +220,8 @@ def main() -> None:
                 "**METAB.** The package has no sample-level run or batch metadata for metabolomics (no `METAB_META`), "
                 "so the only covariate available is how many platforms measured a sample, which is a property of the "
                 "tissue (constant within 13 of 17 tissues) and adds nothing over tissue on the stacked PCs "
-                "(`tissue|n_platforms` = tissue). A metabolomics batch check needs run-order / site metadata from the "
-                "organizers (Q16).\n\n" + report.df_to_md(bp_m, floatfmt=".2f"))
+                "(`tissue|n_platforms` = tissue). A metabolomics batch check would need run-order or site metadata, "
+                "which the package does not carry.\n\n" + report.df_to_md(bp_m, floatfmt=".2f"))
 
     # ---- 5. single-sex tissues ---------------------------------------------------------------
     ss = []

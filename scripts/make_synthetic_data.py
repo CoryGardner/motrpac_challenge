@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """Write a small synthetic dataset in the exact export layout (docs/DATA_GUIDE.md §4).
 
-Purpose: smoke-test every phase before the real export exists, and give Claude Code something
-concrete to develop against. The biology is fake but the *structure* is faithful: animals with
+Purpose: smoke-test every phase before the real export exists, and run the pipeline without the
+data (`make smoke`). The biology is fake but the *structure* is faithful: animals with
 pid/bid/viallabel, both sexes, 5 groups, tissue-specific markers, a confusable tissue pair,
 RNA–protein pairs with a discordant subset, DA tables per sex × time point.
 

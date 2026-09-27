@@ -1,10 +1,10 @@
 # DATA_GUIDE — the MoTrPAC rat endurance-training data
 
-Sources: `MotrpacRatTraining6moData` R package v2.0.0 (https://motrpac.github.io/MotrpacRatTraining6moData/),
-its vignette, and the companion `MotrpacRatTraining6mo` analysis package. Skim the Nature 2024
-paper (MoTrPAC Study Group, *Temporal dynamics of the multi-omic response to endurance exercise
-training*, Nature 629:174–183) before the hackathon — the supplementary methods explain the
-normalization and differential-analysis choices.
+Sources: `MotrpacRatTraining6moData` R package v2.0.0 (https://motrpac.github.io/MotrpacRatTraining6moData/;
+installed from GitHub commit `f831a4f`, tag v2.1.0, whose DESCRIPTION also reads 2.0.0 — `R/install_deps.R` pins it),
+its vignette, and the companion `MotrpacRatTraining6mo` analysis package. The Nature 2024 paper (MoTrPAC Study
+Group, *Temporal dynamics of the multi-omic response to endurance exercise training*, Nature 629:174–183)
+explains the normalization and differential-analysis choices in its supplementary methods.
 
 ## 1. Study design
 
@@ -38,23 +38,21 @@ SPLEEN · TESTES · VENACV vena cava · WAT-SC subcutaneous white adipose.
 
 Assays (`ASSAY_ABBREV`): TRNSCRPT RNA-seq · PROT global proteomics · PHOSPHO · ACETYL · UBIQ ·
 METAB metabolomics/lipidomics · IMMUNO multiplex immunoassays · ATAC · METHYL (RRBS).
-ATAC and METHYL are **not** in the R package; they are on Google Cloud Storage. Skip them
-pre-hackathon.
+ATAC and METHYL data are **not** in the R package (they are on the MoTrPAC Data Hub); only their sample
+metadata (`ATAC_META`, `METHYL_META` → `data/raw/meta/ATAC.csv`, `METHYL.csv`) is exported. Not used by this
+pipeline except their sample metadata (phase 16, the identifiability audit).
 
 Hyphenated codes (`SKM-GN`, `SKM-VL`, `WAT-SC`) become `SKMGN`, `SKMVL`, `WATSC` in R object
 names and in our file names. Values inside the `tissue` column keep the hyphen.
 
-Expect transcriptomics in ~18 tissues, proteomics in ~7 (heart, liver, kidney, lung,
-gastrocnemius, white adipose, cortex — confirm from the inventory), metabolomics in most.
-Confirmed by `make inventory` on package v2.0.0 (2026-09-17): TRNSCRPT in 19 tissues (18 solid +
+Coverage, from `make inventory` on package v2.0.0 (2026-09-17): TRNSCRPT in 19 tissues (18 solid +
 BLOOD; 50 samples = 50 animals per tissue, OVARY 24, TESTES 25; 13.8k–17.4k genes after the
 package's expression filter, 32,883 in raw counts); PROT and PHOSPHO in 7 (CORTEX, HEART, KIDNEY,
 LIVER, LUNG, SKM-GN, WAT-SC; 57–60 samples, i.e. 6 per sex × group, more animals than
 transcriptomics); ACETYL and UBIQ in HEART, LIVER; METAB in 19 (PLASMA instead of BLOOD;
-45–52 samples, VENACV 32); IMMUNO in 17 (30 samples). The fusion set is the 7 PROT tissues with
-47–50 animals shared across TRNSCRPT + PROT + METAB. Unmatched samples: 0.
-The **tissues with all three of TRNSCRPT + PROT + METAB** are the fusion set; `02_inventory.py`
-prints them.
+45–52 samples, VENACV 32); IMMUNO in 17 (30 samples). The **fusion set** is the tissues with all three
+of TRNSCRPT + PROT + METAB: the 7 PROT tissues, with 47–50 animals shared; `02_inventory.py` prints them.
+Unmatched samples: 0.
 
 ## 4. Data objects and our export layout
 
@@ -119,7 +117,7 @@ not `___`. `load_pheno()` accepts both spellings. `bid == viallabel[:5]` holds f
    typically as log-ratios to a per-tissue reference channel, so absolute levels are not
    comparable across tissues the way log-CPM transcripts are. A cross-tissue proteomic
    "fingerprint" trained on `PROT_*_NORM_DATA` may be learning the normalization, not biology.
-   Check the assay metadata and the paper's methods; ask the organizers (see QUESTIONS).
+   Checked in phase 04 (`04_prot_diagnostic.py`): proteomics is treated as within-tissue only.
    For the cross-tissue classification task, transcriptomics from **raw counts re-normalized
    uniformly** (log2 CPM per sample, done by `tfp.io.load_counts`) is the safest layer.
    Metabolomics has a similar issue (platform-specific, per-tissue runs).
@@ -147,11 +145,10 @@ not `___`. `load_pheno()` accepts both spellings. `bid == viallabel[:5]` holds f
 ## 7. Human data (for the human-transfer leg)
 
 MoTrPAC's human protocol collects blood, vastus lateralis muscle, and subcutaneous adipose
-before and after acute endurance or resistance exercise. Tissue papers appeared as preprints
-in March 2026. Access terms for processed human data were **not verified** when this kit was
-written — check the Data Hub (https://motrpac-data.org/) and ask the organizers. Until then,
-the human leg uses **GTEx** for tissue-identity transfer (see `docs/GTEX_TRANSFER.md`) and
-`RAT_TO_HUMAN_GENE` for orthology.
+before and after acute endurance or resistance exercise (tissue papers appeared as preprints in
+March 2026; Data Hub: https://motrpac-data.org/). This pipeline's human leg uses **GTEx** for
+tissue-identity transfer (see `docs/GTEX_TRANSFER.md`) and `RAT_TO_HUMAN_GENE` for orthology;
+the MoTrPAC human tissues are the natural next test once their processed data are in hand.
 
 ## 8. Citing
 
@@ -159,3 +156,24 @@ Publications using these data must acknowledge MoTrPAC and cite the data package
 "Data used in the preparation of this article were obtained from the Molecular Transducers of
 Physical Activity Consortium (MoTrPAC) MotrpacRatTraining6moData R package [version]."
 The manifest records the version.
+
+## 9. Portal inputs for phase 16 (`MOTRPAC_PORTAL`)
+
+Phase 16 (`scripts/16_identifiability.py`) has two optional inputs from the MoTrPAC Data Hub
+(https://motrpac-data.org/), release **c1.0**, that are not part of the R-package export (20 files, ≈ 165 MB):
+
+- the RNA-seq library-QC table, all tissues:
+  `rat-training-06/c1.0/transcriptomics/qa-qc/motrpac_pass1b-06_transcript-rna-seq_qa-qc-metrics.csv`;
+- the 19 per-tissue RSEM gene-count tables, read by `--bridge` (batch measured directly on the bridging
+  reference pools, whose vials are in the portal count files):
+  `rat-training-06/c1.0/transcriptomics/t<code>-<tissue>/transcript-rna-seq/motrpac_pass1b-06_<tissue>_transcript-rna-seq_rsem-genes-count.txt`
+  for `t30-blood-rna`, `t52-hippocampus`, `t53-cortex`, `t54-hypothalamus`, `t55-gastrocnemius`, `t56-vastus-lateralis`,
+  `t58-heart`, `t59-kidney`, `t60-adrenal`, `t61-colon`, `t62-spleen`, `t63-testes`, `t64-ovaries`, `t66-lung`,
+  `t67-small-intestine`, `t68-liver`, `t69-brown-adipose`, `t70-white-adipose`, `t99-vena-cava`
+  (`PORTAL_TISSUE_DIRS` in the script).
+
+Download them into one directory that holds `rat-training-06/` and point `MOTRPAC_PORTAL` at it
+(`export MOTRPAC_PORTAL=<dir>`, or `make identifiability MOTRPAC_PORTAL=<dir>`). `make portal-check` lists the
+20 paths and says which are present. Without them phase 16 still runs: the QC-only baseline then uses the same QC
+columns from the package's `TRNSCRPT_META` export (`data/raw/meta/TRNSCRPT.csv`), and the bridge block is reported
+as unavailable.

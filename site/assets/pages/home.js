@@ -1,38 +1,93 @@
-import { mountChrome, loadJSON, el, statTile, fmt } from "../site.js";
+import { mountChrome, loadJSON, el, statTile, fmt, pct } from "../site.js";
+import { mountOverview } from "../overview.js";
 import { figure, bar, line, band, tokens, palette } from "../charts.js";
 import { mountLadder, pick } from "../ladder.js";
 
 async function main() {
   await mountChrome("index.html");
-  const [H, PC, N, Q] = await Promise.all([loadJSON("data/headline.json"), loadJSON("data/panel_curve.json"), loadJSON("data/nesting.json"), loadJSON("data/qc_baseline.json")]);
+  const [H, PC, N, BM] = await Promise.all([loadJSON("data/headline.json"), loadJSON("data/panel_curve.json"), loadJSON("data/nesting.json"), loadJSON("data/bodymap.json")]);
   const ex = H.extras;
   const tile = Object.fromEntries(H.tiles.map((t) => [t.id, t]));
+  const idk = pick(H.ladder, "in_distribution", "k20", "marginal", "pooled");
+  const opa = pick(H.ladder, "in_distribution", "k20", "marginal", "one_per_animal");
+  const tr = pick(H.ladder, "train_control_test_trained", "k20", "marginal");
+  const mf = pick(H.ladder, "train_male_test_female", "k20", "marginal");
+  const bm = pick(H.ladder, "different_lab", "k20", "marginal");
+  const gt = pick(H.ladder, "different_species", "k20", "marginal");
+  // BodyMap organs with a MoTrPAC counterpart: organ_map is organ → rat tissues, or null
+  const nOrgans = Object.keys(BM.organ_map).length, nMapped = Object.values(BM.organ_map).filter(Boolean).length;
+  const bmAcc = tile.tile_bodymap_k20.value;
+  const perSet = (v) => `${fmt(v, 2)} tissue${fmt(v, 2) === "1.00" ? "" : "s"} per set`;
 
   // lede
   document.getElementById("lede").replaceChildren(
-    el("b", {}, "Yes"),
-    ` — a 20-gene panel identifies 19 rat tissues at ${fmt(tile.tile_acc_k20.value)} balanced accuracy and, fit on all animals, names ${fmt(tile.tile_bodymap_k20.value, 3)} of the mapped adult organs in another laboratory's rats (9 of 11 organs, muscle and brain scored as super-classes). `,
-    "But “reliably” has three parts, and only the first survives on its own: the ",
-    el("a", { href: "#sec-guarantee" }, "coverage guarantee"), " does not travel, and within one study the ",
-    el("a", { href: "#sec-identifiability" }, "tissue axis cannot be separated from processing"), ".",
+    el("b", {}, "Yes."),
+    ` A ${H.design.k_panel}-gene panel identifies ${ex.n_tissues} rat tissues at ${fmt(tile.tile_acc_k20.value)} balanced accuracy and, fit on all animals, names ${bmAcc === 1 ? "every mapped adult organ" : fmt(bmAcc) + " of the mapped adult organs"} in another laboratory's rats (${fmt(bmAcc)}, ${nMapped} of ${nOrgans} organs). `,
+    "Its 90 % guarantee ", el("a", { href: "#sec-guarantee" }, "holds within the study"), ", abstains rather than guesses under shift, and is restored beyond the study by recalibrating on three animals ",
+    `(${fmt(bm?.recal_n3)}, within species).`,
   );
 
   // tiles
+  // ---- overview: what we did, in one picture (numbers from headline.json only) --------------------------------
+  {
+    const d = H.design;
+    const tr20 = pick(H.ladder, "train_control_test_trained", "k20", "marginal");
+    const bm20 = pick(H.ladder, "different_lab", "k20", "marginal");
+    const gt20 = pick(H.ladder, "different_species", "k20", "marginal");
+    const bridge = typeof ex.bridge_sum_ratio_all_genes_pool99 === "number" ? ex.bridge_sum_ratio_all_genes_pool99 : null;
+    document.getElementById("overview-summary").replaceChildren(
+      `MoTrPAC's rat endurance-training study is the asset here: ${ex.n_tissues} tissues from the same ${ex.n_animals} animals, ${ex.n_vials} RNA-seq vials, a training time course, several omic layers, and reference-standard RNA pools on every extraction plate. `,
+      `Inside animal-grouped folds we selected a ${d.k_panel}-gene panel, gave it split-conformal sets that promise the true tissue ${pct(1 - d.alpha)} of the time, carried both up a ladder of shifts (trained animals, the other sex, another laboratory's rats, human GTEx), and measured directly, on the consortium's bridging standards, how much processing contributes to the within-study signal.`,
+    );
+    const nodes = [
+      { label: `MoTrPAC RNA-seq, ${ex.n_tissues} tissues`, num: String(ex.n_vials), unit: "vials" },
+      { label: "Animal-grouped folds, whole animals held out", num: String(d.n_outer_folds), unit: "folds" },
+      { label: "Panel selected inside each fold", num: fmt(H.accuracy.k20.mean), unit: `balanced accuracy, ${d.k_panel} genes` },
+      { label: `${pct(1 - d.alpha)} sets calibrated on held-out animals`, num: String(d.n_cal_animals), unit: "calibration animals" },
+      { label: "Shift ladder: state, sex, laboratory, species", num: fmt(bm20.accuracy), unit: "mapped organs named, other lab" },
+      bridge !== null ? { label: "Batch measured on bridging standards", num: pct(bridge, 1), unit: "of tissue-separating variance" }
+                      : { label: "Batch nested in tissue, by design", num: `${tile.tile_estimable.value} of ${tile.tile_estimable.total}`, unit: "pairs contrastable in a batch" },
+      { label: "Verdict: sufficient, transferable, calibratable", num: null, unit: null, verdict: true },
+    ];
+    const alt = `The study in one picture: MoTrPAC RNA-seq of ${ex.n_tissues} tissues (${ex.n_vials} vials) → ${d.n_outer_folds} animal-grouped folds → a ${d.k_panel}-gene panel selected inside each fold (${fmt(H.accuracy.k20.mean)} balanced accuracy) → ${pct(1 - d.alpha)} conformal sets calibrated on ${d.n_cal_animals} held-out animals → a shift ladder (training state, sex, laboratory, species; ${fmt(bm20.accuracy)} of mapped organs named in another laboratory) → batch measured directly on bridging standards${bridge !== null ? ` (${pct(bridge, 1)} of tissue-separating variance)` : ""} → verdict: sufficient, transferable, calibratable.`;
+    mountOverview(document.getElementById("overview-svg"), nodes, { alt, desc: nodes.map((n) => n.label + (n.num ? ` ${n.num} ${n.unit || ""}` : "")).join("; ") });
+    document.getElementById("overview-caption").replaceChildren(
+      `Coverage of the ${pct(1 - d.alpha)} sets: ${fmt(tr20.coverage)} on trained animals, ${fmt(bm20.coverage)} in another laboratory, ${fmt(gt20.coverage)} in human; three target animals restore ${fmt(bm20.recal_n3)} within species.`,
+    );
+    const li = (parts) => el("li", {}, parts);
+    document.getElementById("overview-new").replaceChildren(
+      li([`A class-aware round-robin selector makes ${d.k_panel} genes sufficient for ${ex.n_tissues} tissues (${fmt(H.accuracy.k20.mean)} ± ${fmt(H.accuracy.k20.sd)}); a univariate F-test at the same size reaches ${fmt(ex.acc_fclassif_k20)}.`]),
+      li([`The ${pct(1 - d.alpha)} guarantee, tested under shift: it holds within the study, abstains rather than guesses beyond it, and three animals restore it within species (${fmt(bm20.recal_n3)}).`]),
+      li([bridge !== null ? `Batch was measured directly on the consortium's bridging standards (${pct(bridge, 1)} of tissue-separating variance) and checked against an independent laboratory (${fmt(bm20.accuracy)} of mapped organs named).`
+                          : `The processing design was audited layer by layer and the fingerprint checked against an independent laboratory (${fmt(bm20.accuracy)} of mapped organs named).`]),
+    );
+    document.getElementById("overview-why").replaceChildren(
+      li([el("b", {}, "For the challenge question: "), "a compact, interpretable signature is sufficient, and “reliably” is measurable: a calibrated guarantee whose behaviour under shift is known and whose repair costs three animals."]),
+      li([el("b", {}, "For MoTrPAC analysts: "), `each tissue was processed as a unit, as in every multi-tissue design (${tile.tile_estimable.value} of ${tile.tile_estimable.total} pairs contrastable within a batch), so pair within-study accuracy with an external check. Training state, the contrast the design supports directly, `, el("a", { href: "exercise.html" }, "has its own page"), `.`]),
+      li([el("b", {}, "For anyone deploying a signature: "), `calibrate on the target. Three animals restore ${fmt(bm20.recal_n3)} coverage at ${fmt(bm20.recal_n3_size, 2)} tissue per set (within species); a zero-error certificate at α = δ = ${fmt(d.alpha, 2)} needs ${ex.n_zero_error_1010} animals.`]),
+    );
+  }
+
   const tiles = document.getElementById("tiles");
   for (const t of H.tiles) tiles.appendChild(statTile(t));
 
-  // ladder with controls (shared with the Transfer page)
+  // ladder with controls (shared with the Transfer page), and the pointer to the Exercise page
   await mountLadder(document.getElementById("fig-ladder"), H, { full: false });
+  document.getElementById("p-exercise").replaceChildren(
+    "Training state, the one contrast this design supports directly, has its own page → ",
+    el("a", { href: "exercise.html" }, "Exercise"),
+    ` (${fmt(tr?.accuracy)} accuracy, ${fmt(tr?.coverage)} coverage, panel fit on sedentary controls only).`,
+  );
 
   // section 1: accuracy paragraph + panel curve mini
   document.getElementById("p-accuracy").replaceChildren(
     `Under five animal-grouped folds the round-robin selector reaches ${fmt(H.accuracy.k20.mean)} ± ${fmt(H.accuracy.k20.sd)} balanced accuracy at 20 genes, `,
-    `${fmt(H.accuracy.k50.mean)} at 50 and ${fmt(H.accuracy.full.mean)} with all genes. The selector, not the classifier, was the hard part: `,
-    `a univariate F-test at the same k picks markers of the same easy tissues and reaches ${fmt(ex.acc_fclassif_k20)}.`,
+    `${fmt(H.accuracy.k50.mean)} at 50 and ${fmt(H.accuracy.full.mean)} with all genes. `,
+    `A univariate F-test at the same size reaches ${fmt(ex.acc_fclassif_k20)}: the selector, not the classifier, is the result.`,
   );
   await figure(document.getElementById("fig-curve"), {
-    title: "The panel curve saturates by 15–20 genes with a class-aware selector; the F-test never gets there",
-    subtitle: "Mean balanced accuracy ± sd over 5 animal-grouped folds vs panel size (log scale), round-robin vs F-test selection, logreg_l2 on the selected genes.",
+    title: `The curve saturates by 15–20 genes with a class-aware selector; a univariate F-test at the same size reaches ${fmt(ex.acc_fclassif_k20)}`,
+    subtitle: "Mean ± sd balanced accuracy over 5 animal-grouped folds vs panel size (log scale); logreg_l2 on the selected genes.",
     build: () => {
       const c = PC.curve;
       const ks = c.map((r) => r.k);
@@ -54,19 +109,13 @@ async function main() {
   });
 
   // section 2: guarantee paragraph + empty-set stack
-  const idk = pick(H.ladder, "in_distribution", "k20", "marginal", "pooled");
-  const bm = pick(H.ladder, "different_lab", "k20", "marginal");
-  const gt = pick(H.ladder, "different_species", "k20", "marginal");
-  const mf = pick(H.ladder, "train_male_test_female", "k20", "marginal");
   document.getElementById("p-guarantee").replaceChildren(
-    `A split-conformal prediction set promises that the true tissue is in the set 90 % of the time. On held-out MoTrPAC animals the 20-gene sets cover ${fmt(idk?.coverage)} of vials. `,
-    `With the same calibration they cover ${fmt(bm?.coverage)} of adult BodyMap organs and ${fmt(gt?.coverage)} of human GTEx samples, and the shortfall is almost entirely `,
-    el("b", {}, "empty sets"), ` (${fmt(bm?.empty)} and ${fmt(gt?.empty)} of samples): the model names the tissue correctly but is less confident on another laboratory's libraries. `,
-    `Three target animals repair it within species (${fmt(bm?.recal_n3)} coverage at ${fmt(bm?.recal_n3_size, 2)} tissues per set); across species the repaired sets hold ${fmt(gt?.recal_n3_size, 1)} of 19 tissues.`,
+    `The 20-gene sets cover ${fmt(idk?.coverage)} of held-out vials (pooled calibration; ${fmt(opa?.coverage)} with one vial per animal) and ${fmt(tr?.coverage)} on trained animals when the panel is fit on sedentary controls only. `,
+    `Beyond the study they abstain rather than guess — coverage ${fmt(bm?.coverage)} in another laboratory and ${fmt(gt?.coverage)} in human, wrong non-empty sets ${fmt(bm?.wrong_non_empty)} and ${fmt(gt?.wrong_non_empty)} — and three target animals restore ${fmt(bm?.recal_n3)} within species at ${perSet(bm?.recal_n3_size)}.`,
   );
   await figure(document.getElementById("fig-empty"), {
-    title: "What replaces coverage is abstention, not confident error",
-    subtitle: "Fraction of test samples whose α = 0.10 set (20-gene panel, marginal, source-calibrated) contains the true tissue, is non-empty but wrong, or is empty.",
+    title: "Under shift the sets abstain rather than guess: the shortfall is empty sets; wrong confident sets stay rare",
+    subtitle: "Fraction of test samples whose α = 0.10 set (20-gene panel, marginal, source-calibrated) holds the true tissue, is wrong, or is empty.",
     build: () => {
       const t = tokens();
       const p = palette();
@@ -90,22 +139,21 @@ async function main() {
   // section 3: identifiability paragraph + nesting mini
   const est = N.estimable_pairs.find((r) => r.assay === "TRNSCRPT");
   const nest = Object.fromEntries(N.nesting.TRNSCRPT.map((r) => [r.variable, r]));
-  const qc = Object.fromEntries(Q.summary.map((r) => [r.features, r]));
+  const pairText = est.estimable_pairs.split(";").map((p) => p.split("|").map((t) => t.toLowerCase()).join(" and ")).join("; ");
+  const facts = [`${fmt(bmAcc)} of mapped adult organs named in a laboratory with none of these batches`];
+  if (typeof ex.bridge_sum_ratio_all_genes_pool99 === "number") {
+    facts.push(`batch measured at ${(100 * ex.bridge_sum_ratio_all_genes_pool99).toFixed(1)} % of tissue-separating variance on bridging pools run on ${ex.bridge_n_plates_pool99} plates at both sites`);
+  }
   document.getElementById("p-identifiability").replaceChildren(
-    `Each tissue sits entirely inside one RNA extraction plate, one library batch and one flowcell: ${ex.n_plates} plates and ${ex.n_lib_batches} library batches holding at most ${Math.max(nest.RNA_extr_plate_ID.max_tissues_per_level, nest.Lib_batch_ID.max_tissues_per_level)} tissues each, ${ex.n_flowcells} flowcells holding up to ${nest.Seq_flowcell_ID.max_tissues_per_level}. `,
-    `Only ${est.n_pairs_estimable} of ${est.n_pairs_total} tissue pairs share a level of all three (${est.estimable_pairs.replace("|", " and ").toLowerCase()}, which is also the sex contrast). `,
-    `Library QC numbers alone, with no gene, classify the tissue at ${fmt(qc.all.bal_acc_mean)} ± ${fmt(qc.all.bal_acc_sd)} (technical numbers ${fmt(qc.technical.bal_acc_mean)}, composition fractions ${fmt(qc.composition.bal_acc_mean)}). `,
-    "So within-study accuracy is not evidence that the signature is biology. The evidence is external: the panel transfers to a laboratory where none of these batches exist. ",
-    ...(typeof ex.bridge_sum_ratio_all_genes_pool99 === "number"
-      ? [`And where batch could be measured directly, on a reference RNA pool run on ${ex.bridge_n_plates_pool99} plates at both sites, it was ${(100 * ex.bridge_sum_ratio_all_genes_pool99).toFixed(1)} % of the variance that separates tissues.`]
-      : []),
+    `As in any multi-tissue design, each tissue was processed as a unit: ${ex.n_plates} plates, ${ex.n_lib_batches} library batches and ${ex.n_flowcells} flowcells hold whole tissues, ${est.n_pairs_estimable} of ${est.n_pairs_total} pairs ${est.n_pairs_estimable === 1 ? "is" : "are"} contrastable inside a batch, and library QC numbers alone reach ${fmt(ex.qc_all)}. `,
+    `${facts.length === 2 ? "Two external facts make" : "One external fact makes"} the fingerprint credible as biology: ${facts.join(", and ")}.`,
   );
   await figure(document.getElementById("fig-nesting"), {
-    title: `${est.n_pairs_estimable} tissue pair${est.n_pairs_estimable === 1 ? "" : "s"} in ${est.n_pairs_total} can be contrasted inside a processing batch (${est.estimable_pairs.split(";").map((p) => p.split("|").map((t) => t.toLowerCase()).join(" and ")).join("; ")})`,
-    subtitle: `Number of the ${est.n_pairs_total} RNA-seq tissue pairs that share at least one level of each processing variable, and the pairs sharing a level of all three.`,
+    title: `As in any multi-tissue design each tissue was processed as a unit: ${est.n_pairs_estimable} of ${est.n_pairs_total} pairs contrastable inside a batch (${pairText})`,
+    subtitle: `Of the ${est.n_pairs_total} RNA-seq tissue pairs, those sharing a level of each processing variable, and of all three.`,
     build: () => {
       const vars = [["RNA_extr_plate_ID", "RNA extraction plate"], ["Lib_batch_ID", "library batch"], ["Seq_flowcell_ID", "flowcell"]];
-      const y = [...vars.map(([, l]) => l), `all three (estimable: ${est.estimable_pairs.split(";").map((p) => p.split("|").map((t) => t.toLowerCase()).join(" and ")).join("; ")})`];
+      const y = [...vars.map(([, l]) => l), `all three (estimable: ${pairText})`];
       const x = [...vars.map(([v]) => nest[v].n_pairs_sharing_level), est.n_pairs_estimable];
       return {
         traces: [bar(x, y, { horizontal: true, name: "tissue pairs sharing a level", slot: 1, text: x.map((v) => `${v} of ${est.n_pairs_total}`), textposition: "outside", hover: "%{y}: %{x} of " + est.n_pairs_total + " pairs<extra></extra>" })],

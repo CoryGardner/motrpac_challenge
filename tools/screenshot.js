@@ -1,6 +1,7 @@
 // Render pass: screenshot every page at 1440×900 and 390×844 in both themes, collect console errors,
-// measure load time, and optionally block the CDN to prove the vendored Plotly fallback works.
-// Usage: node tools/screenshot.js [--base http://localhost:8765] [--pages index,explore] [--block-cdn] [--out site/_screenshots]
+// measure load time and the visible words in <main>, and optionally block the CDN to prove the vendored Plotly fallback works.
+// Usage: node tools/screenshot.js [--base http://localhost:8765] [--pages index,explore] [--block-cdn] [--strict-words] [--out site/_screenshots]
+// --strict-words fails a render whose visible word count exceeds the page's BUDGET.
 // Needs playwright (npm install in tools/) and a Chrome/Chromium: it uses the system Chrome channel.
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
@@ -9,10 +10,22 @@ import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 const { chromium } = require("playwright");
 
-const args = Object.fromEntries(process.argv.slice(2).map((a) => a.replace(/^--/, "").split("=")).map(([k, v]) => [k, v === undefined ? true : v]));
+// --key=value, --key value, or a bare --flag
+const args = {};
+for (let i = 2, argv = process.argv; i < argv.length; i += 1) {
+  const a = argv[i];
+  if (!a.startsWith("--")) continue;
+  const eq = a.indexOf("=");
+  if (eq > 0) args[a.slice(2, eq)] = a.slice(eq + 1);
+  else if (i + 1 < argv.length && !argv[i + 1].startsWith("--")) { args[a.slice(2)] = argv[i + 1]; i += 1; }
+  else args[a.slice(2)] = true;
+}
 const base = args.base || "http://localhost:8765";
 const out = args.out || "site/_screenshots";
-const pages = (args.pages ? String(args.pages).split(",") : ["index", "explore", "transfer", "fingerprint", "identifiability", "methods", "limitations", "about"]);
+const pages = (args.pages ? String(args.pages).split(",") : ["index", "explore", "transfer", "exercise", "fingerprint", "identifiability", "methods", "limitations", "about"]);
+// visible-word budgets per page (main.innerText), enforced with --strict-words
+const BUDGET = { index: 700, explore: 1000, transfer: 1300, exercise: 900, fingerprint: 700, identifiability: 900, methods: 1200, limitations: 700, about: 650 };
+const strictWords = !!args["strict-words"];
 const sizes = [{ name: "desktop", width: 1440, height: 900 }, { name: "phone", width: 390, height: 844 }];
 const themes = ["light", "dark"];
 mkdirSync(out, { recursive: true });
@@ -50,13 +63,17 @@ for (const page of pages) {
         emptyCharts: [...document.querySelectorAll(".chart")].filter((c) => !c.querySelector(".plot-container")).length,
         overflowX: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
         imgsNoAlt: [...document.images].filter((i) => !i.hasAttribute("alt")).length,
+        words: (() => { const m = document.querySelector("main"); return m ? m.innerText.trim().split(/\s+/).filter(Boolean).length : 0; })(),
         plotly: !!window.Plotly, plotlySrc: [...document.scripts].filter((s) => /plotly/.test(s.src)).map((s) => s.src) })).catch(() => ({}));
       const file = join(out, `${page}-${theme}-${size.name}${args["block-cdn"] ? "-offline" : ""}.png`);
       await p.screenshot({ path: file, fullPage: true }).catch((e) => errors.push("screenshot: " + e.message));
-      const row = { page, theme, size: size.name, ms, timing, ...charts, errors };
-      if (errors.length || charts.emptyCharts || charts.overflowX) failures += 1;
+      const budget = BUDGET[page] ?? null;
+      const overBudget = budget !== null && (charts.words ?? 0) > budget;
+      const row = { page, theme, size: size.name, ms, timing, ...charts, budget, overBudget, errors };
+      if (errors.length || charts.emptyCharts || charts.overflowX || (strictWords && overBudget)) failures += 1;
       report.push(row);
-      console.log(`${page.padEnd(16)} ${theme.padEnd(5)} ${size.name.padEnd(7)} ${String(ms).padStart(5)} ms  charts ${charts.rendered}/${charts.charts}  overflowX ${charts.overflowX}  errors ${errors.length}${errors.length ? "\n    " + errors.join("\n    ") : ""}`);
+      const wordsNote = `words ${String(charts.words ?? "?").padStart(4)}${budget !== null ? `/${budget}` : ""}${overBudget ? (strictWords ? " OVER BUDGET" : " (over budget)") : ""}`;
+      console.log(`${page.padEnd(16)} ${theme.padEnd(5)} ${size.name.padEnd(7)} ${String(ms).padStart(5)} ms  charts ${charts.rendered}/${charts.charts}  overflowX ${charts.overflowX}  ${wordsNote}  errors ${errors.length}${errors.length ? "\n    " + errors.join("\n    ") : ""}`);
       await ctx.close();
     }
   }

@@ -15,17 +15,22 @@ sex-specific organs only in one sex). rRNA-depleted total-RNA libraries, Illumin
 MoTrPAC animals are 6-month-old (≈ 26-week) F344 rats with poly-A mRNA libraries (globin-depleted
 for blood), so age, library chemistry and lab are all shifted at once — that is the point.
 
-## Two ways to get it (done 2026-09-17: `bodymapRat` via `R/export_bodymap.R`, hub file 15.8 MB; the GEO archive is also on disk under `data/external/bodymap/`)
+## Two ways to get it (used: `bodymapRat` through `R/export_bodymap.R`, ExperimentHub download of 2026-09-17, hub file 15.8 MB)
 
 | Source | What you get | Size | Needs |
 |---|---|---|---|
-| Bioconductor ExperimentHub package **`bodymapRat`** (v1.28.0, CC BY 4.0) | `SummarizedExperiment` of STAR gene counts, **32,637 Ensembl genes (ENSRNOG) × 652 RNA-seq runs** (technical replicates / lanes included); `colData` has organ, sex (F/M), stage (weeks), `techRep`, `rnaRIN`, instrument, flowcell/lane, SRA/GEO ids | counts matrix on the order of tens of MB (ExperimentHub cache; exact size shown on first download) | R 4.4 (present), `BiocManager` (present), `BiocManager::install("bodymapRat")`, network |
-| GEO supplementary **`GSE53960_RAW.tar`** | 320 per-sample files of **AceView gene symbols with the authors' expression values** (not counts, not Ensembl; `scripts/12_bodymap_prepare.py` builds a matrix; only 13,853 symbols match MoTrPAC) — a fallback, not the primary source | **84 MB** | `curl`; already extracted |
+| Bioconductor ExperimentHub package **`bodymapRat`** (v1.28.0, **CC BY 4.0**) | `SummarizedExperiment` of STAR gene counts, **32,637 Ensembl genes (ENSRNOG) × 652 RNA-seq runs** (technical replicates / lanes included); `colData` has organ, sex (F/M), stage (weeks), `techRep`, `rnaRIN`, instrument, flowcell/lane, SRA/GEO ids | 15.8 MB hub file (ExperimentHub cache) | R 4.5.3 / Bioconductor 3.22 (`environment-r.yml`); `BiocManager::install("bodymapRat")`, done by `R/install_deps.R`; network |
+| GEO supplementary **`GSE53960_RAW.tar`** — the fallback route | 320 per-sample files of **AceView gene symbols with the authors' expression values** (not counts, not Ensembl; only 13,853 symbols match MoTrPAC). `extras/scripts/12_bodymap_prepare.py --source geo` builds a matrix from them; no result uses it | **84 MB** | `curl` |
 
-`bodymapRat` is the source used: STAR counts, Ensembl IDs (21,040 of the 21,193 MoTrPAC genes present, 99.3%), 652 runs summed to 316 biological samples (4 of GEO's 320 are absent: aged kidney F/M, 6-week male spleen). The animal id is the replicate index within organ × stage × sex (`sex_stage_replicate`), an assumption — no animal id exists in GEO or SRA. Export it
-with R to `data/external/bodymap_counts.csv` (genes × runs, `feature_ID` = ENSRNOG) and
-`data/external/bodymap_meta.csv` (run, organ, sex, stage_weeks, animal/biological-replicate id,
-techRep, rnaRIN). Collapse technical replicates (sum counts per biological sample) before use.
+Versions: Bioconductor serves one `bodymapRat` per release (3.22 → 1.26.0, 3.23 → 1.28.0); the ExperimentHub resource
+behind them is the same GSE53960 STAR count matrix, and `R/export_bodymap.R` records the version it used in
+`data/external/bodymap_provenance.json`. Licence: CC BY 4.0 — cite Yu et al. (2014) and the package.
+
+`bodymapRat` is the source used: STAR counts, Ensembl IDs (21,040 of the 21,193 MoTrPAC genes present, 99.3%), 652 runs summed to 316 biological samples (4 of GEO's 320 are absent: aged kidney F/M, 6-week male spleen). The animal id is the replicate index within organ × stage × sex (`sex_stage_replicate`), an assumption — no animal id exists in GEO or SRA.
+`R/export_bodymap.R` (`make bodymap`) sums the technical runs per biological sample and writes
+`data/external/bodymap_counts.csv` (genes × biological samples, `feature_ID` = ENSRNOG), `bodymap_meta.csv` (sample,
+organ, sex, stage_weeks, replicate, n_runs), `bodymap_coldata.csv` (the raw colData, one row per run) and
+`bodymap_provenance.json` (package version, ExperimentHub record, R and Bioconductor versions, date).
 Check the Ensembl release: MoTrPAC counts use the Rnor_6.0 annotation of the package; ID overlap
 with the panel genes must be reported, and the (few) panel genes missing from BodyMap listed.
 

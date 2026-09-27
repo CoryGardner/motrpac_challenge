@@ -1,0 +1,8 @@
+tissue,best_arm,best_auroc,best_sd,best_single,single_auroc,single_sd,best_fusion,fusion_auroc,fusion_minus_single,fusion_beats_single_by_gt_sd,null_median_max_auroc,null_p95_max_auroc,p_perm,best_beats_null_p95
+CORTEX,single:PROT/centroid,1.0,0.0,single:PROT/centroid,1.0,0.0,early_fusion/rf,0.9375,-0.0625,False,0.7291666666666667,0.8958333333333334,0.01990049751243781,True
+HEART,early_fusion/logreg_l2,1.0,0.0,single:PROT/centroid,1.0,0.0,early_fusion/logreg_l2,1.0,0.0,False,0.6875,0.875,0.004975124378109453,True
+KIDNEY,late_fusion/logreg_l2,1.0,0.0,single:METAB/logreg_l2,1.0,0.0,late_fusion/logreg_l2,1.0,0.0,False,0.6666666666666667,0.875,0.004975124378109453,True
+LIVER,early_fusion/logreg_l2,1.0,0.0,single:METAB/logreg_l2,1.0,0.0,early_fusion/logreg_l2,1.0,0.0,False,0.7083333333333333,0.8760416666666663,0.004975124378109453,True
+LUNG,single:METAB/centroid,1.0,0.0,single:METAB/centroid,1.0,0.0,early_fusion/logreg_l2,0.9583333333333334,-0.04166666666666663,False,0.6953125,0.875,0.014925373134328358,True
+SKM-GN,early_fusion/logreg_l2,1.0,0.0,single:PROT/logreg_l2,1.0,0.0,early_fusion/logreg_l2,1.0,0.0,False,0.7083333333333334,0.8958333333333333,0.009950248756218905,True
+WAT-SC,late_fusion/logreg_l2,0.9583333333333334,0.0833333333333333,single:TRNSCRPT/rf,0.9583333333333334,0.0833333333333333,late_fusion/logreg_l2,0.9583333333333334,0.0,False,0.6875,0.8552083333333329,0.004975124378109453,True

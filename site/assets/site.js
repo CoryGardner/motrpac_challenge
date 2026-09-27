@@ -3,9 +3,9 @@
 
 export const REPO_URL = "https://github.com/CoryGardner/motrpac_challenge";
 const PAGES = [
-  ["index.html", "Home"], ["explore.html", "Explore"], ["transfer.html", "Transfer"], ["fingerprint.html", "Fingerprint"],
-  ["identifiability.html", "Identifiability"], ["methods.html", "Methods"], ["limitations.html", "Limitations"],
-  ["about.html", "About"],
+  ["index.html", "Home"], ["explore.html", "Explorer"], ["transfer.html", "Transfer"], ["exercise.html", "Exercise"],
+  ["fingerprint.html", "Signature"], ["identifiability.html", "Identifiability"], ["methods.html", "Methods"],
+  ["limitations.html", "Limitations"], ["about.html", "About"],
 ];
 const cache = new Map();
 
@@ -56,6 +56,13 @@ export function toggleTheme() {
   try { localStorage.setItem("tfp-theme", next); } catch (e) { /* private mode */ }
   document.dispatchEvent(new CustomEvent("themechange", { detail: next }));
   updateToggle();
+  syncThemeColor();
+}
+// Keep <meta name="theme-color"> (the browser chrome colour on phones) equal to the page background token.
+function syncThemeColor() {
+  const page = getComputedStyle(document.documentElement).getPropertyValue("--page").trim();
+  if (!page) return;
+  document.querySelectorAll('meta[name="theme-color"]').forEach((m) => m.setAttribute("content", page));
 }
 function updateToggle() {
   const b = document.querySelector(".theme-toggle");
@@ -65,11 +72,10 @@ function updateToggle() {
 // ---- chrome ---------------------------------------------------------------------------------------
 export async function mountChrome(page) {
   initTheme();
+  syncThemeColor();
+  window.addEventListener("load", syncThemeColor, { once: true });
   const header = document.querySelector("header.site-header") || document.body.insertBefore(el("header", { class: "site-header" }), document.body.firstChild);
-  const logo = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  logo.setAttribute("viewBox", "0 0 24 24");
-  logo.setAttribute("aria-hidden", "true");
-  logo.innerHTML = '<circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><path d="M6 14c2-4 4-4 6 0s4 4 6 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="7" r="1.6" fill="currentColor"/>';
+  const logo = el("img", { class: "mark", src: "assets/brand/badge-64.png", alt: "", width: 24, height: 24, decoding: "async" });
   const nav = el("nav", { class: "primary", "aria-label": "Site" });
   for (const [href, label] of PAGES) {
     const a = el("a", { href }, label);
@@ -81,16 +87,9 @@ export async function mountChrome(page) {
   updateToggle();
   document.body.insertBefore(el("a", { class: "skip", href: "#main" }, "Skip to content"), document.body.firstChild);
   const footer = document.querySelector("footer.site-footer") || document.body.appendChild(el("footer", { class: "site-footer" }));
-  let hash = "pending", generated = "pending";
-  try {
-    const m = await loadJSON("data/manifest.json");
-    hash = m.git_hash; generated = m.generated;
-  } catch (e) { /* footer stays pending */ }
   footer.replaceChildren(el("div", { class: "wrap" }, [
-    el("span", {}, ["Code: ", el("a", { href: REPO_URL }, "repository"), " (MIT)"]),
-    el("span", {}, `results git ${hash}`),
-    el("span", {}, `data exported ${generated}`),
-    el("span", {}, ["Every number on this site is read from ", el("code", {}, "results/"), " through ", el("code", {}, "site/data/provenance.json"), "."]),
+    el("span", {}, ["Code and data exports: ", el("a", { href: REPO_URL }, "github.com/CoryGardner/motrpac_challenge"), " (MIT)."]),
+    el("span", {}, ["Every number on this site is read from the result tables; ", el("code", {}, "site/data/provenance.json"), " records where."]),
   ]));
   window.addEventListener("resize", () => { /* Plotly handles responsive */ });
 }
@@ -121,7 +120,8 @@ export function statTile(t) {
     if (t.sd !== undefined && t.sd !== null) value.append(el("span", { class: "of" }, `± ${fmt(t.sd, 3)}`));
     else if (t.ci) value.append(el("span", { class: "of" }, `[${fmt(t.ci[0], 2)}, ${fmt(t.ci[1], 2)}]`));
   }
-  tile.append(value, el("div", { class: "label" }, t.label), el("div", { class: "sub" }, t.sub || ""), el("div", { class: "source" }, `Source: ${t.source || "pending"}`));
+  tile.append(value, el("div", { class: "label" }, t.label), el("div", { class: "sub" }, t.sub || ""),
+    el("details", { class: "tile-src" }, [el("summary", {}, "Source"), el("div", {}, t.source || "pending")]));
   return tile;
 }
 
@@ -210,3 +210,6 @@ export function sourceList(files) {
 export function badge(kind, icon, text) {
   return el("span", { class: `badge ${kind}` }, [el("span", { class: "icon", "aria-hidden": "true" }, icon), text]);
 }
+
+// Print: open the collapsed figure notes and tile sources so the paper copy carries them.
+window.addEventListener("beforeprint", () => document.querySelectorAll("details.fig-notes, details.tile-src").forEach((d) => { d.open = true; }));

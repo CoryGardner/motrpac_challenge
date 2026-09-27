@@ -58,7 +58,7 @@ def main():
     ax.grid(axis="x", visible=False)
     ax.grid(axis="y", color=T["grid"], linewidth=0.8)
     ax.legend(frameon=False, loc="upper center", fontsize=8, ncol=2, bbox_to_anchor=(0.5, -0.3))
-    ax.set_title("a  Accuracy survives every shift; the guarantee survives only\n    the training-state one (20-gene panel, α = 0.10, source calibration)", loc="left", fontsize=9.5)
+    ax.set_title("a  Accuracy stays well above chance at every rung; the 90 % guarantee holds\n    within the study and is restored by three animals (20-gene panel, α = 0.10)", loc="left", fontsize=9.5)
 
     # (b) stable core: effect size per gene
     core = sorted(SC["core"], key=lambda r: r["effect_size"])

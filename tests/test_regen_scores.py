@@ -125,3 +125,22 @@ def test_08_regen_reproduces_shift_table_and_per_vial_sets_agree():
     k50 = REGEN / "08_shift_k50" / "shift_table.csv"
     assert k50.exists(), "the k = 50 shift run is missing"
     assert set(pd.read_csv(k50)["arm"]) == {"full", "panel_k50"}
+
+
+def test_15_fingerprint_by_duration_matches_regen():
+    """Phase 15b's primary design is the phase-08 controls→trained split scored per duration: its per-group accuracy,
+    coverage and empty-set rate must equal the numbers recomputed from the regenerated per-vial sets."""
+    p5_path = RES / "15_time_course" / "fingerprint_by_duration" / "part5_by_duration.csv"
+    if not p5_path.exists():
+        pytest.skip("phase 15b has not been run (results/15_time_course/fingerprint_by_duration/part5_by_duration.csv)")
+    p5 = pd.read_csv(p5_path)
+    p5 = p5[(p5["design"] == "control_only_fit7_cal3") & p5["test_group"].isin(["1w", "2w", "4w", "8w"])]
+    v = pd.read_csv(REGEN / "08_shift_k20" / "scores_target_vials.csv", dtype={"viallabel": str, "pid": str})
+    v = v[v["split"] == "train_control_test_trained"]
+    assert set(p5["arm"]) == {"full", "panel_k20"} and len(p5) == 8
+    for _, r in p5.iterrows():
+        d = v[(v["arm"] == r["arm"]) & (v["group"] == r["test_group"])]
+        assert len(d) == r["n_test_vials"], (r["arm"], r["test_group"])
+        assert float((d["y_pred"] == d["tissue"]).mean()) == pytest.approx(r["accuracy"], abs=1e-9), (r["arm"], r["test_group"], "accuracy")
+        assert float(d.loc[d["seen"], "covered_marginal"].mean()) == pytest.approx(r["coverage"], abs=1e-9), (r["arm"], r["test_group"], "coverage")
+        assert float((d["size_marginal"] == 0).mean()) == pytest.approx(r["empty_rate"], abs=1e-9), (r["arm"], r["test_group"], "empty")

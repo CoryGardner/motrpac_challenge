@@ -1,11 +1,17 @@
 cff-version: 1.2.0
-message: "If you use this code or site, please cite it as below, and cite the data sources listed in the README."
+message: "If you use this code or site, please cite it as below, and cite the data sources listed in the README and under references."
 title: "Molecular Tissue Fingerprints: a 20-gene panel, its conformal guarantee, and what a within-study fingerprint can identify"
 type: software
-version: "1.2.0"
+version: "1.3.0"
 date-released: "2026-09-26"
 license: MIT
-# team "The Rat Pack"; members in no particular order
+repository-code: "https://github.com/CoryGardner/motrpac_challenge"
+url: "https://corygardner.github.io/motrpac_challenge/"
+identifiers:
+  - type: url
+    value: "https://github.com/CoryGardner/motrpac_challenge/releases/tag/hackathon-submission-v4"
+    description: "Release tag hackathon-submission-v4 (version 1.3.0)"
+# team "The Rat PAC"; members in no particular order
 authors:
   - given-names: Samuel
     family-names: Montalvo
@@ -55,3 +61,31 @@ references:
     start: 1318
     end: 1330
     year: 2020
+  - type: software
+    title: "bodymapRat: Experimental dataset from the rat BodyMap project"
+    authors:
+      - family-names: Hicks
+        given-names: Stephanie
+    version: "1.28.0"
+    doi: 10.18129/B9.bioc.bodymapRat
+    url: "https://bioconductor.org/packages/bodymapRat"
+    license: CC-BY-4.0
+    notes: "Bioconductor ExperimentHub package with the STAR gene counts of GEO GSE53960; exported 2026-09-17 by R/export_bodymap.R."
+  - type: software
+    title: "MotrpacRatTraining6moData: data for analysis of the MoTrPAC endurance exercise training study in 6-month-old rats"
+    authors:
+      - family-names: Gay
+        given-names: Nicole
+      - family-names: Jean Beltran
+        given-names: Pierre
+      - family-names: Amar
+        given-names: David
+      - family-names: Jimenez-Morales
+        given-names: David
+      - name: "MoTrPAC Study Group"
+    version: "2.0.0"
+    commit: f831a4fe421ec11687640452484a8247137aa74a
+    repository-code: "https://github.com/MoTrPAC/MotrpacRatTraining6moData"
+    url: "https://motrpac.github.io/MotrpacRatTraining6moData/"
+    license: MIT
+    notes: "Installed from commit f831a4f (GitHub tag v2.1.0); the DESCRIPTION reads 2.0.0 at both tags v2.0.0 and v2.1.0, so the commit is the pin. Exported 2026-09-17 by R/export_motrpac.R."

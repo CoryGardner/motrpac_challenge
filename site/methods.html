@@ -5,7 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Methods — Tissue Fingerprints</title>
 <meta name="description" content="How every number was produced: animal-grouped splits, the in-fold pipeline, the round-robin selector, split-conformal sets and the quantile rule, the certificate, the transfer protocol and the self-check scheme.">
-<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/brand/badge-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/brand/badge-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/brand/badge-180.png">
+<meta name="theme-color" content="#f9f9f7">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Tissue Fingerprints — The Rat PAC">
+<meta property="og:title" content="Methods">
+<meta property="og:description" content="How every number was produced: animal-grouped splits, the in-fold pipeline, the round-robin selector, split-conformal sets and the quantile rule, the certificate, the transfer protocol and the self-check scheme.">
+<meta property="og:url" content="https://corygardner.github.io/motrpac_challenge/methods.html">
+<meta property="og:image" content="https://corygardner.github.io/motrpac_challenge/assets/brand/badge-og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Rat PAC badge beside the question: can a molecular signature identify a tissue reliably?">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="assets/theme.css">
 <script>
   (function () { try { var p = new URLSearchParams(location.search).get("theme") || localStorage.getItem("tfp-theme"); if (p === "dark" || p === "light") document.documentElement.setAttribute("data-theme", p); } catch (e) {} })();
@@ -16,42 +29,22 @@
 <header class="site-header"></header>
 <main id="main" class="wrap">
   <h1>Methods</h1>
-  <p class="lede">Every number on this site was produced by the pipeline in <code>scripts/</code> under the frozen rules in <code>docs/EVALUATION_RULES.md</code>, then exported to <code>site/data/</code> with a provenance record. Nothing is typed by hand.</p>
+  <p class="lede">Every number on this site was produced by the pipeline under the frozen rules in <code>docs/EVALUATION_RULES.md</code>; nothing is typed by hand.</p>
 
-  <section class="section prose" id="pipeline">
+  <section class="section" id="pipeline">
     <h2>The pipeline, all of it inside the fold</h2>
     <p>Each outer fold holds out whole animals. Everything that learns from data — median imputation, the variance prefilter, z-scoring, the panel selector and the classifier — is fitted on the training animals of that fold only, as one scikit-learn <code>Pipeline</code>, so leakage is impossible by construction rather than by care.</p>
-    <svg class="svg-diagram wide" viewBox="0 0 960 250" role="img" aria-labelledby="diag-title">
-      <title id="diag-title">Pipeline diagram: median imputation, variance prefilter, z-score, round-robin selector and classifier, all inside the training fold; test animals are scored only.</title>
-      <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="currentColor"/></marker></defs>
-      <rect class="fold" x="18" y="52" width="740" height="150" rx="10"/>
-      <text x="30" y="42" font-size="14" font-weight="600">training animals of the fold (40 of 50): every step below is fit here only</text>
-      <g font-size="13" text-anchor="middle">
-        <rect class="box" x="30" y="90" width="120" height="64" rx="8"/><text x="90" y="118">median</text><text x="90" y="136">imputation</text>
-        <rect class="box" x="176" y="90" width="120" height="64" rx="8"/><text x="236" y="118">variance</text><text x="236" y="136">prefilter (5,000)</text>
-        <rect class="box" x="322" y="90" width="120" height="64" rx="8"/><text x="382" y="118">z-score</text><text x="382" y="136">per gene</text>
-        <rect class="box" x="468" y="90" width="130" height="64" rx="8"/><text x="533" y="118">round-robin</text><text x="533" y="136">selector (k genes)</text>
-        <rect class="box" x="624" y="90" width="120" height="64" rx="8"/><text x="684" y="118">logistic</text><text x="684" y="136">regression (L2)</text>
-      </g>
-      <g class="arrow" stroke-width="2" marker-end="url(#arr)" style="color: var(--ink-2)">
-        <path d="M150 122 H172"/><path d="M296 122 H318"/><path d="M442 122 H464"/><path d="M598 122 H620"/>
-      </g>
-      <g font-size="12" fill="var(--ink-2)"><text x="30" y="188">one tissue per pick, classes in turn</text><text x="470" y="188">C = 0.1, tuned by an inner animal-grouped grid search</text></g>
-      <rect class="box" x="800" y="90" width="140" height="64" rx="8"/>
-      <text x="870" y="118" font-size="13" text-anchor="middle">held-out animals</text><text x="870" y="136" font-size="13" text-anchor="middle">(10): scored only</text>
-      <path class="arrow" d="M744 122 H796" stroke-width="2" marker-end="url(#arr)" style="color: var(--ink-2)"/>
-      <text x="800" y="220" font-size="12" fill="var(--ink-2)">→ balanced accuracy, sets, coverage</text>
-    </svg>
-    <p class="small">The one documented deviation: the transcript gene filter (≥ 10 counts in ≥ 20 % of the samples of at least one tissue) runs on all samples before the split. It uses no labels and no test-fold statistics beyond presence, but it is not inside the fold; see Limitations.</p>
+    <div id="fig-pipeline"></div>
+    <p class="small">The one documented deviation: the transcript gene filter (≥ 10 counts in ≥ 20 % of the samples of at least one tissue) runs on all samples before the split. It uses no labels and no test-fold statistics beyond presence, but it is not inside the fold; see <a href="limitations.html#evaluation">Limitations</a>.</p>
   </section>
 
   <section class="section prose" id="splits">
     <h2>Animal-grouped splits</h2>
-    <p>The unit is the animal (<code>pid</code>). Five outer folds are stratified on tissue and grouped on animal (<code>StratifiedGroupKFold</code>), so all 18 vials of an animal are on one side of every split: 40 training and 10 test animals per fold. An assertion checks every split for leaked animals, and the test suite fails if a plain <code>KFold</code> over vials is substituted. Shift experiments are deterministic splits: leave one sex out, hold out one training time point, fit on sedentary controls only.</p>
+    <p>The unit is the animal (<code>pid</code>). Five outer folds are stratified on tissue and grouped on animal (<code>StratifiedGroupKFold</code>), so all 18 vials of an animal are on one side of every split: 40 training and 10 test animals per fold. An assertion checks every split for leaked animals, and the test suite rejects a plain <code>KFold</code> over vials. Shift experiments are deterministic splits: leave one sex out, hold out one training time point, fit on sedentary controls only.</p>
   </section>
 
   <section class="section prose" id="selector">
-    <h2>The selector, and why the F-test fails on 19 classes</h2>
+    <h2>The selector, and why a univariate F-test is not enough for 19 classes</h2>
     <p>The round-robin selector scores every gene for every tissue by a one-vs-rest effect size, |mean in − mean out| / pooled sd, then takes the best remaining gene of each tissue in turn until k genes are chosen. A univariate F-test ranks genes by a single statistic dominated by the tissues with the largest effects, so its top 20 are markers of the same few easy tissues and most tissues are left without one. The Fingerprint page shows the two curves.</p>
   </section>
 
@@ -61,7 +54,7 @@
     <pre>q̂ = the ⌈(n + 1)(1 − α)⌉-th smallest of the n calibration scores,
     and +∞ (every tissue in every set) when that rank exceeds n.</pre>
     <p>A tissue enters a test sample's set when p̂(tissue) ≥ 1 − q̂. With one vial per animal, n = 22, and at α = 0.10 the rank is 21 of 22; at α = 0.05 the rank is 22, the largest score; with n ≤ 18 the rank exceeds n and the set is full. Mondrian sets use one threshold per true class from that class's calibration scores, falling back to the marginal threshold for a class with no score; the floored variant never lets a class threshold fall below the marginal one, so its sets contain both the marginal and the Mondrian sets. Pooled-vial calibration uses all vials of the calibration animals (n ≈ 396); it sits closer to 1 − α but treats vials of one animal as exchangeable, which they are not.</p>
-    <p id="p-quantile-fix"></p>
+    <p id="p-coverage"></p>
   </section>
 
   <section class="section prose" id="certificate">
@@ -76,12 +69,7 @@
 
   <section class="section prose" id="rules">
     <h2>The frozen evaluation rules and the self-check scheme</h2>
-    <p>The rules are in <code>docs/EVALUATION_RULES.md</code> in the repository (frozen; the repository link is in the footer). Two self-contained notebooks, <code>01_replication.ipynb</code> and <code>02_transfer.ipynb</code>, paste the library in verbatim, recompute the headline numbers and compare them with <code>notebooks/expected_values.csv</code> (288 keys; the file records both the pre-fix published value and the post-fix reference value with its tolerance). A drift check inside each notebook fails if the inline library differs from <code>src/</code>. The site adds a third layer: <code>tests/test_site_data.py</code> checks every provenance entry against its results file, and <code>tests/test_site_conformal.js</code> checks the browser's conformal port against Python-computed sets, including infinite thresholds.</p>
-  </section>
-
-  <section class="section prose" id="software">
-    <h2>Software and data versions</h2>
-    <dl class="kv" id="versions"></dl>
+    <p>The rules are in <code>docs/EVALUATION_RULES.md</code> in the repository (frozen; the repository link is in the footer). Two self-contained notebooks, <code>01_replication.ipynb</code> and <code>02_transfer.ipynb</code>, recompute the headline numbers and compare them with a file of expected values; <code>tests/test_site_data.py</code> checks every number on this site against its results file, and <code>tests/test_site_conformal.js</code> checks the browser's conformal sets against Python-computed ones, including infinite thresholds.</p>
   </section>
 </main>
 <footer class="site-footer"></footer>

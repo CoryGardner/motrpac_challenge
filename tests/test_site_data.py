@@ -261,3 +261,71 @@ def test_no_orphan_site_data_files():
         refs |= set(re.findall(r'"data/([\w.-]+\.json)"', js.read_text()))
     orphans = sorted(p.name for p in SITE.glob("*.json") if p.name not in keep and p.name not in refs)
     assert not orphans, orphans
+
+
+# ---- the Exercise page (exercise.json) --------------------------------------------------------------------
+def test_exercise_json_shape():
+    x = _load("exercise.json")
+    for k in ("separability", "covariates", "within_tissue", "fingerprint_by_duration", "summary"):
+        assert k in x, k
+    rows = [r for r in x["fingerprint_by_duration"]["rows"] if not r.get("pending")]
+    assert len(rows) == 12, len(rows)                      # 3 models × 4 training durations
+    for r in rows:
+        assert r["n_individuals"] == 10 and r["n_samples"] in (179, 180), r
+        assert r["accuracy_ci"][0] <= r["accuracy"] <= r["accuracy_ci"][1], r
+        assert r["coverage_ci"][0] <= r["coverage"] <= r["coverage_ci"][1], r
+        assert r["coverage"] + r["empty"] + r["wrong_non_empty"] <= 1 + 1e-9, r
+    assert len(x["separability"]["duration"]) == 28 and len(x["covariates"]["auroc"]) == 84
+    assert len(x["within_tissue"]["TRNSCRPT"]) == 19 and len(x["within_tissue"]["PROT"]) == 7
+
+
+def test_exercise_summary_has_provenance_and_no_pending():
+    """Every scalar the Exercise page reads carries a provenance entry with the same value; pending is allowed only
+    for the parts whose result files are absent."""
+    x = _load("exercise.json")
+    prov = {e["id"]: e for e in _load("provenance.json")["entries"]}
+    optional = ("fbd_ref_", "fbd_acc_excl_", "fbd_cov_excl_", "design_", "physio_", "ptr_")
+    for k, v in x["summary"].items():
+        assert k in prov, f"summary.{k} has no provenance entry"
+        if prov[k].get("pending"):
+            assert k.startswith(optional), f"{k} is pending"
+            continue
+        assert v == prov[k]["value"], (k, v, prov[k]["value"])
+    have15 = (RES / "15_time_course" / "fingerprint_by_duration" / "part5_by_duration.csv").exists()
+    have05 = (RES / "05_panels" / "TRNSCRPT" / "panel_training_summary.csv").exists()
+    for k, e in prov.items():
+        if e.get("pending") and k.startswith(("fbd_ref_", "design_", "physio_")):
+            assert not have15, f"{k} pending although phase 15 results are present"
+        if e.get("pending") and k.startswith("ptr_"):
+            assert not have05, f"{k} pending although the panel training response is present"
+
+
+def test_exercise_page_keys_are_exported():
+    import re
+    x = _load("exercise.json")
+    keys = set()
+    ex_js = ROOT / "site" / "assets" / "pages" / "exercise.js"
+    if ex_js.exists():                       # the page aliases X.summary as S
+        keys |= set(re.findall(r"\bS\.([A-Za-z0-9_]+)", ex_js.read_text()))
+    for js in ((ROOT / "site" / "assets" / "pages" / "home.js"),):
+        if js.exists():
+            keys |= set(re.findall(r"\bX\.summary\.([A-Za-z0-9_]+)", js.read_text()))
+    missing = sorted(k for k in keys if k not in x["summary"])
+    assert not missing, missing
+
+
+def test_fbd_rows_reproduce_the_shift_table():
+    """The per-duration rows recomputed from the per-vial regeneration pool back to the published accuracy."""
+    x = _load("exercise.json")
+    rows = [r for r in x["fingerprint_by_duration"]["rows"] if r["model"] == "k20" and not r.get("pending")]
+    pooled = sum(r["accuracy"] * r["n_samples"] for r in rows) / sum(r["n_samples"] for r in rows)
+    st = pd.read_csv(_res("results/08_shift/TRNSCRPT/shift_table.csv"))
+    ref = float(st[(st["split"] == "train_control_test_trained") & (st["arm"] == "panel_k20")]["accuracy_all"].iloc[0])
+    assert abs(pooled - ref) < 1e-9, (pooled, ref)
+
+
+def test_exercise_covariate_scalars_use_the_logistic_rows():
+    prov = {e["id"]: e for e in _load("provenance.json")["entries"]}
+    for k, e in prov.items():
+        if k.startswith("cov_") and k.endswith(("_logreg", "_null95", "_p")):
+            assert e["where"].get("model") == "logreg", (k, e["where"])

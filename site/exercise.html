@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Does exercise change the fingerprint? — Tissue Fingerprints</title>
+<meta name="description" content="What eight weeks of endurance training do to a tissue fingerprint in MoTrPAC rats: the panel fit on sedentary controls names the tissue of trained animals; within a tissue the training response is real, measurable in every omic layer, and sits on minor axes; where it is strongest it is checked against processing.">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/brand/badge-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/brand/badge-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/brand/badge-180.png">
+<meta name="theme-color" content="#f9f9f7">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Tissue Fingerprints — The Rat PAC">
+<meta property="og:title" content="Does exercise change the fingerprint?">
+<meta property="og:description" content="What eight weeks of endurance training do to a tissue fingerprint in MoTrPAC rats: the panel fit on sedentary controls names the tissue of trained animals; within a tissue the training response is real and sits on minor axes.">
+<meta property="og:url" content="https://corygardner.github.io/motrpac_challenge/exercise.html">
+<meta property="og:image" content="https://corygardner.github.io/motrpac_challenge/assets/brand/badge-og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Rat PAC badge beside the question: can a molecular signature identify a tissue reliably?">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="assets/theme.css">
+<script>
+  (function () { try { var p = new URLSearchParams(location.search).get("theme") || localStorage.getItem("tfp-theme"); if (p === "dark" || p === "light") document.documentElement.setAttribute("data-theme", p); } catch (e) {} })();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/plotly.js-cartesian-dist-min@2.35.2/plotly-cartesian.min.js" crossorigin="anonymous"
+        onerror="this.onerror=null;var s=document.createElement('script');s.src='vendor/plotly-cartesian-2.35.2.min.js';document.head.appendChild(s);"></script>
+<script type="module" src="assets/pages/exercise.js"></script>
+</head>
+<body>
+<header class="site-header"></header>
+<main id="main" class="wrap">
+  <h1>Does exercise change the fingerprint?</h1>
+  <p class="lede" id="lede">Loading…</p>
+
+  <section class="section" id="design">
+    <h2>1. The design: eight weeks of training, and the animals it can be compared with</h2>
+    <p id="p-design"></p>
+    <div id="fig-design"></div>
+    <div class="tiles" id="tiles-physiology"></div>
+  </section>
+
+  <section class="section" id="within-tissue">
+    <h2>2. Inside a tissue, training is visible on minor axes</h2>
+    <p id="p-within"></p>
+    <div id="fig-within"></div>
+  </section>
+
+  <section class="section" id="separability">
+    <h2>3. Sedentary vs trained is separable in every omic layer</h2>
+    <p id="p-sep"></p>
+    <div id="fig-sep"></div>
+  </section>
+
+  <section class="section" id="covariates">
+    <h2>4. Where the training signal can be attributed, and where processing shares the axis</h2>
+    <p id="p-cov"></p>
+    <div id="fig-cov"></div>
+    <div id="callout-cov"></div>
+  </section>
+
+  <section class="section" id="fingerprint">
+    <h2>5. The fingerprint ignores training</h2>
+    <p id="p-fbd"></p>
+    <div id="fig-fbd"></div>
+  </section>
+
+  <section class="section" id="panel-genes">
+    <h2>6. Why: on every panel gene the tissue contrast outweighs the training response</h2>
+    <p id="p-ptr"></p>
+    <div id="fig-ptr"></div>
+  </section>
+
+  <section class="section" id="takeaway">
+    <div id="callout-takeaway"></div>
+  </section>
+</main>
+<footer class="site-footer"></footer>
+</body>
+</html>

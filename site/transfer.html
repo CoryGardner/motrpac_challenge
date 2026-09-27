@@ -4,13 +4,26 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Does it transfer? — Tissue Fingerprints</title>
-<meta name="description" content="The rat tissue fingerprint under shift: trained animals, held-out sex, another laboratory (rat BodyMap), another species (GTEx), juvenile and old animals, and what recalibration can and cannot repair.">
-<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<meta name="description" content="The rat tissue fingerprint under shift: trained animals, held-out sex, another laboratory (rat BodyMap), another species (GTEx), juvenile and old animals, and what recalibration restores, and at what set size.">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/brand/badge-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/brand/badge-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/brand/badge-180.png">
+<meta name="theme-color" content="#f9f9f7">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Tissue Fingerprints — The Rat PAC">
+<meta property="og:title" content="Does it transfer?">
+<meta property="og:description" content="The rat tissue fingerprint under shift: trained animals, held-out sex, another laboratory (rat BodyMap), another species (GTEx), juvenile and old animals, and what recalibration restores, and at what set size.">
+<meta property="og:url" content="https://corygardner.github.io/motrpac_challenge/transfer.html">
+<meta property="og:image" content="https://corygardner.github.io/motrpac_challenge/assets/brand/badge-og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Rat PAC badge beside the question: can a molecular signature identify a tissue reliably?">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="assets/theme.css">
 <script>
   (function () { try { var p = new URLSearchParams(location.search).get("theme") || localStorage.getItem("tfp-theme"); if (p === "dark" || p === "light") document.documentElement.setAttribute("data-theme", p); } catch (e) {} })();
 </script>
-<script src="https://cdn.jsdelivr.net/npm/plotly.js-cartesian-dist-min@2.35.2/plotly-cartesian.min.js" crossorigin="anonymous"
+<script src="https://cdn.jsdelivr.net/npm/plotly.js-cartesian-dist-min@2.35.2/plotly-cartesian.min.js" integrity="sha384-gKF7EaMDoWW1zLWkouldmVWF5jqEKrAswAciW73iNzqlomabVVPO60XkJvL5q/Ie" crossorigin="anonymous"
         onerror="this.onerror=null;var s=document.createElement('script');s.src='vendor/plotly-cartesian-2.35.2.min.js';document.head.appendChild(s);"></script>
 <script type="module" src="assets/pages/transfer.js"></script>
 </head>
@@ -22,18 +35,18 @@
 
   <section class="section" id="ladder">
     <h2>The transfer ladder</h2>
-    <p>The same fingerprint, fit on MoTrPAC, applied one shift further away each rung. Accuracy is the fraction of samples whose top call is the right tissue (super-class scoring for muscle and brain on the external targets). Coverage is what the α = 0.10 conformal set, calibrated on held-out MoTrPAC animals, actually delivers.</p>
+    <p>The same fingerprint, fit on MoTrPAC, one shift further away each rung: accuracy is the fraction of samples whose top call is the right tissue (super-class scoring for muscle and brain on external targets); coverage is what the α = 0.10 set, calibrated on held-out MoTrPAC animals, delivers.</p>
     <div id="fig-ladder"></div>
   </section>
 
   <section class="section" id="empty-sets">
-    <h2>How coverage is lost</h2>
+    <h2>How coverage is spent: abstention, not error</h2>
     <p id="p-empty"></p>
     <div id="fig-empty"></div>
   </section>
 
   <section class="section" id="recalibration">
-    <h2>What recalibration buys, and what it costs</h2>
+    <h2>What recalibration restores, and at what set size</h2>
     <p id="p-recal"></p>
     <div id="callout-recal"></div>
     <div id="fig-recal"></div>
@@ -57,7 +70,7 @@
   </section>
 
   <section class="section" id="representations">
-    <h2>Representation: z-scores transfer, ranks and pairs do not</h2>
+    <h2>Representation: z-scores cross species; ranks and pairs hold within species</h2>
     <p id="p-rep"></p>
     <div id="fig-rep"></div>
     <div id="fig-cpm"></div>

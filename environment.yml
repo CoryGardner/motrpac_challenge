@@ -1,0 +1,24 @@
+# Reference Python environment of the submission: the exact versions of the reference run (2026-09-26),
+# all from conda-forge (py312 builds exist for every pin; checked 2026-09-26). Same pins as requirements.txt.
+#   conda env create -f environment.yml && conda activate tfp      (from the repository root: pip installs `-e .`)
+# Node is only needed for tests/test_site_conformal.js and the screenshot tooling.
+name: tfp
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - python=3.12.14
+  - numpy=2.5.3
+  - pandas=3.0.6
+  - scipy=1.18.1
+  - scikit-learn=1.9.1
+  - matplotlib=3.11.2
+  - statsmodels=0.15.0
+  - pyarrow=25.0.0
+  - joblib=1.6.0
+  - pytest=9.1.1
+  - nodejs=20.20.2
+  - pip
+  - pip:
+      - -e .
+  # optional, import-guarded: umap-learn, seaborn, nbformat (the notebooks under extras/)

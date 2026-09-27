@@ -1,6 +1,6 @@
 {
- "generated": "2026-09-27 03:08 UTC",
- "git_hash": "6adc938",
+ "generated": "2026-09-27 03:49 UTC",
+ "git_hash": "7b4c09c",
  "results_dir": "results",
  "results_snapshot": null,
  "phases": {
@@ -27,6 +27,11 @@
      "sha256": "86bc5be348f2338cd439bd8b14a0ea639f9888fabd431bb88a6cf8968dd98eab"
     },
     {
+     "path": "results/03_eda/readout_within_tissue_summary.csv",
+     "bytes": 310,
+     "sha256": "b1f54f2884480541914337b1b28c4d82a29e700632ebe30288ea324f028a9e53"
+    },
+    {
      "path": "results/03_eda/variance_partition_METAB.csv",
      "bytes": 1125,
      "sha256": "8918cda80ccff8747bdda562a703bf986dec89158a5fc266b1fc7a2996fcc5bc"
@@ -40,10 +45,25 @@
      "path": "results/03_eda/variance_partition_TRNSCRPT.csv",
      "bytes": 1135,
      "sha256": "2af682fdd93bb1c980223a531934a2e6732cfc082f716c8bbc6e1bb2335a777c"
+    },
+    {
+     "path": "results/03_eda/within_tissue_pca_METAB.csv",
+     "bytes": 3211,
+     "sha256": "f5febab3e64e649e39b0594c61e75e02727cd4858e4a6d1648550c30bdf7b836"
+    },
+    {
+     "path": "results/03_eda/within_tissue_pca_PROT.csv",
+     "bytes": 2187,
+     "sha256": "8c5f97a686ce9d5f1d06b49ce309d30e5c137ea0924c1afd705a6da73239d490"
+    },
+    {
+     "path": "results/03_eda/within_tissue_pca_TRNSCRPT.csv",
+     "bytes": 11565,
+     "sha256": "627864b1169831dd7586746b40cc3f66cc80a38eb9e4e844ec6f13c85217b7b1"
     }
    ],
-   "n_files": 7,
-   "bytes": 10073
+   "n_files": 11,
+   "bytes": 27346
   },
   "04_baselines": {
    "files": [
@@ -109,6 +129,21 @@
      "sha256": "9a3ec435882c065fae6046e9ab20084c389f4a6a6b438245cd089b01169720fd"
     },
     {
+     "path": "results/05_panels/TRNSCRPT/panel_training_background.csv",
+     "bytes": 1862,
+     "sha256": "e7f5c7574a87b26fe72fd343207a92f76f0685928210347e9ab81d045173e70a"
+    },
+    {
+     "path": "results/05_panels/TRNSCRPT/panel_training_response.csv",
+     "bytes": 11693,
+     "sha256": "016bc2510a07ee3897e2a6935bc6304fb53deec57b528aa89a41ab95e3479c03"
+    },
+    {
+     "path": "results/05_panels/TRNSCRPT/panel_training_summary.csv",
+     "bytes": 745,
+     "sha256": "ddcad96afe6bf285b89c7d937c4ef14b45d7cdd28b1d51dcb2b55c2dfa38d25b"
+    },
+    {
      "path": "results/05_panels/TRNSCRPT/selected_by_fold.csv",
      "bytes": 29703,
      "sha256": "d6e8856e6836c3b6c2c952b5813bf031e66f89ec09ccfbd00de6dda096d1f5d1"
@@ -124,8 +159,8 @@
      "sha256": "a6f28d211ad532e3a45836ca93ff79614256e3d00996c925d02fed84c0ebc451"
     }
    ],
-   "n_files": 9,
-   "bytes": 58028
+   "n_files": 12,
+   "bytes": 72328
   },
   "06_conformal": {
    "files": [
@@ -172,6 +207,42 @@
    ],
    "n_files": 8,
    "bytes": 22373
+  },
+  "07_fusion": {
+   "files": [
+    {
+     "path": "results/07_fusion/batch_conclusion.csv",
+     "bytes": 2001,
+     "sha256": "c0b4c4f4aae394133f3172acc99a969289cb8a26eaedda4f0039806acf39b01d"
+    },
+    {
+     "path": "results/07_fusion/batch_covariate_auroc.csv",
+     "bytes": 7981,
+     "sha256": "22dd40288c27e520297f8366ca0b8208455112a6a5bc81fbdb9441c1b15764ad"
+    },
+    {
+     "path": "results/07_fusion/taskB_batch_balance.csv",
+     "bytes": 677,
+     "sha256": "1b908fbcde40c453c579c175b93b29427e5f1019061ee37477b92980cd3b6491"
+    },
+    {
+     "path": "results/07_fusion/taskB_best_vs_null.csv",
+     "bytes": 1415,
+     "sha256": "a90b0aa38e5707541c4c5d0f5530b4a7c11f3120aaf63552462773f8615d944f"
+    },
+    {
+     "path": "results/07_fusion/taskB_duration_summary.csv",
+     "bytes": 3517,
+     "sha256": "173e6e979203e78dba4793498ad1e5580fac36c0673919f6394305d11ccfad90"
+    },
+    {
+     "path": "results/07_fusion/taskB_summary.csv",
+     "bytes": 4778,
+     "sha256": "b5f059ab47c777922e1e347d2f57e38156d381605e01736de490e06a463fbf61"
+    }
+   ],
+   "n_files": 6,
+   "bytes": 20369
   },
   "08_shift": {
    "files": [
@@ -398,6 +469,52 @@
    "n_files": 2,
    "bytes": 14349
   },
+  "15_time_course": {
+   "files": [
+    {
+     "path": "results/15_time_course/design/design_by_group_sex.csv",
+     "bytes": 953,
+     "sha256": "5fcafdf475723033004023a579373c49e9125e1602435cb7c6f7299342c2a590"
+    },
+    {
+     "path": "results/15_time_course/design/design_contrasts.csv",
+     "bytes": 1144,
+     "sha256": "05f07dace65ab890230f1d06a5f97b0a20ea26bcdfded92572bd3e590ad99bab"
+    },
+    {
+     "path": "results/15_time_course/fingerprint_by_duration/calibration_info.csv",
+     "bytes": 2198,
+     "sha256": "3c68953831218d12030dfcf7735892083ebaf1e4871f19cd26d53e0ab1010417"
+    },
+    {
+     "path": "results/15_time_course/fingerprint_by_duration/differences.csv",
+     "bytes": 5633,
+     "sha256": "8e9cfae094f4fb6de795cb46cf7ec6c917749f4b66367882701c2bf476b7b103"
+    },
+    {
+     "path": "results/15_time_course/fingerprint_by_duration/part5_by_duration.csv",
+     "bytes": 9038,
+     "sha256": "6a545a964d83256436feb92ddced02fa449eea12c2f656eab370dc2c2bc0333a"
+    },
+    {
+     "path": "results/15_time_course/fingerprint_by_duration/part5_matched_summary.csv",
+     "bytes": 7001,
+     "sha256": "d4ed18f8ed5beaeb96db6dee09f69d2455b51a66e0c2316669bd076b7fff4519"
+    },
+    {
+     "path": "results/15_time_course/fingerprint_by_duration/part6_seeds_summary.csv",
+     "bytes": 4465,
+     "sha256": "8b68f4a53d80352dec7e1e97070e68fdbe5df0ae10eaf8df8c7723ee70b68687"
+    },
+    {
+     "path": "results/15_time_course/physiology/physiology_group_tests.csv",
+     "bytes": 2689,
+     "sha256": "8e99375e9eaf7dd9e67cf89dbd3240a28200f6666a2c9200d7c8e8c2d6e01149"
+    }
+   ],
+   "n_files": 8,
+   "bytes": 33121
+  },
   "16_identifiability": {
    "files": [
     {
@@ -532,11 +649,13 @@
   "04_baselines",
   "05_panels",
   "06_conformal",
+  "07_fusion",
   "08_shift",
   "12_bodymap",
   "13_gtex",
   "14_transfer",
   "14_transfer_cpm",
+  "15_time_course",
   "16_identifiability",
   "31_site_regen"
  ],
@@ -600,19 +719,24 @@
    "regenerated": true
   },
   {
+   "name": "exercise.json",
+   "bytes": 213194,
+   "regenerated": true
+  },
+  {
    "name": "expr_bodymap.json",
    "bytes": 156328,
-   "regenerated": true
+   "regenerated": false
   },
   {
    "name": "expr_gtex.json",
    "bytes": 995893,
-   "regenerated": true
+   "regenerated": false
   },
   {
    "name": "expr_motrpac.json",
    "bytes": 391269,
-   "regenerated": true
+   "regenerated": false
   },
   {
    "name": "genes.json",
@@ -626,7 +750,7 @@
   },
   {
    "name": "headline.json",
-   "bytes": 52616,
+   "bytes": 52523,
    "regenerated": true
   },
   {
@@ -641,7 +765,7 @@
   },
   {
    "name": "provenance.json",
-   "bytes": 103097,
+   "bytes": 136823,
    "regenerated": true
   },
   {

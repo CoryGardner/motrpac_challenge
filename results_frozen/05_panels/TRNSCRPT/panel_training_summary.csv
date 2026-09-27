@@ -1,0 +1,4 @@
+gene_set,n_genes,n_regulated_marker_5pct,regulated_marker_genes,n_regulated_anywhere,max_abs_logfc_marker,min_max_abs_logfc_marker,min_tissue_effect,max_tissue_effect,median_ratio_tissue_over_training,min_ratio_tissue_over_training
+k20,20,6,Qrfpr;Otop1;Hbq1b;Abo3;Akr1c3;Ccl25,11,1.27293078392809,0.0324728223263828,0.6526013373247901,11.794098973920706,8.88888009903906,1.4922054511992175
+core,10,2,Akr1c3;Ccl25,4,1.2286064607855,0.0799248453919544,1.3332122499935908,11.794098973920706,16.241613516390487,6.650344625331994
+stability_51,51,15,Dbh;Mc2r;Qrfpr;Grifin;Otop1;Ucp1;Hbb-b1;Hbq1b;Treml1;Abo3;Akr1c3;Lbx1;Ccl25;Smcp;Csn3,25,2.74577612358187,0.0282146541343568,-1.2475577019782866,12.322475683202402,9.592561727047372,-3.756403467549175

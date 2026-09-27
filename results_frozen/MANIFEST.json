@@ -1,6 +1,6 @@
 {
  "snapshot_date": "2026-09-26",
- "frozen_from_commit": "6adc938",
+ "frozen_from_commit": "7b4c09c",
  "what": "every result file scripts/30_export_site_data.py reads, the --save-scores regeneration runs and the published tables tests/test_regen_scores.py compares them against; derived statistics only, no raw data",
  "produced_by": {
   "phases_02_14": "make all bodymap gtex (2026-09-18); conformal-quantile correction reruns of phases 06, 08, 12-14 (2026-09-25)",
@@ -27,8 +27,8 @@
   "bodymap": "rat BodyMap GSE53960 via bodymapRat 1.28.0 (ExperimentHub), 2026-09-17",
   "gtex": "GTEx v8 open-access files of 2017-06-05 (sha256 in the README), downloaded 2026-09-17/18"
  },
- "n_files": 150,
- "bytes": 10911487,
+ "n_files": 171,
+ "bytes": 10996550,
  "files": [
   {
    "path": "03_eda/batch_partition_METAB.csv",
@@ -51,6 +51,11 @@
    "sha256": "86bc5be348f2338cd439bd8b14a0ea639f9888fabd431bb88a6cf8968dd98eab"
   },
   {
+   "path": "03_eda/readout_within_tissue_summary.csv",
+   "bytes": 310,
+   "sha256": "b1f54f2884480541914337b1b28c4d82a29e700632ebe30288ea324f028a9e53"
+  },
+  {
    "path": "03_eda/variance_partition_METAB.csv",
    "bytes": 1125,
    "sha256": "8918cda80ccff8747bdda562a703bf986dec89158a5fc266b1fc7a2996fcc5bc"
@@ -64,6 +69,21 @@
    "path": "03_eda/variance_partition_TRNSCRPT.csv",
    "bytes": 1135,
    "sha256": "2af682fdd93bb1c980223a531934a2e6732cfc082f716c8bbc6e1bb2335a777c"
+  },
+  {
+   "path": "03_eda/within_tissue_pca_METAB.csv",
+   "bytes": 3211,
+   "sha256": "f5febab3e64e649e39b0594c61e75e02727cd4858e4a6d1648550c30bdf7b836"
+  },
+  {
+   "path": "03_eda/within_tissue_pca_PROT.csv",
+   "bytes": 2187,
+   "sha256": "8c5f97a686ce9d5f1d06b49ce309d30e5c137ea0924c1afd705a6da73239d490"
+  },
+  {
+   "path": "03_eda/within_tissue_pca_TRNSCRPT.csv",
+   "bytes": 11565,
+   "sha256": "627864b1169831dd7586746b40cc3f66cc80a38eb9e4e844ec6f13c85217b7b1"
   },
   {
    "path": "04_baselines/PROT/diagnostic_accuracy.csv",
@@ -119,6 +139,21 @@
    "path": "05_panels/TRNSCRPT/panel_curve_fclassif.csv",
    "bytes": 5883,
    "sha256": "9a3ec435882c065fae6046e9ab20084c389f4a6a6b438245cd089b01169720fd"
+  },
+  {
+   "path": "05_panels/TRNSCRPT/panel_training_background.csv",
+   "bytes": 1862,
+   "sha256": "e7f5c7574a87b26fe72fd343207a92f76f0685928210347e9ab81d045173e70a"
+  },
+  {
+   "path": "05_panels/TRNSCRPT/panel_training_response.csv",
+   "bytes": 11693,
+   "sha256": "016bc2510a07ee3897e2a6935bc6304fb53deec57b528aa89a41ab95e3479c03"
+  },
+  {
+   "path": "05_panels/TRNSCRPT/panel_training_summary.csv",
+   "bytes": 745,
+   "sha256": "ddcad96afe6bf285b89c7d937c4ef14b45d7cdd28b1d51dcb2b55c2dfa38d25b"
   },
   {
    "path": "05_panels/TRNSCRPT/selected_by_fold.csv",
@@ -189,6 +224,36 @@
    "path": "06_conformal/TRNSCRPT/sizing_table.csv",
    "bytes": 106,
    "sha256": "472411abf8197ca23178749474f111d64158458c0ef3b6a3bf3dcc94e9cb0062"
+  },
+  {
+   "path": "07_fusion/batch_conclusion.csv",
+   "bytes": 2001,
+   "sha256": "c0b4c4f4aae394133f3172acc99a969289cb8a26eaedda4f0039806acf39b01d"
+  },
+  {
+   "path": "07_fusion/batch_covariate_auroc.csv",
+   "bytes": 7981,
+   "sha256": "22dd40288c27e520297f8366ca0b8208455112a6a5bc81fbdb9441c1b15764ad"
+  },
+  {
+   "path": "07_fusion/taskB_batch_balance.csv",
+   "bytes": 677,
+   "sha256": "1b908fbcde40c453c579c175b93b29427e5f1019061ee37477b92980cd3b6491"
+  },
+  {
+   "path": "07_fusion/taskB_best_vs_null.csv",
+   "bytes": 1415,
+   "sha256": "a90b0aa38e5707541c4c5d0f5530b4a7c11f3120aaf63552462773f8615d944f"
+  },
+  {
+   "path": "07_fusion/taskB_duration_summary.csv",
+   "bytes": 3517,
+   "sha256": "173e6e979203e78dba4793498ad1e5580fac36c0673919f6394305d11ccfad90"
+  },
+  {
+   "path": "07_fusion/taskB_summary.csv",
+   "bytes": 4778,
+   "sha256": "b5f059ab47c777922e1e347d2f57e38156d381605e01736de490e06a463fbf61"
   },
   {
    "path": "08_shift/METAB_core9/shift_table.csv",
@@ -384,6 +449,46 @@
    "path": "14_transfer_cpm/target_summary.csv",
    "bytes": 904,
    "sha256": "e68f7003a91bb0faa0c4012c57c5adcc52d265b1039f3384bddc962d445a41d5"
+  },
+  {
+   "path": "15_time_course/design/design_by_group_sex.csv",
+   "bytes": 953,
+   "sha256": "5fcafdf475723033004023a579373c49e9125e1602435cb7c6f7299342c2a590"
+  },
+  {
+   "path": "15_time_course/design/design_contrasts.csv",
+   "bytes": 1144,
+   "sha256": "05f07dace65ab890230f1d06a5f97b0a20ea26bcdfded92572bd3e590ad99bab"
+  },
+  {
+   "path": "15_time_course/fingerprint_by_duration/calibration_info.csv",
+   "bytes": 2198,
+   "sha256": "3c68953831218d12030dfcf7735892083ebaf1e4871f19cd26d53e0ab1010417"
+  },
+  {
+   "path": "15_time_course/fingerprint_by_duration/differences.csv",
+   "bytes": 5633,
+   "sha256": "8e9cfae094f4fb6de795cb46cf7ec6c917749f4b66367882701c2bf476b7b103"
+  },
+  {
+   "path": "15_time_course/fingerprint_by_duration/part5_by_duration.csv",
+   "bytes": 9038,
+   "sha256": "6a545a964d83256436feb92ddced02fa449eea12c2f656eab370dc2c2bc0333a"
+  },
+  {
+   "path": "15_time_course/fingerprint_by_duration/part5_matched_summary.csv",
+   "bytes": 7001,
+   "sha256": "d4ed18f8ed5beaeb96db6dee09f69d2455b51a66e0c2316669bd076b7fff4519"
+  },
+  {
+   "path": "15_time_course/fingerprint_by_duration/part6_seeds_summary.csv",
+   "bytes": 4465,
+   "sha256": "8b68f4a53d80352dec7e1e97070e68fdbe5df0ae10eaf8df8c7723ee70b68687"
+  },
+  {
+   "path": "15_time_course/physiology/physiology_group_tests.csv",
+   "bytes": 2689,
+   "sha256": "8e99375e9eaf7dd9e67cf89dbd3240a28200f6666a2c9200d7c8e8c2d6e01149"
   },
   {
    "path": "16_identifiability/NOTES.md",

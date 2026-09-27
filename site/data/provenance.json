@@ -1,15 +1,19 @@
 {
 "_meta": {
-"generated": "2026-09-27 03:08 UTC",
-"git_hash": "6adc938",
+"generated": "2026-09-27 03:49 UTC",
+"git_hash": "7b4c09c",
 "sources": [
 "results/03_eda/batch_partition_METAB.csv",
 "results/03_eda/batch_partition_PROT.csv",
 "results/03_eda/batch_partition_TRNSCRPT.csv",
 "results/03_eda/readout_variance_pc1-3.csv",
+"results/03_eda/readout_within_tissue_summary.csv",
 "results/03_eda/variance_partition_METAB.csv",
 "results/03_eda/variance_partition_PROT.csv",
 "results/03_eda/variance_partition_TRNSCRPT.csv",
+"results/03_eda/within_tissue_pca_METAB.csv",
+"results/03_eda/within_tissue_pca_PROT.csv",
+"results/03_eda/within_tissue_pca_TRNSCRPT.csv",
 "results/04_baselines/PROT/diagnostic_accuracy.csv",
 "results/04_baselines/TRNSCRPT/confusable_pairs_logreg_l2.csv",
 "results/04_baselines/TRNSCRPT/confusion_logreg_l2.csv",
@@ -21,6 +25,9 @@
 "results/05_panels/TRNSCRPT/confusion_k30.csv",
 "results/05_panels/TRNSCRPT/panel_curve.csv",
 "results/05_panels/TRNSCRPT/panel_curve_fclassif.csv",
+"results/05_panels/TRNSCRPT/panel_training_background.csv",
+"results/05_panels/TRNSCRPT/panel_training_response.csv",
+"results/05_panels/TRNSCRPT/panel_training_summary.csv",
 "results/05_panels/TRNSCRPT/selected_by_fold.csv",
 "results/05_panels/TRNSCRPT/selection_consistency.csv",
 "results/05_panels/TRNSCRPT/stability_k20_annotated.csv",
@@ -32,6 +39,12 @@
 "results/06_conformal/TRNSCRPT/coverage_marginal_vs_mondrian.csv",
 "results/06_conformal/TRNSCRPT/per_tissue_marginal_vs_mondrian_alpha0.1.csv",
 "results/06_conformal/TRNSCRPT/sizing_table.csv",
+"results/07_fusion/batch_conclusion.csv",
+"results/07_fusion/batch_covariate_auroc.csv",
+"results/07_fusion/taskB_batch_balance.csv",
+"results/07_fusion/taskB_best_vs_null.csv",
+"results/07_fusion/taskB_duration_summary.csv",
+"results/07_fusion/taskB_summary.csv",
 "results/08_shift/METAB_core9/shift_table.csv",
 "results/08_shift/TRNSCRPT/shift_per_class.csv",
 "results/08_shift/TRNSCRPT/shift_recalibration.csv",
@@ -71,6 +84,14 @@
 "results/14_transfer/target_summary.csv",
 "results/14_transfer_cpm/target_accuracy.csv",
 "results/14_transfer_cpm/target_summary.csv",
+"results/15_time_course/design/design_by_group_sex.csv",
+"results/15_time_course/design/design_contrasts.csv",
+"results/15_time_course/fingerprint_by_duration/calibration_info.csv",
+"results/15_time_course/fingerprint_by_duration/differences.csv",
+"results/15_time_course/fingerprint_by_duration/part5_by_duration.csv",
+"results/15_time_course/fingerprint_by_duration/part5_matched_summary.csv",
+"results/15_time_course/fingerprint_by_duration/part6_seeds_summary.csv",
+"results/15_time_course/physiology/physiology_group_tests.csv",
 "results/16_identifiability/batch_counts.csv",
 "results/16_identifiability/bridge_variance.csv",
 "results/16_identifiability/bridge_variance_per_gene.csv",
@@ -4157,6 +4178,1246 @@
 "column": "n_tissues",
 "agg": "value",
 "tol": 1e-06
+},
+{
+"id": "fusion_n_beats_single",
+"value": 0.0,
+"file": "results/07_fusion/taskB_best_vs_null.csv",
+"where": {},
+"column": "fusion_beats_single_by_gt_sd",
+"agg": "sum",
+"tol": 1e-06,
+"note": "tissues where a fusion arm beats the best single omic by more than its fold sd"
+},
+{
+"id": "fusion_n_beats_null",
+"value": 7.0,
+"file": "results/07_fusion/taskB_best_vs_null.csv",
+"where": {},
+"column": "best_beats_null_p95",
+"agg": "sum",
+"tol": 1e-06,
+"note": "tissues where the best arm beats the permutation null (95th percentile of the max over arms)"
+},
+{
+"id": "fusion_n_tissues",
+"value": 7,
+"file": "results/07_fusion/taskB_best_vs_null.csv",
+"where": {},
+"column": "tissue",
+"agg": "count",
+"tol": 1e-06
+},
+{
+"id": "taskB_mean_auroc_1w",
+"value": 0.9642857142857143,
+"file": "results/07_fusion/taskB_duration_summary.csv",
+"where": {
+"duration": "1w"
+},
+"column": "best_single_auroc",
+"agg": "mean",
+"tol": 1e-06,
+"note": "mean over the 7 tissues of the best single-omic AUROC (best of 9 arms, optimistic); 1w/2w/4w animals were sacrificed months apart from the controls"
+},
+{
+"id": "taskB_mean_auroc_2w",
+"value": 0.9940476190476192,
+"file": "results/07_fusion/taskB_duration_summary.csv",
+"where": {
+"duration": "2w"
+},
+"column": "best_single_auroc",
+"agg": "mean",
+"tol": 1e-06,
+"note": "mean over the 7 tissues of the best single-omic AUROC (best of 9 arms, optimistic); 1w/2w/4w animals were sacrificed months apart from the controls"
+},
+{
+"id": "taskB_mean_auroc_4w",
+"value": 0.9404761904761905,
+"file": "results/07_fusion/taskB_duration_summary.csv",
+"where": {
+"duration": "4w"
+},
+"column": "best_single_auroc",
+"agg": "mean",
+"tol": 1e-06,
+"note": "mean over the 7 tissues of the best single-omic AUROC (best of 9 arms, optimistic); 1w/2w/4w animals were sacrificed months apart from the controls"
+},
+{
+"id": "taskB_mean_auroc_8w",
+"value": 0.994047619047619,
+"file": "results/07_fusion/taskB_duration_summary.csv",
+"where": {
+"duration": "8w"
+},
+"column": "best_single_auroc",
+"agg": "mean",
+"tol": 1e-06,
+"note": "mean over the 7 tissues of the best single-omic AUROC (best of 9 arms, optimistic); 1w/2w/4w animals were sacrificed months apart from the controls"
+},
+{
+"id": "verdict_n_training",
+"value": 4,
+"file": "results/07_fusion/batch_conclusion.csv",
+"where": {
+"verdict": "training"
+},
+"column": "tissue",
+"agg": "count",
+"tol": 1e-06,
+"note": "tissues where no processing covariate separates the arms above its permutation null"
+},
+{
+"id": "verdict_n_tissues",
+"value": 7,
+"file": "results/07_fusion/batch_conclusion.csv",
+"where": {},
+"column": "tissue",
+"agg": "count",
+"tol": 1e-06
+},
+{
+"id": "verdict_overall",
+"value": "training in 4 of 7 tissues, unresolvable in HEART, KIDNEY, SKM-GN (sequencing depth differs between the arms in HEART)",
+"file": "results/07_fusion/batch_conclusion.csv",
+"where": {
+"tissue": "CORTEX"
+},
+"column": "overall_verdict",
+"agg": "value",
+"tol": 1e-06,
+"note": "the same string in every row"
+},
+{
+"id": "cov_heart_depth_logreg",
+"value": 0.9583333333333331,
+"file": "results/07_fusion/batch_covariate_auroc.csv",
+"where": {
+"tissue": "HEART",
+"feature_set": "trnscrpt_depth",
+"model": "logreg"
+},
+"column": "auroc_mean",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_heart_depth_null95",
+"value": 0.79375,
+"file": "results/07_fusion/batch_covariate_auroc.csv",
+"where": {
+"tissue": "HEART",
+"feature_set": "trnscrpt_depth",
+"model": "logreg"
+},
+"column": "null_p95_auroc",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_heart_depth_p",
+"value": 0.0099009900990099,
+"file": "results/07_fusion/batch_covariate_auroc.csv",
+"where": {
+"tissue": "HEART",
+"feature_set": "trnscrpt_depth",
+"model": "logreg"
+},
+"column": "p_perm",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_kidney_library_logreg",
+"value": 0.8854166666666666,
+"file": "results/07_fusion/batch_covariate_auroc.csv",
+"where": {
+"tissue": "KIDNEY",
+"feature_set": "trnscrpt_library",
+"model": "logreg"
+},
+"column": "auroc_mean",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_kidney_library_null95",
+"value": 0.7822916666666666,
+"file": "results/07_fusion/batch_covariate_auroc.csv",
+"where": {
+"tissue": "KIDNEY",
+"feature_set": "trnscrpt_library",
+"model": "logreg"
+},
+"column": "null_p95_auroc",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_kidney_library_p",
+"value": 0.0198019801980198,
+"file": "results/07_fusion/batch_covariate_auroc.csv",
+"where": {
+"tissue": "KIDNEY",
+"feature_set": "trnscrpt_library",
+"model": "logreg"
+},
+"column": "p_perm",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_skmgn_qc_logreg",
+"value": 0.9583333333333331,
+"file": "results/07_fusion/batch_covariate_auroc.csv",
+"where": {
+"tissue": "SKM-GN",
+"feature_set": "trnscrpt_qc",
+"model": "logreg"
+},
+"column": "auroc_mean",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_skmgn_qc_null95",
+"value": 0.8055555555555556,
+"file": "results/07_fusion/batch_covariate_auroc.csv",
+"where": {
+"tissue": "SKM-GN",
+"feature_set": "trnscrpt_qc",
+"model": "logreg"
+},
+"column": "null_p95_auroc",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_skmgn_qc_p",
+"value": 0.0099009900990099,
+"file": "results/07_fusion/batch_covariate_auroc.csv",
+"where": {
+"tissue": "SKM-GN",
+"feature_set": "trnscrpt_qc",
+"model": "logreg"
+},
+"column": "p_perm",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "cov_skmgn_all_rf",
+"value": 1.0,
+"file": "results/07_fusion/batch_covariate_auroc.csv",
+"where": {
+"tissue": "SKM-GN",
+"feature_set": "all_batch_covariates",
+"model": "rf"
+},
+"column": "auroc_mean",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "wt_TRNSCRPT_n_visible",
+"value": 13,
+"file": "results/03_eda/readout_within_tissue_summary.csv",
+"where": {
+"assay": "TRNSCRPT"
+},
+"column": "group_visible",
+"agg": "value",
+"tol": 1e-06,
+"note": "tissues whose training-group R\u00b2 on some PC 1\u20135 exceeds the 95th percentile of label permutations"
+},
+{
+"id": "wt_TRNSCRPT_n_tissues",
+"value": 19,
+"file": "results/03_eda/readout_within_tissue_summary.csv",
+"where": {
+"assay": "TRNSCRPT"
+},
+"column": "tissues",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "wt_TRNSCRPT_median_max_r2",
+"value": 0.3055419285274285,
+"file": "results/03_eda/readout_within_tissue_summary.csv",
+"where": {
+"assay": "TRNSCRPT"
+},
+"column": "median_max_R2_group",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "wt_PROT_n_visible",
+"value": 6,
+"file": "results/03_eda/readout_within_tissue_summary.csv",
+"where": {
+"assay": "PROT"
+},
+"column": "group_visible",
+"agg": "value",
+"tol": 1e-06,
+"note": "tissues whose training-group R\u00b2 on some PC 1\u20135 exceeds the 95th percentile of label permutations"
+},
+{
+"id": "wt_PROT_n_tissues",
+"value": 7,
+"file": "results/03_eda/readout_within_tissue_summary.csv",
+"where": {
+"assay": "PROT"
+},
+"column": "tissues",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "wt_PROT_median_max_r2",
+"value": 0.2912461654220228,
+"file": "results/03_eda/readout_within_tissue_summary.csv",
+"where": {
+"assay": "PROT"
+},
+"column": "median_max_R2_group",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "wt_METAB_n_visible",
+"value": 18,
+"file": "results/03_eda/readout_within_tissue_summary.csv",
+"where": {
+"assay": "METAB"
+},
+"column": "group_visible",
+"agg": "value",
+"tol": 1e-06,
+"note": "tissues whose training-group R\u00b2 on some PC 1\u20135 exceeds the 95th percentile of label permutations"
+},
+{
+"id": "wt_METAB_n_tissues",
+"value": 19,
+"file": "results/03_eda/readout_within_tissue_summary.csv",
+"where": {
+"assay": "METAB"
+},
+"column": "tissues",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "wt_METAB_median_max_r2",
+"value": 0.5418997874929172,
+"file": "results/03_eda/readout_within_tissue_summary.csv",
+"where": {
+"assay": "METAB"
+},
+"column": "median_max_R2_group",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "wt_heart_trnscrpt_max_r2_group",
+"value": 0.7012625882504181,
+"file": "results/03_eda/within_tissue_pca_TRNSCRPT.csv",
+"where": {
+"tissue": "HEART"
+},
+"column": "max_R2_group_PC1-5",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "wt_heart_trnscrpt_pc",
+"value": 3,
+"file": "results/03_eda/within_tissue_pca_TRNSCRPT.csv",
+"where": {
+"tissue": "HEART"
+},
+"column": "PC_with_max_group_R2",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "stacked_pc1_r2_group",
+"value": 8.331242755244782e-05,
+"file": "results/03_eda/variance_partition_TRNSCRPT.csv",
+"where": {
+"PC": "PC1"
+},
+"column": "R2_group",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "stacked_pc1_r2_tissue",
+"value": 0.9949745801673032,
+"file": "results/03_eda/variance_partition_TRNSCRPT.csv",
+"where": {
+"PC": "PC1"
+},
+"column": "R2_tissue",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "fbd_acc_k20_1w",
+"value": 0.9444444444444444,
+"file": null,
+"files": [
+"results/31_site_regen/08_shift_k20/scores_target_vials.csv"
+],
+"agg": "recomputed",
+"note": "accuracy of the control-fit k20 model on the 1w animals' vials (train_control_test_trained split)"
+},
+{
+"id": "fbd_cov_k20_1w",
+"value": 0.8833333333333333,
+"file": null,
+"files": [
+"results/31_site_regen/08_shift_k20/scores_target_vials.csv"
+],
+"agg": "recomputed",
+"note": "coverage of the \u03b1 = 0.10 marginal sets on the 1w animals' vials"
+},
+{
+"id": "fbd_acc_k20_2w",
+"value": 0.9611111111111111,
+"file": null,
+"files": [
+"results/31_site_regen/08_shift_k20/scores_target_vials.csv"
+],
+"agg": "recomputed",
+"note": "accuracy of the control-fit k20 model on the 2w animals' vials (train_control_test_trained split)"
+},
+{
+"id": "fbd_cov_k20_2w",
+"value": 0.8944444444444445,
+"file": null,
+"files": [
+"results/31_site_regen/08_shift_k20/scores_target_vials.csv"
+],
+"agg": "recomputed",
+"note": "coverage of the \u03b1 = 0.10 marginal sets on the 2w animals' vials"
+},
+{
+"id": "fbd_acc_k20_4w",
+"value": 0.9664804469273743,
+"file": null,
+"files": [
+"results/31_site_regen/08_shift_k20/scores_target_vials.csv"
+],
+"agg": "recomputed",
+"note": "accuracy of the control-fit k20 model on the 4w animals' vials (train_control_test_trained split)"
+},
+{
+"id": "fbd_cov_k20_4w",
+"value": 0.9162011173184358,
+"file": null,
+"files": [
+"results/31_site_regen/08_shift_k20/scores_target_vials.csv"
+],
+"agg": "recomputed",
+"note": "coverage of the \u03b1 = 0.10 marginal sets on the 4w animals' vials"
+},
+{
+"id": "fbd_acc_k20_8w",
+"value": 0.9722222222222222,
+"file": null,
+"files": [
+"results/31_site_regen/08_shift_k20/scores_target_vials.csv"
+],
+"agg": "recomputed",
+"note": "accuracy of the control-fit k20 model on the 8w animals' vials (train_control_test_trained split)"
+},
+{
+"id": "fbd_cov_k20_8w",
+"value": 0.9166666666666666,
+"file": null,
+"files": [
+"results/31_site_regen/08_shift_k20/scores_target_vials.csv"
+],
+"agg": "recomputed",
+"note": "coverage of the \u03b1 = 0.10 marginal sets on the 8w animals' vials"
+},
+{
+"id": "fbd_acc_k50_1w",
+"value": 0.9611111111111111,
+"file": null,
+"files": [
+"results/31_site_regen/08_shift_k50/scores_target_vials.csv"
+],
+"agg": "recomputed",
+"note": "accuracy of the control-fit k50 model on the 1w animals' vials (train_control_test_trained split)"
+},
+{
+"id": "fbd_cov_k50_1w",
+"value": 0.8611111111111112,
+"file": null,
+"files": [
+"results/31_site_regen/08_shift_k50/scores_target_vials.csv"
+],
+"agg": "recomputed",
+"note": "coverage of the \u03b1 = 0.10 marginal sets on the 1w animals' vials"
+},
+{
+"id": "fbd_acc_k50_2w",
+"value": 0.9666666666666667,
+"file": null,
+"files": [
+"results/31_site_regen/08_shift_k50/scores_target_vials.csv"
+],
+"agg": "recomputed",
+"note": "accuracy of the control-fit k50 model on the 2w animals' vials (train_control_test_trained split)"
+},
+{
+"id": "fbd_cov_k50_2w",
+"value": 0.8777777777777778,
+"file": null,
+"files": [
+"results/31_site_regen/08_shift_k50/scores_target_vials.csv"
+],
+"agg": "recomputed",
+"note": "coverage of the \u03b1 = 0.10 marginal sets on the 2w animals' vials"
+},
+{
+"id": "fbd_acc_k50_4w",
+"value": 0.9664804469273743,
+"file": null,
+"files": [
+"results/31_site_regen/08_shift_k50/scores_target_vials.csv"
+],
+"agg": "recomputed",
+"note": "accuracy of the control-fit k50 model on the 4w animals' vials (train_control_test_trained split)"
+},
+{
+"id": "fbd_cov_k50_4w",
+"value": 0.888268156424581,
+"file": null,
+"files": [
+"results/31_site_regen/08_shift_k50/scores_target_vials.csv"
+],
+"agg": "recomputed",
+"note": "coverage of the \u03b1 = 0.10 marginal sets on the 4w animals' vials"
+},
+{
+"id": "fbd_acc_k50_8w",
+"value": 0.9777777777777777,
+"file": null,
+"files": [
+"results/31_site_regen/08_shift_k50/scores_target_vials.csv"
+],
+"agg": "recomputed",
+"note": "accuracy of the control-fit k50 model on the 8w animals' vials (train_control_test_trained split)"
+},
+{
+"id": "fbd_cov_k50_8w",
+"value": 0.8888888888888888,
+"file": null,
+"files": [
+"results/31_site_regen/08_shift_k50/scores_target_vials.csv"
+],
+"agg": "recomputed",
+"note": "coverage of the \u03b1 = 0.10 marginal sets on the 8w animals' vials"
+},
+{
+"id": "fbd_acc_full_1w",
+"value": 0.9611111111111111,
+"file": null,
+"files": [
+"results/31_site_regen/08_shift_k20/scores_target_vials.csv"
+],
+"agg": "recomputed",
+"note": "accuracy of the control-fit full model on the 1w animals' vials (train_control_test_trained split)"
+},
+{
+"id": "fbd_cov_full_1w",
+"value": 0.8666666666666667,
+"file": null,
+"files": [
+"results/31_site_regen/08_shift_k20/scores_target_vials.csv"
+],
+"agg": "recomputed",
+"note": "coverage of the \u03b1 = 0.10 marginal sets on the 1w animals' vials"
+},
+{
+"id": "fbd_acc_full_2w",
+"value": 0.9666666666666667,
+"file": null,
+"files": [
+"results/31_site_regen/08_shift_k20/scores_target_vials.csv"
+],
+"agg": "recomputed",
+"note": "accuracy of the control-fit full model on the 2w animals' vials (train_control_test_trained split)"
+},
+{
+"id": "fbd_cov_full_2w",
+"value": 0.8777777777777778,
+"file": null,
+"files": [
+"results/31_site_regen/08_shift_k20/scores_target_vials.csv"
+],
+"agg": "recomputed",
+"note": "coverage of the \u03b1 = 0.10 marginal sets on the 2w animals' vials"
+},
+{
+"id": "fbd_acc_full_4w",
+"value": 0.9888268156424581,
+"file": null,
+"files": [
+"results/31_site_regen/08_shift_k20/scores_target_vials.csv"
+],
+"agg": "recomputed",
+"note": "accuracy of the control-fit full model on the 4w animals' vials (train_control_test_trained split)"
+},
+{
+"id": "fbd_cov_full_4w",
+"value": 0.888268156424581,
+"file": null,
+"files": [
+"results/31_site_regen/08_shift_k20/scores_target_vials.csv"
+],
+"agg": "recomputed",
+"note": "coverage of the \u03b1 = 0.10 marginal sets on the 4w animals' vials"
+},
+{
+"id": "fbd_acc_full_8w",
+"value": 1.0,
+"file": null,
+"files": [
+"results/31_site_regen/08_shift_k20/scores_target_vials.csv"
+],
+"agg": "recomputed",
+"note": "accuracy of the control-fit full model on the 8w animals' vials (train_control_test_trained split)"
+},
+{
+"id": "fbd_cov_full_8w",
+"value": 0.8888888888888888,
+"file": null,
+"files": [
+"results/31_site_regen/08_shift_k20/scores_target_vials.csv"
+],
+"agg": "recomputed",
+"note": "coverage of the \u03b1 = 0.10 marginal sets on the 8w animals' vials"
+},
+{
+"id": "fbd_acc_excl_k20_1w",
+"value": 0.9714285714285714,
+"file": "results/15_time_course/fingerprint_by_duration/part5_by_duration.csv",
+"where": {
+"design": "control_only_fit7_cal3_excl_BATcontam_VENACV",
+"arm": "panel_k20",
+"test_group": "1w"
+},
+"column": "accuracy",
+"agg": "value",
+"tol": 1e-06,
+"note": "the consortium-flagged brown-fat-contaminated vena cava vials excluded"
+},
+{
+"id": "fbd_cov_excl_k20_1w",
+"value": 0.9085714285714286,
+"file": "results/15_time_course/fingerprint_by_duration/part5_by_duration.csv",
+"where": {
+"design": "control_only_fit7_cal3_excl_BATcontam_VENACV",
+"arm": "panel_k20",
+"test_group": "1w"
+},
+"column": "coverage",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "fbd_acc_excl_k20_2w",
+"value": 0.9885714285714284,
+"file": "results/15_time_course/fingerprint_by_duration/part5_by_duration.csv",
+"where": {
+"design": "control_only_fit7_cal3_excl_BATcontam_VENACV",
+"arm": "panel_k20",
+"test_group": "2w"
+},
+"column": "accuracy",
+"agg": "value",
+"tol": 1e-06,
+"note": "the consortium-flagged brown-fat-contaminated vena cava vials excluded"
+},
+{
+"id": "fbd_cov_excl_k20_2w",
+"value": 0.92,
+"file": "results/15_time_course/fingerprint_by_duration/part5_by_duration.csv",
+"where": {
+"design": "control_only_fit7_cal3_excl_BATcontam_VENACV",
+"arm": "panel_k20",
+"test_group": "2w"
+},
+"column": "coverage",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "fbd_acc_excl_k20_4w",
+"value": 0.9664804469273744,
+"file": "results/15_time_course/fingerprint_by_duration/part5_by_duration.csv",
+"where": {
+"design": "control_only_fit7_cal3_excl_BATcontam_VENACV",
+"arm": "panel_k20",
+"test_group": "4w"
+},
+"column": "accuracy",
+"agg": "value",
+"tol": 1e-06,
+"note": "the consortium-flagged brown-fat-contaminated vena cava vials excluded"
+},
+{
+"id": "fbd_cov_excl_k20_4w",
+"value": 0.9162011173184358,
+"file": "results/15_time_course/fingerprint_by_duration/part5_by_duration.csv",
+"where": {
+"design": "control_only_fit7_cal3_excl_BATcontam_VENACV",
+"arm": "panel_k20",
+"test_group": "4w"
+},
+"column": "coverage",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "fbd_acc_excl_k20_8w",
+"value": 0.9722222222222222,
+"file": "results/15_time_course/fingerprint_by_duration/part5_by_duration.csv",
+"where": {
+"design": "control_only_fit7_cal3_excl_BATcontam_VENACV",
+"arm": "panel_k20",
+"test_group": "8w"
+},
+"column": "accuracy",
+"agg": "value",
+"tol": 1e-06,
+"note": "the consortium-flagged brown-fat-contaminated vena cava vials excluded"
+},
+{
+"id": "fbd_cov_excl_k20_8w",
+"value": 0.9166666666666666,
+"file": "results/15_time_course/fingerprint_by_duration/part5_by_duration.csv",
+"where": {
+"design": "control_only_fit7_cal3_excl_BATcontam_VENACV",
+"arm": "panel_k20",
+"test_group": "8w"
+},
+"column": "coverage",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "fbd_acc_excl_full_1w",
+"value": 0.9885714285714284,
+"file": "results/15_time_course/fingerprint_by_duration/part5_by_duration.csv",
+"where": {
+"design": "control_only_fit7_cal3_excl_BATcontam_VENACV",
+"arm": "full",
+"test_group": "1w"
+},
+"column": "accuracy",
+"agg": "value",
+"tol": 1e-06,
+"note": "the consortium-flagged brown-fat-contaminated vena cava vials excluded"
+},
+{
+"id": "fbd_cov_excl_full_1w",
+"value": 0.8914285714285715,
+"file": "results/15_time_course/fingerprint_by_duration/part5_by_duration.csv",
+"where": {
+"design": "control_only_fit7_cal3_excl_BATcontam_VENACV",
+"arm": "full",
+"test_group": "1w"
+},
+"column": "coverage",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "fbd_acc_excl_full_2w",
+"value": 0.9942857142857144,
+"file": "results/15_time_course/fingerprint_by_duration/part5_by_duration.csv",
+"where": {
+"design": "control_only_fit7_cal3_excl_BATcontam_VENACV",
+"arm": "full",
+"test_group": "2w"
+},
+"column": "accuracy",
+"agg": "value",
+"tol": 1e-06,
+"note": "the consortium-flagged brown-fat-contaminated vena cava vials excluded"
+},
+{
+"id": "fbd_cov_excl_full_2w",
+"value": 0.9028571428571428,
+"file": "results/15_time_course/fingerprint_by_duration/part5_by_duration.csv",
+"where": {
+"design": "control_only_fit7_cal3_excl_BATcontam_VENACV",
+"arm": "full",
+"test_group": "2w"
+},
+"column": "coverage",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "fbd_acc_excl_full_4w",
+"value": 0.988826815642458,
+"file": "results/15_time_course/fingerprint_by_duration/part5_by_duration.csv",
+"where": {
+"design": "control_only_fit7_cal3_excl_BATcontam_VENACV",
+"arm": "full",
+"test_group": "4w"
+},
+"column": "accuracy",
+"agg": "value",
+"tol": 1e-06,
+"note": "the consortium-flagged brown-fat-contaminated vena cava vials excluded"
+},
+{
+"id": "fbd_cov_excl_full_4w",
+"value": 0.888268156424581,
+"file": "results/15_time_course/fingerprint_by_duration/part5_by_duration.csv",
+"where": {
+"design": "control_only_fit7_cal3_excl_BATcontam_VENACV",
+"arm": "full",
+"test_group": "4w"
+},
+"column": "coverage",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "fbd_acc_excl_full_8w",
+"value": 1.0,
+"file": "results/15_time_course/fingerprint_by_duration/part5_by_duration.csv",
+"where": {
+"design": "control_only_fit7_cal3_excl_BATcontam_VENACV",
+"arm": "full",
+"test_group": "8w"
+},
+"column": "accuracy",
+"agg": "value",
+"tol": 1e-06,
+"note": "the consortium-flagged brown-fat-contaminated vena cava vials excluded"
+},
+{
+"id": "fbd_cov_excl_full_8w",
+"value": 0.8888888888888888,
+"file": "results/15_time_course/fingerprint_by_duration/part5_by_duration.csv",
+"where": {
+"design": "control_only_fit7_cal3_excl_BATcontam_VENACV",
+"arm": "full",
+"test_group": "8w"
+},
+"column": "coverage",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "fbd_ref_accuracy_k20",
+"value": 1.0,
+"file": "results/15_time_course/fingerprint_by_duration/part5_matched_summary.csv",
+"where": {
+"arm": "panel_k20",
+"test_group": "control_heldout (pooled over folds)"
+},
+"column": "accuracy",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "fbd_ref_coverage_k20",
+"value": 0.9388888888888888,
+"file": "results/15_time_course/fingerprint_by_duration/part5_matched_summary.csv",
+"where": {
+"arm": "panel_k20",
+"test_group": "control_heldout (pooled over folds)"
+},
+"column": "coverage",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "fbd_ref_empty_rate_k20",
+"value": 0.0611111111111111,
+"file": "results/15_time_course/fingerprint_by_duration/part5_matched_summary.csv",
+"where": {
+"arm": "panel_k20",
+"test_group": "control_heldout (pooled over folds)"
+},
+"column": "empty_rate",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "fbd_ref_accuracy_full",
+"value": 0.9944444444444444,
+"file": "results/15_time_course/fingerprint_by_duration/part5_matched_summary.csv",
+"where": {
+"arm": "full",
+"test_group": "control_heldout (pooled over folds)"
+},
+"column": "accuracy",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "fbd_ref_coverage_full",
+"value": 0.9222222222222224,
+"file": "results/15_time_course/fingerprint_by_duration/part5_matched_summary.csv",
+"where": {
+"arm": "full",
+"test_group": "control_heldout (pooled over folds)"
+},
+"column": "coverage",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "fbd_ref_empty_rate_full",
+"value": 0.0777777777777777,
+"file": "results/15_time_course/fingerprint_by_duration/part5_matched_summary.csv",
+"where": {
+"arm": "full",
+"test_group": "control_heldout (pooled over folds)"
+},
+"column": "empty_rate",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "design_gap_days_1w",
+"value": 142.5,
+"file": "results/15_time_course/design/design_contrasts.csv",
+"where": {
+"duration": "1w",
+"sex": "pooled"
+},
+"column": "sacrifice_gap_days",
+"agg": "value",
+"tol": 1e-06,
+"note": "median sacrifice date of the group minus the controls' median, days"
+},
+{
+"id": "design_gap_days_2w",
+"value": 149.5,
+"file": "results/15_time_course/design/design_contrasts.csv",
+"where": {
+"duration": "2w",
+"sex": "pooled"
+},
+"column": "sacrifice_gap_days",
+"agg": "value",
+"tol": 1e-06,
+"note": "median sacrifice date of the group minus the controls' median, days"
+},
+{
+"id": "design_gap_days_4w",
+"value": 66.0,
+"file": "results/15_time_course/design/design_contrasts.csv",
+"where": {
+"duration": "4w",
+"sex": "pooled"
+},
+"column": "sacrifice_gap_days",
+"agg": "value",
+"tol": 1e-06,
+"note": "median sacrifice date of the group minus the controls' median, days"
+},
+{
+"id": "design_gap_days_8w",
+"value": 12.0,
+"file": "results/15_time_course/design/design_contrasts.csv",
+"where": {
+"duration": "8w",
+"sex": "pooled"
+},
+"column": "sacrifice_gap_days",
+"agg": "value",
+"tol": 1e-06,
+"note": "median sacrifice date of the group minus the controls' median, days"
+},
+{
+"id": "physio_vo2max_change_8w_female_median_diff",
+"value": 19.250000000000004,
+"file": "results/15_time_course/physiology/physiology_group_tests.csv",
+"where": {
+"variable": "vo2max_change",
+"contrast": "8w vs control",
+"sex": "female"
+},
+"column": "median_diff",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "physio_vo2max_change_8w_female_mw_p",
+"value": 0.000127174734002,
+"file": "results/15_time_course/physiology/physiology_group_tests.csv",
+"where": {
+"variable": "vo2max_change",
+"contrast": "8w vs control",
+"sex": "female"
+},
+"column": "mw_p",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "physio_vo2max_change_8w_female_n_trained",
+"value": 14,
+"file": "results/15_time_course/physiology/physiology_group_tests.csv",
+"where": {
+"variable": "vo2max_change",
+"contrast": "8w vs control",
+"sex": "female"
+},
+"column": "n_trained",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "physio_vo2max_change_8w_female_n_control",
+"value": 12,
+"file": "results/15_time_course/physiology/physiology_group_tests.csv",
+"where": {
+"variable": "vo2max_change",
+"contrast": "8w vs control",
+"sex": "female"
+},
+"column": "n_control",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "physio_vo2max_change_8w_male_median_diff",
+"value": 17.119999999999997,
+"file": "results/15_time_course/physiology/physiology_group_tests.csv",
+"where": {
+"variable": "vo2max_change",
+"contrast": "8w vs control",
+"sex": "male"
+},
+"column": "median_diff",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "physio_vo2max_change_8w_male_mw_p",
+"value": 4.014238415264471e-05,
+"file": "results/15_time_course/physiology/physiology_group_tests.csv",
+"where": {
+"variable": "vo2max_change",
+"contrast": "8w vs control",
+"sex": "male"
+},
+"column": "mw_p",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "physio_vo2max_change_8w_male_n_trained",
+"value": 13,
+"file": "results/15_time_course/physiology/physiology_group_tests.csv",
+"where": {
+"variable": "vo2max_change",
+"contrast": "8w vs control",
+"sex": "male"
+},
+"column": "n_trained",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "physio_vo2max_change_8w_male_n_control",
+"value": 12,
+"file": "results/15_time_course/physiology/physiology_group_tests.csv",
+"where": {
+"variable": "vo2max_change",
+"contrast": "8w vs control",
+"sex": "male"
+},
+"column": "n_control",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "physio_fat_change_8w_female_median_diff",
+"value": -3.35,
+"file": "results/15_time_course/physiology/physiology_group_tests.csv",
+"where": {
+"variable": "fat_change",
+"contrast": "8w vs control",
+"sex": "female"
+},
+"column": "median_diff",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "physio_fat_change_8w_female_mw_p",
+"value": 0.0001024861481689,
+"file": "results/15_time_course/physiology/physiology_group_tests.csv",
+"where": {
+"variable": "fat_change",
+"contrast": "8w vs control",
+"sex": "female"
+},
+"column": "mw_p",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "physio_fat_change_8w_female_n_trained",
+"value": 14,
+"file": "results/15_time_course/physiology/physiology_group_tests.csv",
+"where": {
+"variable": "fat_change",
+"contrast": "8w vs control",
+"sex": "female"
+},
+"column": "n_trained",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "physio_fat_change_8w_female_n_control",
+"value": 12,
+"file": "results/15_time_course/physiology/physiology_group_tests.csv",
+"where": {
+"variable": "fat_change",
+"contrast": "8w vs control",
+"sex": "female"
+},
+"column": "n_control",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "physio_fat_change_8w_male_median_diff",
+"value": -5.9,
+"file": "results/15_time_course/physiology/physiology_group_tests.csv",
+"where": {
+"variable": "fat_change",
+"contrast": "8w vs control",
+"sex": "male"
+},
+"column": "median_diff",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "physio_fat_change_8w_male_mw_p",
+"value": 2.448409877282751e-05,
+"file": "results/15_time_course/physiology/physiology_group_tests.csv",
+"where": {
+"variable": "fat_change",
+"contrast": "8w vs control",
+"sex": "male"
+},
+"column": "mw_p",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "physio_fat_change_8w_male_n_trained",
+"value": 13,
+"file": "results/15_time_course/physiology/physiology_group_tests.csv",
+"where": {
+"variable": "fat_change",
+"contrast": "8w vs control",
+"sex": "male"
+},
+"column": "n_trained",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "physio_fat_change_8w_male_n_control",
+"value": 12,
+"file": "results/15_time_course/physiology/physiology_group_tests.csv",
+"where": {
+"variable": "fat_change",
+"contrast": "8w vs control",
+"sex": "male"
+},
+"column": "n_control",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "ptr_k20_n_genes",
+"value": 20,
+"file": "results/05_panels/TRNSCRPT/panel_training_summary.csv",
+"where": {
+"gene_set": "k20"
+},
+"column": "n_genes",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "ptr_k20_n_regulated_marker_5pct",
+"value": 6,
+"file": "results/05_panels/TRNSCRPT/panel_training_summary.csv",
+"where": {
+"gene_set": "k20"
+},
+"column": "n_regulated_marker_5pct",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "ptr_k20_max_abs_logfc_marker",
+"value": 1.27293078392809,
+"file": "results/05_panels/TRNSCRPT/panel_training_summary.csv",
+"where": {
+"gene_set": "k20"
+},
+"column": "max_abs_logfc_marker",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "ptr_k20_min_tissue_effect",
+"value": 0.6526013373247901,
+"file": "results/05_panels/TRNSCRPT/panel_training_summary.csv",
+"where": {
+"gene_set": "k20"
+},
+"column": "min_tissue_effect",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "ptr_k20_median_ratio_tissue_over_training",
+"value": 8.88888009903906,
+"file": "results/05_panels/TRNSCRPT/panel_training_summary.csv",
+"where": {
+"gene_set": "k20"
+},
+"column": "median_ratio_tissue_over_training",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "ptr_k20_min_ratio_tissue_over_training",
+"value": 1.4922054511992175,
+"file": "results/05_panels/TRNSCRPT/panel_training_summary.csv",
+"where": {
+"gene_set": "k20"
+},
+"column": "min_ratio_tissue_over_training",
+"agg": "value",
+"tol": 1e-06
 }
 ],
 "tables": [
@@ -4673,6 +5934,146 @@
 "json_file": "eda.json",
 "json_path": "prot_diagnostic",
 "n_rows": 1
+},
+{
+"id": "taskB_duration",
+"file": "results/07_fusion/taskB_duration_summary.csv",
+"json_file": "exercise.json",
+"json_path": "separability.duration",
+"n_rows": 28
+},
+{
+"id": "taskB_best_vs_null",
+"file": "results/07_fusion/taskB_best_vs_null.csv",
+"json_file": "exercise.json",
+"json_path": "separability.best_vs_null",
+"n_rows": 7
+},
+{
+"id": "taskB_summary",
+"file": "results/07_fusion/taskB_summary.csv",
+"json_file": "exercise.json",
+"json_path": "separability.arms_8w",
+"n_rows": 91
+},
+{
+"id": "taskB_batch_balance",
+"file": "results/07_fusion/taskB_batch_balance.csv",
+"json_file": "exercise.json",
+"json_path": "separability.plex_balance",
+"n_rows": 7
+},
+{
+"id": "batch_covariate_auroc",
+"file": "results/07_fusion/batch_covariate_auroc.csv",
+"json_file": "exercise.json",
+"json_path": "covariates.auroc",
+"n_rows": 84
+},
+{
+"id": "batch_conclusion",
+"file": "results/07_fusion/batch_conclusion.csv",
+"json_file": "exercise.json",
+"json_path": "covariates.conclusion",
+"n_rows": 7
+},
+{
+"id": "within_tissue_pca_TRNSCRPT",
+"file": "results/03_eda/within_tissue_pca_TRNSCRPT.csv",
+"json_file": "exercise.json",
+"json_path": "within_tissue.TRNSCRPT",
+"n_rows": 19
+},
+{
+"id": "within_tissue_pca_PROT",
+"file": "results/03_eda/within_tissue_pca_PROT.csv",
+"json_file": "exercise.json",
+"json_path": "within_tissue.PROT",
+"n_rows": 7
+},
+{
+"id": "within_tissue_pca_METAB",
+"file": "results/03_eda/within_tissue_pca_METAB.csv",
+"json_file": "exercise.json",
+"json_path": "within_tissue.METAB",
+"n_rows": 19
+},
+{
+"id": "readout_within_tissue",
+"file": "results/03_eda/readout_within_tissue_summary.csv",
+"json_file": "exercise.json",
+"json_path": "within_tissue.readout",
+"n_rows": 3
+},
+{
+"id": "fbd_matched_summary",
+"file": "results/15_time_course/fingerprint_by_duration/part5_matched_summary.csv",
+"json_file": "exercise.json",
+"json_path": "fingerprint_by_duration.matched_summary",
+"n_rows": 18
+},
+{
+"id": "fbd_differences",
+"file": "results/15_time_course/fingerprint_by_duration/differences.csv",
+"json_file": "exercise.json",
+"json_path": "fingerprint_by_duration.differences",
+"n_rows": 18
+},
+{
+"id": "fbd_seeds",
+"file": "results/15_time_course/fingerprint_by_duration/part6_seeds_summary.csv",
+"json_file": "exercise.json",
+"json_path": "fingerprint_by_duration.seeds",
+"n_rows": 14
+},
+{
+"id": "fbd_calibration",
+"file": "results/15_time_course/fingerprint_by_duration/calibration_info.csv",
+"json_file": "exercise.json",
+"json_path": "fingerprint_by_duration.calibration",
+"n_rows": 20
+},
+{
+"id": "design_by_group_sex",
+"file": "results/15_time_course/design/design_by_group_sex.csv",
+"json_file": "exercise.json",
+"json_path": "design.by_group_sex",
+"n_rows": 10
+},
+{
+"id": "design_contrasts",
+"file": "results/15_time_course/design/design_contrasts.csv",
+"json_file": "exercise.json",
+"json_path": "design.contrasts",
+"n_rows": 12
+},
+{
+"id": "physiology_group_tests",
+"file": "results/15_time_course/physiology/physiology_group_tests.csv",
+"json_file": "exercise.json",
+"json_path": "physiology.group_tests",
+"n_rows": 24
+},
+{
+"id": "panel_training_response",
+"file": "results/05_panels/TRNSCRPT/panel_training_response.csv",
+"json_file": "exercise.json",
+"json_path": "panel_training.genes",
+"n_rows": 51
+},
+{
+"id": "panel_training_background",
+"file": "results/05_panels/TRNSCRPT/panel_training_background.csv",
+"json_file": "exercise.json",
+"json_path": "panel_training.background",
+"n_rows": 19
+},
+{
+"id": "panel_training_summary",
+"file": "results/05_panels/TRNSCRPT/panel_training_summary.csv",
+"json_file": "exercise.json",
+"json_path": "panel_training.summary",
+"n_rows": 3
 },
 {
 "id": "samples_motrpac",

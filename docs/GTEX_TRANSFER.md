@@ -1,4 +1,4 @@
-# GTEX_TRANSFER — the human leg (teammate's side)
+# GTEX_TRANSFER — the human leg
 
 Purpose: test whether a compact rat tissue fingerprint survives the jump to human tissue.
 Two human sources, in order of availability:
@@ -9,15 +9,16 @@ Two human sources, in order of availability:
    Brain - Hypothalamus, Colon - Transverse, Small Intestine - Terminal Ileum, Spleen,
    Adrenal Gland, Ovary, Testis, Artery - Aorta (closest to vena cava, imperfect).
 2. **MoTrPAC human** (blood, vastus lateralis, subcutaneous adipose; acute endurance/resistance
-   bouts; preprints March 2026). Access terms not verified — check https://motrpac-data.org/
-   and ask organizers. If available, it is the better test because it is the same consortium's
-   pipelines and the exercise-state question becomes possible.
+   bouts; preprints March 2026; Data Hub https://motrpac-data.org/). Not used here; it is the
+   natural next test, because it is the same consortium's pipelines and the exercise-state
+   question becomes possible.
 
 ## GTEx download (done 2026-09-17: v8 gene TPM GCT, 1.63 GB, and the v8 sample attributes; 2026-09-18: v8 gene read-count GCT, 0.92 GB; all under `data/external/gtex/`; `make gtex` builds the subsets if missing and runs the transfer, the representation comparison and the units test)
 
 - Portal: https://gtexportal.org/home/downloads/adult-gtex (registration-free for open-access
   files). Get the **gene TPM** matrix (GCT, gzipped, ~1.5 GB for v8/v10) and the
-  **sample attributes** file (`*SampleAttributesDS.txt`) which maps SAMPID → SMTSD (tissue).
+  **sample attributes** file (`*SampleAttributesDS.txt`) which maps SAMPID → SMTSD (tissue);
+  the exact v8 files, sizes and checksums are under "Download" below.
 - `scripts/11_gtex_prepare.py` subsets to the tissues above (≤ 150 donors per tissue, seeded) and writes
   `data/external/gtex_tpm_subset.csv` (log2 TPM+1), `gtex_meta.csv`, `gtex_gene_symbols.csv` and, from the
   read-count GCT (`--reads`), `gtex_cpm_subset.csv`: log2 CPM+1 with the library size = the sample's read
@@ -25,6 +26,37 @@ Two human sources, in order of availability:
   outputs are not rebuilt without `--force`. File names change per GTEx release; pass them explicitly.
 - Sample IDs `GTEX-XXXX-...` share a donor prefix `GTEX-XXXX`; group splits on the donor,
   same rule as `pid` in rat.
+
+### Download
+
+The three GTEx v8 open-access files the pipeline reads, with the sizes and SHA-256 of the files used for the
+reference run (TPM and sample attributes downloaded 2026-09-17, read counts 2026-09-18; checksums re-verified
+2026-09-26). Terms: the GTEx data-use policy, https://gtexportal.org/home/license (open-access files, no
+registration). All three live under `https://storage.googleapis.com/adult-gtex/`:
+
+| File | Bytes | SHA-256 |
+|---|---|---|
+| `bulk-gex/v8/rna-seq/GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_tpm.gct.gz` | 1,625,807,147 | `ec783825ebebb8ba8525b73cb7ff9577162bc0d2e8a7fdc408283b7639c306fb` |
+| `bulk-gex/v8/rna-seq/GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_reads.gct.gz` | 917,091,994 | `148ab1c84609608a00772b0e1431a1f87d5bf40b63071997510181d0a684a110` |
+| `annotations/v8/metadata-files/GTEx_Analysis_v8_Annotations_SampleAttributesDS.txt` | 11,512,258 | `74f6ab4c34ed2648d708a0ae6e6dff324f6c86ea723ae7d1c37d76f5221148f0` |
+
+To download into the directory `make gtex` expects and verify the checksums:
+
+```sh
+mkdir -p data/external/gtex && cd data/external/gtex
+B=https://storage.googleapis.com/adult-gtex
+curl -O $B/bulk-gex/v8/rna-seq/GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_tpm.gct.gz
+curl -O $B/bulk-gex/v8/rna-seq/GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_reads.gct.gz
+curl -O $B/annotations/v8/metadata-files/GTEx_Analysis_v8_Annotations_SampleAttributesDS.txt
+sha256sum -c - <<'EOF'
+ec783825ebebb8ba8525b73cb7ff9577162bc0d2e8a7fdc408283b7639c306fb  GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_tpm.gct.gz
+148ab1c84609608a00772b0e1431a1f87d5bf40b63071997510181d0a684a110  GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_reads.gct.gz
+74f6ab4c34ed2648d708a0ae6e6dff324f6c86ea723ae7d1c37d76f5221148f0  GTEx_Analysis_v8_Annotations_SampleAttributesDS.txt
+EOF
+```
+
+(On macOS, which has no `sha256sum`, use `shasum -a 256 -c -`.) The Makefile's `GTEX_TPM`, `GTEX_READS` and
+`GTEX_ATTRS` are exactly these file names; `make gtex` builds the subsets with `scripts/11_gtex_prepare.py`.
 
 ## Transfer protocol (implemented in `scripts/13_gtex_transfer.py` on the shared `tfp.transfer` code path; results in `results/13_gtex/`; representations and the transferability-aware selector in `scripts/14_transfer_representations.py`, `results/14_transfer/`)
 
@@ -34,8 +66,9 @@ muscles are the confusable pair); Artery - Aorta → VENACV is kept but read as 
 shared by scripts 13 and 14 so that both quote the same gene set); panels are re-selected in the ortholog space on all
 50 rat animals; every GTEx split is grouped on the donor.
 
-**Accuracy convention.** Every GTEx (and BodyMap) accuracy in `results/SUMMARY.md`, `../../docs/findings/QUESTIONS_FOR_ORGANIZERS.md`
-and `results/ABSTRACT.md` is *sample-weighted*: the mean over all mapped samples, each sample counting once. With
+**Accuracy convention.** Every GTEx (and BodyMap) accuracy in `results/SUMMARY.md`, `results/ABSTRACT.md` and in the
+site's data (`site/data/gtex.json`, `site/data/bodymap.json`) is *sample-weighted*: the mean over all mapped samples,
+each sample counting once. With
 60–150 samples per tissue it is within 0.01 of the macro mean over tissues, which is kept in
 `results/13_gtex/accuracy_overall.csv` and in the `accuracy_macro_over_tissues` column of
 `results/14_transfer*/target_summary.csv` for anyone who prefers it.
@@ -51,7 +84,7 @@ species). The answer is in the "Units test" paragraph of the representations blo
 (each class quantile floored at the marginal one, so the sets contain both the marginal and the Mondrian sets);
 `results/13_gtex/coverage_by_tissue.csv` has all three per GTEx tissue.
 
-## Transfer protocol (as planned)
+## Protocol steps
 
 1. Fit the rat panel (Ensembl rat gene IDs) on all rat animals; map to human via
    `data/raw/rat_to_human_gene.csv`; keep 1:1 orthologs only, report losses.

@@ -1,7 +1,8 @@
 // Chart template and helpers — every chart on the site goes through `figure()`.
 // Rules enforced here: one y-axis, tokens from theme.css, thin marks (2px lines, ≥ 8px markers, ≤ 24px bars
 // with a 2px surface gap), hairline solid gridlines, hover on every mark, text in ink tokens, a legend for
-// ≥ 2 series, a data-table toggle on every figure, and a caption with "Source:" and "What it does not show:".
+// ≥ 2 series, a data-table toggle on every figure, and a collapsed "Source and caveats" block with "Source:" and
+// "What it does not show:".
 
 import { el, tableFrom } from "./site.js";
 
@@ -136,15 +137,11 @@ export async function figure(container, spec) {
   const btn = el("button", { class: "btn", type: "button", "aria-pressed": "false", "aria-controls": tableWrap.id = `tbl-${Math.random().toString(36).slice(2, 8)}` }, "Show data table");
   toolbar.appendChild(btn);
   root.appendChild(tableWrap);
-  const cap = el("p", { class: "fig-caption" });
-  cap.appendChild(el("b", {}, "Source: "));
-  cap.appendChild(document.createTextNode(spec.source || "pending"));
-  if (spec.notShow) {
-    cap.appendChild(el("br"));
-    cap.appendChild(el("b", {}, "What it does not show: "));
-    cap.appendChild(document.createTextNode(spec.notShow));
-  }
-  root.appendChild(cap);
+  // source and caveats, collapsed by default (the "Source and caveats" block under every figure)
+  const notes = el("details", { class: "fig-notes" }, [el("summary", {}, "Source and caveats")]);
+  notes.appendChild(el("p", {}, [el("b", {}, "Source: "), spec.source || "pending"]));
+  if (spec.notShow) notes.appendChild(el("p", {}, [el("b", {}, "What it does not show: "), spec.notShow]));
+  root.appendChild(notes);
 
   const state = { root, chart, spec, tableWrap };
   btn.addEventListener("click", () => {

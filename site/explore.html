@@ -3,14 +3,27 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Explorer — Tissue Fingerprints</title>
+<title>The Explorer — Tissue Fingerprints</title>
 <meta name="description" content="Pick a sample, set α, and watch the conformal prediction set: confident, ambiguous or abstaining. Explore each panel gene across MoTrPAC, rat BodyMap and GTEx. Build the panel gene by gene.">
-<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/brand/badge-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/brand/badge-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/brand/badge-180.png">
+<meta name="theme-color" content="#f9f9f7">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Tissue Fingerprints — The Rat PAC">
+<meta property="og:title" content="The Explorer">
+<meta property="og:description" content="Pick a sample, set α, and watch the conformal prediction set: confident, ambiguous or abstaining. Explore each panel gene across MoTrPAC, rat BodyMap and GTEx. Build the panel gene by gene.">
+<meta property="og:url" content="https://corygardner.github.io/motrpac_challenge/explore.html">
+<meta property="og:image" content="https://corygardner.github.io/motrpac_challenge/assets/brand/badge-og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Rat PAC badge beside the question: can a molecular signature identify a tissue reliably?">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="assets/theme.css">
 <script>
   (function () { try { var p = new URLSearchParams(location.search).get("theme") || localStorage.getItem("tfp-theme"); if (p === "dark" || p === "light") document.documentElement.setAttribute("data-theme", p); } catch (e) {} })();
 </script>
-<script src="https://cdn.jsdelivr.net/npm/plotly.js-cartesian-dist-min@2.35.2/plotly-cartesian.min.js" crossorigin="anonymous"
+<script src="https://cdn.jsdelivr.net/npm/plotly.js-cartesian-dist-min@2.35.2/plotly-cartesian.min.js" integrity="sha384-gKF7EaMDoWW1zLWkouldmVWF5jqEKrAswAciW73iNzqlomabVVPO60XkJvL5q/Ie" crossorigin="anonymous"
         onerror="this.onerror=null;var s=document.createElement('script');s.src='vendor/plotly-cartesian-2.35.2.min.js';document.head.appendChild(s);"></script>
 <script type="module" src="assets/pages/explore.js"></script>
 </head>
@@ -18,11 +31,11 @@
 <header class="site-header"></header>
 <main id="main" class="wrap">
   <h1>The Explorer</h1>
-  <p class="lede">Every prediction set on this page is computed in your browser from the exported class probabilities and calibration scores, with the same rule as the pipeline: the threshold is the ⌈(n+1)(1−α)⌉-th smallest calibration score, or +∞ when that rank exceeds n.</p>
+  <p class="lede">Every prediction set on this page is computed in your browser from the models' class probabilities and calibration scores, with the same rule as the pipeline: the threshold is the ⌈(n+1)(1−α)⌉-th smallest calibration score, or +∞ when that rank exceeds n.</p>
 
   <section class="section" id="tissue-card">
     <h2>The tissue card</h2>
-    <p>Pick a sample and ask the fingerprint what it is. The set of tissues it returns is the answer it is willing to guarantee: one tissue is a confident call, several is ambiguity, none is abstention. Try a BodyMap <b>thymus</b> or <b>uterus</b> sample, organs the fingerprint has never seen, and a GTEx <b>heart</b>.</p>
+    <p>Pick a sample and ask the fingerprint what it is; the set of tissues it returns is the answer it is willing to guarantee: one tissue is a confident call, several is ambiguity, none is abstention. Try a BodyMap <b>thymus</b> or <b>uterus</b>, organs the fingerprint has never seen, and a GTEx <b>heart</b>.</p>
     <div class="controls" id="picker"></div>
     <div class="controls" id="card-controls"></div>
     <div class="grid-2">
@@ -34,7 +47,7 @@
 
   <section class="section" id="gene-explorer">
     <h2>The gene explorer</h2>
-    <p>One gene across the three datasets: log2 CPM by tissue in MoTrPAC (sex as marker shape), by organ and age in the rat BodyMap, and log2 TPM by tissue in GTEx through its 1:1 ortholog. Start with <b>Pgk2</b>, the testis marker that collapses in two-week-old rats, and <b>Gnb3</b>, the heart marker that points at the ovary in human.</p>
+    <p>One gene across the three datasets: log2 CPM by tissue in MoTrPAC (sex as marker shape), by organ and age in the rat BodyMap, and log2 TPM by tissue in GTEx through its 1:1 ortholog. Start with <b>Pgk2</b>, the testis marker not yet expressed in two-week-old rats, and <b>Gnb3</b>, the heart marker that points at the ovary in human.</p>
     <div class="controls" id="gene-controls"></div>
     <div class="grid-2">
       <div id="gene-card" class="sample-card"></div>
@@ -48,7 +61,7 @@
 
   <section class="section" id="panel-builder">
     <h2>The panel builder</h2>
-    <p>The round-robin selector takes the best remaining gene of each tissue in turn. Slide k along the grid the pipeline evaluated and watch which tissues have a marker yet: at k = 10 only the first ten tissues in the class order do, which is why accuracy jumps between 10 and 15.</p>
+    <p>The round-robin selector takes the best remaining gene of each tissue in turn. Slide k along the evaluated grid and watch which tissues have a marker yet: at k = 10 only the first ten tissues in class order do, which is why accuracy jumps between 10 and 15.</p>
     <div class="controls" id="builder-controls"></div>
     <div id="builder-summary" class="sample-card"></div>
     <div id="builder-strip" class="strip" style="margin: 1rem 0"></div>
@@ -58,7 +71,7 @@
 
   <section class="section" id="calculator">
     <h2>The animals-needed calculator</h2>
-    <p>A certificate that a panel makes at most α errors, with confidence 1 − δ, needs zero calibration errors on n ≥ ln δ / ln(1 − α) calibration animals. The guarantee is paid for in animals, not genes.</p>
+    <p>A certificate that a panel makes at most α errors, with confidence 1 − δ, needs zero calibration errors on n ≥ ln δ / ln(1 − α) calibration animals: the guarantee is paid for in animals, not genes.</p>
     <div class="controls" id="calc-controls"></div>
     <div id="calc-out" class="sample-card"></div>
   </section>

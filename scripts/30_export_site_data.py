@@ -614,24 +614,24 @@ def export_headline(w: Writer, prov: Prov, rec: pd.DataFrame | None):
         {"id": "tile_acc_k20", "value": P.val("tile_acc_k20", "05_panels/TRNSCRPT/panel_curve.csv", "balanced_accuracy", where={"k": 20}, agg="mean",
                                              note="mean over 5 animal-grouped folds; round-robin selector + logreg_l2"),
          "sd": P.val("tile_acc_k20_sd", "05_panels/TRNSCRPT/panel_curve.csv", "balanced_accuracy", where={"k": 20}, agg="std"),
-         "label": "balanced accuracy of a 20-gene panel", "sub": f"19 rat tissues, {n_vials} vials, {n_animals} animals, 5 animal-grouped folds; the panel is re-selected inside each fold", "format": "3",
+         "label": "balanced accuracy of a 20-gene panel", "sub": f"19 tissues · {n_vials} vials · {n_animals} animals · 5 animal-grouped folds, the panel re-selected inside each", "format": "3",
          "source": "results/05_panels/TRNSCRPT/panel_curve.csv (k = 20, mean ± sd over folds)"},
         {"id": "tile_bodymap_k20", "value": P.val("tile_bodymap_k20", "12_bodymap/age_shift_accuracy.csv", "k20", where={"stage_weeks": 21}),
          "ci": (transfer_rung_stats("12_bodymap", "k20", "stage_weeks", 21, "animal_id")["accuracy_ci"] if (REGEN / "12_bodymap" / "scores_target_probs.csv").exists() else None),
-         "label": "mapped adult organs named correctly in another lab's rats", "sub": f"rat BodyMap, 21-week adults: 9 of 11 organs have a MoTrPAC counterpart, muscle and brain scored as super-classes; {n_bm_mapped} samples, {n_bm_animals} animals; panel fit on all 50 MoTrPAC animals", "format": "3",
+         "label": "mapped adult organs named correctly in another lab's rats", "sub": f"rat BodyMap, 21-week adults: 9 of 11 organs mapped, muscle and brain as super-classes; {n_bm_mapped} samples, {n_bm_animals} animals; panel fit on all 50 MoTrPAC animals", "format": "3",
          "source": "results/12_bodymap/age_shift_accuracy.csv (stage 21, k20)"},
         {"id": "tile_bodymap_cov_k20", "value": P.val("tile_bodymap_cov_k20", "12_bodymap/conformal_transfer.csv", "coverage_mapped",
                                                       where={"stage_weeks": 21, "model": "k20", "conformal": "marginal"}),
          "ci": (transfer_rung_stats("12_bodymap", "k20", "stage_weeks", 21, "animal_id")["coverage_ci"] if (REGEN / "12_bodymap" / "scores_target_probs.csv").exists() else None),
          "empty": P.val("tile_bodymap_empty_k20", "12_bodymap/conformal_transfer.csv", "frac_empty_mapped", where={"stage_weeks": 21, "model": "k20", "conformal": "marginal"}),
-         "label": "coverage of the 90 % guarantee there", "sub": "prediction sets calibrated on MoTrPAC animals, scored on the same adults, α = 0.10; the shortfall is empty sets", "format": "3",
+         "label": "coverage of the 90 % guarantee there", "sub": "sets calibrated on MoTrPAC animals, α = 0.10; the shortfall is empty sets", "format": "3",
          "source": "results/12_bodymap/conformal_transfer.csv (stage 21, k20, marginal)"},
         {"id": "tile_estimable", "value": P.val("tile_estimable", "16_identifiability/estimable_pairs.csv", "n_pairs_estimable", where={"assay": "TRNSCRPT"}),
          "total": P.val("tile_estimable_total", "16_identifiability/estimable_pairs.csv", "n_pairs_total", where={"assay": "TRNSCRPT"}),
          "pairs": P.val("tile_estimable_pairs", "16_identifiability/estimable_pairs.csv", "estimable_pairs", where={"assay": "TRNSCRPT"}),
          "pair_text": " and ".join(t.lower() for t in str(P.val("tile_estimable_pairs_text", "16_identifiability/estimable_pairs.csv", "estimable_pairs", where={"assay": "TRNSCRPT"})).split("|")),
          "label": "tissue pairs whose contrast exists inside one processing batch (" + " and ".join(t.lower() for t in str(P.entries[-1]["value"]).split("|")) + ")",
-         "sub": "RNA-seq: extraction plate, library batch and flowcell; the one estimable pair is also the sex contrast", "format": "of",
+         "sub": "RNA-seq plate, library batch and flowcell; the one pair is also the sex contrast", "format": "of",
          "source": "results/16_identifiability/estimable_pairs.csv (TRNSCRPT)"},
     ]
     # in-distribution accuracy per model
@@ -1164,6 +1164,177 @@ def export_fixtures(w: Writer, motrpac: tuple, bodymap: tuple, gtex: tuple):
 
 # ---------------------------------------------------------------------------------------------
 # anchors, reconciliation, readme table, abstract
+
+# ---------------------------------------------------------------------------------------------
+# the Exercise page: what training does and does not do to the fingerprint
+# ---------------------------------------------------------------------------------------------
+def export_exercise(w: Writer, prov: Prov):
+    """site/data/exercise.json — every number of the Exercise page: within-tissue separability of sedentary vs
+    trained animals and its batch check (phase 07), where the training signal sits (phase 03), the fingerprint fit
+    on controls only tested per training duration (recomputed from the phase-08 per-vial regeneration; enriched from
+    phase 15 when present), the study-design dates and physiology (phase 15) and the panel genes' training response
+    (phase 05b). `summary` holds every scalar a page reads, each with a provenance id."""
+    P = prov
+    S: dict = {}
+    before = set(P.sources)
+    # ---- 1. control vs trained within tissue (phase 07) -----------------------------------------------------
+    sep = {"duration": P.table("taskB_duration", "07_fusion/taskB_duration_summary.csv", "exercise.json", "separability.duration"),
+           "best_vs_null": P.table("taskB_best_vs_null", "07_fusion/taskB_best_vs_null.csv", "exercise.json", "separability.best_vs_null"),
+           "arms_8w": P.table("taskB_summary", "07_fusion/taskB_summary.csv", "exercise.json", "separability.arms_8w"),
+           "plex_balance": P.table("taskB_batch_balance", "07_fusion/taskB_batch_balance.csv", "exercise.json", "separability.plex_balance"),
+           "design": "control vs 8-week within each of 7 tissues (17–20 animals), animal-grouped sex × group-stratified folds, tuned models; "
+                     "13 arms (single omic and fusion); the null is the 95th percentile of the best arm's AUROC under within-sex label permutations"}
+    S["fusion_n_beats_single"] = int(P.val("fusion_n_beats_single", "07_fusion/taskB_best_vs_null.csv", "fusion_beats_single_by_gt_sd", agg="sum",
+                                           note="tissues where a fusion arm beats the best single omic by more than its fold sd"))
+    S["fusion_n_beats_null"] = int(P.val("fusion_n_beats_null", "07_fusion/taskB_best_vs_null.csv", "best_beats_null_p95", agg="sum",
+                                         note="tissues where the best arm beats the permutation null (95th percentile of the max over arms)"))
+    S["fusion_n_tissues"] = P.val("fusion_n_tissues", "07_fusion/taskB_best_vs_null.csv", "tissue", agg="count")
+    for d in ("1w", "2w", "4w", "8w"):
+        S[f"taskB_mean_auroc_{d}"] = P.val(f"taskB_mean_auroc_{d}", "07_fusion/taskB_duration_summary.csv", "best_single_auroc", where={"duration": d}, agg="mean",
+                                           note="mean over the 7 tissues of the best single-omic AUROC (best of 9 arms, optimistic); 1w/2w/4w animals were sacrificed months apart from the controls")
+    # ---- 2. processing covariates alone (phase 07 batch check) -----------------------------------------------
+    cov = {"auroc": P.table("batch_covariate_auroc", "07_fusion/batch_covariate_auroc.csv", "exercise.json", "covariates.auroc"),
+           "conclusion": P.table("batch_conclusion", "07_fusion/batch_conclusion.csv", "exercise.json", "covariates.conclusion"),
+           "feature_sets": {"pheno_collection": "collection (arrival, sacrifice and collection dates, times, staff, cage, freeze times)",
+                            "trnscrpt_library": "library preparation (plate, dates, concentrations, well position, sequencing run)",
+                            "trnscrpt_depth": "sequencing depth (raw, mapped and splice-junction read counts)",
+                            "trnscrpt_qc": "library QC fractions (mapping, mRNA, intronic, rRNA, globin, GC, duplication, RIN, 5′–3′ bias)",
+                            "prot_plex_channel": "TMT plex and channel", "all_batch_covariates": "all of the above"}}
+    S["verdict_n_training"] = P.val("verdict_n_training", "07_fusion/batch_conclusion.csv", "tissue", where={"verdict": "training"}, agg="count",
+                                    note="tissues where no processing covariate separates the arms above its permutation null")
+    S["verdict_n_tissues"] = P.val("verdict_n_tissues", "07_fusion/batch_conclusion.csv", "tissue", agg="count")
+    S["verdict_overall"] = P.val("verdict_overall", "07_fusion/batch_conclusion.csv", "overall_verdict", where={"tissue": "CORTEX"}, note="the same string in every row")
+    for id_, t, fs in (("cov_heart_depth", "HEART", "trnscrpt_depth"), ("cov_kidney_library", "KIDNEY", "trnscrpt_library"), ("cov_skmgn_qc", "SKM-GN", "trnscrpt_qc")):
+        where = {"tissue": t, "feature_set": fs, "model": "logreg"}
+        S[f"{id_}_logreg"] = P.val(f"{id_}_logreg", "07_fusion/batch_covariate_auroc.csv", "auroc_mean", where=where)
+        S[f"{id_}_null95"] = P.val(f"{id_}_null95", "07_fusion/batch_covariate_auroc.csv", "null_p95_auroc", where=where)
+        S[f"{id_}_p"] = P.val(f"{id_}_p", "07_fusion/batch_covariate_auroc.csv", "p_perm", where=where)
+    S["cov_skmgn_all_rf"] = P.val("cov_skmgn_all_rf", "07_fusion/batch_covariate_auroc.csv", "auroc_mean", where={"tissue": "SKM-GN", "feature_set": "all_batch_covariates", "model": "rf"})
+    # ---- 3. where the training signal sits (phase 03, within-tissue PCA) -----------------------------------------
+    wt = {a: P.table(f"within_tissue_pca_{a}", f"03_eda/within_tissue_pca_{a}.csv", "exercise.json", f"within_tissue.{a}") for a in ("TRNSCRPT", "PROT", "METAB")}
+    wt["readout"] = P.table("readout_within_tissue", "03_eda/readout_within_tissue_summary.csv", "exercise.json", "within_tissue.readout")
+    for a in ("TRNSCRPT", "PROT", "METAB"):
+        S[f"wt_{a}_n_visible"] = P.val(f"wt_{a}_n_visible", "03_eda/readout_within_tissue_summary.csv", "group_visible", where={"assay": a},
+                                       note="tissues whose training-group R² on some PC 1–5 exceeds the 95th percentile of label permutations")
+        S[f"wt_{a}_n_tissues"] = P.val(f"wt_{a}_n_tissues", "03_eda/readout_within_tissue_summary.csv", "tissues", where={"assay": a})
+        S[f"wt_{a}_median_max_r2"] = P.val(f"wt_{a}_median_max_r2", "03_eda/readout_within_tissue_summary.csv", "median_max_R2_group", where={"assay": a})
+    S["wt_heart_trnscrpt_max_r2_group"] = P.val("wt_heart_trnscrpt_max_r2_group", "03_eda/within_tissue_pca_TRNSCRPT.csv", "max_R2_group_PC1-5", where={"tissue": "HEART"})
+    S["wt_heart_trnscrpt_pc"] = P.val("wt_heart_trnscrpt_pc", "03_eda/within_tissue_pca_TRNSCRPT.csv", "PC_with_max_group_R2", where={"tissue": "HEART"})
+    S["stacked_pc1_r2_group"] = P.val("stacked_pc1_r2_group", "03_eda/variance_partition_TRNSCRPT.csv", "R2_group", where={"PC": "PC1"})
+    S["stacked_pc1_r2_tissue"] = P.val("stacked_pc1_r2_tissue", "03_eda/variance_partition_TRNSCRPT.csv", "R2_tissue", where={"PC": "PC1"})
+    # ---- 4. the fingerprint fit on controls only, by training duration (phase-08 per-vial regeneration) ------------
+    fbd, errors = [], []
+    for model, kk, arm in (("k20", "k20", "panel_k20"), ("k50", "k50", "panel_k50"), ("full", "k20", "full")):
+        f = REGEN / f"08_shift_{kk}" / "scores_target_vials.csv"
+        rf = f"31_site_regen/08_shift_{kk}/scores_target_vials.csv"
+        if not f.exists():
+            fbd.append({"model": model, **P.pending(f"fbd_acc_{model}_8w", "phase 08 not regenerated with --save-scores (make regen-scores)")})
+            continue
+        v = pd.read_csv(f, dtype={"viallabel": str, "pid": str})
+        v = v[(v["split"] == "train_control_test_trained") & (v["arm"] == arm)]
+        for grp in ("1w", "2w", "4w", "8w"):
+            d = v[v["group"] == grp]
+            ok = (d["y_pred"] == d["tissue"]).to_numpy()
+            cv = d["covered_marginal"].to_numpy(dtype=bool)
+            sz = d["size_marginal"].to_numpy()
+            row = {"model": model, "group": grp, "n_samples": int(len(d)), "n_individuals": int(d["pid"].nunique()),
+                   "accuracy": P.recomputed(f"fbd_acc_{model}_{grp}", float(ok.mean()), [rf], f"accuracy of the control-fit {model} model on the {grp} animals' vials (train_control_test_trained split)"),
+                   "accuracy_ci": cluster_boot(ok, d["pid"].to_numpy()),
+                   "coverage": P.recomputed(f"fbd_cov_{model}_{grp}", float(cv.mean()), [rf], f"coverage of the α = 0.10 marginal sets on the {grp} animals' vials"),
+                   "coverage_ci": cluster_boot(cv, d["pid"].to_numpy()),
+                   "empty": float((sz == 0).mean()), "wrong_non_empty": float(((~cv) & (sz > 0)).mean()), "set_size": float(sz.mean()),
+                   "source": [f"results/{rf}", "results/08_shift/TRNSCRPT/shift_table.csv"]}
+            fbd.append(row)
+            e = d[d["y_pred"] != d["tissue"]].groupby(["tissue", "y_pred", "sex"]).size().reset_index(name="n")
+            errors += [{"model": model, "group": grp, **r} for r in records(e)]
+            if model in ("k20", "full") and grp in ("1w", "8w"):
+                S[f"fbd_acc_{model}_{grp}"], S[f"fbd_cov_{model}_{grp}"] = row["accuracy"], row["coverage"]
+    fbd_block = {"rows": fbd, "errors_by_group": errors,
+                 "design": "fit on 7 of the 10 sedentary control animals, calibrate on the other 3 (54 pooled vials, LAC, α = 0.10), test every vial of each "
+                           "trained group; the phase-08 train_controls_test_trained split; 95 % cluster-bootstrap intervals over the 10 animals of a group"}
+    p15 = RES / "15_time_course" / "fingerprint_by_duration"
+    if (p15 / "part5_by_duration.csv").exists():
+        p5 = P.read("15_time_course/fingerprint_by_duration/part5_by_duration.csv")
+        armname = {"k20": "panel_k20", "full": "full"}
+        for r in fbd:
+            if r.get("pending") or r["model"] not in armname:
+                continue
+            sel = p5[(p5["design"] == "control_only_fit7_cal3") & (p5["arm"] == armname[r["model"]]) & (p5["test_group"] == r["group"])]
+            assert len(sel) == 1 and abs(float(sel["accuracy"].iloc[0]) - r["accuracy"]) < 1e-9 and abs(float(sel["coverage"].iloc[0]) - r["coverage"]) < 1e-9, \
+                ("phase 15 disagrees with the per-vial regeneration", r["model"], r["group"])
+            wx = {"design": "control_only_fit7_cal3_excl_BATcontam_VENACV", "arm": armname[r["model"]], "test_group": r["group"]}
+            if len(p5[(p5["design"] == wx["design"]) & (p5["arm"] == wx["arm"]) & (p5["test_group"] == wx["test_group"])]) == 1:
+                r["accuracy_excl_flagged"] = P.val(f"fbd_acc_excl_{r['model']}_{r['group']}", "15_time_course/fingerprint_by_duration/part5_by_duration.csv", "accuracy", where=wx,
+                                                   note="the consortium-flagged brown-fat-contaminated vena cava vials excluded")
+                r["coverage_excl_flagged"] = P.val(f"fbd_cov_excl_{r['model']}_{r['group']}", "15_time_course/fingerprint_by_duration/part5_by_duration.csv", "coverage", where=wx)
+        ms = P.read("15_time_course/fingerprint_by_duration/part5_matched_summary.csv")
+        ref = {}
+        for model, arm in armname.items():
+            where = {"arm": arm, "test_group": "control_heldout (pooled over folds)"}
+            if len(ms[(ms["arm"] == arm) & (ms["test_group"] == where["test_group"])]) == 1:
+                ref[model] = {k: P.val(f"fbd_ref_{k}_{model}", "15_time_course/fingerprint_by_duration/part5_matched_summary.csv", k, where=where)
+                              for k in ("accuracy", "coverage", "empty_rate") if k in ms.columns}
+                for k in ("accuracy_lo", "accuracy_hi", "coverage_lo", "coverage_hi", "n_test_animals"):
+                    if k in ms.columns:
+                        ref[model][k] = jsonable(ms[(ms["arm"] == arm) & (ms["test_group"] == where["test_group"])][k].iloc[0])
+        S["fbd_ref_coverage_k20"] = ref.get("k20", {}).get("coverage")
+        if S["fbd_ref_coverage_k20"] is None:
+            S["fbd_ref_coverage_k20"] = P.pending("fbd_ref_coverage_k20", "held-out-control reference row not in part5_matched_summary.csv")["pending"] and None
+        fbd_block.update({"reference_held_out_controls": ref,
+                          "matched_summary": P.table("fbd_matched_summary", "15_time_course/fingerprint_by_duration/part5_matched_summary.csv", "exercise.json", "fingerprint_by_duration.matched_summary")})
+        for name, fn in (("differences", "differences.csv"), ("seeds", "part6_seeds_summary.csv"), ("calibration", "calibration_info.csv")):
+            if (p15 / fn).exists():
+                fbd_block[name] = P.table(f"fbd_{name}", f"15_time_course/fingerprint_by_duration/{fn}", "exercise.json", f"fingerprint_by_duration.{name}")
+    else:
+        S["fbd_ref_coverage_k20"] = None
+        P.pending("fbd_ref_coverage_k20", "phase 15 (scripts/15_fingerprint_by_duration.py, make time-course) not run")
+        fbd_block["reference_held_out_controls"] = None
+    # ---- 5. study design dates and physiology (phase 15) ---------------------------------------------------------
+    d15 = RES / "15_time_course" / "design"
+    ph15 = RES / "15_time_course" / "physiology"
+    if (d15 / "design_by_group_sex.csv").exists() and (ph15 / "physiology_group_tests.csv").exists():
+        design = {"by_group_sex": P.table("design_by_group_sex", "15_time_course/design/design_by_group_sex.csv", "exercise.json", "design.by_group_sex")}
+        if (d15 / "design_contrasts.csv").exists():
+            design["contrasts"] = P.table("design_contrasts", "15_time_course/design/design_contrasts.csv", "exercise.json", "design.contrasts")
+            dc = P.read("15_time_course/design/design_contrasts.csv")
+            for d in ("1w", "2w", "4w", "8w"):
+                if len(dc[(dc["duration"] == d) & (dc["sex"] == "pooled")]) == 1:
+                    S[f"design_gap_days_{d}"] = P.val(f"design_gap_days_{d}", "15_time_course/design/design_contrasts.csv", "sacrifice_gap_days", where={"duration": d, "sex": "pooled"},
+                                                      note="median sacrifice date of the group minus the controls' median, days")
+        phys = {"group_tests": P.table("physiology_group_tests", "15_time_course/physiology/physiology_group_tests.csv", "exercise.json", "physiology.group_tests")}
+        gt = P.read("15_time_course/physiology/physiology_group_tests.csv")
+        for var in ("vo2max_change", "fat_change"):
+            for sex in ("female", "male"):
+                where = {"variable": var, "contrast": "8w vs control", "sex": sex}
+                if len(gt[(gt["variable"] == var) & (gt["contrast"] == where["contrast"]) & (gt["sex"] == sex)]) == 1:
+                    for col in ("median_diff", "mw_p", "n_trained", "n_control"):
+                        S[f"physio_{var}_8w_{sex}_{col}"] = P.val(f"physio_{var}_8w_{sex}_{col}", "15_time_course/physiology/physiology_group_tests.csv", col, where=where)
+    else:
+        design = phys = None
+        for d in ("1w", "2w", "4w", "8w"):
+            S[f"design_gap_days_{d}"] = None
+            P.pending(f"design_gap_days_{d}", "phase 15 design script (scripts/15_time_course_design.py, make time-course) not run")
+        S["physio_vo2max_change_8w_female_median_diff"] = None
+        P.pending("physio_vo2max_change_8w_female_median_diff", "phase 15 physiology (make time-course) not run")
+    # ---- 6. the panel genes' training response (phase 05b) ---------------------------------------------------
+    f05 = RES / "05_panels" / "TRNSCRPT" / "panel_training_summary.csv"
+    if f05.exists():
+        ptr = {"genes": P.table("panel_training_response", "05_panels/TRNSCRPT/panel_training_response.csv", "exercise.json", "panel_training.genes"),
+               "background": P.table("panel_training_background", "05_panels/TRNSCRPT/panel_training_background.csv", "exercise.json", "panel_training.background"),
+               "summary": P.table("panel_training_summary", "05_panels/TRNSCRPT/panel_training_summary.csv", "exercise.json", "panel_training.summary")}
+        ps = P.read("05_panels/TRNSCRPT/panel_training_summary.csv")
+        for col in ("n_genes", "n_regulated_marker_5pct", "max_abs_logfc_marker", "min_tissue_effect", "median_ratio_tissue_over_training", "min_ratio_tissue_over_training"):
+            if col in ps.columns and len(ps[ps["gene_set"] == "k20"]) == 1:
+                S[f"ptr_k20_{col}"] = P.val(f"ptr_k20_{col}", "05_panels/TRNSCRPT/panel_training_summary.csv", col, where={"gene_set": "k20"})
+    else:
+        ptr = None
+        for col in ("n_genes", "n_regulated_marker_5pct", "max_abs_logfc_marker", "min_tissue_effect", "median_ratio_tissue_over_training", "min_ratio_tissue_over_training"):
+            S[f"ptr_k20_{col}"] = None
+            P.pending(f"ptr_k20_{col}", "scripts/05_panel_training_response.py (make panel-training) not run")
+    w.write("exercise.json", {"separability": sep, "covariates": cov, "within_tissue": wt, "fingerprint_by_duration": fbd_block,
+                              "design": design, "physiology": phys, "panel_training": ptr, "summary": S},
+            sorted(P.sources - before))
+
 # ---------------------------------------------------------------------------------------------
 ANCHORS = [  # (id in provenance, spec value, tolerance)
     ("acc_full", 0.995, 0.0005), ("acc_k20", 0.976, 0.0005), ("acc_fclassif_k20", 0.399, 0.0005), ("acc_bodymap_k20", 1.000, 1e-9),
@@ -1177,6 +1348,14 @@ ANCHORS = [  # (id in provenance, spec value, tolerance)
     ("recal3size_gtex_k20", 11.70, 0.005), ("gtex_recal_k20_n3_frac_inf", 0.45, 0.005), # QC-only baseline as balanced accuracy since 2026-09-27 (the brief's 0.873 / 0.949 / 0.975 were plain accuracy; bal_acc_mean in the same file)
     ("qc_technical", 0.874, 0.0005), ("qc_technical_sd", 0.025, 0.0005),
     ("qc_composition", 0.952, 0.0005), ("qc_composition_sd", 0.010, 0.0005), ("qc_all", 0.976, 0.0005), ("qc_all_sd", 0.020, 0.0005),
+    # the Exercise page (results/SUMMARY.md and results/07_fusion, 03_eda; per-duration rows from the phase-08 regeneration)
+    ("fusion_n_beats_single", 0, 0), ("fusion_n_beats_null", 7, 0), ("fusion_n_tissues", 7, 0), ("verdict_n_training", 4, 0), ("verdict_n_tissues", 7, 0),
+    ("taskB_mean_auroc_1w", 0.96, 0.005), ("taskB_mean_auroc_2w", 0.99, 0.005), ("taskB_mean_auroc_4w", 0.94, 0.005), ("taskB_mean_auroc_8w", 0.99, 0.005),
+    ("cov_heart_depth_logreg", 0.96, 0.005), ("cov_kidney_library_logreg", 0.89, 0.005), ("cov_skmgn_qc_logreg", 0.96, 0.005), ("cov_skmgn_all_rf", 1.0, 1e-9),
+    ("wt_heart_trnscrpt_max_r2_group", 0.70, 0.005), ("wt_TRNSCRPT_n_visible", 13, 0), ("wt_PROT_n_visible", 6, 0), ("wt_METAB_n_visible", 18, 0),
+    ("fbd_acc_k20_8w", 0.972, 0.0005), ("fbd_cov_k20_8w", 0.917, 0.0005), ("fbd_acc_k20_1w", 0.944, 0.0005), ("fbd_acc_full_8w", 1.000, 1e-9), ("fbd_cov_full_8w", 0.889, 0.0005),
+    ("physio_vo2max_change_8w_female_median_diff", 19.25, 0.005), ("physio_vo2max_change_8w_male_median_diff", 17.12, 0.005), ("design_gap_days_8w", 12, 0.5),
+    ("fbd_ref_coverage_k20", 0.939, 0.0005), ("ptr_k20_n_regulated_marker_5pct", 6, 0),
     ("n_plates", 17, 0), ("n_lib_batches", 17, 0), ("n_flowcells", 4, 0), ("shared_genes_bodymap", 21040, 0), ("motrpac_genes", 21193, 0),
     ("orthologs_1to1", 14609, 0), ("orthologs_in_gtex", 14569, 0), ("tile_estimable", 1, 0), ("tile_estimable_total", 171, 0), ("cov_id_full_marginal_one_per_animal", 0.916, 0.0005), ("cov_id_full_marginal_pooled", 0.908, 0.0005),
     ("bridge_sum_ratio_all_genes_pool99", 0.017, 0.002),   # the brief's "~1.7 % of the variance that separates tissues"
@@ -1327,6 +1506,8 @@ def readme_table(prov_entries: list[dict]) -> str:
         ("GTEx (human): accuracy k20 / k50 / full", f"{f('acc_gtex_k20')} / {f('acc_gtex_k50')} / {f('acc_gtex_full')}", "results/13_gtex/accuracy_overall.csv"),
         ("GTEx coverage k20 / empty; recalibrated on 3 donors: coverage at set size", f"{f('cov_gtex_k20_marginal')} / {f('empty_gtex_k20_marginal')}; {f('recal3_gtex_k20')} at {f('recal3size_gtex_k20', 2)}", "results/13_gtex/"),
         ("Estimable tissue pairs within study (RNA-seq)", f"{f('tile_estimable')} of {f('tile_estimable_total')} ({' and '.join(t.lower() for t in str(byid.get('tile_estimable_pairs', '')).split('|'))})", "results/16_identifiability/estimable_pairs.csv"),
+        ("Sedentary vs 8-week-trained within tissue: mean best single-omic AUROC / fusion beats single / attributable to training", f"{f('taskB_mean_auroc_8w')} / {f('fusion_n_beats_single', 0)} of {f('fusion_n_tissues', 0)} / {f('verdict_n_training', 0)} of {f('verdict_n_tissues', 0)}", "results/07_fusion/"),
+        ("Panel fit on sedentary controls, tested per training duration: accuracy 1w / 8w, coverage 8w", f"{f('fbd_acc_k20_1w')} / {f('fbd_acc_k20_8w')}, {f('fbd_cov_k20_8w')}", "results/31_site_regen/08_shift_k20/scores_target_vials.csv"),
         ("Batch measured on a bridging reference pool run on 6 plates (Σ V_batch / Σ V_tissue, all genes)", f('bridge_sum_ratio_all_genes_pool99'), "results/16_identifiability/bridge_variance.csv"),
         ("QC covariates alone, balanced accuracy: technical / composition / all", f"{f('qc_technical')} / {f('qc_composition')} / {f('qc_all')}", "results/16_identifiability/qc_only_summary.csv"),
     ]
@@ -1336,21 +1517,21 @@ def readme_table(prov_entries: list[dict]) -> str:
 def abstract(prov_entries: list[dict]) -> str:
     byid = {e["id"]: e.get("value") for e in prov_entries}
     g = lambda i, d=3: ("pending" if byid.get(i) is None else (f"{byid[i]:.{d}f}" if isinstance(byid[i], float) else str(byid[i])))
+    pairs = " and ".join(t.lower() for t in str(byid.get("tile_estimable_pairs", "")).split("|"))
     return (
-        f"In the MoTrPAC 6-month rat endurance-training transcriptomes (19 tissues, 899 vials, 50 animals), a 20-gene panel selected "
-        f"inside each fold by a class-aware round-robin rule reaches "
-        f"{g('acc_k20')} balanced accuracy under animal-grouped cross-validation (50 genes {g('acc_k50')}; all genes {g('acc_full')}; "
-        f"an F-test selector at the same size {g('acc_fclassif_k20')}). A split-conformal set promising the true tissue 90 % of the time "
-        f"covers {g('cov_id_full_marginal_one_per_animal')} of held-out animals in-distribution, but with the same calibration only "
-        f"{g('cov_bodymap_k20_marginal')} of adult rat BodyMap organs from another laboratory, where the panel still names all mapped "
-        f"organs correctly (9 of 11; muscle and brain as super-classes), and {g('cov_gtex_k20_marginal')} of human GTEx samples "
-        f"(accuracy {g('acc_gtex_k20')}); the loss is abstention, not confident error. Three target animals restore coverage within "
-        f"species ({g('recal3_bodymap_k20')} at {g('recal3size_bodymap_k20', 2)} tissues per set); three donors do not across species "
-        f"({g('recal3_gtex_k20')} at {g('recal3size_gtex_k20', 1)} tissues per set). Within one multi-tissue study the tissue axis is "
-        f"confounded with processing: each tissue sits inside one extraction plate, library batch and flowcell, only {g('tile_estimable')} of "
-        f"{g('tile_estimable_total')} tissue pairs ({' and '.join(t.lower() for t in str(byid.get('tile_estimable_pairs', '')).split('|'))}) shares all three, and library QC numbers alone classify tissue at {g('qc_all')} "
-        f"({g('qc_technical')} from purely technical ones). Within-study accuracy is therefore not evidence of biology; transfer to an "
-        f"independently processed cohort is."
+        f"In the MoTrPAC rat endurance-training transcriptomes (19 tissues, 899 vials, 50 animals), a 20-gene panel selected "
+        f"inside each fold by a class-aware round-robin rule reaches {g('acc_k20')} balanced accuracy over animal-grouped folds "
+        f"(50 genes {g('acc_k50')}; all genes {g('acc_full')}; a univariate F-test at the same size {g('acc_fclassif_k20')}). "
+        f"A split-conformal set promising the true tissue 90 % of the time covers {g('cov_id_full_marginal_one_per_animal')} of held-out "
+        f"animals and, with the panel fit on sedentary controls only, {g('cov_train_control_test_trained_k20_marginal')} of trained animals. "
+        f"Beyond the study it abstains rather than errs: {g('cov_bodymap_k20_marginal')} of rat BodyMap organs from another laboratory, "
+        f"where the panel names every mapped organ correctly, and {g('cov_gtex_k20_marginal')} of human GTEx samples (accuracy {g('acc_gtex_k20')}). "
+        f"Three target animals restore the guarantee within species ({g('recal3_bodymap_k20')} at {g('recal3size_bodymap_k20', 2)} tissues per set); "
+        f"across species three donors restore the number, not the information ({g('recal3_gtex_k20')} at {g('recal3size_gtex_k20', 1)} tissues per set). "
+        f"As in any multi-tissue design, each tissue was processed as a unit: {g('tile_estimable')} of {g('tile_estimable_total')} tissue pairs "
+        f"({pairs}) can be contrasted inside one batch, and library QC numbers alone classify tissue at {g('qc_all')}. "
+        f"Two external facts establish the fingerprint as biology: the independent laboratory, and batch measured directly on the consortium's "
+        f"bridging reference pools, {g('bridge_sum_ratio_all_genes_pool99')} of the variance that separates tissues."
     )
 
 
@@ -1393,6 +1574,8 @@ def main():
     export_aggregates(w, prov, rec)
     print("== headline")
     export_headline(w, prov, rec)
+    print("== exercise")
+    export_exercise(w, prov)
     if probs is not None:
         print("== samples")
         motrpac = export_samples(w, prov, probs, cal, classes)

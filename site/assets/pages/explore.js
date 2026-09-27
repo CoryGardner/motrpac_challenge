@@ -200,16 +200,15 @@ function tissueCard(exprP) {
       chips.appendChild(ch);
     }
     let kind, icon, sentence;
-    if (chosen.length === 0) { kind = "abstains"; icon = "∅"; sentence = `Abstains. At α = ${state.alpha.toFixed(2)} no tissue clears the calibrated threshold, so the set is empty: the model is not confident enough in any tissue to name one under the guarantee.`; }
+    if (chosen.length === 0) { kind = "abstains"; icon = "∅"; sentence = `Abstains. At α = ${state.alpha.toFixed(2)} no tissue clears the calibrated threshold, so the set is empty: under the guarantee the model names no tissue rather than guessing.`; }
     else if (chosen.length === 1) { kind = "confident"; icon = "●"; sentence = `Confident. Exactly one tissue clears the threshold: ${tissueLabel(chosen[0][0])}.`; }
-    else { kind = "ambiguous"; icon = "◐"; sentence = `Ambiguous. ${chosen.length} tissues clear the threshold; the guarantee is kept by returning all of them.`; }
+    else { kind = "ambiguous"; icon = "◐"; sentence = `Ambiguous. ${chosen.length} tissues clear the threshold, so the set returns all of them.`; }
     const thr = Number.isFinite(q) ? `threshold q̂ = ${fmt(q, 3)}: a tissue enters the set when p ≥ ${fmt(1 - q, 3)}` : "threshold q̂ = +∞ (too few calibration scores for this α): every tissue enters the set";
     const who = el("div", { class: "who" }, [el("b", {}, s.id), " · ", state.source === "motrpac" ? `MoTrPAC vial, ${s.sex}, ${s.group}, out-of-fold (fold ${s.fold})` : state.source === "bodymap" ? `rat BodyMap, ${s.sex}, animal ${s.animal}` : `GTEx v8, donor ${s.donor}`]);
     const topCall = top[0][0];
     const calls = state.source === "motrpac" ? null : el("p", { class: "explain" }, [
       el("b", {}, "Two models, two calls. "),
-      `The sets above come from the model refit on 35 MoTrPAC animals so that the other 15 could calibrate it; its top call is ${tissueLabel(topCall)}. `,
-      `The model fit on all 50 animals, the one the accuracy tables use, calls this sample `, el("b", {}, tissueLabel(s.pred_all_animals[state.model])), ".",
+      `The sets come from the model refit on 35 MoTrPAC animals, calibrated on the other 15 (top call ${tissueLabel(topCall)}); the model fit on all 50 animals, the one the accuracy tables use, calls this sample `, el("b", {}, tissueLabel(s.pred_all_animals[state.model])), ".",
       s.pred_all_animals[state.model] !== topCall ? " The two disagree here: a panel re-selected on 35 animals is not the same panel." : "",
     ]);
     const answer = el("div", { class: "answer" + (state.hide ? " hidden-answer" : "") }, [el("b", {}, "True tissue: "), tr.label]);
@@ -223,7 +222,7 @@ function tissueCard(exprP) {
     const top5 = top.slice(0, 5);
     const specTop = {
       title: "Top-5 class probabilities and the calibrated threshold",
-      subtitle: `${state.model === "full" ? "all-gene" : state.model.replace("k", "") + "-gene"} model${state.source === "motrpac" ? " (fit on the fold's 18 fit animals)" : " (refit on 35 MoTrPAC animals for calibration)"}; a tissue enters the set when its probability is at least 1 − q̂.`,
+      subtitle: `${state.model === "full" ? "all-gene" : state.model.replace("k", "") + "-gene"} model${state.source === "motrpac" ? " (fit on the fold's 18 fit animals)" : " (refit on 35 MoTrPAC animals for calibration)"}; a tissue enters the set when its probability is ≥ 1 − q̂.`,
       build: () => {
         const y = top5.map(([c]) => tissueLabel(c)).reverse(), x = top5.map(([, v]) => v).reverse();
         const inset = top5.map(([c]) => set[classes.indexOf(c)]).reverse();
@@ -242,7 +241,7 @@ function tissueCard(exprP) {
       height: "short",
     };
     if (!figTop) figTop = await figure(document.getElementById("fig-top5"), specTop);
-    else { figTop.spec = specTop; const b = specTop.build(); figTop.traces = b.traces; figTop.table = b.table; await window.Plotly.react(figTop.chart, b.traces, { ...template(), ...b.layout }, CONFIG); figTop.root.querySelector(".fig-sub").textContent = specTop.subtitle; figTop.root.querySelector(".fig-caption").firstChild.nextSibling.textContent = specTop.source; }
+    else { figTop.spec = specTop; const b = specTop.build(); figTop.traces = b.traces; figTop.table = b.table; await window.Plotly.react(figTop.chart, b.traces, { ...template(), ...b.layout }, CONFIG); figTop.root.querySelector(".fig-sub").textContent = specTop.subtitle; figTop.root.querySelector(".fig-notes p").lastChild.textContent = specTop.source; }
 
     // panel-gene strip (needs the expression exports)
     await exprP;
@@ -260,7 +259,7 @@ function tissueCard(exprP) {
     const trueGroup = state.source === "motrpac" ? s.tissue : state.source === "bodymap" ? s.organ : s.tissue;
     const specStrip = {
       title: `Where this sample sits on each panel gene, against the tissue reference profiles`,
-      subtitle: `Within-dataset z-score of the sample (bars) for the ${panelIds.length} panel genes, with the mean z of the top-scoring tissue's reference profile (◆) and of the sample's own group (●). Marker tissue of each gene in the hover.`,
+      subtitle: `Sample z (bars) for the ${panelIds.length} panel genes, with the mean z of the top-scoring tissue (◆) and of the sample's own group (●); marker tissue in the hover.`,
       build: () => {
         const x = panelIds.map((g) => gi[g]?.symbol || g);
         const traces = [{ ...bar(x, sampleZ, { name: "this sample (z)", slot: 1, hover: "%{x}: z = %{y:.2f}<br>%{customdata}<extra>this sample</extra>" }), customdata: panelIds.map((g) => `marker of ${gi[g]?.marker_tissue || "?"}`) }];
@@ -288,7 +287,7 @@ function geneExplorer(exprP) {
   const ctl = document.getElementById("gene-controls");
   const sel = select(genes.map((g) => [g.id, `${g.symbol || g.id}${g.marker_tissue ? " · " + g.marker_tissue : ""}${g.in_core ? " · core" : g.in_k20 ? " · k20" : ""}`]), state.gene, (v) => { state.gene = v; render(); });
   const feat = (sym) => el("button", { class: "btn", type: "button", onclick: () => { state.gene = bySym[sym]; sel.value = state.gene; render(); } }, sym);
-  ctl.append(control("Gene (the ~100 exported)", sel), el("span", { class: "control" }, [el("span", {}, "Featured"), el("span", {}, [feat("Pgk2"), " ", feat("Gnb3")])]));
+  ctl.append(control("Gene (panel and candidate genes)", sel), el("span", { class: "control" }, [el("span", {}, "Featured"), el("span", {}, [feat("Pgk2"), " ", feat("Gnb3")])]));
   const figs = {};
   async function render() {
     await exprP;
@@ -299,23 +298,23 @@ function geneExplorer(exprP) {
     const row = (k, v) => { dl.append(el("dt", {}, k), el("dd", {}, v === null || v === undefined ? "—" : String(v))); };
     row("gene", `${g.symbol} (${g.id})`);
     row("marker tissue", g.marker_tissue ? tissueLabel(g.marker_tissue) : "—");
-    row("bootstrap selection frequency (k = 20)", g.freq === null || g.freq === undefined ? "not in the stability run" : fmt(g.freq, 2));
-    row("effect size (log2 CPM above the next tissue)", g.effect_size === null || g.effect_size === undefined ? "—" : fmt(g.effect_size, 2) + (g.next_highest_tissue ? ` (next: ${g.next_highest_tissue})` : ""));
+    row("selection frequency (k = 20 bootstraps)", g.freq === null || g.freq === undefined ? "not in the stability run" : fmt(g.freq, 2));
+    row("effect (log2 CPM above the next tissue)", g.effect_size === null || g.effect_size === undefined ? "—" : fmt(g.effect_size, 2) + (g.next_highest_tissue ? ` (next: ${g.next_highest_tissue})` : ""));
     row("one-vs-rest score", g.ovr_score === null || g.ovr_score === undefined ? "—" : fmt(g.ovr_score, 2));
-    row("r with mRNA fraction in marker tissue", g.r_pct_mrna === null || g.r_pct_mrna === undefined ? "—" : fmt(g.r_pct_mrna, 2) + (g.qc_flag ? " · QC-correlated flag" : ""));
-    row("training-regulated in marker tissue", g.regulated === null || g.regulated === undefined ? "—" : g.regulated ? "yes (risk flag)" : "no");
+    row("r with mRNA fraction (marker tissue)", g.r_pct_mrna === null || g.r_pct_mrna === undefined ? "—" : fmt(g.r_pct_mrna, 2) + (g.qc_flag ? " · QC-correlated flag" : ""));
+    row("training-regulated (marker tissue)", g.regulated === null || g.regulated === undefined ? "—" : g.regulated ? "yes (risk flag)" : "no");
     row("in panels", [g.in_core ? "stable core" : null, g.in_k20 ? "k = 20" : null, g.in_k50 ? "k = 50" : null, g.in_developmental ? "developmental marker" : null].filter(Boolean).join(", ") || "none (selected in " + g.n_folds_selected_k20 + " of 5 folds at k = 20)");
-    row("BodyMap adults", g.fails_bodymap === null || g.fails_bodymap === undefined ? "not testable (no organ)" : g.fails_bodymap ? `fails (top organ ${g.bodymap_top_organ})` : g.weakened_bodymap ? "weakened" : "holds");
-    row("GTEx", g.fails_gtex === null || g.fails_gtex === undefined ? "not testable / not in the ortholog-space panel" : g.fails_gtex ? `fails (top tissue ${g.gtex_top_tissue})` : g.weakened_gtex ? "weakened" : "holds");
+    row("BodyMap adults", g.fails_bodymap === null || g.fails_bodymap === undefined ? "not testable (no organ)" : g.fails_bodymap ? `lost (top organ ${g.bodymap_top_organ})` : g.weakened_bodymap ? "weakened" : "holds");
+    row("GTEx", g.fails_gtex === null || g.fails_gtex === undefined ? "not testable / not in the ortholog-space panel" : g.fails_gtex ? `lost (top tissue ${g.gtex_top_tissue})` : g.weakened_gtex ? "weakened" : "holds");
     row("human ortholog", g.human_gene || "—");
     card.replaceChildren(el("div", { class: "who" }, [el("b", {}, g.symbol), " annotation card"]), dl,
-                         el("p", { class: "explain small" }, "Sources: results/05_panels/TRNSCRPT/stability_k20_annotated.csv, results/12_bodymap/panel_gene_check.csv, results/13_gtex/panel_gene_check.csv"));
+                         el("details", { class: "fig-notes" }, [el("summary", {}, "Source"), el("p", {}, [el("b", {}, "Source: "), "results/05_panels/TRNSCRPT/stability_k20_annotated.csv, results/12_bodymap/panel_gene_check.csv, results/13_gtex/panel_gene_check.csv"])]));
     const systemOrder = ["CORTEX", "HIPPOC", "HYPOTH", "SKM-GN", "SKM-VL", "HEART", "WAT-SC", "BAT", "COLON", "SMLINT", "OVARY", "TESTES", "BLOOD", "SPLEEN", "VENACV", "LIVER", "KIDNEY", "LUNG", "ADRNL"];
     const t = tokens();
     // MoTrPAC panel
     const specM = {
       title: `${g.symbol} in MoTrPAC: log2 CPM by tissue`,
-      subtitle: "Every study vial (899), sex as marker shape (● female, ◆ male), colour = organ system; bars mark the tissue median.",
+      subtitle: "Every study vial (899); sex as marker shape (● female, ◆ male), colour = organ system, bars = tissue median.",
       build: () => {
         const i = EM._idx?.[g.id] ?? EM.genes.indexOf(g.id);
         if (i < 0) return { traces: [], layout: { annotations: [{ text: "gene absent from the stacked MoTrPAC matrix", showarrow: false }] } };
@@ -336,7 +335,7 @@ function geneExplorer(exprP) {
     };
     const specB = {
       title: `${g.symbol} in the rat BodyMap: by organ and age`,
-      subtitle: "Every sample (316), colour = age (2 → 104 weeks, light → dark), jittered within organ; thymus and uterus have no MoTrPAC tissue.",
+      subtitle: "Every sample (316), colour = age (2 → 104 weeks, light → dark); thymus and uterus have no MoTrPAC tissue.",
       build: () => {
         const i = EB.genes.indexOf(g.id);
         if (i < 0) return { traces: [], layout: { annotations: [{ text: "gene absent from the BodyMap matrix", showarrow: false }] } };
@@ -356,7 +355,7 @@ function geneExplorer(exprP) {
     };
     const specG = {
       title: `${g.symbol} in GTEx: log2 TPM by tissue`,
-      subtitle: `Every sample (2,485, ≤ 150 donors per tissue) through the 1:1 ortholog${g.human_gene ? " " + g.human_gene : ""}; one hue, the axis carries identity; bars mark the tissue median.`,
+      subtitle: `Every sample (2,485, ≤ 150 donors per tissue) through the 1:1 ortholog${g.human_gene ? " " + g.human_gene : ""}; bars = tissue median.`,
       build: () => {
         const i = EG.genes.indexOf(g.id);
         if (i < 0) return { traces: [], layout: { annotations: [{ text: "no 1:1 human ortholog in GTEx for this gene", showarrow: false, font: { color: t.ink2 } }], xaxis: { visible: false }, yaxis: { visible: false } } };
@@ -401,7 +400,7 @@ function panelBuilder() {
     const covered = order.slice(0, Math.min(k, order.length));
     document.getElementById("builder-summary").replaceChildren(
       el("div", { class: "who" }, [el("b", {}, `k = ${k}`), ` · balanced accuracy ${fmt(row.roundrobin_mean)} ± ${fmt(row.roundrobin_sd)} (5 folds, ${row.n_train_animals} train / ${row.n_test_animals} test animals) · F-test selector at the same k: ${fmt(row.fclassif_mean)}`]),
-      el("p", { class: "explain" }, `${covered.length} of 19 tissues have a marker after ${k} picks (the selector takes one tissue per pick, classes in sorted order).`),
+      el("p", { class: "explain" }, `${covered.length} of 19 tissues have a marker after ${k} picks (one tissue per pick, classes in sorted order).`),
     );
     const stripEl = document.getElementById("builder-strip");
     stripEl.replaceChildren(...order.map((t) => el("div", { class: "cell" + (covered.includes(t) ? " on" : ""), title: tissueLabel(t) }, t)));
@@ -410,7 +409,7 @@ function panelBuilder() {
       return el("span", { class: "chip", title: mt ? `marker of ${mt}` : "marker tissue not annotated for this gene" }, [os ? el("span", { class: "dot", style: `background:${os.color}` }) : null, sym + (mt ? ` · ${mt}` : "")]); }));
     const spec = {
       title: "Accuracy vs panel size, with the current k marked",
-      subtitle: "Mean ± sd balanced accuracy over 5 animal-grouped folds, round-robin selector (blue) vs F-test (orange); log x.",
+      subtitle: "Mean ± sd balanced accuracy over 5 animal-grouped folds, round-robin selector vs F-test; log x.",
       build: () => {
         const t = tokens();
         const ks = PC.curve.map((r) => r.k);
@@ -445,9 +444,9 @@ function calculator() {
     const refs = CERT.sizing.map((r) => ({ ...r, agrees: animalsNeeded(r.alpha, r.delta) === r.n_zero_error_needed }));
     out.replaceChildren(
       el("div", { class: "who" }, [el("b", {}, `n ≥ ${n} calibration animals`), ` with zero calibration errors certify a panel at (α, δ) = (${state.alpha.toFixed(2)}, ${state.delta.toFixed(2)}).`]),
-      el("p", { class: "explain" }, `This study calibrates on ${CERT.sizing[0].n_cal_this_run} animals per fold (one vial per animal). The guarantee is paid for in animals, not genes.`),
+      el("p", { class: "explain" }, `This study calibrates on ${CERT.sizing[0].n_cal_this_run} animals per fold (one vial per animal).`),
       tableFrom({ columns: ["alpha", "delta", "n_zero_error_needed", "n_cal_this_run", "formula_agrees"], rows: refs.map((r) => ({ alpha: r.alpha, delta: r.delta, n_zero_error_needed: r.n_zero_error_needed, n_cal_this_run: r.n_cal_this_run, formula_agrees: r.agrees ? "yes" : "no" })) }),
-      el("p", { class: "explain small" }, "Source: results/06_conformal/TRNSCRPT/sizing_table.csv (the four reference points); the slider applies n = ⌈ln δ / ln(1 − α)⌉, the same formula the pipeline uses."),
+      el("details", { class: "fig-notes" }, [el("summary", {}, "Source"), el("p", {}, [el("b", {}, "Source: "), "results/06_conformal/TRNSCRPT/sizing_table.csv (the four reference points); the slider applies n = ⌈ln δ / ln(1 − α)⌉, the same formula the pipeline uses."])]),
     );
   }
   render();

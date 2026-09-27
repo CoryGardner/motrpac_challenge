@@ -8,20 +8,18 @@ async function main() {
   const k20 = PC.curve.find((r) => r.k === 20), k15 = PC.curve.find((r) => r.k === 15), k10 = PC.curve.find((r) => r.k === 10), k50 = PC.curve.find((r) => r.k === 50);
   const base = Object.fromEntries(PC.baselines.map((r) => [r.model, r]));
   document.getElementById("lede").replaceChildren(
-    `A class-aware selector and a plain logistic regression identify 19 rat tissues at ${fmt(k20.roundrobin_mean)} ± ${fmt(k20.roundrobin_sd)} balanced accuracy with 20 genes, ${fmt(k50.roundrobin_mean)} with 50, and ${fmt(base.logreg_l2.balanced_accuracy_mean)} with all ${ex.motrpac_genes} genes. `,
+    `A class-aware selector and a plain logistic regression identify 19 rat tissues at ${fmt(k20.roundrobin_mean)} ± ${fmt(k20.roundrobin_sd)} balanced accuracy with 20 genes, ${fmt(k50.roundrobin_mean)} with 50, and ${fmt(base.logreg_l2.balanced_accuracy_mean)} with all ${ex.motrpac_genes.toLocaleString()} genes. `,
     `Ten of the genes are stable across animal bootstraps; most are textbook markers.`,
   );
 
   // ---- panel curve ------------------------------------------------------------------------------------
   document.getElementById("p-curve").replaceChildren(
-    `The accuracy-vs-size curve is flat from 15 genes on (${fmt(k15.roundrobin_mean)} at 15, ${fmt(k20.roundrobin_mean)} at 20, ${fmt(k50.roundrobin_mean)} at 50) and steep below: ${fmt(k10.roundrobin_mean)} at 10. `,
-    "The step is the selector's construction: it picks one marker per tissue in turn, so at k = 10 nine tissues have no marker yet. ",
-    `The univariate F-test ranks genes by a one-vs-rest statistic dominated by the easy tissues; its top 20 leave most tissues unrepresented and reach ${fmt(k20.fclassif_mean)}. `,
-    `For reference, the tuned baselines on the same folds with all genes: nearest centroid ${fmt(base.centroid.balanced_accuracy_mean)}, L2 logistic regression ${fmt(base.logreg_l2.balanced_accuracy_mean)}, random forest ${fmt(base.rf.balanced_accuracy_mean)}.`,
+    `The curve is flat from 15 genes on (${fmt(k15.roundrobin_mean)} at 15, ${fmt(k20.roundrobin_mean)} at 20, ${fmt(k50.roundrobin_mean)} at 50) and steep below (${fmt(k10.roundrobin_mean)} at 10), because the selector picks one marker per tissue in turn and at k = 10 nine tissues have none yet. `,
+    `A univariate F-test ranks genes by a one-vs-rest statistic dominated by the easy tissues, so its top 20 leave most tissues unrepresented and reach ${fmt(k20.fclassif_mean)}; the tuned all-gene baselines on the same folds: nearest centroid ${fmt(base.centroid.balanced_accuracy_mean)}, L2 logistic regression ${fmt(base.logreg_l2.balanced_accuracy_mean)}, random forest ${fmt(base.rf.balanced_accuracy_mean)}.`,
   );
   await figure(document.getElementById("fig-curve"), {
-    title: "Fifteen to twenty genes are enough; the F-test never gets there",
-    subtitle: "Balanced accuracy vs panel size on a log axis: mean (line) ± sd (band) over 5 animal-grouped folds, with every fold's value as a dot; round-robin vs F-test selection, logreg_l2 on the selected genes.",
+    title: `Fifteen to twenty genes are enough; a univariate F-test at the same size reaches ${fmt(ex.acc_fclassif_k20)}`,
+    subtitle: "Balanced accuracy vs panel size (log axis): mean (line) ± sd (band) over 5 animal-grouped folds, every fold as a dot; logreg_l2 on the selected genes.",
     build: () => {
       const c = PC.curve;
       const ks = c.map((r) => r.k);
@@ -46,17 +44,19 @@ async function main() {
   const gi = Object.fromEntries(GENES.genes.map((g) => [g.id, g]));
   const core = SC.core;
   document.getElementById("p-core").replaceChildren(
-    `Selection was repeated on 50 bootstrap resamples of animals; ${core.length} genes were chosen in at least 80 % of them (Source: results/05_panels/TRNSCRPT/candidate_panel_annotated.csv). `,
-    `They cover ${new Set(core.map((r) => r.marker_tissue)).size} tissues with single markers such as Umod (kidney), Cyp21a1 (adrenal) and Pmch (hypothalamus). ${core.filter((r) => r.risk_T7_regulated).length} carry a training-regulated flag and ${core.filter((r) => r.risk_qc_correlated).length} a QC-correlation flag: annotations, not exclusions.`,
+    `Selection was repeated on 50 bootstrap resamples of animals; ${core.length} genes were chosen in at least 80 % of them, covering ${new Set(core.map((r) => r.marker_tissue)).size} tissues with single markers such as Umod (kidney), Cyp21a1 (adrenal) and Pmch (hypothalamus). `,
+    `${core.filter((r) => r.risk_T7_regulated).length} carry a training-regulated flag and ${core.filter((r) => r.risk_qc_correlated).length} a QC-correlation flag: annotations, not exclusions.`,
   );
   const coreRows = core.map((r) => { const g = gi[r.feature_ID] || {}; return {
     gene: r.gene_symbol, tissue: tissueLabel(r.marker_tissue).split(" · ").pop(), freq: r.selection_frequency, effect: r.effect_size, "runner-up": r.next_highest_tissue, OvR: r.ovr_score,
     "r mRNA": r.r_pct_mrna_in_marker_tissue, regulated: r.risk_T7_regulated ? "yes" : "no", "QC flag": r.risk_qc_correlated ? "yes" : "no",
-    BodyMap: g.fails_bodymap === null || g.fails_bodymap === undefined ? "no organ" : g.fails_bodymap ? "fails" : g.weakened_bodymap ? "weakened" : "holds",
-    GTEx: g.fails_gtex === null || g.fails_gtex === undefined ? "not testable" : g.fails_gtex ? "fails" : g.weakened_gtex ? "weakened" : "holds" }; });
+    BodyMap: g.fails_bodymap === null || g.fails_bodymap === undefined ? "no organ" : g.fails_bodymap ? "lost" : g.weakened_bodymap ? "weakened" : "holds",
+    GTEx: g.fails_gtex === null || g.fails_gtex === undefined ? "not testable" : g.fails_gtex ? "lost" : g.weakened_gtex ? "weakened" : "holds" }; });
   const f2 = (v) => v.toFixed(2);
   document.getElementById("tbl-core").replaceChildren(tableFrom({ columns: Object.keys(coreRows[0]), rows: coreRows, format: { freq: f2, effect: f2, OvR: f2, "r mRNA": f2 } }),
-    el("p", { class: "small" }, "Columns: freq = selection frequency over the 50 bootstraps; effect = log2 CPM above the runner-up tissue; OvR = one-vs-rest score; r mRNA = correlation with the library mRNA fraction in the marker tissue; regulated = training-regulated in the marker tissue; QC flag = QC-correlated. Sources: results/05_panels/TRNSCRPT/candidate_panel_annotated.csv (selection frequency, effect size, one-vs-rest score, QC correlation, flags); results/12_bodymap/panel_gene_check.csv and results/13_gtex/panel_gene_check.csv (holds / weakened / fails on the external targets; the GTEx panel is re-selected in ortholog space, so a core gene can be untested there)."));
+    el("details", { class: "fig-notes" }, [el("summary", {}, "Columns and source"),
+      el("p", {}, "Columns: freq = selection frequency over the 50 bootstraps; effect = log2 CPM above the runner-up tissue; OvR = one-vs-rest score; r mRNA = correlation with the library mRNA fraction in the marker tissue; regulated = training-regulated in the marker tissue; QC flag = QC-correlated; BodyMap / GTEx = whether the marker holds, is weakened or is lost on the external target."),
+      el("p", {}, [el("b", {}, "Source: "), "results/05_panels/TRNSCRPT/candidate_panel_annotated.csv (selection frequency, effect size, one-vs-rest score, QC correlation, flags); results/12_bodymap/panel_gene_check.csv and results/13_gtex/panel_gene_check.csv (the external checks; the GTEx panel is re-selected in ortholog space, so a core gene can be untested there)."])]));
 
   // ---- per-tissue accuracy and confusion --------------------------------------------------------------
   const pt20 = CM.confusion.k20.per_tissue_accuracy, ptFull = CM.confusion.full.per_tissue_accuracy;
@@ -66,8 +66,8 @@ async function main() {
     `Its ${CM.confusable_k20.reduce((a, r) => a + r.count, 0)} errors are mostly ${CM.confusable_k20[0].true} → ${CM.confusable_k20[0].predicted} (${CM.confusable_k20[0].count}) and the two skeletal muscles for each other. With all genes the same folds leave ${CM.confusable_full.reduce((a, r) => a + r.count, 0)} errors.`,
   );
   await figure(document.getElementById("fig-tissue"), {
-    title: "Accuracy per tissue: brown fat, the two skeletal muscles and vena cava are the hard ones",
-    subtitle: "Fraction of each tissue's 899 pooled out-of-fold vials called correctly, 20-gene panel vs all genes (logreg_l2), 5 animal-grouped folds.",
+    title: "Accuracy per tissue: brown fat, the two skeletal muscles and vena cava are the closest neighbours",
+    subtitle: "Fraction of each tissue's pooled out-of-fold vials (899 in all) called correctly, 20-gene panel vs all genes, 5 animal-grouped folds.",
     build: () => ({
       traces: [bar(tissues.map((t) => pt20[t]), tissues.map((t) => tissueLabel(t)), { horizontal: true, name: "20-gene panel", slot: 1, hover: "%{y}: %{x:.3f}<extra>20 genes</extra>" }),
                bar(tissues.map((t) => ptFull[t] ?? null), tissues.map((t) => tissueLabel(t)), { horizontal: true, name: "all genes", slot: 4, hover: "%{y}: %{x:.3f}<extra>all genes</extra>" })],
@@ -101,15 +101,15 @@ async function main() {
   const hard = ["BAT", "SKM-GN", "SKM-VL", "VENACV"].map((t) => best[t]).filter(Boolean);
   const liver = stab.filter((r) => r.marker_tissue === "LIVER").sort((a, b) => b.ovr_score - a.ovr_score);
   document.getElementById("p-hard").replaceChildren(
-    "Every hard tissue is hard for the same reason: its best single marker sits only a little above its anatomical neighbour. ",
+    "The closest neighbours are confused for one reason: the best single marker sits only a little above the anatomical neighbour (",
     hard.map((r) => `${r.gene_symbol} for ${tissueLabel(r.marker_tissue)} is ${fmt(r.effect_size, 2)} log2 CPM above ${r.next_highest_tissue}`).join("; "),
-    `. Compare the easy tissues, whose best marker sits ${fmt(Math.min(...["KIDNEY", "ADRNL", "TESTES"].map((t) => best[t].effect_size)), 1)}–${fmt(Math.max(...["KIDNEY", "ADRNL", "TESTES"].map((t) => best[t].effect_size)), 1)} log2 CPM above everything else (${["KIDNEY", "ADRNL", "TESTES"].map((t) => best[t].gene_symbol).join(", ")}). `,
+    `), while the best marker of an easy tissue sits ${fmt(Math.min(...["KIDNEY", "ADRNL", "TESTES"].map((t) => best[t].effect_size)), 1)}–${fmt(Math.max(...["KIDNEY", "ADRNL", "TESTES"].map((t) => best[t].effect_size)), 1)} log2 CPM above everything else (${["KIDNEY", "ADRNL", "TESTES"].map((t) => best[t].gene_symbol).join(", ")}). `,
     "The muscles share a fibre programme, vena cava carries perivascular brown fat, and the panel has one gene per tissue to tell them apart.",
   );
   const tissuesAll = Object.keys(best).sort((a, b) => best[a].effect_size - best[b].effect_size);
   await figure(document.getElementById("fig-markers"), {
-    title: "Marker strength per tissue: the hard tissues have weak single markers",
-    subtitle: "Effect size of each tissue's strongest marker among the 51 stability-selected genes (not necessarily the one the k = 20 panel picked in a given fold): mean log2 CPM in the tissue minus the highest mean of any other tissue; hover for the gene and its runner-up tissue.",
+    title: "Marker strength per tissue: the closest neighbours have the smallest single-marker margins",
+    subtitle: "Each tissue's strongest marker among the 51 stability-selected genes (not necessarily a given fold's pick): mean log2 CPM in the tissue minus the highest mean of any other tissue; hover for the runner-up.",
     build: () => {
       const t = tokens(); const p = palette();
       const x = tissuesAll.map((tt) => best[tt].effect_size);
@@ -119,12 +119,14 @@ async function main() {
                layout: { xaxis: { title: { text: "log2 CPM above the next-highest tissue" }, range: [0, Math.max(...x) * 1.25] }, yaxis: { automargin: true, tickfont: { size: 11 } }, margin: { t: 20, l: 10 }, showlegend: false, bargap: 0.3 },
                table: { columns: ["tissue", "gene", "effect_size", "next_highest_tissue", "selection_frequency", "ovr_score"], rows: tissuesAll.map((tt) => ({ tissue: tt, gene: best[tt].gene_symbol, effect_size: best[tt].effect_size, next_highest_tissue: best[tt].next_highest_tissue, selection_frequency: best[tt].selection_frequency, ovr_score: best[tt].ovr_score })) } };
     },
-    source: "results/05_panels/TRNSCRPT/stability_k20_annotated.csv (51 genes ever selected in the bootstrap run; orange = the hard tissues)",
+    source: "results/05_panels/TRNSCRPT/stability_k20_annotated.csv (51 genes ever selected in the bootstrap run; orange = the closest neighbours)",
     notShow: "tissues whose markers were never among the 51 (none: every tissue has at least one); the effect is on the log scale, so 2 log2 CPM is a four-fold difference.", height: "tall",
   });
-  document.getElementById("p-liver").replaceChildren(callout("note", "Liver's instability is redundancy, not weakness",
-    `Liver has ${liver.length} near-equivalent candidates (${liver.map((r) => `${r.gene_symbol} ${fmt(r.ovr_score, 1)}`).join(", ")}; one-vs-rest scores from results/05_panels/TRNSCRPT/stability_k20_annotated.csv), so bootstraps split the vote: `
-    + `${liver[0].gene_symbol} is selected in ${fmt(liver[0].selection_frequency, 2)} of resamples, ${liver[1]?.gene_symbol} in ${fmt(liver[1]?.selection_frequency, 2)}. Any of them identifies liver; the stability rule simply cannot pick one.`));
+  document.getElementById("p-liver").replaceChildren(callout("note", "Liver's instability is redundancy, not weakness", [
+    `Liver has ${liver.length} near-equivalent candidates (one-vs-rest scores ${liver.map((r) => `${r.gene_symbol} ${fmt(r.ovr_score, 1)}`).join(", ")}), so bootstraps split the vote: `
+    + `${liver[0].gene_symbol} is selected in ${fmt(liver[0].selection_frequency, 2)} of resamples, ${liver[1]?.gene_symbol} in ${fmt(liver[1]?.selection_frequency, 2)}. Any of them identifies liver, so the stability rule has no single gene to settle on.`,
+    el("details", { class: "fig-notes" }, [el("summary", {}, "Source"), el("p", {}, [el("b", {}, "Source: "), "results/05_panels/TRNSCRPT/stability_k20_annotated.csv (one-vs-rest scores and selection frequencies)"])]),
+  ]));
 }
 
 main().catch((e) => { console.error(e); document.getElementById("lede").textContent = "Failed to load: " + e.message; });

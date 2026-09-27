@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2026 Cory Gardner
+Copyright (c) 2026 The Rat PAC: Samuel Montalvo, Manasa Rapuru, Erol Evangelista, Cory Gardner
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -21,6 +21,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 ---
-Data are not part of this repository and keep their own terms: MoTrPAC (consortium data-use terms for the
-public release c1.0 / MotrpacRatTraining6moData 2.0.0), rat BodyMap GEO GSE53960 (public domain), GTEx v8
-open-access expression (GTEx data-use policy). Plotly.js (site/vendor/) is MIT-licensed by Plotly, Inc.
+Data and third-party components
+
+The raw data are not part of this repository and keep their own terms:
+
+- MoTrPAC 6-month rat endurance-training data, public release c1.0, obtained through the R package
+  MotrpacRatTraining6moData 2.0.0 (GitHub commit f831a4fe421ec11687640452484a8247137aa74a, tag v2.1.0).
+  The package is MIT-licensed; the data carry the MoTrPAC consortium's data-use terms
+  (https://motrpac-data.org/).
+- Rat BodyMap, GEO GSE53960 (Yu et al., Nature Communications 2014), obtained through the Bioconductor
+  ExperimentHub package bodymapRat 1.28.0: CC BY 4.0.
+- GTEx v8 open-access expression data: the GTEx data-use policy (https://gtexportal.org/home/license).
+
+`results_frozen/` and `site/data/` contain derived statistics and per-sample predictions (no expression
+matrices beyond the per-sample values of at most 100 genes in `site/data/expr_*.json`: log2 CPM for MoTrPAC
+and BodyMap, log2(TPM + 1) for GTEx) and are MIT-licensed like the code.
+
+Plotly.js 2.35.2 (`site/vendor/plotly-cartesian-2.35.2.min.js`) is MIT-licensed by Plotly, Inc.;
+its licence text is in `site/vendor/LICENSE.plotly.txt`.
