@@ -40,6 +40,7 @@ async function main() {
   document.getElementById("in-file").addEventListener("change", (e) => { const f = e.target.files && e.target.files[0]; if (f) readFile(f); });
   document.getElementById("btn-template").addEventListener("click", () => download("tissue_check_template.csv", templateCsv(model).replace(",true_tissue", ",claimed_tissue"), "text/csv"));
   document.getElementById("drawer-close").addEventListener("click", closeDrawer);
+  if (window.matchMedia) window.matchMedia("(max-width: 700px)").addEventListener("change", () => { if (state.check) table(); });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !document.getElementById("drawer").hidden) closeDrawer(); });
   if (new URLSearchParams(location.search).get("example") === "1") runExample();
 }
@@ -270,6 +271,10 @@ function table() {
   document.getElementById("table-controls").replaceChildren(el("label", { class: "control inline", for: "flagged-only" }, [onlyFlag, el("span", {}, "Flagged only")]), dl, rp);
   const cols = [["id", "sample"], ["label", "claimed"], ["call", "call"], ["set", setLabel(state.alpha)], ["status", "status"], ["claimStatus", "claim"], ["callProb", "top p"], ["runnerUp", "runner-up"], ...(C.results.some((r) => r.missingGenes.length) ? [["missing", "missing"]] : [])];
   const hasMissing = cols.some(([k]) => k === "missing");
+  if (window.matchMedia && window.matchMedia("(max-width: 700px)").matches) {   // phones: status and claim right after the sample
+    const first = ["id", "status", "claimStatus", "call"];
+    cols.sort((a, b) => (first.includes(a[0]) ? first.indexOf(a[0]) : 99) - (first.includes(b[0]) ? first.indexOf(b[0]) : 99));
+  }
   let rows = orderByPriority(C.results.filter((r) => !state.filterFlagged || r.flagged));
   if (state.sort.key) {
     const k = state.sort.key, d = state.sort.dir;
@@ -284,14 +289,17 @@ function table() {
     return th;
   })));
   const tbody = el("tbody");
+  // one cell per column key, so the column order (which changes on phones) and the cells always agree
+  const cell = (k, r) => ({
+    id: () => el("td", {}, r.id), label: () => el("td", { class: "wrap" }, r.label ?? ""), call: () => el("td", { class: "wrap" }, nm(r.call)),
+    set: () => el("td", { class: "wrap" }, r.set.length ? r.set.map(nm).join("; ") : "none"),
+    status: () => el("td", {}, sBadge(r.status)), claimStatus: () => el("td", {}, cBadge(r.claimStatus)),
+    callProb: () => el("td", { class: "num" }, fmt(r.callProb, 2)), runnerUp: () => el("td", { class: "wrap" }, `${nm(r.runnerUp)} (${fmt(r.runnerUpProb, 2)})`),
+    missing: () => el("td", {}, r.missingGenes.length ? el("span", { class: "missing-mark", title: `missing: ${r.missingGenes.join(", ")}` }, `⚠ ${r.missingGenes.length} gene${r.missingGenes.length === 1 ? "" : "s"}`) : ""),
+  })[k]();
   for (const r of rows) {
-    const tr = el("tr", { tabindex: "0", class: "clickable" + (r.flagged ? " flagged" : "") + (state.selected === r.id ? " selected" : ""), "aria-label": `${r.id}: ${r.status}${r.claimStatus ? ", " + r.claimStatus : ""}. Open details.` }, [
-      el("td", {}, r.id), el("td", { class: "wrap" }, r.label ?? ""), el("td", { class: "wrap" }, nm(r.call)),
-      el("td", { class: "wrap" }, r.set.length ? r.set.map(nm).join("; ") : "none"),
-      el("td", {}, sBadge(r.status)), el("td", {}, cBadge(r.claimStatus)),
-      el("td", { class: "num" }, fmt(r.callProb, 2)), el("td", { class: "wrap" }, `${nm(r.runnerUp)} (${fmt(r.runnerUpProb, 2)})`),
-      hasMissing ? el("td", {}, r.missingGenes.length ? el("span", { class: "missing-mark", title: `missing: ${r.missingGenes.join(", ")}` }, `⚠ ${r.missingGenes.length} gene${r.missingGenes.length === 1 ? "" : "s"}`) : "") : null,
-    ]);
+    const tr = el("tr", { tabindex: "0", "data-id": r.id, class: "clickable" + (r.flagged ? " flagged" : "") + (state.selected === r.id ? " selected" : ""), "aria-label": `${r.id}: ${r.status}${r.claimStatus ? ", " + r.claimStatus : ""}. Open details.` },
+      cols.map(([k]) => cell(k, r)));
     const open = () => openDrawer(r.id, true);
     tr.addEventListener("click", open);
     tr.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); } });
@@ -422,7 +430,11 @@ function closeDrawer() {
   dr.hidden = true;
   const id = state.selected;
   state.selected = null;
-  if (id && state.check) table();
+  if (id && state.check) {
+    table();
+    const row = [...document.querySelectorAll("#tbl-results tbody tr")].find((t) => t.dataset.id === id);   // focus returns to the row that opened it
+    if (row) row.focus();
+  }
 }
 
 // ---- calibrate to my lab -------------------------------------------------------------------------------------------------
