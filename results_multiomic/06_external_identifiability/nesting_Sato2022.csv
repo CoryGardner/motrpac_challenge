@@ -1,0 +1,4 @@
+dataset,variable,n_levels,n_tissues,median_levels_per_tissue,max_levels_per_tissue,max_tissues_per_level,n_levels_shared,tissues_in_one_level,cramers_v,n_pairs_sharing_level,n_pairs_total
+Sato2022,round,6,8,3.0,3,7,3,0,0.44731459224819675,21,28
+Sato2022,run_day,4,2,4.0,4,2,4,0,0.0,1,1
+Sato2022,animal,24,8,24.0,24,8,24,0,0.027277236279499045,28,28

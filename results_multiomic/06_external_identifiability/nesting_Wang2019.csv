@@ -1,0 +1,2 @@
+dataset,variable,n_levels,n_tissues,median_levels_per_tissue,max_levels_per_tissue,max_tissues_per_level,n_levels_shared,tissues_in_one_level,cramers_v,n_pairs_sharing_level,n_pairs_total
+Wang2019,ms_experiment,47,31,1.0,9,1,0,24,1.0,0,465

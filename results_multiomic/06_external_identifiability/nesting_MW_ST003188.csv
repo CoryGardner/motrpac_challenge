@@ -1,0 +1,3 @@
+dataset,variable,n_levels,n_tissues,median_levels_per_tissue,max_levels_per_tissue,max_tissues_per_level,n_levels_shared,tissues_in_one_level,cramers_v,n_pairs_sharing_level,n_pairs_total
+MW_ST003188,batch,12,12,1.0,1,1,0,12,1.0,0,66
+MW_ST003188,mouse,70,12,70.0,70,12,70,0,0.0,66,66

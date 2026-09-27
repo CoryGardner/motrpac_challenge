@@ -1,0 +1,9 @@
+model,stage,n,n_individuals,accuracy
+k10,Exercise,95,12,0.23157894736842105
+k10,Sedentary,96,12,0.19791666666666666
+k20,Exercise,95,12,0.2736842105263158
+k20,Sedentary,96,12,0.28125
+k50,Exercise,95,12,0.4842105263157895
+k50,Sedentary,96,12,0.40625
+full,Exercise,95,12,0.42105263157894735
+full,Sedentary,96,12,0.46875

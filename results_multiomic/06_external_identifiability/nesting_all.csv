@@ -1,0 +1,10 @@
+dataset,variable,n_levels,n_tissues,median_levels_per_tissue,max_levels_per_tissue,max_tissues_per_level,n_levels_shared,tissues_in_one_level,cramers_v,n_pairs_sharing_level,n_pairs_total
+Jiang2020,tmt_run,56,33,14.0,28,8,56,0,0.32378389603372243,424,528
+Jiang2020,tmt_tag,8,33,6.0,8,24,8,1,0.2625872447217247,503,528
+Jiang2020,donor,14,32,7.0,11,18,14,1,0.31002481880575616,431,496
+Wang2019,ms_experiment,47,31,1.0,9,1,0,24,1.0,0,465
+Sato2022,round,6,8,3.0,3,7,3,0,0.44731459224819675,21,28
+Sato2022,run_day,4,2,4.0,4,2,4,0,0.0,1,1
+Sato2022,animal,24,8,24.0,24,8,24,0,0.027277236279499045,28,28
+MW_ST003188,batch,12,12,1.0,1,1,0,12,1.0,0,66
+MW_ST003188,mouse,70,12,70.0,70,12,70,0,0.0,66,66

@@ -146,6 +146,22 @@ def main():
     sections["01_rii"] = phase1(findings)
     for ph, _ in PHASES[2:]:
         sections[ph] = generic(ph, findings)
+    # Phase 3 secondary runs: raw-scale sensitivity and the two one-sample-per-tissue atlases
+    if sections.get("03_prot_transfer") is not None:
+        extra = []
+        raw = csv("03_prot_transfer/rawppm/accuracy_overall.csv"); rawc = csv("03_prot_transfer/rawppm/conformal_transfer.csv"); rawr = csv("03_prot_transfer/rawppm/recalibration.csv"); rawo = csv("03_prot_transfer/rawppm/gene_overlap.csv")
+        if raw is not None:
+            a = raw.set_index("model")["accuracy_sample_weighted"]; c = rawc[(rawc["model"] == "k20") & (rawc["conformal"] == "marginal")].iloc[0]; r5 = rawr[(rawr["model"] == "k20") & (rawr["n_recal"] == 5)].iloc[0]
+            extra.append(f"- sensitivity, same scale both sides (`results_multiomic/03_prot_transfer/rawppm/`): Jiang raw reporter intensities re-normalised like the RII (channel total → log2 ppm, technical replicates kept), "
+                         f"{int(rawo.iloc[0]['matched_genes'])} genes, {int(raw['n_samples_mapped'].iloc[0])} mapped samples / {int(raw['n_donors_mapped'].iloc[0])} donors: accuracy k20 **{f(a['k20'])}**, k50 {f(a.get('k50', np.nan))}, full {f(a['full'])}; "
+                         f"coverage with MoTrPAC calibration {f(c['coverage_mapped'])} (empty {f(c['frac_empty_mapped'])}), recalibrated on 5 donors {f(r5['coverage_recalibrated'])} (set size {f(r5['set_size_recalibrated'])}).")
+        for atlas, label in (("wang2019", "Wang 2019, 29 human tissues, one donor each, label-free"), ("geiger2013", "Geiger 2013, 28 mouse tissues, pooled mice, SILAC ratios, gene-symbol match")):
+            p = R / "03_prot_transfer" / atlas / "summary.json"
+            if p.exists():
+                s = json.loads(p.read_text())
+                extra.append(f"- secondary atlas ({label}; `results_multiomic/03_prot_transfer/{atlas}/`): {s['matched_genes']} genes; {s['n_mapped']} mapped tissue samples, {s['n_ood']} OOD; accuracy k20 {f(s.get('acc_k20'))}, k50 {f(s.get('acc_k50'))}, full {f(s.get('acc_full'))}; "
+                             f"coverage with MoTrPAC calibration at k20 {f(s['coverage_k20_marginal_source_cal'])} (empty {f(s['frac_empty_k20_source_cal'])}); OOD empty-set fraction {f(s.get('ood_frac_empty_k20'))}.")
+        sections["03_prot_transfer"] = sections["03_prot_transfer"] + extra
     now = time.strftime("%Y-%m-%d %H:%M UTC", time.gmtime())
     done = [ph for ph, _ in PHASES if sections.get(ph) is not None or status(ph).get("status") == "DONE"]
     out = ["# Multiomic overnight report — can the proteome and metabolome carry a tissue fingerprint that transfers?", "",

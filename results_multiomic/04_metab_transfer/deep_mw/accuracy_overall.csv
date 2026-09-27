@@ -1,0 +1,4 @@
+model,accuracy_sample_weighted,accuracy_macro_over_target_tissues,n_samples_mapped,n_individuals_mapped,n_target_tissues_mapped,n_source_classes,chance,n_matched_features
+full,0.753061224489796,0.753061224489796,490,70,7,9,0.1111111111111111,44
+k10,0.4959183673469388,0.4959183673469388,490,70,7,9,0.1111111111111111,44
+k20,0.636734693877551,0.636734693877551,490,70,7,9,0.1111111111111111,44

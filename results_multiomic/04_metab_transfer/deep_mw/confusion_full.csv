@@ -1,0 +1,13 @@
+organ,BAT,HEART,HIPPOC,KIDNEY,LIVER,LUNG,PLASMA,SKM-GN,WAT-SC
+Bladder,19,0,0,50,0,0,0,1,0
+Brain,0,0,70,0,0,0,0,0,0
+Heart,0,56,0,0,0,0,0,14,0
+Kidney,2,1,0,67,0,0,0,0,0
+Liver,0,0,0,0,70,0,0,0,0
+Lung,11,0,0,0,0,56,0,0,3
+Muscle (Quad),24,23,0,0,0,0,0,23,0
+Pancreas,5,0,1,0,0,50,0,0,14
+Plasma,1,0,0,0,0,0,27,36,6
+Spleen,14,0,0,50,0,6,0,0,0
+Thymus,65,0,0,0,0,4,0,0,1
+Tongue,42,16,0,4,0,6,0,1,1

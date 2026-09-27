@@ -1,0 +1,12 @@
+{
+ "atlas": "geiger2013",
+ "n_mapped": 9,
+ "n_ood": 20,
+ "matched_genes": 2151,
+ "acc_full": 1.0,
+ "acc_k20": 0.6666666666666666,
+ "acc_k50": 0.8888888888888888,
+ "coverage_k20_marginal_source_cal": 0.1111111111111111,
+ "frac_empty_k20_source_cal": 0.8888888888888888,
+ "ood_frac_empty_k20": 1.0
+}

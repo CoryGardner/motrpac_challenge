@@ -83,6 +83,8 @@ def main():
         ann = pd.read_csv(EXT / "geiger2013" / "tableS1_annotation.csv", index_col=0, dtype=str)
         T = T.drop(columns=[c for c in T.columns if c.strip() == ""], errors="ignore")
         gsym = ann["Gene names"].astype(str).str.split(";").str[0].str.strip().str.upper()
+        gsym.index = gsym.index.astype(int)
+        T.index = T.index.astype(int)
         T = T.groupby(gsym.reindex(T.index).to_numpy()).mean()                             # gene-symbol level (mean over protein groups)
         T = T[T.index != "NAN"]
         Xt = np.log2(T.where(T > 0)).T
