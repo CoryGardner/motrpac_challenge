@@ -36,6 +36,24 @@
 
   <div class="tiles" id="tiles"></div>
 
+  <section class="section" id="deliverables" aria-labelledby="deliverables-h">
+    <h2 id="deliverables-h">What this submission delivers</h2>
+    <div class="tiles">
+      <div class="tile"><h3>A classifier</h3>
+        <p class="small">The 20-gene logistic regression with calibrated 90 % prediction sets.</p>
+        <p class="small"><a href="explore.html#tissue-card">Explorer tissue card</a> · <a href="data/panel_model.json">panel_model.json</a> (the model the browser runs) · <a href="https://github.com/CoryGardner/motrpac_challenge/blob/main/src/tfp/models.py">src/tfp/models.py</a></p></div>
+      <div class="tile"><h3>Minimal tissue-signature panel</h3>
+        <p class="small">The 20 genes and the 10-gene stable core.</p>
+        <p class="small"><a href="fingerprint.html">Panel page</a> · <a href="data/panel_card.csv">panel card CSV</a> · <a href="data/panel_card.json">JSON</a></p></div>
+      <div class="tile"><h3>Feature-selection workflow</h3>
+        <p class="small">The class-aware round-robin selector, fitted inside animal-grouped folds.</p>
+        <p class="small"><a href="methods.html#selector">Methods: the selector</a> · <a href="explore.html#panel-builder">Explorer panel builder</a> · <a href="https://github.com/CoryGardner/motrpac_challenge/blob/main/src/tfp/models.py#L58">RoundRobinSelector</a></p></div>
+      <div class="tile"><h3>Interactive model-explanation tool</h3>
+        <p class="small">The Explorer: see why a sample is called, gene by gene, and score your own data.</p>
+        <p class="small"><a href="explore.html#tissue-card">Tissue card</a> · <a href="explore.html#gene-explorer">Gene explorer</a> · <a href="explore.html#panel-builder">Panel builder</a> · <a href="explore.html#score-tool">Score your own samples</a></p></div>
+    </div>
+  </section>
+
   <section class="overview" id="overview">
     <div class="figure" id="fig-overview">
       <div class="fig-head"><h3>The study in one picture</h3></div>

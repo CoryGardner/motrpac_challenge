@@ -30,3 +30,14 @@ The Rat PAC: Samuel Montalvo, Manasa Rapuru, Erol Evangelista and Cory Gardner (
 `site/about.html` and `CITATION.cff`.
 
 AI tools assisted with code and writing; all results were verified by the team.
+
+## Track outputs → where they are
+
+| output the track names | what it is | where |
+|---|---|---|
+| A classifier | the 20-gene logistic regression with calibrated 90 % prediction sets | [Explorer tissue card](https://corygardner.github.io/motrpac_challenge/explore.html#tissue-card); `site/data/panel_model.json` (the model the browser runs); [`src/tfp/models.py`](https://github.com/CoryGardner/motrpac_challenge/blob/main/src/tfp/models.py) |
+| Minimal tissue-signature panel | the 20 genes and the 10-gene stable core | [Panel page](https://corygardner.github.io/motrpac_challenge/fingerprint.html); `site/data/panel_card.csv`, `site/data/panel_card.json` |
+| Feature-selection workflow | the class-aware round-robin selector, fitted inside animal-grouped folds | [Methods: the selector](https://corygardner.github.io/motrpac_challenge/methods.html#selector); [Explorer panel builder](https://corygardner.github.io/motrpac_challenge/explore.html#panel-builder); [`RoundRobinSelector`](https://github.com/CoryGardner/motrpac_challenge/blob/main/src/tfp/models.py#L58) in `src/tfp/models.py` |
+| Interactive model-explanation tool | the Explorer: why a sample is called, gene by gene, and scoring of new samples | [tissue card](https://corygardner.github.io/motrpac_challenge/explore.html#tissue-card), [gene explorer](https://corygardner.github.io/motrpac_challenge/explore.html#gene-explorer), [panel builder](https://corygardner.github.io/motrpac_challenge/explore.html#panel-builder), [Score your own samples](https://corygardner.github.io/motrpac_challenge/explore.html#score-tool) |
+
+The same mapping is the "What this submission delivers" section of the home page (`site/index.html#deliverables`).

@@ -105,6 +105,7 @@ nav.primary a:hover { color: var(--ink); }
 .tile .value .of { font-size: 0.5em; font-weight: 500; color: var(--ink-2); margin-left: 0.2em; }
 .tile .ci { margin-top: 0.15rem; font-size: 0.8rem; color: var(--ink-2); white-space: normal; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
 .tile .label { margin-top: 0.4rem; font-weight: 500; color: var(--ink); max-width: none; }
+.tile > h3 { margin-top: 0; }
 .tile .sub { margin-top: 0.25rem; color: var(--ink-2); font-size: 0.85rem; max-width: none; }
 .tile .source { margin-top: auto; padding-top: 0.5rem; color: var(--muted); font-size: 0.75rem; word-break: break-word; max-width: none; }
 .tile .tile-src { margin-top: auto; padding-top: 0.5rem; }

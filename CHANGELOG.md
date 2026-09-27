@@ -4,6 +4,17 @@ All notable changes to this repository. The format follows [Keep a Changelog](ht
 dates are UTC. Each section is a `hackathon-submission-v<n>` git tag; the version numbers are those of `CITATION.cff`
 and `pyproject.toml`.
 
+## [1.8.1] — 2026-09-27 (tag `hackathon-submission-v9.1`)
+
+### Added
+- Home: "What this submission delivers", four cards under the hero tiles mapping the track's four outputs (classifier,
+  minimal panel, feature-selection workflow, interactive explanation tool) to the pages, data files and code.
+- The same mapping as "Track outputs → where they are" in the README (after "The answer") and in
+  `docs/COMPETITION_COMPLIANCE.md`.
+
+### Changed
+- Home word budget in `tools/screenshot.js` raised from 1200 to 1300 for the new section.
+
 ## [1.8.0] — 2026-09-27 (tag `hackathon-submission-v9`)
 
 ### Added
