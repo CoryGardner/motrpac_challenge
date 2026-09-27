@@ -1,0 +1,7 @@
+model,n_recal,n_test_individuals,draws,coverage_recalibrated,coverage_source_cal_same_test,frac_empty_recalibrated,frac_empty_source_cal,set_size_recalibrated
+k20,3,26,14,1.0,0.11862244897959183,0.0,0.8813775510204083,7.0
+k20,5,24,19,1.0,0.1293859649122807,0.0,0.8706140350877194,7.0
+k50,3,26,12,1.0,0.1121031746031746,0.0,0.8878968253968255,7.0
+k50,5,24,16,1.0,0.12797619047619047,0.0,0.8720238095238095,7.0
+full,3,26,16,1.0,0.0,0.0,1.0,7.0
+full,5,24,19,1.0,0.0,0.0,1.0,7.0

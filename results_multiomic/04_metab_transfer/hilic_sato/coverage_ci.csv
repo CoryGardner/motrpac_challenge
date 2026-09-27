@@ -1,0 +1,5 @@
+model,conformal,coverage_mapped_all_stages,ci95_low_animal_boot,ci95_high_animal_boot,n_samples,n_individuals
+k10,marginal,0.06806282722513089,0.042105263157894736,0.09424083769633508,191,24
+k20,marginal,0.05235602094240838,0.03125,0.07853403141361257,191,24
+k50,marginal,0.0,0.0,0.0,191,24
+full,marginal,0.0,0.0,0.0,191,24

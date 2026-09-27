@@ -1,0 +1,21 @@
+refmet_key,refmet_name,marker_tissue
+5methylthioadenosine,5'-Methylthioadenosine,PLASMA
+allantoin,Allantoin,HIPPOC
+arginine,Arginine,SKM-GN
+asparagine,Asparagine,LIVER
+asparticacid,Aspartic acid,BAT
+carnitine,Carnitine,WAT-SC
+cisaconiticacid,cis-Aconitic acid,HEART
+creatine,Creatine,LIVER
+creatinine,Creatinine,WAT-SC
+gammaaminobutyricacid,gamma-Aminobutyric acid,HIPPOC
+hypoxanthine,Hypoxanthine,KIDNEY
+methionine,Methionine,SKM-GN
+pantothenicacid,Pantothenic acid,LUNG
+proline,Proline,PLASMA
+sphinganine,Sphinganine,LUNG
+succinicacid,Succinic acid,HEART
+taurine,Taurine,PLASMA
+thiamine,Thiamine,KIDNEY
+tryptophan,Tryptophan,PLASMA
+tyrosine,Tyrosine,LUNG

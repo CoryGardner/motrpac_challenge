@@ -1,0 +1,9 @@
+split,arm,accuracy,accuracy_sd,coverage,coverage_sd,set_size,frac_empty,n_test_samples,n_test_animals,n_folds,n_train_animals,n_cal_animals,n_classes,layer
+in_distribution,full,1.0,0.0,0.919047619047619,0.03303437363217049,0.919047619047619,0.08095238095238096,420,60,5,34,14,7,protein (RII)
+in_distribution,panel_k20,1.0,0.0,0.9142857142857143,0.025808908796046245,0.9142857142857143,0.08571428571428572,420,60,5,34,14,7,protein (RII)
+train_male_test_female,full,1.0,,0.8142857142857143,,0.8142857142857143,0.18571428571428572,210,30,0,30,9,7,protein (RII)
+train_male_test_female,panel_k20,1.0,,1.0,,1.0,0.0,210,30,0,30,9,7,protein (RII)
+train_female_test_male,full,1.0,,0.8761904761904762,,0.8761904761904762,0.12380952380952381,210,30,0,30,9,7,protein (RII)
+train_female_test_male,panel_k20,1.0,,0.8761904761904762,,0.8761904761904762,0.12380952380952381,210,30,0,30,9,7,protein (RII)
+train_control_test_trained,full,1.0,,0.9702380952380952,,0.9702380952380952,0.02976190476190476,336,48,0,12,4,7,protein (RII)
+train_control_test_trained,panel_k20,1.0,,0.9583333333333334,,0.9583333333333334,0.041666666666666664,336,48,0,12,4,7,protein (RII)

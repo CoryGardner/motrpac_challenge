@@ -1,0 +1,13 @@
+model,conformal,organ,n,frac_empty,avg_set_size,max_set_size,most_frequent_members
+k10,marginal,HYPOTHALAMUS,12,1.0,0.0,0,
+k10,mondrian,HYPOTHALAMUS,12,0.16666666666666666,0.8333333333333334,1,HEART (10)
+k10,floored,HYPOTHALAMUS,12,0.16666666666666666,0.8333333333333334,1,HEART (10)
+k20,marginal,HYPOTHALAMUS,12,1.0,0.0,0,
+k20,mondrian,HYPOTHALAMUS,12,1.0,0.0,0,
+k20,floored,HYPOTHALAMUS,12,1.0,0.0,0,
+k50,marginal,HYPOTHALAMUS,12,1.0,0.0,0,
+k50,mondrian,HYPOTHALAMUS,12,1.0,0.0,0,
+k50,floored,HYPOTHALAMUS,12,1.0,0.0,0,
+full,marginal,HYPOTHALAMUS,12,1.0,0.0,0,
+full,mondrian,HYPOTHALAMUS,12,1.0,0.0,0,
+full,floored,HYPOTHALAMUS,12,1.0,0.0,0,

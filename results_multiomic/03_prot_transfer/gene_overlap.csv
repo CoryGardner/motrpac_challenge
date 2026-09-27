@@ -1,0 +1,2 @@
+rii_proteins_every_tissue,rii_genes,genes_with_1to1_ortholog,target_genes_total,target_genes_complete_ge_0.8,matched_genes,target_samples,target_donors,target_tissues,target_samples_mapped,target_donors_mapped,mapped_rat_classes,source_classes_without_target,n_ood_tissues,target_scale
+3637,3570,3167,12627,6958,2731,201,14,32,44,13,CORTEX;HEART;LIVER;LUNG;SKM-GN,KIDNEY;WAT-SC,26,relative

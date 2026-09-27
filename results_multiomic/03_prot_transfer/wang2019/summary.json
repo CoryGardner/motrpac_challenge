@@ -1,0 +1,12 @@
+{
+ "atlas": "wang2019",
+ "n_mapped": 6,
+ "n_ood": 23,
+ "matched_genes": 3037,
+ "acc_full": 0.6666666666666666,
+ "acc_k20": 0.5,
+ "acc_k50": 0.6666666666666666,
+ "coverage_k20_marginal_source_cal": 0.3333333333333333,
+ "frac_empty_k20_source_cal": 0.6666666666666666,
+ "ood_frac_empty_k20": 1.0
+}

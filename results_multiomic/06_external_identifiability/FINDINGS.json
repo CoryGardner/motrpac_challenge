@@ -1,0 +1,6 @@
+[
+ {
+  "rank": 2,
+  "text": "**An external TMT design with tissue crossed with plex exists.** In Jiang 2020 each TMT run holds up to 8 tissues from several donors (56 runs, 448 samples, Cram\u00e9r's V run \u00d7 tissue 0.324, 424 of 528 tissue pairs estimable within a run) versus MoTrPAC PROT (V = 1.000, 0 of 21). Nesting is a choice of design, not a property of the assay. \u2014 `results_multiomic/06_external_identifiability/design_comparison.csv`"
+ }
+]

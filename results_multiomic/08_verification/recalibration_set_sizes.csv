@@ -1,0 +1,59 @@
+source,model,n_recal,n_test_individuals,draws,coverage_recalibrated,coverage_source_cal_same_test,set_size_recalibrated,n_classes_label_space,set_size_frac_of_classes,frac_empty_recalibrated,file,note
+Phase 3 protein → Jiang 2020 (cleaned relative),k20,3,11,20,0.8995091673032849,0.0698068938877762,3.4965944900687544,7,0.49951349858125066,0.0,results_multiomic/03_prot_transfer/recalibration.csv,
+Phase 3 protein → Jiang 2020 (cleaned relative),k20,5,9,20,0.9174791171497928,0.0765526332960287,2.9544652952926027,7,0.4220664707560861,0.0,results_multiomic/03_prot_transfer/recalibration.csv,
+Phase 3 protein → Jiang 2020 (cleaned relative),k50,3,11,20,0.9255215495289024,0.0456751783648068,4.027115880443086,7,0.5753022686347266,0.0,results_multiomic/03_prot_transfer/recalibration.csv,
+Phase 3 protein → Jiang 2020 (cleaned relative),k50,5,9,20,0.9684608559775412,0.0531162895574742,3.109651057561583,7,0.44423586536594045,0.0,results_multiomic/03_prot_transfer/recalibration.csv,
+Phase 3 protein → Jiang 2020 (cleaned relative),full,3,11,20,0.9597612681436212,0.0503718726541869,5.359333699388847,7,0.7656190999126924,0.0,results_multiomic/03_prot_transfer/recalibration.csv,
+Phase 3 protein → Jiang 2020 (cleaned relative),full,5,9,20,0.9498239582894754,0.0447692416346476,4.347943673678936,7,0.6211348105255622,0.0,results_multiomic/03_prot_transfer/recalibration.csv,
+Phase 3 protein → Jiang 2020 (raw ppm),k20,3,11,20,0.9205250017245344,0.081186964115913,1.6339533477647603,7,0.2334219068235372,0.0,results_multiomic/03_prot_transfer/rawppm/recalibration.csv,
+Phase 3 protein → Jiang 2020 (raw ppm),k20,5,9,20,0.9226856489772612,0.0851428915086446,1.5384302505435294,7,0.21977575007764708,0.0,results_multiomic/03_prot_transfer/rawppm/recalibration.csv,
+Phase 3 protein → Jiang 2020 (raw ppm),k50,3,11,20,0.9164187355173756,0.0633977118004712,1.4825114664461732,7,0.2117873523494533,0.0012195121951219,results_multiomic/03_prot_transfer/rawppm/recalibration.csv,
+Phase 3 protein → Jiang 2020 (raw ppm),k50,5,9,20,0.9173165289274998,0.0707079382542967,1.444635751344997,7,0.20637653590642815,0.0,results_multiomic/03_prot_transfer/rawppm/recalibration.csv,
+Phase 3 protein → Jiang 2020 (raw ppm),full,3,11,20,0.9044021128911932,0.0,1.4194240017916693,7,0.2027748573988099,0.0111111111111111,results_multiomic/03_prot_transfer/rawppm/recalibration.csv,
+Phase 3 protein → Jiang 2020 (raw ppm),full,5,9,20,0.9111085093436307,0.0,1.2232390559930892,7,0.1747484365704413,0.0017711598746081,results_multiomic/03_prot_transfer/rawppm/recalibration.csv,
+Phase 3b protein → Wang 2019,k20,3,26,9,1.0,0.3444444444444444,7.0,7,1.0,0.0,results_multiomic/03_prot_transfer/wang2019/recalibration.csv,recalibration individuals are single tissue samples
+Phase 3b protein → Wang 2019,k20,5,24,16,1.0,0.35,7.0,7,1.0,0.0,results_multiomic/03_prot_transfer/wang2019/recalibration.csv,recalibration individuals are single tissue samples
+Phase 3b protein → Wang 2019,k50,3,26,9,1.0,0.3166666666666666,7.0,7,1.0,0.0,results_multiomic/03_prot_transfer/wang2019/recalibration.csv,recalibration individuals are single tissue samples
+Phase 3b protein → Wang 2019,k50,5,24,16,1.0,0.3552083333333333,7.0,7,1.0,0.0,results_multiomic/03_prot_transfer/wang2019/recalibration.csv,recalibration individuals are single tissue samples
+Phase 3b protein → Wang 2019,full,3,26,11,1.0,0.1272727272727272,7.0,7,1.0,0.0,results_multiomic/03_prot_transfer/wang2019/recalibration.csv,recalibration individuals are single tissue samples
+Phase 3b protein → Wang 2019,full,5,24,11,1.0,0.1545454545454545,7.0,7,1.0,0.0,results_multiomic/03_prot_transfer/wang2019/recalibration.csv,recalibration individuals are single tissue samples
+Phase 3b protein → Geiger 2013,k20,3,26,14,1.0,0.1186224489795918,7.0,7,1.0,0.0,results_multiomic/03_prot_transfer/geiger2013/recalibration.csv,recalibration individuals are single tissue samples
+Phase 3b protein → Geiger 2013,k20,5,24,19,1.0,0.1293859649122807,7.0,7,1.0,0.0,results_multiomic/03_prot_transfer/geiger2013/recalibration.csv,recalibration individuals are single tissue samples
+Phase 3b protein → Geiger 2013,k50,3,26,12,1.0,0.1121031746031746,7.0,7,1.0,0.0,results_multiomic/03_prot_transfer/geiger2013/recalibration.csv,recalibration individuals are single tissue samples
+Phase 3b protein → Geiger 2013,k50,5,24,16,1.0,0.1279761904761904,7.0,7,1.0,0.0,results_multiomic/03_prot_transfer/geiger2013/recalibration.csv,recalibration individuals are single tissue samples
+Phase 3b protein → Geiger 2013,full,3,26,16,1.0,0.0,7.0,7,1.0,0.0,results_multiomic/03_prot_transfer/geiger2013/recalibration.csv,recalibration individuals are single tissue samples
+Phase 3b protein → Geiger 2013,full,5,24,19,1.0,0.0,7.0,7,1.0,0.0,results_multiomic/03_prot_transfer/geiger2013/recalibration.csv,recalibration individuals are single tissue samples
+Phase 4 hilic_sato,k10,3,9,20,0.9458333333333332,0.0541666666666666,14.797222222222222,19,0.7788011695906433,0.0,results_multiomic/04_metab_transfer/hilic_sato/recalibration.csv,
+Phase 4 hilic_sato,k10,5,7,20,0.9196428571428572,0.0499999999999999,13.670535714285716,19,0.7195018796992482,0.0,results_multiomic/04_metab_transfer/hilic_sato/recalibration.csv,
+Phase 4 hilic_sato,k20,3,9,20,0.925,0.0493055555555555,12.71805555555556,19,0.66937134502924,0.0,results_multiomic/04_metab_transfer/hilic_sato/recalibration.csv,
+Phase 4 hilic_sato,k20,5,7,20,0.8991071428571429,0.0535714285714285,11.86517857142857,19,0.6244830827067669,0.0,results_multiomic/04_metab_transfer/hilic_sato/recalibration.csv,
+Phase 4 hilic_sato,k50,3,9,20,0.9326388888888888,0.0,4.601388888888889,19,0.2421783625730994,0.0,results_multiomic/04_metab_transfer/hilic_sato/recalibration.csv,
+Phase 4 hilic_sato,k50,5,7,20,0.9133928571428572,0.0,4.25625,19,0.22401315789473683,0.0,results_multiomic/04_metab_transfer/hilic_sato/recalibration.csv,
+Phase 4 hilic_sato,full,3,9,20,0.9354166666666666,0.0,4.6312500000000005,19,0.24375000000000002,0.0,results_multiomic/04_metab_transfer/hilic_sato/recalibration.csv,
+Phase 4 hilic_sato,full,5,7,20,0.9053571428571427,0.0,4.132142857142856,19,0.21748120300751875,0.0,results_multiomic/04_metab_transfer/hilic_sato/recalibration.csv,
+Phase 4 deep_sato,k10,3,9,20,0.9047619047619048,0.0,3.617460317460317,9,0.4019400352733686,0.0,results_multiomic/04_metab_transfer/deep_sato/recalibration.csv,
+Phase 4 deep_sato,k10,5,7,20,0.9183673469387756,0.0,3.703061224489796,9,0.4114512471655329,0.0,results_multiomic/04_metab_transfer/deep_sato/recalibration.csv,
+Phase 4 deep_sato,k20,3,9,20,0.9103174603174604,0.0,5.352380952380953,9,0.5947089947089947,0.0,results_multiomic/04_metab_transfer/deep_sato/recalibration.csv,
+Phase 4 deep_sato,k20,5,7,20,0.9102040816326528,0.0,5.276530612244898,9,0.586281179138322,0.0,results_multiomic/04_metab_transfer/deep_sato/recalibration.csv,
+Phase 4 deep_sato,k50,3,9,20,0.9126984126984128,0.0,5.071428571428571,9,0.5634920634920635,0.0,results_multiomic/04_metab_transfer/deep_sato/recalibration.csv,
+Phase 4 deep_sato,k50,5,7,20,0.9255102040816324,0.0,5.148979591836735,9,0.572108843537415,0.0,results_multiomic/04_metab_transfer/deep_sato/recalibration.csv,
+Phase 4 deep_sato,full,3,9,20,0.9158730158730158,0.0,5.788095238095238,9,0.6431216931216931,0.0,results_multiomic/04_metab_transfer/deep_sato/recalibration.csv,
+Phase 4 deep_sato,full,5,7,20,0.9091836734693878,0.0,5.743877551020408,9,0.6382086167800454,0.0,results_multiomic/04_metab_transfer/deep_sato/recalibration.csv,
+Phase 4 deep_mw,k10,3,11,20,0.9305194805194804,0.1551948051948052,4.701298701298701,9,0.5223665223665224,0.0,results_multiomic/04_metab_transfer/deep_mw/recalibration.csv,
+Phase 4 deep_mw,k10,5,9,20,0.9206349206349206,0.1547619047619047,4.628571428571429,9,0.5142857142857143,0.0,results_multiomic/04_metab_transfer/deep_mw/recalibration.csv,
+Phase 4 deep_mw,k20,3,11,20,0.924025974025974,0.1538961038961039,2.343506493506493,9,0.26038961038961034,0.0012987012987012,results_multiomic/04_metab_transfer/deep_mw/recalibration.csv,
+Phase 4 deep_mw,k20,5,9,20,0.91984126984127,0.146031746031746,2.2333333333333334,9,0.24814814814814815,0.0,results_multiomic/04_metab_transfer/deep_mw/recalibration.csv,
+Phase 4 deep_mw,full,3,11,20,0.9123376623376624,0.0,1.5487012987012985,9,0.17207792207792205,0.011038961038961,results_multiomic/04_metab_transfer/deep_mw/recalibration.csv,
+Phase 4 deep_mw,full,5,9,20,0.9277777777777776,0.0,1.688095238095238,9,0.18756613756613758,0.0055555555555555,results_multiomic/04_metab_transfer/deep_mw/recalibration.csv,
+frozen phase 13 RNA → GTEx,k20,3,859,20,0.9544042733273792,0.363801643589903,11.69662694772028,19,0.6156119446168568,0.0085084882780921,results_frozen/13_gtex/recalibration.csv,the RNA ladder rows quoted for comparison
+frozen phase 13 RNA → GTEx,k20,5,857,20,0.9328742780196038,0.363762685454595,6.281691250243343,19,0.3306153289601759,0.0143870415591747,results_frozen/13_gtex/recalibration.csv,the RNA ladder rows quoted for comparison
+frozen phase 13 RNA → GTEx,k50,3,859,20,0.9592233996675894,0.3630894942178176,11.624427101911984,19,0.6118119527322097,0.0077607113985448,results_frozen/13_gtex/recalibration.csv,the RNA ladder rows quoted for comparison
+frozen phase 13 RNA → GTEx,k50,5,857,20,0.9355222782501288,0.3627671996548974,4.035639894611753,19,0.21240209971640808,4.045307443365696e-05,results_frozen/13_gtex/recalibration.csv,the RNA ladder rows quoted for comparison
+frozen phase 13 RNA → GTEx,full,3,859,20,0.9506761028326765,0.0620509205670226,11.177532052752412,19,0.5882911606711796,0.0194396689298493,results_frozen/13_gtex/recalibration.csv,the RNA ladder rows quoted for comparison
+frozen phase 13 RNA → GTEx,full,5,857,20,0.8657841719256185,0.0620638251779992,2.045111570457871,19,0.10763745107673006,0.0708464477652839,results_frozen/13_gtex/recalibration.csv,the RNA ladder rows quoted for comparison
+frozen phase 12 RNA → BodyMap,k20,3,5,20,0.9426243330313098,0.6187267190174166,0.997912262156448,19,0.052521698008234106,0.0573756669686902,results_frozen/12_bodymap/recalibration.csv,the RNA ladder rows quoted for comparison
+frozen phase 12 RNA → BodyMap,k20,5,3,20,0.9139707977207978,0.6197514245014245,0.9200541310541308,19,0.04842390163442794,0.0860292022792022,results_frozen/12_bodymap/recalibration.csv,the RNA ladder rows quoted for comparison
+frozen phase 12 RNA → BodyMap,k50,3,5,20,0.9365171650055372,0.6616002214839424,0.9530177187153932,19,0.05015882730081017,0.0469822812846068,results_frozen/12_bodymap/recalibration.csv,the RNA ladder rows quoted for comparison
+frozen phase 12 RNA → BodyMap,k50,5,3,20,0.9203561253561254,0.6584821937321936,0.934054131054131,19,0.04916074373969111,0.0659458689458689,results_frozen/12_bodymap/recalibration.csv,the RNA ladder rows quoted for comparison
+frozen phase 12 RNA → BodyMap,full,3,5,20,0.9460674015906576,0.711168579482533,0.9460674015906576,19,0.0497930211363504,0.0539325984093425,results_frozen/12_bodymap/recalibration.csv,the RNA ladder rows quoted for comparison
+frozen phase 12 RNA → BodyMap,full,5,3,20,0.9193076923076922,0.7096923076923076,0.9193076923076922,19,0.04838461538461538,0.0806923076923077,results_frozen/12_bodymap/recalibration.csv,the RNA ladder rows quoted for comparison

@@ -1,0 +1,4 @@
+model,accuracy_sample_weighted,n_vials,n_jiang_training_samples,n_jiang_donors,n_classes
+full,0.5866666666666667,300,44,13,5
+k20,0.5766666666666667,300,44,13,5
+k50,0.5733333333333334,300,44,13,5

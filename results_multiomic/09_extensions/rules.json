@@ -1,0 +1,8 @@
+{
+ "rules": {
+  "B2_i_held_out_animals": true,
+  "B2_ii_controls_to_trained": true,
+  "B2_iii_held_out_sex_either": true
+ },
+ "minutes": 0.15150989691416422
+}

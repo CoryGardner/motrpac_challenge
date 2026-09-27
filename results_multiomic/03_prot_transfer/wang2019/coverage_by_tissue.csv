@@ -1,0 +1,262 @@
+model,conformal,organ,n,coverage,frac_empty,avg_set_size
+k20,marginal,Adrenal gland,1,,1.0,0.0
+k20,marginal,Appendix,1,,1.0,0.0
+k20,marginal,CORTEX,1,1.0,0.0,1.0
+k20,marginal,Colon,1,,1.0,0.0
+k20,marginal,Duodenum,1,,1.0,0.0
+k20,marginal,Endometrium,1,,1.0,0.0
+k20,marginal,Esophagus,1,,1.0,0.0
+k20,marginal,Fallopian tube,1,,1.0,0.0
+k20,marginal,Gallbladder,1,,1.0,0.0
+k20,marginal,HEART,1,0.0,1.0,0.0
+k20,marginal,KIDNEY,1,1.0,0.0,1.0
+k20,marginal,LIVER,1,0.0,1.0,0.0
+k20,marginal,LUNG,1,0.0,1.0,0.0
+k20,marginal,Lymph node,1,,1.0,0.0
+k20,marginal,Ovary,1,,1.0,0.0
+k20,marginal,Pancreas,1,,1.0,0.0
+k20,marginal,Placenta,1,,1.0,0.0
+k20,marginal,Prostate,1,,1.0,0.0
+k20,marginal,Rectum,1,,1.0,0.0
+k20,marginal,Salivary gland,1,,1.0,0.0
+k20,marginal,Small intestine,1,,1.0,0.0
+k20,marginal,Smooth muscle,1,,1.0,0.0
+k20,marginal,Spleen,1,,1.0,0.0
+k20,marginal,Stomach,1,,1.0,0.0
+k20,marginal,Testis,1,,1.0,0.0
+k20,marginal,Thyroid,1,,1.0,0.0
+k20,marginal,Tonsil,1,,1.0,0.0
+k20,marginal,Urinary bladder,1,,1.0,0.0
+k20,marginal,WAT-SC,1,0.0,1.0,0.0
+k20,mondrian,Adrenal gland,1,,1.0,0.0
+k20,mondrian,Appendix,1,,1.0,0.0
+k20,mondrian,CORTEX,1,1.0,0.0,1.0
+k20,mondrian,Colon,1,,1.0,0.0
+k20,mondrian,Duodenum,1,,1.0,0.0
+k20,mondrian,Endometrium,1,,1.0,0.0
+k20,mondrian,Esophagus,1,,1.0,0.0
+k20,mondrian,Fallopian tube,1,,1.0,0.0
+k20,mondrian,Gallbladder,1,,1.0,0.0
+k20,mondrian,HEART,1,0.0,1.0,0.0
+k20,mondrian,KIDNEY,1,1.0,0.0,1.0
+k20,mondrian,LIVER,1,0.0,1.0,0.0
+k20,mondrian,LUNG,1,0.0,1.0,0.0
+k20,mondrian,Lymph node,1,,1.0,0.0
+k20,mondrian,Ovary,1,,1.0,0.0
+k20,mondrian,Pancreas,1,,1.0,0.0
+k20,mondrian,Placenta,1,,1.0,0.0
+k20,mondrian,Prostate,1,,1.0,0.0
+k20,mondrian,Rectum,1,,1.0,0.0
+k20,mondrian,Salivary gland,1,,1.0,0.0
+k20,mondrian,Small intestine,1,,1.0,0.0
+k20,mondrian,Smooth muscle,1,,1.0,0.0
+k20,mondrian,Spleen,1,,1.0,0.0
+k20,mondrian,Stomach,1,,1.0,0.0
+k20,mondrian,Testis,1,,1.0,0.0
+k20,mondrian,Thyroid,1,,1.0,0.0
+k20,mondrian,Tonsil,1,,1.0,0.0
+k20,mondrian,Urinary bladder,1,,1.0,0.0
+k20,mondrian,WAT-SC,1,0.0,1.0,0.0
+k20,floored,Adrenal gland,1,,1.0,0.0
+k20,floored,Appendix,1,,1.0,0.0
+k20,floored,CORTEX,1,1.0,0.0,1.0
+k20,floored,Colon,1,,1.0,0.0
+k20,floored,Duodenum,1,,1.0,0.0
+k20,floored,Endometrium,1,,1.0,0.0
+k20,floored,Esophagus,1,,1.0,0.0
+k20,floored,Fallopian tube,1,,1.0,0.0
+k20,floored,Gallbladder,1,,1.0,0.0
+k20,floored,HEART,1,0.0,1.0,0.0
+k20,floored,KIDNEY,1,1.0,0.0,1.0
+k20,floored,LIVER,1,0.0,1.0,0.0
+k20,floored,LUNG,1,0.0,1.0,0.0
+k20,floored,Lymph node,1,,1.0,0.0
+k20,floored,Ovary,1,,1.0,0.0
+k20,floored,Pancreas,1,,1.0,0.0
+k20,floored,Placenta,1,,1.0,0.0
+k20,floored,Prostate,1,,1.0,0.0
+k20,floored,Rectum,1,,1.0,0.0
+k20,floored,Salivary gland,1,,1.0,0.0
+k20,floored,Small intestine,1,,1.0,0.0
+k20,floored,Smooth muscle,1,,1.0,0.0
+k20,floored,Spleen,1,,1.0,0.0
+k20,floored,Stomach,1,,1.0,0.0
+k20,floored,Testis,1,,1.0,0.0
+k20,floored,Thyroid,1,,1.0,0.0
+k20,floored,Tonsil,1,,1.0,0.0
+k20,floored,Urinary bladder,1,,1.0,0.0
+k20,floored,WAT-SC,1,0.0,1.0,0.0
+k50,marginal,Adrenal gland,1,,1.0,0.0
+k50,marginal,Appendix,1,,1.0,0.0
+k50,marginal,CORTEX,1,1.0,0.0,1.0
+k50,marginal,Colon,1,,1.0,0.0
+k50,marginal,Duodenum,1,,1.0,0.0
+k50,marginal,Endometrium,1,,1.0,0.0
+k50,marginal,Esophagus,1,,1.0,0.0
+k50,marginal,Fallopian tube,1,,1.0,0.0
+k50,marginal,Gallbladder,1,,1.0,0.0
+k50,marginal,HEART,1,0.0,1.0,0.0
+k50,marginal,KIDNEY,1,1.0,0.0,1.0
+k50,marginal,LIVER,1,0.0,1.0,0.0
+k50,marginal,LUNG,1,0.0,1.0,0.0
+k50,marginal,Lymph node,1,,1.0,0.0
+k50,marginal,Ovary,1,,1.0,0.0
+k50,marginal,Pancreas,1,,1.0,0.0
+k50,marginal,Placenta,1,,1.0,0.0
+k50,marginal,Prostate,1,,1.0,0.0
+k50,marginal,Rectum,1,,1.0,0.0
+k50,marginal,Salivary gland,1,,1.0,0.0
+k50,marginal,Small intestine,1,,1.0,0.0
+k50,marginal,Smooth muscle,1,,1.0,0.0
+k50,marginal,Spleen,1,,1.0,0.0
+k50,marginal,Stomach,1,,1.0,0.0
+k50,marginal,Testis,1,,1.0,0.0
+k50,marginal,Thyroid,1,,1.0,0.0
+k50,marginal,Tonsil,1,,1.0,0.0
+k50,marginal,Urinary bladder,1,,1.0,0.0
+k50,marginal,WAT-SC,1,0.0,1.0,0.0
+k50,mondrian,Adrenal gland,1,,1.0,0.0
+k50,mondrian,Appendix,1,,1.0,0.0
+k50,mondrian,CORTEX,1,1.0,0.0,1.0
+k50,mondrian,Colon,1,,1.0,0.0
+k50,mondrian,Duodenum,1,,1.0,0.0
+k50,mondrian,Endometrium,1,,1.0,0.0
+k50,mondrian,Esophagus,1,,1.0,0.0
+k50,mondrian,Fallopian tube,1,,1.0,0.0
+k50,mondrian,Gallbladder,1,,1.0,0.0
+k50,mondrian,HEART,1,0.0,1.0,0.0
+k50,mondrian,KIDNEY,1,1.0,0.0,1.0
+k50,mondrian,LIVER,1,0.0,1.0,0.0
+k50,mondrian,LUNG,1,0.0,1.0,0.0
+k50,mondrian,Lymph node,1,,1.0,0.0
+k50,mondrian,Ovary,1,,1.0,0.0
+k50,mondrian,Pancreas,1,,1.0,0.0
+k50,mondrian,Placenta,1,,1.0,0.0
+k50,mondrian,Prostate,1,,1.0,0.0
+k50,mondrian,Rectum,1,,1.0,0.0
+k50,mondrian,Salivary gland,1,,1.0,0.0
+k50,mondrian,Small intestine,1,,1.0,0.0
+k50,mondrian,Smooth muscle,1,,1.0,0.0
+k50,mondrian,Spleen,1,,1.0,0.0
+k50,mondrian,Stomach,1,,1.0,0.0
+k50,mondrian,Testis,1,,1.0,0.0
+k50,mondrian,Thyroid,1,,1.0,0.0
+k50,mondrian,Tonsil,1,,1.0,0.0
+k50,mondrian,Urinary bladder,1,,1.0,0.0
+k50,mondrian,WAT-SC,1,0.0,1.0,0.0
+k50,floored,Adrenal gland,1,,1.0,0.0
+k50,floored,Appendix,1,,1.0,0.0
+k50,floored,CORTEX,1,1.0,0.0,1.0
+k50,floored,Colon,1,,1.0,0.0
+k50,floored,Duodenum,1,,1.0,0.0
+k50,floored,Endometrium,1,,1.0,0.0
+k50,floored,Esophagus,1,,1.0,0.0
+k50,floored,Fallopian tube,1,,1.0,0.0
+k50,floored,Gallbladder,1,,1.0,0.0
+k50,floored,HEART,1,0.0,1.0,0.0
+k50,floored,KIDNEY,1,1.0,0.0,1.0
+k50,floored,LIVER,1,0.0,1.0,0.0
+k50,floored,LUNG,1,0.0,1.0,0.0
+k50,floored,Lymph node,1,,1.0,0.0
+k50,floored,Ovary,1,,1.0,0.0
+k50,floored,Pancreas,1,,1.0,0.0
+k50,floored,Placenta,1,,1.0,0.0
+k50,floored,Prostate,1,,1.0,0.0
+k50,floored,Rectum,1,,1.0,0.0
+k50,floored,Salivary gland,1,,1.0,0.0
+k50,floored,Small intestine,1,,1.0,0.0
+k50,floored,Smooth muscle,1,,1.0,0.0
+k50,floored,Spleen,1,,1.0,0.0
+k50,floored,Stomach,1,,1.0,0.0
+k50,floored,Testis,1,,1.0,0.0
+k50,floored,Thyroid,1,,1.0,0.0
+k50,floored,Tonsil,1,,1.0,0.0
+k50,floored,Urinary bladder,1,,1.0,0.0
+k50,floored,WAT-SC,1,0.0,1.0,0.0
+full,marginal,Adrenal gland,1,,1.0,0.0
+full,marginal,Appendix,1,,1.0,0.0
+full,marginal,CORTEX,1,1.0,0.0,1.0
+full,marginal,Colon,1,,1.0,0.0
+full,marginal,Duodenum,1,,1.0,0.0
+full,marginal,Endometrium,1,,1.0,0.0
+full,marginal,Esophagus,1,,1.0,0.0
+full,marginal,Fallopian tube,1,,1.0,0.0
+full,marginal,Gallbladder,1,,1.0,0.0
+full,marginal,HEART,1,0.0,1.0,0.0
+full,marginal,KIDNEY,1,0.0,1.0,0.0
+full,marginal,LIVER,1,0.0,1.0,0.0
+full,marginal,LUNG,1,0.0,1.0,0.0
+full,marginal,Lymph node,1,,1.0,0.0
+full,marginal,Ovary,1,,1.0,0.0
+full,marginal,Pancreas,1,,1.0,0.0
+full,marginal,Placenta,1,,1.0,0.0
+full,marginal,Prostate,1,,1.0,0.0
+full,marginal,Rectum,1,,1.0,0.0
+full,marginal,Salivary gland,1,,1.0,0.0
+full,marginal,Small intestine,1,,1.0,0.0
+full,marginal,Smooth muscle,1,,1.0,0.0
+full,marginal,Spleen,1,,1.0,0.0
+full,marginal,Stomach,1,,1.0,0.0
+full,marginal,Testis,1,,1.0,0.0
+full,marginal,Thyroid,1,,1.0,0.0
+full,marginal,Tonsil,1,,1.0,0.0
+full,marginal,Urinary bladder,1,,1.0,0.0
+full,marginal,WAT-SC,1,0.0,1.0,0.0
+full,mondrian,Adrenal gland,1,,1.0,0.0
+full,mondrian,Appendix,1,,1.0,0.0
+full,mondrian,CORTEX,1,0.0,1.0,0.0
+full,mondrian,Colon,1,,1.0,0.0
+full,mondrian,Duodenum,1,,1.0,0.0
+full,mondrian,Endometrium,1,,1.0,0.0
+full,mondrian,Esophagus,1,,1.0,0.0
+full,mondrian,Fallopian tube,1,,1.0,0.0
+full,mondrian,Gallbladder,1,,1.0,0.0
+full,mondrian,HEART,1,0.0,1.0,0.0
+full,mondrian,KIDNEY,1,0.0,1.0,0.0
+full,mondrian,LIVER,1,0.0,1.0,0.0
+full,mondrian,LUNG,1,0.0,1.0,0.0
+full,mondrian,Lymph node,1,,1.0,0.0
+full,mondrian,Ovary,1,,1.0,0.0
+full,mondrian,Pancreas,1,,1.0,0.0
+full,mondrian,Placenta,1,,1.0,0.0
+full,mondrian,Prostate,1,,1.0,0.0
+full,mondrian,Rectum,1,,1.0,0.0
+full,mondrian,Salivary gland,1,,1.0,0.0
+full,mondrian,Small intestine,1,,1.0,0.0
+full,mondrian,Smooth muscle,1,,1.0,0.0
+full,mondrian,Spleen,1,,1.0,0.0
+full,mondrian,Stomach,1,,1.0,0.0
+full,mondrian,Testis,1,,1.0,0.0
+full,mondrian,Thyroid,1,,1.0,0.0
+full,mondrian,Tonsil,1,,1.0,0.0
+full,mondrian,Urinary bladder,1,,1.0,0.0
+full,mondrian,WAT-SC,1,0.0,1.0,0.0
+full,floored,Adrenal gland,1,,1.0,0.0
+full,floored,Appendix,1,,1.0,0.0
+full,floored,CORTEX,1,1.0,0.0,1.0
+full,floored,Colon,1,,1.0,0.0
+full,floored,Duodenum,1,,1.0,0.0
+full,floored,Endometrium,1,,1.0,0.0
+full,floored,Esophagus,1,,1.0,0.0
+full,floored,Fallopian tube,1,,1.0,0.0
+full,floored,Gallbladder,1,,1.0,0.0
+full,floored,HEART,1,0.0,1.0,0.0
+full,floored,KIDNEY,1,0.0,1.0,0.0
+full,floored,LIVER,1,0.0,1.0,0.0
+full,floored,LUNG,1,0.0,1.0,0.0
+full,floored,Lymph node,1,,1.0,0.0
+full,floored,Ovary,1,,1.0,0.0
+full,floored,Pancreas,1,,1.0,0.0
+full,floored,Placenta,1,,1.0,0.0
+full,floored,Prostate,1,,1.0,0.0
+full,floored,Rectum,1,,1.0,0.0
+full,floored,Salivary gland,1,,1.0,0.0
+full,floored,Small intestine,1,,1.0,0.0
+full,floored,Smooth muscle,1,,1.0,0.0
+full,floored,Spleen,1,,1.0,0.0
+full,floored,Stomach,1,,1.0,0.0
+full,floored,Testis,1,,1.0,0.0
+full,floored,Thyroid,1,,1.0,0.0
+full,floored,Tonsil,1,,1.0,0.0
+full,floored,Urinary bladder,1,,1.0,0.0
+full,floored,WAT-SC,1,0.0,1.0,0.0

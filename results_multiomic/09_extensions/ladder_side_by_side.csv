@@ -1,0 +1,17 @@
+split,arm,accuracy,accuracy_sd,coverage,coverage_sd,set_size,frac_empty,n_test_samples,n_test_animals,n_folds,n_train_animals,n_cal_animals,n_classes,layer,source
+in_distribution,full,1.0,0.0,0.919047619047619,0.03303437363217049,0.919047619047619,0.08095238095238096,420,60,5.0,34.0,14.0,7,protein (RII),results_multiomic/09_extensions/protein_ladder.csv
+in_distribution,k20,1.0,0.0,0.9142857142857143,0.025808908796046245,0.9142857142857143,0.08571428571428572,420,60,5.0,34.0,14.0,7,protein (RII),results_multiomic/09_extensions/protein_ladder.csv
+train_male_test_female,full,1.0,,0.8142857142857143,,0.8142857142857143,0.18571428571428572,210,30,0.0,30.0,9.0,7,protein (RII),results_multiomic/09_extensions/protein_ladder.csv
+train_male_test_female,k20,1.0,,1.0,,1.0,0.0,210,30,0.0,30.0,9.0,7,protein (RII),results_multiomic/09_extensions/protein_ladder.csv
+train_female_test_male,full,1.0,,0.8761904761904762,,0.8761904761904762,0.12380952380952381,210,30,0.0,30.0,9.0,7,protein (RII),results_multiomic/09_extensions/protein_ladder.csv
+train_female_test_male,k20,1.0,,0.8761904761904762,,0.8761904761904762,0.12380952380952381,210,30,0.0,30.0,9.0,7,protein (RII),results_multiomic/09_extensions/protein_ladder.csv
+train_control_test_trained,full,1.0,,0.9702380952380952,,0.9702380952380952,0.02976190476190476,336,48,0.0,12.0,4.0,7,protein (RII),results_multiomic/09_extensions/protein_ladder.csv
+train_control_test_trained,k20,1.0,,0.9583333333333334,,0.9583333333333334,0.041666666666666664,336,48,0.0,12.0,4.0,7,protein (RII),results_multiomic/09_extensions/protein_ladder.csv
+train_male_test_female,full,0.9131403118040088,,0.7639198218262806,,0.779510022271715,0.220489977728285,449,25,,,,19,RNA (counts),results_frozen/08_shift/TRNSCRPT/shift_table.csv
+train_male_test_female,k20,0.8930957683741648,,0.7884187082405345,,0.8173719376391982,0.1826280623608017,449,25,,,,19,RNA (counts),results_frozen/08_shift/TRNSCRPT/shift_table.csv
+train_female_test_male,full,0.9422222222222222,,0.8244444444444444,,0.8244444444444444,0.1755555555555555,450,25,,,,19,RNA (counts),results_frozen/08_shift/TRNSCRPT/shift_table.csv
+train_female_test_male,k20,0.9,,0.8333333333333334,,0.8333333333333334,0.1666666666666666,450,25,,,,19,RNA (counts),results_frozen/08_shift/TRNSCRPT/shift_table.csv
+train_control_test_trained,full,0.9791376912378305,,0.8803894297635605,,0.8901251738525731,0.1098748261474269,719,40,,,,19,RNA (counts),results_frozen/08_shift/TRNSCRPT/shift_table.csv
+train_control_test_trained,k20,0.96105702364395,,0.9026425591098748,,0.9193324061196104,0.0806675938803894,719,40,,,,19,RNA (counts),results_frozen/08_shift/TRNSCRPT/shift_table.csv
+in_distribution,k20,0.9757894736842105,,0.8999006828057109,,0.9088019863438859,0.09119801365611421,899,50,,,,19,RNA (counts),"results_frozen/05_panels/TRNSCRPT/panel_curve.csv (accuracy, mean over folds); site/data/headline.json in_distribution k20 marginal pooled (coverage, recomputed from results/31_site_regen/06_conformal)"
+in_distribution,full,,,0.9076846679081317,,0.9099193047796399,0.09008069522036,899,50,,,,19,RNA (counts),"results_frozen/06_conformal/TRNSCRPT/coverage.csv (pooled, marginal, lac, α = 0.1; mean over folds)"

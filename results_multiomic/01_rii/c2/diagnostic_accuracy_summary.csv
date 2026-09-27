@@ -1,0 +1,10 @@
+quantity,mean,sd,n_folds,n_test_animals_mean,n_missingness_features_outer,n_missingness_features_inner
+model_as_fitted_acc,1.0,0.0,5,12.0,13289,1314
+model_as_fitted_bal_acc,1.0,0.0,5,12.0,13289,1314
+missingness_outer_acc,1.0,0.0,5,12.0,13289,1314
+missingness_outer_bal_acc,1.0,0.0,5,12.0,13289,1314
+missingness_inner_acc,1.0,0.0,5,12.0,13289,1314
+missingness_inner_bal_acc,1.0,0.0,5,12.0,13289,1314
+per_tissue_means_removed_acc,0.14285714285714285,0.0,5,12.0,13289,1314
+per_tissue_means_removed_bal_acc,0.14285714285714285,0.0,5,12.0,13289,1314
+chance,0.14285714285714285,0.0,5,12.0,13289,1314

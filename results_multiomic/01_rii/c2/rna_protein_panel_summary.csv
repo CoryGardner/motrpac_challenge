@@ -1,0 +1,2 @@
+n_rna_panel_genes,n_with_protein_quantified,n_with_protein_means_in_all_7,n_marker_in_prot7,n_testable_c,n_same_marker,frac_same_marker,prereg_c_threshold,prereg_c_pass,spearman_median_panel_genes,spearman_median_all_genes,n_panel_genes_above_null_q95
+51,23,2,23,15,11,0.7333333333333333,0.7,True,0.5357142857142858,0.7142857142857144,0

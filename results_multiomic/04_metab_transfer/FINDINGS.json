@@ -1,0 +1,14 @@
+[
+ {
+  "rank": 6,
+  "text": "**Metabolite fingerprint transfer (hilic_sato).** A k20 RefMet-named metabolite panel selected on MoTrPAC (19 tissues, 58 matched names) names the tissue of 0.277 of 191 external samples (animal-bootstrap 95 % CI 0.26\u20130.30; 24 mice; full model 0.445; chance 0.053); coverage with MoTrPAC calibration 0.052, recalibrated on 5 mice 0.899 at 11.87 of 19 classes per set; a native panel fit on sedentary mice keeps accuracy 1.000 / coverage 0.926 on exercised mice after a single acute bout (not a training programme; RNA controls \u2192 trained: 0.961 / 0.903). \u2014 `results_multiomic/04_metab_transfer/hilic_sato/accuracy_overall.csv`, `conformal_transfer.csv`, `recalibration.csv`"
+ },
+ {
+  "rank": 6,
+  "text": "**Metabolite fingerprint transfer (deep_sato).** A k20 RefMet-named metabolite panel selected on MoTrPAC (9 tissues, 83 matched names) names the tissue of 0.329 of 167 external samples (animal-bootstrap 95 % CI 0.27\u20130.39; 24 mice; full model 0.527; chance 0.111); coverage with MoTrPAC calibration 0.000, recalibrated on 5 mice 0.910 at 5.28 of 9 classes per set; a native panel fit on sedentary mice keeps accuracy 1.000 / coverage 0.926 on exercised mice after a single acute bout (not a training programme; RNA controls \u2192 trained: 0.961 / 0.903). \u2014 `results_multiomic/04_metab_transfer/deep_sato/accuracy_overall.csv`, `conformal_transfer.csv`, `recalibration.csv`"
+ },
+ {
+  "rank": 3,
+  "text": "**Metabolite fingerprint transfer (deep_mw).** A k20 RefMet-named metabolite panel selected on MoTrPAC (9 tissues, 44 matched names) names the tissue of 0.637 of 490 external samples (animal-bootstrap 95 % CI 0.61\u20130.66; 70 mice; full model 0.753; chance 0.111); coverage with MoTrPAC calibration 0.153, recalibrated on 5 mice 0.920 at 2.23 of 9 classes per set. \u2014 `results_multiomic/04_metab_transfer/deep_mw/accuracy_overall.csv`, `conformal_transfer.csv`, `recalibration.csv`"
+ }
+]

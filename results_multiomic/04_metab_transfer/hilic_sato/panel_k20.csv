@@ -1,0 +1,21 @@
+refmet_key,refmet_name,marker_tissue
+1methylnicotinamide,1-Methyl nicotinamide,TESTES
+3dehydroxycarnitine,3-Dehydroxycarnitine,CORTEX
+allantoin,Allantoin,HIPPOC
+arginine,Arginine,LIVER
+asparagine,Asparagine,COLON
+car180,CAR(18:0),SKM-GN
+cytidine,Cytidine,SKM-GN
+deoxycytidine,Deoxycytidine,HYPOTH
+lysine,Lysine,HYPOTH
+n6trimethyllysine,N-6-Trimethyllysine,SPLEEN
+pantothenicacid,Pantothenic acid,PLASMA
+phenylalanine,Phenylalanine,PLASMA
+proline,Proline,SMLINT
+putrescine,Putrescine,SKM-VL
+serine,Serine,HEART
+sphinganine,Sphinganine,LUNG
+taurine,Taurine,PLASMA
+threonine,Threonine,PLASMA
+trigonelline,Trigonelline,LIVER
+valine,Valine,SKM-GN

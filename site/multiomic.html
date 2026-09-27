@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The proteome and metabolome carry the fingerprint too — Tissue Fingerprints</title>
+<meta name="description" content="Follow-up on the branch multiomic-overnight: on the portal reporter-ion scale MoTrPAC proteomics carries the tissue axis, a 20-protein panel transfers to a human TMT atlas with the RNA coverage pattern, metabolites transfer to a mouse atlas, fusion is not more robust under shift, and one external TMT design crosses tissue with plex.">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/brand/badge-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/brand/badge-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/brand/badge-180.png">
+<meta name="theme-color" content="#f9f9f7">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Tissue Fingerprints — The Rat PAC">
+<meta property="og:title" content="The proteome and metabolome carry the fingerprint too — on the right scale">
+<meta property="og:description" content="Follow-up (branch): reporter-ion proteomics, protein and metabolite transfer to external atlases, fusion under shift, and an external TMT design with tissue crossed with plex.">
+<meta property="og:url" content="https://corygardner.github.io/motrpac_challenge/multiomic.html">
+<meta property="og:image" content="https://corygardner.github.io/motrpac_challenge/assets/brand/badge-og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Rat PAC badge beside the question: can a molecular signature identify a tissue reliably?">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="assets/theme.css">
+<script>
+  (function () { try { var p = new URLSearchParams(location.search).get("theme") || localStorage.getItem("tfp-theme"); if (p === "dark" || p === "light") document.documentElement.setAttribute("data-theme", p); } catch (e) {} })();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/plotly.js-cartesian-dist-min@2.35.2/plotly-cartesian.min.js" integrity="sha384-gKF7EaMDoWW1zLWkouldmVWF5jqEKrAswAciW73iNzqlomabVVPO60XkJvL5q/Ie" crossorigin="anonymous"
+        onerror="this.onerror=null;var s=document.createElement('script');s.src='vendor/plotly-cartesian-2.35.2.min.js';document.head.appendChild(s);"></script>
+<script type="module" src="assets/pages/multiomic.js"></script>
+</head>
+<body>
+<header class="site-header"></header>
+<main id="main" class="wrap">
+  <h1>The proteome and metabolome carry the fingerprint too — on the right scale</h1>
+  <p id="status-line" class="small"></p>
+  <p class="lede" id="lede">Loading the numbers from <code>site/data/multiomic.json</code>…</p>
+
+  <div class="tiles" id="tiles"></div>
+
+  <div id="callout-caveats"></div>
+
+  <section class="section" id="scales">
+    <h2>1. Same proteins, two scales</h2>
+    <p id="p-scales"></p>
+    <div id="fig-scales"></div>
+  </section>
+
+  <section class="section" id="ladder">
+    <h2>2. The protein ladder beside the RNA ladder</h2>
+    <p id="p-ladder"></p>
+    <div id="fig-ladder"></div>
+    <div id="tbl-per-tissue"></div>
+  </section>
+
+  <section class="section" id="recalibration">
+    <h2>3. Recalibration: coverage and set size, side by side</h2>
+    <p id="p-recal"></p>
+    <div class="grid-2">
+      <div id="fig-recal-cov"></div>
+      <div id="fig-recal-size"></div>
+    </div>
+  </section>
+
+  <section class="section" id="fusion">
+    <h2>4. Fusion under the species shift</h2>
+    <p id="p-fusion"></p>
+    <div id="fig-fusion"></div>
+  </section>
+
+  <section class="section" id="design">
+    <h2>5. The design that is not nested</h2>
+    <p id="p-design"></p>
+    <div class="grid-2">
+      <div id="fig-design-v"></div>
+      <div id="fig-design-pairs"></div>
+    </div>
+  </section>
+
+  <section class="section" id="markers">
+    <h2>6. RNA markers at the protein level</h2>
+    <p id="p-markers"></p>
+    <div id="fig-markers"></div>
+    <div id="tbl-markers"></div>
+  </section>
+
+  <section class="section" id="metabolites">
+    <h2>7. Metabolites: two mouse atlases, and exercise</h2>
+    <p id="p-metab"></p>
+    <div id="tbl-metab"></div>
+  </section>
+
+  <section class="section prose" id="provenance">
+    <h2>Where the numbers come from</h2>
+    <p id="p-prov"></p>
+  </section>
+</main>
+<footer class="site-footer"></footer>
+</body>
+</html>

@@ -1,0 +1,6 @@
+- question · what survived, what it changes, what to say tomorrow, what was not done.
+- data · every CSV under `results_multiomic/` (phases 1–6); the download log (20 files, 418 MB) and the attempts table.
+- design · the findings list at the top is rebuilt from the phase CSVs on every run of `build_report.py`; the four synthesis blocks below (submission changes, talk, not done, site draft) are written by `07_synthesis.py` from the same files.
+- result · pre-registered predictions: (a) PASS, (b) PASS, (c) PASS, (d) PASS, (e) PASS, (f) PASS. The pre-registered fusion rule (Phase 5) FAILED: neither late nor stacked fusion is more robust than RNA alone on the same human samples. Strongest external results: protein transfer to Jiang 2020 with the RNA coverage pattern; metabolite transfer to the 70-mouse aging atlas; a TMT design (Jiang 2020) in which tissue is crossed with plex.
+- what it does not show · anything about the MoTrPAC fingerprint's identifiability inside MoTrPAC — that stays nested; the sections below say what would change in the submission and nothing was edited.
+- files · `results_multiomic/07_synthesis/`.

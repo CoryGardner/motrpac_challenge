@@ -1,0 +1,13 @@
+dataset,batch_variable,n_samples,n_tissues,n_levels,max_tissues_per_level,cramers_v,n_pairs_estimable,n_pairs_total,source,frac_pairs_estimable
+MoTrPAC TRNSCRPT,RNA_extr_plate_ID,899,19,17,2,1.0,1,171,results_frozen/16_identifiability,0.005847953216374269
+MoTrPAC METHYL,DNA_extr_plate_ID,400,8,8,1,1.0,0,28,results_frozen/16_identifiability,0.0
+MoTrPAC ATAC,Nuclei_extr_date,500,8,25,2,0.9179556830271104,0,28,results_frozen/16_identifiability,0.0
+MoTrPAC PROT,plex_id,420,7,42,1,1.0,0,21,results_frozen/16_identifiability,0.0
+MoTrPAC PHOSPHO,plex_id,420,7,42,1,1.0,0,21,results_frozen/16_identifiability,0.0
+MoTrPAC ACETYL,plex_id,108,2,12,1,1.0,0,1,results_frozen/16_identifiability,0.0
+MoTrPAC UBIQ,plex_id,120,2,12,1,1.0,0,1,results_frozen/16_identifiability,0.0
+MoTrPAC IMMUNO,plate_id,1375,17,20,4,0.6124633933547731,16,136,results_frozen/16_identifiability,0.11764705882352941
+Jiang2020,tmt_run,448,33,56,8,0.32378389603372243,424,528,results_multiomic/06_external_identifiability,0.803030303030303
+Wang2019,ms_experiment,50,31,47,1,1.0,0,465,results_multiomic/06_external_identifiability,0.0
+Sato2022,round,191,8,6,7,0.44731459224819675,21,28,results_multiomic/06_external_identifiability,0.75
+MW_ST003188,batch,840,12,12,1,1.0,0,66,results_multiomic/06_external_identifiability,0.0

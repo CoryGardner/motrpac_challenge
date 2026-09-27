@@ -1,0 +1,2 @@
+atlas,matching,rii_genes,target_genes,matched_genes_before_completeness,matched_genes_complete_ge_0.5,target_samples,target_samples_mapped,mapped_rat_classes,source_classes_without_target,n_ood_samples
+geiger2013,"gene symbol, upper-cased (rat ↔ mouse)",3623,7014,2800,2151,29,9,CORTEX;HEART;KIDNEY;LIVER;LUNG;SKM-GN;WAT-SC,,20
