@@ -1,0 +1,6 @@
+[
+ {
+  "rank": 3,
+  "text": "**Protein fingerprint transfers to a human proteome atlas, with the RNA coverage pattern.** A 20-protein panel selected on MoTrPAC RII names the tissue of 0.455 of 44 Jiang 2020 samples (13 donors, 5 mapped tissues; k50 0.477, full 0.523; chance 0.143); marginal conformal coverage with MoTrPAC calibration is 0.068 (empty sets 0.932) against a nominal 0.90, and recalibration on 5 donors restores 0.917 at set size 2.954. Human adults, post-mortem, different TMT design \u2014 all shifts at once. \u2014 `results_multiomic/03_prot_transfer/accuracy_overall.csv`, `conformal_transfer.csv`, `recalibration.csv`"
+ }
+]

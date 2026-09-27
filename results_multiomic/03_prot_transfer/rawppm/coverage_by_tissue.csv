@@ -1,0 +1,280 @@
+model,conformal,rat_class_or_ood_tissue,n,coverage,frac_empty,avg_set_size
+k20,marginal,Adrenal Gland,14,,1.0,0.0
+k20,marginal,Artery - Aorta,21,,1.0,0.0
+k20,marginal,Artery - Coronary,4,,1.0,0.0
+k20,marginal,Artery - Tibial,8,,0.875,0.125
+k20,marginal,Brain - Cerebellum,6,,0.16666666666666666,0.8333333333333334
+k20,marginal,Breast - Mammary Tissue,14,,1.0,0.0
+k20,marginal,CORTEX,4,1.0,0.0,1.0
+k20,marginal,Colon - Sigmoid,23,,1.0,0.0
+k20,marginal,Colon - Transverse,9,,1.0,0.0
+k20,marginal,Esophagus - Gastroesophageal Junction,21,,1.0,0.0
+k20,marginal,Esophagus - Mucosa,8,,1.0,0.0
+k20,marginal,Esophagus - Muscularis,18,,1.0,0.0
+k20,marginal,HEART,38,0.0,1.0,0.0
+k20,marginal,LIVER,11,0.0,1.0,0.0
+k20,marginal,LUNG,17,0.0,1.0,0.0
+k20,marginal,Minor Salivary Gland,2,,0.5,0.5
+k20,marginal,Nerve - Tibial,12,,1.0,0.0
+k20,marginal,Ovary,8,,1.0,0.0
+k20,marginal,Pancreas,17,,1.0,0.0
+k20,marginal,Pituitary,4,,1.0,0.0
+k20,marginal,Prostate,4,,1.0,0.0
+k20,marginal,SKM-GN,24,0.16666666666666666,0.8333333333333334,0.16666666666666666
+k20,marginal,Skin - Not Sun Exposed (Suprapubic),17,,1.0,0.0
+k20,marginal,Skin - Sun Exposed (Lower leg),14,,1.0,0.0
+k20,marginal,Small Intestine - Terminal Ileum,6,,0.8333333333333334,0.16666666666666666
+k20,marginal,Spleen,17,,0.8235294117647058,0.17647058823529413
+k20,marginal,Stomach,23,,1.0,0.0
+k20,marginal,Testis,6,,1.0,0.0
+k20,marginal,Thyroid,23,,1.0,0.0
+k20,marginal,Uterus,13,,1.0,0.0
+k20,marginal,Vagina,14,,1.0,0.0
+k20,mondrian,Adrenal Gland,14,,1.0,0.0
+k20,mondrian,Artery - Aorta,21,,1.0,0.0
+k20,mondrian,Artery - Coronary,4,,1.0,0.0
+k20,mondrian,Artery - Tibial,8,,0.625,0.375
+k20,mondrian,Brain - Cerebellum,6,,0.16666666666666666,0.8333333333333334
+k20,mondrian,Breast - Mammary Tissue,14,,0.7857142857142857,0.21428571428571427
+k20,mondrian,CORTEX,4,1.0,0.0,1.0
+k20,mondrian,Colon - Sigmoid,23,,1.0,0.0
+k20,mondrian,Colon - Transverse,9,,1.0,0.0
+k20,mondrian,Esophagus - Gastroesophageal Junction,21,,1.0,0.0
+k20,mondrian,Esophagus - Mucosa,8,,1.0,0.0
+k20,mondrian,Esophagus - Muscularis,18,,1.0,0.0
+k20,mondrian,HEART,38,0.0,1.0,0.0
+k20,mondrian,LIVER,11,0.0,1.0,0.0
+k20,mondrian,LUNG,17,0.0,1.0,0.0
+k20,mondrian,Minor Salivary Gland,2,,0.5,0.5
+k20,mondrian,Nerve - Tibial,12,,1.0,0.0
+k20,mondrian,Ovary,8,,1.0,0.0
+k20,mondrian,Pancreas,17,,1.0,0.0
+k20,mondrian,Pituitary,4,,1.0,0.0
+k20,mondrian,Prostate,4,,1.0,0.0
+k20,mondrian,SKM-GN,24,0.25,0.75,0.25
+k20,mondrian,Skin - Not Sun Exposed (Suprapubic),17,,1.0,0.0
+k20,mondrian,Skin - Sun Exposed (Lower leg),14,,1.0,0.0
+k20,mondrian,Small Intestine - Terminal Ileum,6,,0.8333333333333334,0.16666666666666666
+k20,mondrian,Spleen,17,,0.8235294117647058,0.17647058823529413
+k20,mondrian,Stomach,23,,1.0,0.0
+k20,mondrian,Testis,6,,1.0,0.0
+k20,mondrian,Thyroid,23,,1.0,0.0
+k20,mondrian,Uterus,13,,1.0,0.0
+k20,mondrian,Vagina,14,,1.0,0.0
+k20,floored,Adrenal Gland,14,,1.0,0.0
+k20,floored,Artery - Aorta,21,,1.0,0.0
+k20,floored,Artery - Coronary,4,,1.0,0.0
+k20,floored,Artery - Tibial,8,,0.625,0.375
+k20,floored,Brain - Cerebellum,6,,0.16666666666666666,0.8333333333333334
+k20,floored,Breast - Mammary Tissue,14,,0.7857142857142857,0.21428571428571427
+k20,floored,CORTEX,4,1.0,0.0,1.0
+k20,floored,Colon - Sigmoid,23,,1.0,0.0
+k20,floored,Colon - Transverse,9,,1.0,0.0
+k20,floored,Esophagus - Gastroesophageal Junction,21,,1.0,0.0
+k20,floored,Esophagus - Mucosa,8,,1.0,0.0
+k20,floored,Esophagus - Muscularis,18,,1.0,0.0
+k20,floored,HEART,38,0.0,1.0,0.0
+k20,floored,LIVER,11,0.0,1.0,0.0
+k20,floored,LUNG,17,0.0,1.0,0.0
+k20,floored,Minor Salivary Gland,2,,0.5,0.5
+k20,floored,Nerve - Tibial,12,,1.0,0.0
+k20,floored,Ovary,8,,1.0,0.0
+k20,floored,Pancreas,17,,1.0,0.0
+k20,floored,Pituitary,4,,1.0,0.0
+k20,floored,Prostate,4,,1.0,0.0
+k20,floored,SKM-GN,24,0.25,0.75,0.25
+k20,floored,Skin - Not Sun Exposed (Suprapubic),17,,1.0,0.0
+k20,floored,Skin - Sun Exposed (Lower leg),14,,1.0,0.0
+k20,floored,Small Intestine - Terminal Ileum,6,,0.8333333333333334,0.16666666666666666
+k20,floored,Spleen,17,,0.8235294117647058,0.17647058823529413
+k20,floored,Stomach,23,,1.0,0.0
+k20,floored,Testis,6,,1.0,0.0
+k20,floored,Thyroid,23,,1.0,0.0
+k20,floored,Uterus,13,,1.0,0.0
+k20,floored,Vagina,14,,1.0,0.0
+k50,marginal,Adrenal Gland,14,,1.0,0.0
+k50,marginal,Artery - Aorta,21,,1.0,0.0
+k50,marginal,Artery - Coronary,4,,1.0,0.0
+k50,marginal,Artery - Tibial,8,,1.0,0.0
+k50,marginal,Brain - Cerebellum,6,,0.3333333333333333,0.6666666666666666
+k50,marginal,Breast - Mammary Tissue,14,,1.0,0.0
+k50,marginal,CORTEX,4,1.0,0.0,1.0
+k50,marginal,Colon - Sigmoid,23,,1.0,0.0
+k50,marginal,Colon - Transverse,9,,1.0,0.0
+k50,marginal,Esophagus - Gastroesophageal Junction,21,,1.0,0.0
+k50,marginal,Esophagus - Mucosa,8,,1.0,0.0
+k50,marginal,Esophagus - Muscularis,18,,1.0,0.0
+k50,marginal,HEART,38,0.0,1.0,0.0
+k50,marginal,LIVER,11,0.0,1.0,0.0
+k50,marginal,LUNG,17,0.0,1.0,0.0
+k50,marginal,Minor Salivary Gland,2,,1.0,0.0
+k50,marginal,Nerve - Tibial,12,,1.0,0.0
+k50,marginal,Ovary,8,,1.0,0.0
+k50,marginal,Pancreas,17,,1.0,0.0
+k50,marginal,Pituitary,4,,1.0,0.0
+k50,marginal,Prostate,4,,1.0,0.0
+k50,marginal,SKM-GN,24,0.08333333333333333,0.9166666666666666,0.08333333333333333
+k50,marginal,Skin - Not Sun Exposed (Suprapubic),17,,1.0,0.0
+k50,marginal,Skin - Sun Exposed (Lower leg),14,,1.0,0.0
+k50,marginal,Small Intestine - Terminal Ileum,6,,1.0,0.0
+k50,marginal,Spleen,17,,1.0,0.0
+k50,marginal,Stomach,23,,1.0,0.0
+k50,marginal,Testis,6,,1.0,0.0
+k50,marginal,Thyroid,23,,1.0,0.0
+k50,marginal,Uterus,13,,1.0,0.0
+k50,marginal,Vagina,14,,1.0,0.0
+k50,mondrian,Adrenal Gland,14,,1.0,0.0
+k50,mondrian,Artery - Aorta,21,,1.0,0.0
+k50,mondrian,Artery - Coronary,4,,1.0,0.0
+k50,mondrian,Artery - Tibial,8,,1.0,0.0
+k50,mondrian,Brain - Cerebellum,6,,0.8333333333333334,0.16666666666666666
+k50,mondrian,Breast - Mammary Tissue,14,,1.0,0.0
+k50,mondrian,CORTEX,4,0.75,0.25,0.75
+k50,mondrian,Colon - Sigmoid,23,,1.0,0.0
+k50,mondrian,Colon - Transverse,9,,1.0,0.0
+k50,mondrian,Esophagus - Gastroesophageal Junction,21,,1.0,0.0
+k50,mondrian,Esophagus - Mucosa,8,,1.0,0.0
+k50,mondrian,Esophagus - Muscularis,18,,1.0,0.0
+k50,mondrian,HEART,38,0.0,1.0,0.0
+k50,mondrian,LIVER,11,0.0,1.0,0.0
+k50,mondrian,LUNG,17,0.0,1.0,0.0
+k50,mondrian,Minor Salivary Gland,2,,1.0,0.0
+k50,mondrian,Nerve - Tibial,12,,1.0,0.0
+k50,mondrian,Ovary,8,,1.0,0.0
+k50,mondrian,Pancreas,17,,1.0,0.0
+k50,mondrian,Pituitary,4,,1.0,0.0
+k50,mondrian,Prostate,4,,1.0,0.0
+k50,mondrian,SKM-GN,24,0.08333333333333333,0.9166666666666666,0.08333333333333333
+k50,mondrian,Skin - Not Sun Exposed (Suprapubic),17,,1.0,0.0
+k50,mondrian,Skin - Sun Exposed (Lower leg),14,,1.0,0.0
+k50,mondrian,Small Intestine - Terminal Ileum,6,,1.0,0.0
+k50,mondrian,Spleen,17,,1.0,0.0
+k50,mondrian,Stomach,23,,1.0,0.0
+k50,mondrian,Testis,6,,1.0,0.0
+k50,mondrian,Thyroid,23,,1.0,0.0
+k50,mondrian,Uterus,13,,1.0,0.0
+k50,mondrian,Vagina,14,,1.0,0.0
+k50,floored,Adrenal Gland,14,,1.0,0.0
+k50,floored,Artery - Aorta,21,,1.0,0.0
+k50,floored,Artery - Coronary,4,,1.0,0.0
+k50,floored,Artery - Tibial,8,,1.0,0.0
+k50,floored,Brain - Cerebellum,6,,0.3333333333333333,0.6666666666666666
+k50,floored,Breast - Mammary Tissue,14,,1.0,0.0
+k50,floored,CORTEX,4,1.0,0.0,1.0
+k50,floored,Colon - Sigmoid,23,,1.0,0.0
+k50,floored,Colon - Transverse,9,,1.0,0.0
+k50,floored,Esophagus - Gastroesophageal Junction,21,,1.0,0.0
+k50,floored,Esophagus - Mucosa,8,,1.0,0.0
+k50,floored,Esophagus - Muscularis,18,,1.0,0.0
+k50,floored,HEART,38,0.0,1.0,0.0
+k50,floored,LIVER,11,0.0,1.0,0.0
+k50,floored,LUNG,17,0.0,1.0,0.0
+k50,floored,Minor Salivary Gland,2,,1.0,0.0
+k50,floored,Nerve - Tibial,12,,1.0,0.0
+k50,floored,Ovary,8,,1.0,0.0
+k50,floored,Pancreas,17,,1.0,0.0
+k50,floored,Pituitary,4,,1.0,0.0
+k50,floored,Prostate,4,,1.0,0.0
+k50,floored,SKM-GN,24,0.08333333333333333,0.9166666666666666,0.08333333333333333
+k50,floored,Skin - Not Sun Exposed (Suprapubic),17,,1.0,0.0
+k50,floored,Skin - Sun Exposed (Lower leg),14,,1.0,0.0
+k50,floored,Small Intestine - Terminal Ileum,6,,1.0,0.0
+k50,floored,Spleen,17,,1.0,0.0
+k50,floored,Stomach,23,,1.0,0.0
+k50,floored,Testis,6,,1.0,0.0
+k50,floored,Thyroid,23,,1.0,0.0
+k50,floored,Uterus,13,,1.0,0.0
+k50,floored,Vagina,14,,1.0,0.0
+full,marginal,Adrenal Gland,14,,1.0,0.0
+full,marginal,Artery - Aorta,21,,1.0,0.0
+full,marginal,Artery - Coronary,4,,1.0,0.0
+full,marginal,Artery - Tibial,8,,1.0,0.0
+full,marginal,Brain - Cerebellum,6,,1.0,0.0
+full,marginal,Breast - Mammary Tissue,14,,1.0,0.0
+full,marginal,CORTEX,4,0.0,1.0,0.0
+full,marginal,Colon - Sigmoid,23,,1.0,0.0
+full,marginal,Colon - Transverse,9,,1.0,0.0
+full,marginal,Esophagus - Gastroesophageal Junction,21,,1.0,0.0
+full,marginal,Esophagus - Mucosa,8,,1.0,0.0
+full,marginal,Esophagus - Muscularis,18,,1.0,0.0
+full,marginal,HEART,38,0.0,1.0,0.0
+full,marginal,LIVER,11,0.0,1.0,0.0
+full,marginal,LUNG,17,0.0,1.0,0.0
+full,marginal,Minor Salivary Gland,2,,1.0,0.0
+full,marginal,Nerve - Tibial,12,,1.0,0.0
+full,marginal,Ovary,8,,1.0,0.0
+full,marginal,Pancreas,17,,1.0,0.0
+full,marginal,Pituitary,4,,1.0,0.0
+full,marginal,Prostate,4,,1.0,0.0
+full,marginal,SKM-GN,24,0.0,1.0,0.0
+full,marginal,Skin - Not Sun Exposed (Suprapubic),17,,1.0,0.0
+full,marginal,Skin - Sun Exposed (Lower leg),14,,1.0,0.0
+full,marginal,Small Intestine - Terminal Ileum,6,,1.0,0.0
+full,marginal,Spleen,17,,1.0,0.0
+full,marginal,Stomach,23,,1.0,0.0
+full,marginal,Testis,6,,1.0,0.0
+full,marginal,Thyroid,23,,1.0,0.0
+full,marginal,Uterus,13,,1.0,0.0
+full,marginal,Vagina,14,,1.0,0.0
+full,mondrian,Adrenal Gland,14,,1.0,0.0
+full,mondrian,Artery - Aorta,21,,1.0,0.0
+full,mondrian,Artery - Coronary,4,,1.0,0.0
+full,mondrian,Artery - Tibial,8,,1.0,0.0
+full,mondrian,Brain - Cerebellum,6,,1.0,0.0
+full,mondrian,Breast - Mammary Tissue,14,,1.0,0.0
+full,mondrian,CORTEX,4,0.0,1.0,0.0
+full,mondrian,Colon - Sigmoid,23,,1.0,0.0
+full,mondrian,Colon - Transverse,9,,1.0,0.0
+full,mondrian,Esophagus - Gastroesophageal Junction,21,,1.0,0.0
+full,mondrian,Esophagus - Mucosa,8,,1.0,0.0
+full,mondrian,Esophagus - Muscularis,18,,1.0,0.0
+full,mondrian,HEART,38,0.0,1.0,0.0
+full,mondrian,LIVER,11,0.0,1.0,0.0
+full,mondrian,LUNG,17,0.0,1.0,0.0
+full,mondrian,Minor Salivary Gland,2,,1.0,0.0
+full,mondrian,Nerve - Tibial,12,,1.0,0.0
+full,mondrian,Ovary,8,,1.0,0.0
+full,mondrian,Pancreas,17,,1.0,0.0
+full,mondrian,Pituitary,4,,1.0,0.0
+full,mondrian,Prostate,4,,1.0,0.0
+full,mondrian,SKM-GN,24,0.0,1.0,0.0
+full,mondrian,Skin - Not Sun Exposed (Suprapubic),17,,1.0,0.0
+full,mondrian,Skin - Sun Exposed (Lower leg),14,,1.0,0.0
+full,mondrian,Small Intestine - Terminal Ileum,6,,1.0,0.0
+full,mondrian,Spleen,17,,1.0,0.0
+full,mondrian,Stomach,23,,1.0,0.0
+full,mondrian,Testis,6,,1.0,0.0
+full,mondrian,Thyroid,23,,1.0,0.0
+full,mondrian,Uterus,13,,1.0,0.0
+full,mondrian,Vagina,14,,1.0,0.0
+full,floored,Adrenal Gland,14,,1.0,0.0
+full,floored,Artery - Aorta,21,,1.0,0.0
+full,floored,Artery - Coronary,4,,1.0,0.0
+full,floored,Artery - Tibial,8,,1.0,0.0
+full,floored,Brain - Cerebellum,6,,1.0,0.0
+full,floored,Breast - Mammary Tissue,14,,1.0,0.0
+full,floored,CORTEX,4,0.0,1.0,0.0
+full,floored,Colon - Sigmoid,23,,1.0,0.0
+full,floored,Colon - Transverse,9,,1.0,0.0
+full,floored,Esophagus - Gastroesophageal Junction,21,,1.0,0.0
+full,floored,Esophagus - Mucosa,8,,1.0,0.0
+full,floored,Esophagus - Muscularis,18,,1.0,0.0
+full,floored,HEART,38,0.0,1.0,0.0
+full,floored,LIVER,11,0.0,1.0,0.0
+full,floored,LUNG,17,0.0,1.0,0.0
+full,floored,Minor Salivary Gland,2,,1.0,0.0
+full,floored,Nerve - Tibial,12,,1.0,0.0
+full,floored,Ovary,8,,1.0,0.0
+full,floored,Pancreas,17,,1.0,0.0
+full,floored,Pituitary,4,,1.0,0.0
+full,floored,Prostate,4,,1.0,0.0
+full,floored,SKM-GN,24,0.0,1.0,0.0
+full,floored,Skin - Not Sun Exposed (Suprapubic),17,,1.0,0.0
+full,floored,Skin - Sun Exposed (Lower leg),14,,1.0,0.0
+full,floored,Small Intestine - Terminal Ileum,6,,1.0,0.0
+full,floored,Spleen,17,,1.0,0.0
+full,floored,Stomach,23,,1.0,0.0
+full,floored,Testis,6,,1.0,0.0
+full,floored,Thyroid,23,,1.0,0.0
+full,floored,Uterus,13,,1.0,0.0
+full,floored,Vagina,14,,1.0,0.0

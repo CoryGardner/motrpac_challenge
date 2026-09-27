@@ -1,0 +1,2 @@
+atlas,matching,rii_genes,target_genes,matched_genes_before_completeness,matched_genes_complete_ge_0.8,target_samples,target_samples_mapped,mapped_rat_classes,source_classes_without_target,n_ood_samples
+wang2019,1:1 rat–human orthologs by Ensembl id,3570,13640,3123,3037,29,6,CORTEX;HEART;KIDNEY;LIVER;LUNG;WAT-SC,SKM-GN,23

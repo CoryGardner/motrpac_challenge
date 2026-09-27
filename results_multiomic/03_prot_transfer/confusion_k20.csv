@@ -1,0 +1,33 @@
+tissue,CORTEX,HEART,KIDNEY,LIVER,LUNG,SKM-GN,WAT-SC
+Adrenal Gland,0,1,1,5,0,0,0
+Artery - Aorta,0,0,0,0,0,0,10
+Artery - Coronary,0,0,0,0,0,0,2
+Artery - Tibial,0,0,0,0,0,0,4
+Brain - Cerebellum,3,0,0,0,0,0,0
+Brain - Cortex,2,0,0,0,0,0,0
+Breast - Mammary Tissue,0,0,0,0,1,0,6
+Colon - Sigmoid,4,5,0,0,0,1,1
+Colon - Transverse,0,0,0,0,0,0,4
+Esophagus - Gastroesophageal Junction,4,0,0,0,1,2,3
+Esophagus - Mucosa,0,0,0,0,4,0,0
+Esophagus - Muscularis,7,0,0,0,0,0,1
+Heart - Atrial Appendage,0,0,11,0,0,0,0
+Heart - Left Ventricle,0,0,7,0,0,0,0
+Liver,0,0,1,4,0,0,0
+Lung,0,0,0,0,7,0,1
+Minor Salivary Gland,0,0,0,0,1,0,0
+Muscle - Skeletal,2,1,1,0,0,7,0
+Nerve - Tibial,3,0,0,0,0,0,3
+Ovary,0,0,0,1,0,1,2
+Pancreas,0,0,4,4,0,0,0
+Pituitary,2,0,0,0,0,0,0
+Prostate,0,0,0,1,1,0,0
+Skin - Not Sun Exposed (Suprapubic),0,1,0,0,2,0,5
+Skin - Sun Exposed (Lower leg),0,0,0,1,2,0,4
+Small Intestine - Terminal Ileum,0,0,0,2,1,0,0
+Spleen,0,0,0,0,8,0,0
+Stomach,0,0,10,0,0,0,1
+Testis,0,0,0,0,0,3,0
+Thyroid,0,0,0,0,0,0,11
+Uterus,0,0,0,0,0,0,6
+Vagina,0,0,0,0,2,0,5
