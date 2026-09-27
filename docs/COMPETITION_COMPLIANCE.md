@@ -26,8 +26,16 @@ Fingerprints — Can molecular signatures identify a tissue reliably?**
 
 ## Team
 
-The Rat PAC: Samuel Montalvo, Manasa Rapuru, Erol Evangelista and Cory Gardner (in no particular order); see
-`site/about.html` and `CITATION.cff`.
+The Rat PAC (see also `site/about.html` and `CITATION.cff`):
+
+- Cory Gardner (team lead): the analysis pipeline and the evaluation design (animal-grouped folds, the round-robin panel selector, conformal prediction sets, the shift ladder with the rat BodyMap and GTEx transfers, the batch audit on MoTrPAC's bridging reference pools); the tested repository, provenance and site build.
+- Samuel Montalvo: product and visual design (the Check samples interface and the interactive explorer); the exercise analysis (training effects on the panel, VO2max and body composition).
+- Manasa Rapuru: the multi-omic follow-up (the proteomics reporter-ion rescue, the protein and metabolite transfers to the GTEx proteome and Metabolomics Workbench) and its pre-registration.
+- Erol Evangelista (writer): the README and documentation, the site's text and glossary, the slides and the speaking script; the marker-gene interpretation.
+- All four: the study design, review of every result against the evaluation rules frozen on day one (docs/EVALUATION_RULES.md), and the presentation.
+
+We worked in parallel workstreams against shared evaluation rules frozen on day one (docs/EVALUATION_RULES.md); the
+multi-omic follow-up was pre-registered before its data were read (docs/PREREGISTRATION_MULTIOMIC.md).
 
 AI tools assisted with code and writing; all results were verified by the team.
 

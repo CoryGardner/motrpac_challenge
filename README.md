@@ -11,7 +11,7 @@ every number carries provenance and whose Check samples page scores new samples 
 
 [![tests](https://github.com/CoryGardner/motrpac_challenge/actions/workflows/tests.yml/badge.svg)](https://github.com/CoryGardner/motrpac_challenge/actions/workflows/tests.yml)
 **Team repository:** https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3 · **Public mirror:** https://github.com/CoryGardner/motrpac_challenge
-**Live site:** https://corygardner.github.io/motrpac_challenge/ · **Release:** tag `hackathon-submission-v10.3` (version 2.1.0) · **Licence:** MIT (`LICENSE`); third-party data and their terms: [`NOTICE.md`](NOTICE.md)
+**Live site:** https://corygardner.github.io/motrpac_challenge/ (public) · **Team site** (organization members): https://turbo-guide-2yve4kz.pages.github.io/ · **Release:** tag `hackathon-submission-v10.3.1` (version 2.1.1) · **Licence:** MIT (`LICENSE`); third-party data and their terms: [`NOTICE.md`](NOTICE.md)
 
 ## The Track 3 brief
 
@@ -56,7 +56,6 @@ per-sample reference data are in the **[Reference atlas](https://corygardner.git
 
 | | |
 |---|---|
-| **Team** | The Rat PAC — Erol Evangelista, Cory Gardner, Samuel Montalvo, Manasa Rapuru |
 | **Event** | Stanford Bioinformatics Center / MoTrPAC Hackathon, 25–27 September 2026, track *Molecular Tissue Fingerprints* |
 | **Intended users** | judges and reviewers; MoTrPAC and CFDE analysts who need a tested harness for tissue classifiers, conformal prediction sets and shift tests; anyone reusing the panels or the evaluation rules |
 | **Why it matters** | a signature that transfers to independently processed data, with a calibrated guarantee, is the check that a molecular signature reads biology rather than the processing design of the study it was learned in |
@@ -83,6 +82,16 @@ per-sample reference data are in the **[Reference atlas](https://corygardner.git
 | Feature-selection workflow | the class-aware round-robin selector, fitted inside animal-grouped folds | [Methods: the selector](https://corygardner.github.io/motrpac_challenge/methods.html#selector); [Reference atlas: panel builder](https://corygardner.github.io/motrpac_challenge/explore.html#panel-builder); [`RoundRobinSelector`](src/tfp/models.py#L58) in `src/tfp/models.py` |
 | Interactive model-explanation tool | per sample: probabilities against the calibrated threshold, per-gene contributions (“why X, not Y”), gene values against the reference tissues, a reference map | [Check samples](https://corygardner.github.io/motrpac_challenge/) (the sample drawer); [Reference atlas](https://corygardner.github.io/motrpac_challenge/explore.html): [tissue card](https://corygardner.github.io/motrpac_challenge/explore.html#tissue-card), [gene explorer](https://corygardner.github.io/motrpac_challenge/explore.html#gene-explorer), [panel builder](https://corygardner.github.io/motrpac_challenge/explore.html#panel-builder) |
 <!-- END generated:outputs -->
+
+## Team
+
+- Cory Gardner (team lead): the analysis pipeline and the evaluation design (animal-grouped folds, the round-robin panel selector, conformal prediction sets, the shift ladder with the rat BodyMap and GTEx transfers, the batch audit on MoTrPAC's bridging reference pools); the tested repository, provenance and site build.
+- Samuel Montalvo: product and visual design (the Check samples interface and the interactive explorer); the exercise analysis (training effects on the panel, VO2max and body composition).
+- Manasa Rapuru: the multi-omic follow-up (the proteomics reporter-ion rescue, the protein and metabolite transfers to the GTEx proteome and Metabolomics Workbench) and its pre-registration.
+- Erol Evangelista (writer): the README and documentation, the site's text and glossary, the slides and the speaking script; the marker-gene interpretation.
+- All four: the study design, review of every result against the evaluation rules frozen on day one (docs/EVALUATION_RULES.md), and the presentation.
+
+AI tools assisted with code and writing; all results were verified by the team.
 
 ## Key results
 
@@ -147,6 +156,6 @@ check are in [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md#validation).
 
 ## Cite
 
-`CITATION.cff` (version 2.1.0, tag `hackathon-submission-v10.3`), and the data: MoTrPAC Study Group, *Nature* 629,
+`CITATION.cff` (version 2.1.1, tag `hackathon-submission-v10.3.1`), and the data: MoTrPAC Study Group, *Nature* 629,
 174–183 (2024); Yu et al., *Nat Commun* 5, 3230 (2014); GTEx Consortium, *Science* 369, 1318–1330 (2020); for the
 multiomic follow-up the sources listed in [NOTICE.md](NOTICE.md). History: [CHANGELOG.md](CHANGELOG.md).
