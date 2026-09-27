@@ -4,6 +4,20 @@ All notable changes to this repository. The format follows [Keep a Changelog](ht
 dates are UTC. Each section is a `hackathon-submission-v<n>` git tag; the version numbers are those of `CITATION.cff`
 and `pyproject.toml`.
 
+## [1.7.0] — 2026-09-27 (tag `hackathon-submission-v8`)
+
+### Added
+- The multiomic follow-up (merged from branch `multiomic-overnight`; pre-registration `docs/PREREGISTRATION_MULTIOMIC.md`,
+  report `docs/MULTIOMIC_REPORT.md`, results under `results_multiomic/`): MoTrPAC proteomics on the portal's reporter-ion
+  scale, protein transfer to the Jiang 2020 GTEx proteome, metabolite transfer to two mouse atlases, fusion judged by
+  transfer, and the identifiability of the external designs. New page `site/multiomic.html` with `site/data/multiomic.json`,
+  provenance entries `mo_*` and checks in `tests/test_site_data.py`; slide figures in `results_multiomic/figures/`.
+
+### Changed
+- Navigation: "Multiomic" after Exercise; tighter nav spacing so the header stays on one row from 1024 to 1440 px.
+- README scope, roadmap and follow-up paragraph, and the Limitations page: proteomics is within-tissue only as distributed
+  (ratios), not on the reporter-ion scale.
+
 ## [1.6.0] — 2026-09-27 (tag `hackathon-submission-v7`)
 
 ### Changed
@@ -181,6 +195,10 @@ through `bodymapRat` (2026-09-17); the GTEx v8 downloads (TPM and sample attribu
 were rerun — its effect on every headline number is in `docs/NUMBERS_RECONCILIATION.md`. `results/` and `data/`
 are not versioned; the results are reproducible with `make all`, `make external` and `make identifiability`.
 
+[1.7.0]: https://github.com/CoryGardner/motrpac_challenge/compare/hackathon-submission-v7...hackathon-submission-v8
+[1.6.0]: https://github.com/CoryGardner/motrpac_challenge/compare/hackathon-submission-v6...hackathon-submission-v7
+[1.5.0]: https://github.com/CoryGardner/motrpac_challenge/compare/hackathon-submission-v5...hackathon-submission-v6
+[1.4.0]: https://github.com/CoryGardner/motrpac_challenge/compare/hackathon-submission-v4...hackathon-submission-v5
 [1.3.0]: https://github.com/CoryGardner/motrpac_challenge/compare/hackathon-submission-v3...hackathon-submission-v4
 [1.2.0]: https://github.com/CoryGardner/motrpac_challenge/compare/hackathon-submission-v2...hackathon-submission-v3
 [1.1.0]: https://github.com/CoryGardner/motrpac_challenge/compare/hackathon-submission-v1...hackathon-submission-v2

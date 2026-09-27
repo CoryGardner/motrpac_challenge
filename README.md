@@ -10,7 +10,7 @@ of processing effects on the consortium's bridging standards, an exercise-specif
 every number carries provenance and whose Explorer scores new samples with the panel in the browser.
 
 [![tests](https://github.com/CoryGardner/motrpac_challenge/actions/workflows/tests.yml/badge.svg)](https://github.com/CoryGardner/motrpac_challenge/actions/workflows/tests.yml)
-**Live site:** https://corygardner.github.io/motrpac_challenge/ · **Release:** tag `hackathon-submission-v7` (version 1.6.0) · **Licence:** MIT
+**Live site:** https://corygardner.github.io/motrpac_challenge/ · **Release:** tag `hackathon-submission-v8` (version 1.7.0) · **Licence:** MIT
 
 ![The home page: the question, the tiles, the one-picture diagram and the transfer ladder](figures/home.png)
 
@@ -74,7 +74,8 @@ held-out animals, calibrated (a 90 % prediction set really covers 90 %), and tra
 
 **Scope.** MoTrPAC 6-month rat endurance-training study, portal release c1.0 (rn6), RNA-seq of 19 tissues from the same
 50 animals (899 vials, 21,193 genes after the stacked filter; both sexes; sedentary controls and 1, 2, 4 and 8 weeks
-of training); proteomics and metabolomics evaluated for within-tissue use only. External: rat BodyMap (316 samples,
+of training); proteomics and metabolomics evaluated for within-tissue use only in the core analysis (distributed ratio scale); the
+Multiomic follow-up evaluates them across tissues on the portal reporter-ion scale and against external atlases. External: rat BodyMap (316 samples,
 11 organs, 4 ages) and GTEx v8 (2,485 samples, 862 donors, 17 tissues, 14,569 one-to-one orthologs present).
 
 **Success criteria.** Balanced accuracy ≥ 0.95 at k ≤ 20 under animal-grouped cross-validation against tuned simple
@@ -222,7 +223,7 @@ Known failure modes and limits (details on the site's Limitations page):
 ## Reuse
 
 - **Licence:** MIT for code, site and derived tables (`LICENSE`); the data keep their own terms (table above).
-- **Cite:** `CITATION.cff` (version 1.6.0, tag `hackathon-submission-v7`) and the three data papers.
+- **Cite:** `CITATION.cff` (version 1.7.0, tag `hackathon-submission-v8`) and the three data papers.
 - **Score your samples:** the Explorer's *Score your own samples* tool takes a CSV of log2 CPM for the 20 panel genes
   (a template is provided) and returns tissue calls and 90 % prediction sets in the browser, with optional recalibration
   on labelled samples; the panel card (`site/data/panel_card.csv`, `.json`) lists the genes with their mean expression per
@@ -231,9 +232,9 @@ Known failure modes and limits (details on the site's Limitations page):
   numbers, add provenance entries in `scripts/30_export_site_data.py` and re-freeze (`make freeze-results`).
 - **Extras:** `extras/` holds analyses outside the submission path (discordance, the report builder, the GEO fallback,
   the time-course investigations, the frozen replication notebooks); not covered by the tests.
-- **Roadmap:** rerun on portal release c2.0 (rn7); a cross-tissue proteomics fingerprint; MoTrPAC human tissues when
+- **Roadmap:** rerun on portal release c2.0 (rn7); a rat multi-tissue proteome to replicate the protein fingerprint externally (none is public); MoTrPAC human tissues when
   released; exercise-response panels under the same rules; further independently processed rat cohorts.
-- **Follow-up on the branch `multiomic-overnight` (not merged; a human decision):** the proteome and metabolome carry the
+- **Follow-up, the proteome and metabolome (pre-registered, run after the core analysis):** the proteome and metabolome carry the
   fingerprint too, on the right scale. On the portal's reporter-ion intensities tissue explains R² 0.991 of PC1 against
   0.0009 on the distributed ratios (`results_multiomic/01_rii/variance_partition.csv`, `variance_partition_ratio.csv`); a
   20-protein panel selected there names the tissue of 0.455 of 44 human TMT samples from 13 GTEx donors (donor-bootstrap

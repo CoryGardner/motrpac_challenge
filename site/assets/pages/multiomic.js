@@ -23,7 +23,7 @@ async function main() {
   const mw = M.metabolites.find((m) => m.leg === "deep_mw");
   const DJ = M.design_jiang;
 
-  document.getElementById("status-line").replaceChildren(badge("ambiguous", "◔", "follow-up on the branch multiomic-overnight — not part of the frozen submission; merging is a human decision"));
+  document.getElementById("status-line").replaceChildren(badge("ambiguous", "◔", "follow-up, pre-registered and run after the core analysis; the RNA results on the other pages do not depend on it"));
   document.getElementById("lede").replaceChildren(
     `The submission left proteomics and metabolomics out of the cross-tissue fingerprint because the distributed proteomics are ratios to per-tissue reference pools. On the portal's reporter-ion intensities tissue explains R² ${fmt(pc1.r2_rii)} of the first principal component (${fmt(pc1.r2_ratio, 4)} on the ratios). `,
     `A 20-protein panel selected on that scale names the tissue of ${fmt(jr20.accuracy)} of ${jr20.n_samples} human TMT samples from ${jr20.n_individuals} GTEx donors (chance ${fmt(1 / 7)}; ${fmt(jw20.accuracy)} of ${jw20.n_samples} when both sides are processed the same way), and its 90 % sets cover ${fmt(jr20.coverage)} with MoTrPAC calibration and ${fmt(jrec5.coverage_recalibrated)} after recalibrating on five donors — at ${perSet(jrec5.set_size_recalibrated, jrec5.n_classes_label_space)}: the GTEx pattern, not the BodyMap one. `,

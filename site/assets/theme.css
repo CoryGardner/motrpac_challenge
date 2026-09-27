@@ -89,8 +89,8 @@ main.wrap { padding-top: 1.5rem; padding-bottom: 4rem; }
 .brand { font-weight: 650; color: var(--ink); text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; white-space: nowrap; }
 .brand svg { width: 22px; height: 22px; }
 .brand img.mark { width: 72px; height: 72px; border-radius: 50%; display: block; box-shadow: 0 0 0 1px var(--mark-ring); }
-nav.primary { display: flex; flex-wrap: wrap; gap: 0.15rem 0.9rem; margin-left: auto; }
-nav.primary a { color: var(--ink-2); text-decoration: none; padding: 0.35rem 0.1rem; border-bottom: 2px solid transparent; font-size: 0.95rem; }
+nav.primary { display: flex; flex-wrap: wrap; gap: 0.15rem 0.6rem; margin-left: auto; }
+nav.primary a { color: var(--ink-2); text-decoration: none; padding: 0.35rem 0.1rem; border-bottom: 2px solid transparent; font-size: 0.9rem; }
 nav.primary a[aria-current="page"] { color: var(--ink); border-bottom-color: var(--ink); }
 nav.primary a:hover { color: var(--ink); }
 .theme-toggle { border: 1px solid var(--axis); background: var(--surface); color: var(--ink-2); border-radius: 999px; padding: 0.3rem 0.7rem; cursor: pointer; font: inherit; font-size: 0.85rem; }
@@ -239,8 +239,9 @@ img.shot { max-width: 100%; height: auto; border: 1px solid var(--grid); border-
 .overview-grid li { margin: .45rem 0; }
 
 @media (max-width: 1100px) {
-  nav.primary { gap: 0.15rem 0.55rem; }
-  nav.primary a { font-size: 0.9rem; }
+  nav.primary { gap: 0.15rem 0.25rem; }
+  nav.primary a { font-size: 0.85rem; }
+  .theme-toggle { padding: 0.25rem 0.55rem; font-size: 0.8rem; }
   .site-header .wrap { gap: 0.6rem; }
 }
 @media (max-width: 640px) {
