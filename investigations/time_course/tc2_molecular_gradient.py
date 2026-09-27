@@ -33,8 +33,8 @@ import pandas as pd
 from joblib import Parallel, delayed
 from scipy import stats
 
-from motrpac import config as C, io, models
-from motrpac.splits import assert_no_group_leak, grouped_kfold
+from tfp import config as C, io, models
+from tfp.splits import assert_no_group_leak, grouped_kfold
 
 PIPE = Path(__file__).resolve().parents[2]
 OUT = PIPE / "results" / "15_time_course" / "2_3_gradients"

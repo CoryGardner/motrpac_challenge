@@ -267,7 +267,7 @@ print("range of recalibrated coverage (N = 3):",
 CORE9 = "SKM-GN,HEART,KIDNEY,LIVER,LUNG,BAT,WAT-SC,HIPPOC,PLASMA"
 
 
-# from src/motrpac/cli.py::parse_tissues (verbatim)
+# from src/tfp/cli.py::parse_tissues (verbatim)
 def parse_tissues(arg: str | None) -> list[str] | None:
     if not arg:
         return None

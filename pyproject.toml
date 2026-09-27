@@ -3,7 +3,7 @@ requires = ["setuptools>=64"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "motrpac-hackathon-starter"
+name = "tfp-tissue-fingerprint-pipeline"
 version = "0.1.0"
 description = "Calibrated, leakage-safe evaluation of MoTrPAC multi-omic tissue fingerprints"
 requires-python = ">=3.10"

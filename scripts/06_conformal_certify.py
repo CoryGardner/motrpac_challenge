@@ -29,8 +29,8 @@ from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 
-from motrpac import cli, config as C, conformal as cp, io, models, plots, report
-from motrpac.splits import assert_no_group_leak, fit_calibration_split, grouped_kfold
+from tfp import cli, config as C, conformal as cp, io, models, plots, report
+from tfp.splits import assert_no_group_leak, fit_calibration_split, grouped_kfold
 
 SIZING_PAIRS = [(0.05, 0.05), (0.10, 0.05), (0.10, 0.10), (0.20, 0.10)]
 

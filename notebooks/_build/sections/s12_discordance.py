@@ -30,7 +30,7 @@ section("12 discordance")
 # defaults --assay-a TRNSCRPT --assay-b PROT --fdr 0.1, complete protein features; `make discordance` passes no flags)
 
 
-# [notebook workaround] src/motrpac/discordance.py::ptm_site_counts has a function-local relative import
+# [notebook workaround] src/tfp/discordance.py::ptm_site_counts has a function-local relative import
 # (`from .io import read_sample_table`) that the builder does not strip (it strips only top-level ones), so the
 # pasted version raises ImportError here. Below: the same function, verbatim, minus that one line
 # (read_sample_table is already defined bare in this namespace). Reported to the lead as a build.py fix.

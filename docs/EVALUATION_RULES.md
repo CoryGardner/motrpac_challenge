@@ -5,7 +5,7 @@ go in the report.
 
 ## 1. Units of splitting
 
-- The unit is the **animal (`pid`)**. `motrpac.splits.grouped_kfold()` wraps
+- The unit is the **animal (`pid`)**. `tfp.splits.grouped_kfold()` wraps
   `StratifiedGroupKFold` (stratified on the label, grouped on `pid`).
 - Default: 5 outer folds. With ~50–60 animals per tissue that is ~10–12 test animals per fold —
   report the count.
@@ -60,7 +60,7 @@ same outer folds by more than the fold-to-fold sd.
 ## 7. Certified panel size (LTT-style)
 
 The question "what is the smallest panel whose error is ≤ α with confidence 1 − δ" is a
-multiple-testing problem over panel sizes. `motrpac.conformal.certify_panel_size()`:
+multiple-testing problem over panel sizes. `tfp.conformal.certify_panel_size()`:
 1. For each k on the grid, fit the panel on fit animals, measure errors on calibration animals.
 2. Compute a Clopper–Pearson upper confidence bound on the error at level δ.
 3. **Fixed-sequence testing from large k to small k**: walk down the grid and stop at the first
@@ -86,7 +86,7 @@ For each of: held-out sex, held-out time point (8w; also 1w), controls → train
 
 ## 10. Reporting
 
-- `motrpac.report.add_section()` appends to `results/REPORT.md` with a timestamp, the git
+- `tfp.report.add_section()` appends to `results/REPORT.md` with a timestamp, the git
   hash (if any), the script name, and the exact parameters.
 - Negative results are written up the same way as positive ones.
 - Every table in the report has n (animals) next to the metric.

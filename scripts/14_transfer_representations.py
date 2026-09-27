@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """Phase 14 — representation and transferability-aware selection, on both transfer targets.
 
-Three representations of a k-gene panel (motrpac.transfer): per-gene z-scores within each dataset,
+Three representations of a k-gene panel (tfp.transfer): per-gene z-scores within each dataset,
 within-sample ranks of the panel genes, and top-scoring pairs. Two selectors: the standard round
 robin, and a transferability-aware one that forbids a tissue from picking a gene that is
 training-regulated in that tissue or correlated (|r| > --r-thresh) with the library mRNA fraction
@@ -26,9 +26,9 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import balanced_accuracy_score
 
-from motrpac import cli, config as C, io, report
-from motrpac.splits import assert_no_group_leak, grouped_kfold
-from motrpac.transfer import REPRESENTATIONS, PanelModels, calibrate_models, conformal_transfer, exclusion_mask, \
+from tfp import cli, config as C, io, report
+from tfp.splits import assert_no_group_leak, grouped_kfold
+from tfp.transfer import REPRESENTATIONS, PanelModels, calibrate_models, conformal_transfer, exclusion_mask, \
     gtex_symbols, match_gtex_orthologs, one_to_one_orthologs, score_block
 
 BODYMAP_MAP = {"Adrenal": {"ADRNL"}, "Brain": {"CORTEX", "HIPPOC", "HYPOTH"}, "Heart": {"HEART"}, "Kidney": {"KIDNEY"},

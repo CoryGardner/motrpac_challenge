@@ -24,7 +24,7 @@
 section("4 baselines")
 
 
-# from src/motrpac/cli.py::resolve_source (verbatim) — cli.py is not pasted into this notebook
+# from src/tfp/cli.py::resolve_source (verbatim) — cli.py is not pasted into this notebook
 def resolve_source(assay: str, source: str) -> str:
     if source != "auto":
         return source

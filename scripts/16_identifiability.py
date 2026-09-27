@@ -5,9 +5,9 @@ Three recomputations from metadata alone (no expression values):
   a) Batch nesting per omic layer — for every processing variable in the export (extraction plate,
      library batch, flowcell, lane, dates, site; TMT plex and channel; immunoassay plate), how many
      levels a tissue spans, how many tissues a level holds, Cramér's V with tissue, and how many of
-     the tissue pairs share at least one level (`motrpac.batch.nesting_table`).
+     the tissue pairs share at least one level (`tfp.batch.nesting_table`).
   b) Estimable tissue pairs per layer — pairs that share a level of EVERY processing variable of the
-     layer, so that a within-batch contrast exists (`motrpac.batch.estimable_pairs`).
+     layer, so that a within-batch contrast exists (`tfp.batch.estimable_pairs`).
   c) The QC-only baseline of notebook 02 §13 (`notebooks/_build/sections/s14_qc_baseline.py`), copied
      verbatim in its feature lists and model: a multinomial logistic regression on the consortium's
      RNA-seq library QC numbers, no gene, on the phase-04 animal-grouped folds, technical and
@@ -33,8 +33,8 @@ from sklearn.metrics import accuracy_score, balanced_accuracy_score
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
-from motrpac import batch, cli, config as C, io
-from motrpac.splits import assert_no_group_leak, grouped_kfold
+from tfp import batch, cli, config as C, io
+from tfp.splits import assert_no_group_leak, grouped_kfold
 
 # free-text tissue names used in the metadata tables → pipeline tissue codes
 _TISSUE_ALIASES = {

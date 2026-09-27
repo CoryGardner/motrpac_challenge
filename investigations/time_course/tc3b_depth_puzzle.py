@@ -23,7 +23,7 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-from motrpac import config as C
+from tfp import config as C
 
 import os
 import sys

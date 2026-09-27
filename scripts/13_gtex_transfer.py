@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """Phase 13 — human transfer: score GTEx with the MoTrPAC rat fingerprint (docs/GTEX_TRANSFER.md),
-through the same code path as the rat BodyMap validation (motrpac.transfer).
+through the same code path as the rat BodyMap validation (tfp.transfer).
 
 Inputs: data/external/gtex_tpm_subset.csv (samples × human genes, log2(TPM+1); scripts/11_gtex_prepare.py)
 and gtex_meta.csv (SAMPID, donor, SMTSD, rat_tissue). Orthology: data/raw/rat_to_human_gene.csv,
@@ -18,9 +18,9 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from motrpac import cli, config as C, io, models, report
-from motrpac.splits import assert_no_group_leak
-from motrpac.transfer import PanelModels, calibrate_models, conformal_transfer, gene_check, gtex_symbols, match_gtex_orthologs, \
+from tfp import cli, config as C, io, models, report
+from tfp.splits import assert_no_group_leak
+from tfp.transfer import PanelModels, calibrate_models, conformal_transfer, gene_check, gtex_symbols, match_gtex_orthologs, \
     one_to_one_orthologs, per_organ_coverage, save_transfer_scores, score_block, zscore
 
 GTEX_TO_RAT = {

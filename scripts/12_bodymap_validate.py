@@ -24,9 +24,9 @@ import itertools
 
 import numpy as np
 import pandas as pd
-from motrpac import cli, config as C, conformal as cp, io, models, report
-from motrpac.splits import assert_no_group_leak
-from motrpac.transfer import PanelModels, calibrate_models, conformal_transfer, per_organ_coverage, save_transfer_scores, \
+from tfp import cli, config as C, conformal as cp, io, models, report
+from tfp.splits import assert_no_group_leak
+from tfp.transfer import PanelModels, calibrate_models, conformal_transfer, per_organ_coverage, save_transfer_scores, \
     score_block, zscore
 
 ORGAN_MAP = {"Adrenal": {"ADRNL"}, "Brain": {"CORTEX", "HIPPOC", "HYPOTH"}, "Heart": {"HEART"}, "Kidney": {"KIDNEY"},

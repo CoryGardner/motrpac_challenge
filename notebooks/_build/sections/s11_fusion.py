@@ -209,7 +209,7 @@ def batch_balance(tissue: str, meta_sub: pd.DataFrame) -> dict:
     return out
 
 
-# from src/motrpac/cli.py::resolve_source (verbatim; cli.py is not pasted into the notebook)
+# from src/tfp/cli.py::resolve_source (verbatim; cli.py is not pasted into the notebook)
 def resolve_source(assay: str, source: str) -> str:
     if source != "auto":
         return source

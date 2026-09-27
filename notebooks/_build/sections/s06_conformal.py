@@ -32,7 +32,7 @@
 section("6 conformal sets")
 
 # -- the data: the same stacked TRNSCRPT matrix phases 04, 06 and 08 use (shared cache key) --
-# from src/motrpac/cli.py::resolve_source (verbatim)
+# from src/tfp/cli.py::resolve_source (verbatim)
 def resolve_source(assay: str, source: str) -> str:
     if source != "auto":
         return source

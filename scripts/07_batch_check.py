@@ -39,8 +39,8 @@ from sklearn.metrics import roc_auc_score
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
-from motrpac import cli, config as C, io, report
-from motrpac.splits import assert_no_group_leak, grouped_kfold
+from tfp import cli, config as C, io, report
+from tfp.splits import assert_no_group_leak, grouped_kfold
 
 FUSION_TISSUES = ["CORTEX", "HEART", "KIDNEY", "LIVER", "LUNG", "SKM-GN", "WAT-SC"]
 DURATION_WEEKS = {"1w": 1, "2w": 2, "4w": 4, "8w": 8}

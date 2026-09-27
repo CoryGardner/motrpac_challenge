@@ -5,7 +5,7 @@ scikit-learn>=1.3
 scipy>=1.10
 matplotlib>=3.7
 pytest>=7
-# Install the library itself in editable mode so `import motrpac` works from anywhere:
+# Install the library itself in editable mode so `import tfp` works from anywhere:
 -e .
 # Optional extras (import-guarded; install when useful):
 #   umap-learn   nicer 2-D embeddings than PCA for EDA

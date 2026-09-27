@@ -3,7 +3,7 @@ import numpy as np
 import pytest
 from sklearn.linear_model import LogisticRegression
 
-from motrpac import conformal as cp
+from tfp import conformal as cp
 
 
 def _fit_set_missing_one_class(seed=0):

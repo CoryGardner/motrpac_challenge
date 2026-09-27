@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import pandas as pd
 
-from motrpac import cli, config as C, io, models, plots, report
+from tfp import cli, config as C, io, models, plots, report
 
 
 def confusable_pairs(conf: pd.DataFrame, top: int = 10) -> pd.DataFrame:

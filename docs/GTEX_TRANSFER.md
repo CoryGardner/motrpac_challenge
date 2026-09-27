@@ -26,11 +26,11 @@ Two human sources, in order of availability:
 - Sample IDs `GTEX-XXXX-...` share a donor prefix `GTEX-XXXX`; group splits on the donor,
   same rule as `pid` in rat.
 
-## Transfer protocol (implemented in `scripts/13_gtex_transfer.py` on the shared `motrpac.transfer` code path; results in `results/13_gtex/`; representations and the transferability-aware selector in `scripts/14_transfer_representations.py`, `results/14_transfer/`)
+## Transfer protocol (implemented in `scripts/13_gtex_transfer.py` on the shared `tfp.transfer` code path; results in `results/13_gtex/`; representations and the transferability-aware selector in `scripts/14_transfer_representations.py`, `results/14_transfer/`)
 
 Decisions: Muscle - Skeletal is scored as the {SKM-GN, SKM-VL} super-class (GTEx muscle is gastrocnemius, but the rat
 muscles are the confusable pair); Artery - Aorta → VENACV is kept but read as a caveat; orthologs are 1:1 pairs from
-`rat_to_human_gene.csv` matched to GTEx by human Ensembl id with symbol fallback (`motrpac.transfer.match_gtex_orthologs`,
+`rat_to_human_gene.csv` matched to GTEx by human Ensembl id with symbol fallback (`tfp.transfer.match_gtex_orthologs`,
 shared by scripts 13 and 14 so that both quote the same gene set); panels are re-selected in the ortholog space on all
 50 rat animals; every GTEx split is grouped on the donor.
 

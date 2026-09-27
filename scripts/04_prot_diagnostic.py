@@ -22,8 +22,8 @@ from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 
-from motrpac import cli, config as C, io, models, report
-from motrpac.splits import grouped_kfold
+from tfp import cli, config as C, io, models, report
+from tfp.splits import grouped_kfold
 
 
 def r2_cat(x: np.ndarray, cat: np.ndarray) -> float:

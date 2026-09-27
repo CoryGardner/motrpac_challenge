@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from motrpac import config as C, conformal as cp
+from tfp import config as C, conformal as cp
 
 RES = C.RESULTS_DIR
 REGEN = RES / "31_site_regen"

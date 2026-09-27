@@ -10,7 +10,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from motrpac import cli, config as C, report
+from tfp import cli, config as C, report
 
 R = C.RESULTS_DIR
 

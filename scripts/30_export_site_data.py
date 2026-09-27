@@ -27,7 +27,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from motrpac import config as C, conformal as cp, io, transfer
+from tfp import config as C, conformal as cp, io, transfer
 
 ROOT = C.ROOT
 RES = C.RESULTS_DIR

@@ -28,8 +28,8 @@ import numpy as np
 import pandas as pd
 from joblib import Parallel, delayed
 
-from motrpac import cli, config as C, io, models, report
-from motrpac.splits import assert_no_group_leak, grouped_kfold
+from tfp import cli, config as C, io, models, report
+from tfp.splits import assert_no_group_leak, grouped_kfold
 
 DURATION_WEEKS = {"1w": 1, "2w": 2, "4w": 4, "8w": 8}
 

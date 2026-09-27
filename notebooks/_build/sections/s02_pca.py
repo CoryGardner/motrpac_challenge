@@ -57,7 +57,7 @@ def pca_of(om: io.OmicsMatrix, n_components: int = 10, top_var: int | None = 500
     return S, pca.explained_variance_ratio_
 
 
-# from src/motrpac/cli.py::resolve_source (verbatim; cli.py is not part of the pasted library)
+# from src/tfp/cli.py::resolve_source (verbatim; cli.py is not part of the pasted library)
 def resolve_source(assay: str, source: str) -> str:
     if source != "auto":
         return source

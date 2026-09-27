@@ -15,7 +15,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from motrpac import config as C
+from tfp import config as C
 
 ORGAN = {"Adr": "Adrenal", "Brn": "Brain", "Hrt": "Heart", "Kdn": "Kidney", "Lng": "Lung", "Lvr": "Liver",
          "Msc": "Muscle", "Spl": "Spleen", "Thm": "Thymus", "Tst": "Testes", "Utr": "Uterus"}

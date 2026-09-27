@@ -14,7 +14,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from motrpac import cli, config as C, report
+from tfp import cli, config as C, report
 
 DURATIONS = ("1w", "2w", "4w", "8w")
 VARIANTS = ("marginal", "mondrian", "floored")

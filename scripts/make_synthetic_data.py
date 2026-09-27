@@ -19,7 +19,7 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-from motrpac import config as C
+from tfp import config as C
 
 TRN_TISSUES = ["SKM-GN", "SKM-VL", "HEART", "LIVER", "KIDNEY", "WAT-SC", "BAT", "CORTEX"]
 PROT_TISSUES = ["SKM-GN", "HEART", "LIVER", "KIDNEY", "WAT-SC"]

@@ -6,7 +6,7 @@ import importlib
 import shutil
 import sys
 
-from motrpac import config as C
+from tfp import config as C
 
 
 def main() -> int:

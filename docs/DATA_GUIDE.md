@@ -86,7 +86,7 @@ averages vials within a platform, joins platforms on `bid`, and writes **one col
 named by one representative viallabel** (one present in PHENO when possible) so `bid == viallabel[:5]`
 and the PHENO lookup keep working; `meta/<ASSAY>_VIALS.csv` maps every original vial to its platform,
 bid and exported column. Features measured on several platforms appear as **duplicate `feature_ID`
-rows** (platforms in sorted name order; `motrpac.io` suffixes the repeats with `__dupN`);
+rows** (platforms in sorted name order; `tfp.io` suffixes the repeats with `__dupN`);
 `meta/<ASSAY>_FEATURES.csv` says which platform each row came from. Tissues outside the nine core
 metabolomics tissues have only the `metab-u-hilicpos` platform, so METAB feature counts differ a lot
 by tissue and the cross-tissue inner join is small. `METAB_<TISSUE>_DA` uses `feature_ID_da`, which
@@ -103,7 +103,7 @@ deliberately not exported (manifest `skipped` lists every object with a reason).
 - physiology worth having around: `vo2.max.test.vo2_max`, `nmr.testing.nmr_fat`,
   `terminal.weight.bw`, `calculated.variables.pct_body_fat_change`, `time_to_freeze`
 
-`motrpac.io.load_pheno()` standardizes these into `pid, bid, sex, group, tissue_long` and keeps
+`tfp.io.load_pheno()` standardizes these into `pid, bid, sex, group, tissue_long` and keeps
 the rest.
 
 In package v2.0.0 as installed, PHENO is **6,156 vials × 509 variables from 147 animals**, `pid`/`bid`
@@ -121,7 +121,7 @@ not `___`. `load_pheno()` accepts both spellings. `bid == viallabel[:5]` holds f
    "fingerprint" trained on `PROT_*_NORM_DATA` may be learning the normalization, not biology.
    Check the assay metadata and the paper's methods; ask the organizers (see QUESTIONS).
    For the cross-tissue classification task, transcriptomics from **raw counts re-normalized
-   uniformly** (log2 CPM per sample, done by `motrpac.io.load_counts`) is the safest layer.
+   uniformly** (log2 CPM per sample, done by `tfp.io.load_counts`) is the safest layer.
    Metabolomics has a similar issue (platform-specific, per-tissue runs).
 2. **Feature-ID spaces differ across tissues for some assays.** Transcripts share Ensembl gene
    IDs across tissues (good). Proteomics feature IDs may be protein accessions, sometimes with
@@ -134,7 +134,7 @@ not `___`. `load_pheno()` accepts both spellings. `bid == viallabel[:5]` holds f
    panel's genes have human orthologs and transfer.
 4. **Samples from one animal are not independent** — one rat contributes up to ~18 tissue
    samples. Group every split by `pid`. This also means conformal calibration at the sample
-   level is only approximately exchangeable; `motrpac.conformal` has a `one_per_group` option
+   level is only approximately exchangeable; `tfp.conformal` has a `one_per_group` option
    that subsamples one sample per animal for the calibration set.
 5. **Outliers.** `OUTLIERS` lists samples the consortium excluded from differential analysis.
    Default: keep them for classification but flag them; report both if results differ.

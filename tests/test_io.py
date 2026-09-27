@@ -6,7 +6,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from motrpac import config as C
+from tfp import config as C
 
 
 @pytest.fixture(scope="module")
@@ -18,7 +18,7 @@ def tiny_raw(tmp_path_factory):
 
 
 def test_pheno_and_norm(tiny_raw):
-    from motrpac import io
+    from tfp import io
     ph = io.load_pheno(tiny_raw)
     assert {"pid", "bid", "sex", "group"} <= set(ph.columns)
     assert set(ph["sex"]) == {"female", "male"}
@@ -29,7 +29,7 @@ def test_pheno_and_norm(tiny_raw):
 
 
 def test_counts_are_log_cpm(tiny_raw):
-    from motrpac import io
+    from tfp import io
     ph = io.load_pheno(tiny_raw)
     om = io.load_counts("HEART", ph, raw_dir=tiny_raw)
     assert om.X.min().min() >= 0
@@ -37,7 +37,7 @@ def test_counts_are_log_cpm(tiny_raw):
 
 
 def test_stack_and_align(tiny_raw):
-    from motrpac import io
+    from tfp import io
     ph = io.load_pheno(tiny_raw)
     st = io.stack_tissues("TRNSCRPT", pheno=ph, raw_dir=tiny_raw, verbose=False)
     assert st.meta["tissue"].nunique() == 8 and st.n_samples == 8 * 20
@@ -49,13 +49,13 @@ def test_stack_and_align(tiny_raw):
 
 
 def test_gene_mapping(tiny_raw):
-    from motrpac import io
+    from tfp import io
     s = io.map_to_gene_symbols(["ENSRNOG00000000001", "NP_000001", "nope"], raw_dir=tiny_raw)
     assert s.iloc[0] == "GENE0001" and isinstance(s.iloc[1], str) and s.isna().iloc[2]
 
 
 def test_conformal_quantile_and_certificate():
-    from motrpac import conformal as cp
+    from tfp import conformal as cp
     rng = np.random.default_rng(0)
     scores = rng.uniform(size=200)
     q = cp.conformal_quantile(scores, 0.1)
@@ -68,7 +68,7 @@ def test_stacked_counts_filter_keeps_tissue_restricted_genes(tiny_raw):
     """A gene expressed in one tissue only must survive the stacked filter (absent = 0 counts),
     while the old per-tissue inner join drops it."""
     import pandas as pd
-    from motrpac import io
+    from tfp import io
     ph = io.load_pheno(tiny_raw)
     gene = "ENSRNOG00000000005"
     for p in sorted((tiny_raw / "counts").glob("TRNSCRPT__*.csv")):

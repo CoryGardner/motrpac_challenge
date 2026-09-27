@@ -54,7 +54,7 @@ PLASMA (no transcripts anyway). They stay in the classifier as possible labels.
    MoTrPAC animal is held out for accuracy). Keep a MoTrPAC animal-grouped calibration split for
    the "rat-calibrated" prediction sets.
 2. Normalize BodyMap exactly like MoTrPAC counts: log2 CPM on the total library size
-   (`motrpac.io.log_cpm`), restricted to the panel genes. Run twice: (a) no re-standardization
+   (`tfp.io.log_cpm`), restricted to the panel genes. Run twice: (a) no re-standardization
    (same species, same units — the honest first attempt), (b) per-gene z-score within each
    dataset, and report both.
 3. Report per mapped organ: accuracy, the confusion matrix against the 19 MoTrPAC classes, and,

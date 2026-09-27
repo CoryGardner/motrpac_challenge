@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from motrpac import config as C
+from tfp import config as C
 
 OUT = C.RESULTS_DIR / "15_time_course" / "5_6_fingerprint"
 COL = {"full": "#2a78d6", "panel_k20": "#eb6834"}

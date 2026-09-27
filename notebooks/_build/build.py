@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Assemble the replication notebooks from section files, with the pipeline library copied in verbatim.
 
-Why a builder: the notebooks must contain every line of code they run (no `import motrpac`), and the
-library code they need must stay identical to src/motrpac/. Rather than retyping ~1,600 library lines,
+Why a builder: the notebooks must contain every line of code they run (no `import tfp`), and the
+library code they need must stay identical to src/tfp/. Rather than retyping ~1,600 library lines,
 this script copies each module's source into notebook cells (dropping only the package-relative
 imports and matplotlib's forced "Agg" backend), then appends the hand-written section files.
 
@@ -31,7 +31,7 @@ import nbformat as nbf
 HERE = Path(__file__).resolve().parent            # notebooks/_build
 NB_DIR = HERE.parent                              # notebooks/
 PIPE = NB_DIR.parent                              # code/pipeline
-SRC = PIPE / "src" / "motrpac"
+SRC = PIPE / "src" / "tfp"
 SECTIONS = HERE / "sections"
 
 # Library modules in dependency order, and the namespace name each is exposed under in the notebook
@@ -56,7 +56,7 @@ def code(text: str):
 
 
 def transform_module(mod: str, src: str) -> str:
-    """The three mechanical edits applied to a src/motrpac module before it is pasted into the notebook:
+    """The three mechanical edits applied to a src/tfp module before it is pasted into the notebook:
     (1) package-relative imports removed (indented ones become `pass`), (2) matplotlib.use("Agg") removed,
     (3) in config, ROOT and RESULTS_DIR computed from the notebook's location. Also used verbatim by the
     notebook's drift check, so the check and the build can never disagree about what "the same" means."""
@@ -78,25 +78,25 @@ def transform_module(mod: str, src: str) -> str:
                       body, count=1, flags=re.M)
         body = re.sub(r'^RESULTS_DIR = .*$', 'RESULTS_DIR = PIPE / "results"  # [notebook] read-only here; notebook outputs go to OUT',
                       body, count=1, flags=re.M)
-    return f"# ===== copied verbatim from src/motrpac/{mod}.py (see the note above for the 3 mechanical edits) =====\n" + body
+    return f"# ===== copied verbatim from src/tfp/{mod}.py (see the note above for the 3 mechanical edits) =====\n" + body
 
 
 def library_cells() -> list:
-    """One markdown + one code cell per library module, copied verbatim from src/motrpac/*.py."""
+    """One markdown + one code cell per library module, copied verbatim from src/tfp/*.py."""
     cells = [md("""## Appendix-in-place: the pipeline library, copied verbatim
 
-The cells below are the source of `src/motrpac/` (the pipeline's library), pasted in so this notebook runs
+The cells below are the source of `src/tfp/` (the pipeline's library), pasted in so this notebook runs
 without importing it. Three mechanical edits only: package-relative imports (`from . import …`) are
 removed because everything shares one namespace; `matplotlib.use("Agg")` is removed so figures can show;
 and in `config`, the path constants are computed from this notebook's location instead of the file's.
 After each module, a namespace object (`C`, `io`, `splits`, `models`, `cp`, `discordance`, `transfer`,
 `plots`) is created so code copied from the scripts can keep calling e.g. `cp.predict_sets(...)`.
 
-**Drift check.** The cell right after the library re-reads each `src/motrpac/*.py` from disk (when the
+**Drift check.** The cell right after the library re-reads each `src/tfp/*.py` from disk (when the
 notebook sits in its repository), applies the same three edits with the same function the notebook
 builder uses (`transform_module`, pasted in), and compares the result with the library code that actually
 executed in this kernel. It prints an identical / differs table and **raises** if any module differs. So
-a run that gets past it used exactly the library in `src/`. If `src/motrpac` is not reachable (the
+a run that gets past it used exactly the library in `src/`. If `src/tfp` is not reachable (the
 notebook was copied elsewhere), it says the inline copy could not be verified, and continues.""")]
     for mod, alias in MODULES:
         path = SRC / f"{mod}.py"
@@ -125,7 +125,7 @@ notebook was copied elsewhere), it says the inline copy could not be verified, a
     return cells
 
 
-DRIFT_CHECK = '''# ---- drift check: is the inline library (the cells above) still identical to src/motrpac/*.py? ----
+DRIFT_CHECK = '''# ---- drift check: is the inline library (the cells above) still identical to src/tfp/*.py? ----
 # notebook-only helper (not in the pipeline). transform_module is pasted from notebooks/_build/build.py, the
 # function that generated the cells above, so "identical" means exactly what the build did.
 __TRANSFORM_SOURCE__
@@ -135,21 +135,21 @@ def _executed_library_cells() -> dict:
     """The library cells as they actually ran in this kernel (IPython's input history), falling back to
     the saved notebook file. Keyed by module name, from each cell's first line."""
     hist = list(globals().get("In", []))
-    if not any(h.startswith("# ===== copied verbatim from src/motrpac/") for h in hist):
+    if not any(h.startswith("# ===== copied verbatim from src/tfp/") for h in hist):
         import nbformat as _nbf
         hist = [c.source for c in _nbf.read(NB / NOTEBOOK_NAME, 4).cells if c.cell_type == "code"]
     out = {}
     for h in hist:
-        m = re.match(r"# ===== copied verbatim from src/motrpac/(\\w+)\\.py", h)
+        m = re.match(r"# ===== copied verbatim from src/tfp/(\\w+)\\.py", h)
         if m:
             out[m.group(1)] = h.rstrip("\\n")      # the last execution of each module's cell wins
     return out
 
 
-_src_dir = PIPE / "src" / "motrpac"
+_src_dir = PIPE / "src" / "tfp"
 _mods = ["config", "io", "splits", "models", "conformal", "discordance", "transfer", "plots"]
 if not _src_dir.is_dir():
-    print(f"src/motrpac not found at {_src_dir}: the inline copy of the library could NOT be verified; continuing.")
+    print(f"src/tfp not found at {_src_dir}: the inline copy of the library could NOT be verified; continuing.")
 else:
     _ran = _executed_library_cells()
     _rows = []
@@ -163,10 +163,10 @@ else:
     print(_drift.to_string(index=False))
     _bad = _drift[_drift["status"] != "identical"]
     if len(_bad):
-        raise RuntimeError(f"inline library differs from src/motrpac for: {', '.join(_bad['module'])}. Rebuild the "
+        raise RuntimeError(f"inline library differs from src/tfp for: {', '.join(_bad['module'])}. Rebuild the "
                            "notebook (python notebooks/_build/build.py) or revert the edit; results below would not "
                            "come from the pipeline's library.")
-    print("inline library identical to src/motrpac (after the 3 documented edits)")
+    print("inline library identical to src/tfp (after the 3 documented edits)")
 '''
 
 

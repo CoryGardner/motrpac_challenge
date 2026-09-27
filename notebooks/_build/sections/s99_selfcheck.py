@@ -39,7 +39,7 @@ _t.to_csv(OUT / f"timings_{NOTEBOOK_NAME.replace('.ipynb', '')}_{'recompute' if 
 # %% [markdown]
 # ### Where the code came from
 # The cell below reads this notebook's own file and lists every provenance comment. These are the lines
-# that name the pipeline source a block was copied from: `src/motrpac/*.py` for the library cells, and
+# that name the pipeline source a block was copied from: `src/tfp/*.py` for the library cells, and
 # `scripts/*.py::function` for the script logic. It also lists every helper marked notebook-only (not in
 # the pipeline).
 
@@ -52,7 +52,7 @@ if _nbpath.exists():
         if _c.cell_type != "code":
             continue
         for _ln in _c.source.splitlines():
-            _m = re.search(r"(copied verbatim from src/motrpac/\S+|from (?:scripts|code/probes)/[\w./]+(?:::[\w, .]+)?|notebook-only helper)", _ln)
+            _m = re.search(r"(copied verbatim from src/tfp/\S+|from (?:scripts|code/probes)/[\w./]+(?:::[\w, .]+)?|notebook-only helper)", _ln)
             if _m and _ln.lstrip().startswith("#"):
                 _rows.append({"cell": _i, "provenance": _m.group(1).strip(" ,.")})
     _prov = pd.DataFrame(_rows).drop_duplicates("provenance")

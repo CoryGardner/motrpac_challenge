@@ -17,7 +17,7 @@
 # `expected_values.csv` and prints a pass/fail table.
 #
 # **Self-contained.** The notebook does not import the pipeline package. The pipeline's library
-# (`src/motrpac/`) is pasted in below, verbatim, and the logic of each pipeline script is copied into
+# (`src/tfp/`) is pasted in below, verbatim, and the logic of each pipeline script is copied into
 # the section that needs it, with a comment naming its source file and function.
 #
 # **Two modes.**
@@ -59,13 +59,13 @@ RECOMPUTE = os.environ.get("NB_RECOMPUTE", "0") == "1"
 
 # ---- paths: found from this notebook's location (code/pipeline/notebooks/), overridable ----
 def _find_pipeline_root() -> Path:
-    """The pipeline directory is the nearest ancestor of the working directory holding src/motrpac and
+    """The pipeline directory is the nearest ancestor of the working directory holding src/tfp and
     results/. Override with MOTRPAC_PIPELINE_ROOT (the pipeline's own MOTRPAC_ROOT is not used here,
     because in the rest of the repo MOTRPAC_ROOT means the repository root)."""
     if os.environ.get("MOTRPAC_PIPELINE_ROOT"):
         return Path(os.environ["MOTRPAC_PIPELINE_ROOT"]).resolve()
     for p in [Path.cwd(), *Path.cwd().parents]:
-        if (p / "src" / "motrpac").is_dir() and (p / "results").is_dir():
+        if (p / "src" / "tfp").is_dir() and (p / "results").is_dir():
             return p
     raise FileNotFoundError("run this notebook from code/pipeline/notebooks/ or set MOTRPAC_PIPELINE_ROOT")
 

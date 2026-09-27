@@ -35,8 +35,8 @@ import pandas as pd
 from scipy import stats
 from sklearn.metrics import roc_auc_score
 
-from motrpac import cli, config as C, io, models
-from motrpac.splits import assert_no_group_leak, grouped_kfold
+from tfp import cli, config as C, io, models
+from tfp.splits import assert_no_group_leak, grouped_kfold
 
 HERE = Path(__file__).resolve()
 PIPE = HERE.parents[2]

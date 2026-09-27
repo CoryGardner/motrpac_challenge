@@ -22,8 +22,8 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from motrpac import cli, config as C, conformal as cp, io, models, plots, report
-from motrpac.splits import assert_no_group_leak, fit_calibration_split, leave_one_group_out, leave_one_sex_out, \
+from tfp import cli, config as C, conformal as cp, io, models, plots, report
+from tfp.splits import assert_no_group_leak, fit_calibration_split, leave_one_group_out, leave_one_sex_out, \
     train_controls_test_trained
 
 

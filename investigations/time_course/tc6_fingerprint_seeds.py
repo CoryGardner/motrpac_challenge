@@ -22,8 +22,8 @@ import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from tc56_fingerprint_shift import K, OUT, SEED, fit_and_calibrate, metrics, score_vials  # noqa: E402
-from motrpac import cli, io  # noqa: E402
-from motrpac.splits import assert_no_group_leak, fit_calibration_split  # noqa: E402
+from tfp import cli, io  # noqa: E402
+from tfp.splits import assert_no_group_leak, fit_calibration_split  # noqa: E402
 
 DESIGNS = {"a_control+1w": ["control", "1w"], "b_control+1w+2w+4w": ["control", "1w", "2w", "4w"],
            "c_control+4w": ["control", "4w"], "d_control_only": ["control"]}

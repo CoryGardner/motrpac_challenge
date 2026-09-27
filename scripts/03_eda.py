@@ -23,9 +23,9 @@ from sklearn.decomposition import PCA
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import StandardScaler
 
-from motrpac import cli, config as C, io, plots, report
+from tfp import cli, config as C, io, plots, report
 
-import matplotlib.pyplot as plt  # noqa: E402  (Agg backend is set by motrpac.plots)
+import matplotlib.pyplot as plt  # noqa: E402  (Agg backend is set by tfp.plots)
 
 # Sample-level batch covariates in data/raw/meta/<ASSAY>.csv (categorical) and continuous QC columns.
 # METAB / IMMUNO have no sample-level meta object; platforms were merged per biospecimen, so the

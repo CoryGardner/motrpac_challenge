@@ -36,8 +36,8 @@ import numpy as np
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
-from motrpac import cli, config as C, conformal as cp, io, models  # noqa: E402
-from motrpac.splits import assert_no_group_leak, fit_calibration_split, grouped_kfold, \
+from tfp import cli, config as C, conformal as cp, io, models  # noqa: E402
+from tfp.splits import assert_no_group_leak, fit_calibration_split, grouped_kfold, \
     train_controls_test_trained  # noqa: E402
 
 ALPHA, K, MODEL, PREFILTER, SEED, B = 0.10, 20, "logreg_l2", 5000, C.SEED, 2000

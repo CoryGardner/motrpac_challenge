@@ -12,7 +12,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from motrpac import cli, config as C, io, report
+from tfp import cli, config as C, io, report
 
 _spec = importlib.util.spec_from_file_location("eda", Path(__file__).with_name("03_eda.py"))
 eda = importlib.util.module_from_spec(_spec)

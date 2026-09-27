@@ -8,7 +8,7 @@ Inputs in data/external/gtex/ (download from https://gtexportal.org/home/downloa
 Outputs (data/external/): gtex_tpm_subset.csv (samples × genes, log2(TPM+1)), gtex_meta.csv
 (SAMPID, donor, SMTSD, rat_tissue), gtex_gene_symbols.csv, and with --reads gtex_cpm_subset.csv
 (samples × genes, log2(CPM+1) with the library size = the sample's read total over every gene in
-the GCT — the same unit as the MoTrPAC and BodyMap count matrices, motrpac.io.log_cpm). Only the
+the GCT — the same unit as the MoTrPAC and BodyMap count matrices, tfp.io.log_cpm). Only the
 tissues that map to the MoTrPAC rat set are kept, ≤ --max-per-tissue donors per tissue, and the
 CPM matrix uses exactly the samples of the TPM subset.
 
@@ -24,7 +24,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from motrpac import config as C
+from tfp import config as C
 
 GTEX_TO_RAT = {
     "Whole Blood": "BLOOD", "Muscle - Skeletal": "SKM-GN", "Adipose - Subcutaneous": "WAT-SC",

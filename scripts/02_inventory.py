@@ -7,7 +7,7 @@ import json
 import numpy as np
 import pandas as pd
 
-from motrpac import cli, config as C, io, plots, report
+from tfp import cli, config as C, io, plots, report
 
 
 def main() -> None:

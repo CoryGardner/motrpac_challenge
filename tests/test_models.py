@@ -1,7 +1,7 @@
 """Round-robin panel selection: prefix property and agreement with the selector class."""
 import numpy as np
 
-from motrpac import models
+from tfp import models
 
 
 def test_roundrobin_prefix_and_selector_agree():

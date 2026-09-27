@@ -23,7 +23,7 @@ import numpy as np
 import pandas as pd
 from sklearn.impute import SimpleImputer
 
-from motrpac import cli, config as C, io, models, report
+from tfp import cli, config as C, io, models, report
 
 
 def main() -> None:

@@ -37,8 +37,8 @@ from sklearn.metrics import roc_auc_score
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
-from motrpac import config as C, io
-from motrpac.splits import assert_no_group_leak, grouped_kfold
+from tfp import config as C, io
+from tfp.splits import assert_no_group_leak, grouped_kfold
 
 import sys
 sys.path.insert(0, os.path.dirname(__file__))

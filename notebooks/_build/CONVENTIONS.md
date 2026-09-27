@@ -10,7 +10,7 @@ narrative: `01_replication.ipynb` (sections 1–8, 11–14) and `02_transfer.ipy
 header (`s00_header.py`) and the pipeline library pasted in verbatim. Read both files first.
 
 ## Hard rules (from the user — binding)
-1. **Self-contained:** never `import motrpac` and never `sys.path` into `src/`. The library is already in
+1. **Self-contained:** never `import tfp` and never `sys.path` into `src/`. The library is already in
    the namespace (see below). Script logic you need (from `PIPE/scripts/*.py`) is **copied into the
    section**, verbatim where possible, trimmed only of argparse/CLI, `report.add_section`, and branches
    the notebook does not use. Every copied block starts with a provenance comment:
@@ -70,7 +70,7 @@ in both modes (and where the pipeline wrote the same number to results/, print b
   (a results file, raises if missing), `show_png(path)`, `cached(key, fn)` (load a big matrix once per
   run — use shared keys: `"pheno"` → `io.load_pheno()`; `"TRNSCRPT_counts"` → the exact
   `io.stack_tissues(...)` call that scripts/04_fingerprint_baselines.py makes for TRNSCRPT).
-- Library namespaces (verbatim copies of `src/motrpac/*.py`): `C` (config), `io`, `splits`, `models`,
+- Library namespaces (verbatim copies of `src/tfp/*.py`): `C` (config), `io`, `splits`, `models`,
   `cp` (conformal), `discordance`, `transfer`, `plots`. Every top-level name of those modules is also
   defined bare (e.g. `OmicsMatrix`, `grouped_kfold`). `cli.py` and `report.py` are **not** included:
   copy `cli.resolve_source` / `cli.parse_tissues` inline if you need them.

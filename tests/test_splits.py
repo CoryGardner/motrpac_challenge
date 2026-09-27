@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from motrpac import splits
+from tfp import splits
 
 
 def _meta(n_animals=30, tissues=("A", "B", "C", "D"), seed=0):

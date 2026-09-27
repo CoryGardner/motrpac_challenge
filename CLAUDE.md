@@ -11,7 +11,7 @@ Run with the `motrpac-py` conda env: `PYTHONPATH=src python -m pytest -q`, `make
 ## Non-negotiable evaluation rules (short form)
 
 1. **Split by animal (`pid`), never by sample.** Every sample from one animal is on one side of
-   every split. Use `motrpac.splits`. Tests in `tests/test_splits.py` must pass.
+   every split. Use `tfp.splits`. Tests in `tests/test_splits.py` must pass.
 2. **Everything data-dependent happens inside the training fold**: scaling, imputation,
    feature selection, hyperparameter tuning. Use sklearn `Pipeline`s; never pre-select
    features on the full dataset.
@@ -35,20 +35,20 @@ Run with the `motrpac-py` conda env: `PYTHONPATH=src python -m pytest -q`, `make
   Join assays by `bid`/`pid`, never by `viallabel`. Reference-standard vials start with 8, study vials with 9.
 - Keep IDs as strings everywhere (`dtype=str`); leading zeros and int overflow have bitten people.
 - Tissue codes use hyphens in data (`SKM-GN`, `WAT-SC`) but not in R object/file names (`SKMGN`, `WATSC`).
-  `motrpac.config.tissue_token()` / `tissue_from_token()` convert.
+  `tfp.config.tissue_token()` / `tissue_from_token()` convert.
 - Group labels: `control`, `1w`, `2w`, `4w`, `8w`. Sex: `male`, `female`.
-- Use `motrpac.io.load_norm()` / `stack_tissues()` / `align_by_animal()`; don't hand-roll readers.
+- Use `tfp.io.load_norm()` / `stack_tissues()` / `align_by_animal()`; don't hand-roll readers.
 
 ## Coding conventions
 
 - Python 3.10+, numpy/pandas/scikit-learn/scipy/matplotlib only in the core path;
   anything else is optional and must be import-guarded.
 - Scripts are numbered, idempotent, and accept `--quick` for fast runs; they write to
-  `results/<phase>/` and append a short section to `results/REPORT.md` via `motrpac.report`.
-- Seed everything with `motrpac.config.SEED`. Set `n_jobs=-1` where sklearn allows it.
+  `results/<phase>/` and append a short section to `results/REPORT.md` via `tfp.report`.
+- Seed everything with `tfp.config.SEED`. Set `n_jobs=-1` where sklearn allows it.
 - No notebooks in the core path; results must be reproducible from a script before they go in the report.
 - Figures: matplotlib, PNG at 150 dpi, one idea per figure, axis labels with units/scales.
-- Run `pytest -q` after touching `src/motrpac/`.
+- Run `pytest -q` after touching `src/tfp/`.
 
 ## Things not to do
 
@@ -59,6 +59,16 @@ Run with the `motrpac-py` conda env: `PYTHONPATH=src python -m pytest -q`, `make
 - Don't silently drop samples or features; log counts before/after every filter.
 - Don't add dependencies without a fallback path; the hackathon laptop may be offline for stretches.
 - Don't invent results. If a phase can't run (missing data, missing R), say so in the report.
+
+## Submission build (2026-09-26/27)
+
+- The library is `src/tfp/` (renamed from `src/motrpac/`, which collided with the MoTrPAC R package names).
+- New phases: `scripts/16_identifiability.py` (batch nesting, estimable pairs, QC-only baseline → `results/16_identifiability/`),
+  `scripts/30_export_site_data.py` (every site number, with `site/data/provenance.json`), `scripts/32_summary_figure.py`.
+  `results/31_site_regen/` holds the `--save-scores` reruns of phases 06/12/13 (`make regen-scores`; checked against `results/`).
+- The site is `site/` (static; `make site`; `python -m http.server -d site 8000`). Numbers on it are never typed by hand.
+- `docs/NUMBERS_RECONCILIATION.md` supersedes `results/SUMMARY.md`, `results/ABSTRACT.md` and the workspace findings report
+  wherever they disagree; `docs/BUILD_LOG.md` is the build record.
 
 ## Status
 
@@ -74,5 +84,5 @@ The pre-hackathon run is complete (`make all` + `bodymap gtex transfer`; clean r
 
 **Replication notebooks.**
 - `notebooks/01_replication.ipynb` and `02_transfer.ipynb` are self-contained: the library is pasted in verbatim.
-- `notebooks/_build/build.py` builds them from `notebooks/_build/sections/`. Rebuild after changing `src/motrpac/`.
+- `notebooks/_build/build.py` builds them from `notebooks/_build/sections/`. Rebuild after changing `src/tfp/`.
 Organizer questions raised by the data: `../../docs/findings/QUESTIONS_FOR_ORGANIZERS.md`.
