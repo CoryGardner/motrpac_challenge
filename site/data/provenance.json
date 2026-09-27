@@ -131,10 +131,10 @@
 "document": "docs/NUMBERS_RECONCILIATION.md"
 },
 "multiomic": {
-"generated": "2026-09-27 16:06 UTC",
-"git_hash": "03f3d6a",
-"n_entries": 236,
-"n_tables": 11,
+"generated": "2026-09-27 16:27 UTC",
+"git_hash": "e615c95",
+"n_entries": 244,
+"n_tables": 13,
 "sources": [
 "results_frozen/03_eda/variance_partition_METAB.csv",
 "results_frozen/13_gtex/accuracy_overall.csv",
@@ -143,6 +143,8 @@
 "results_multiomic/01_rii/join_summary.csv",
 "results_multiomic/01_rii/panel_curve_summary.csv",
 "results_multiomic/01_rii/panel_null_k20.csv",
+"results_multiomic/01_rii/pca_scores_ratio.csv",
+"results_multiomic/01_rii/pca_scores_rii.csv",
 "results_multiomic/01_rii/rna_protein_correlation.csv",
 "results_multiomic/01_rii/rna_protein_correlation_summary.csv",
 "results_multiomic/01_rii/rna_protein_panel_genes.csv",
@@ -175,8 +177,8 @@
 ]
 },
 "product": {
-"generated": "2026-09-27 16:06 UTC",
-"git_hash": "03f3d6a",
+"generated": "2026-09-27 16:27 UTC",
+"git_hash": "e615c95",
 "n_entries": 101,
 "n_tables": 5,
 "sources": [
@@ -6019,6 +6021,94 @@
 "tol": 1e-06
 },
 {
+"id": "mo_pca_rii_explained_PC1",
+"value": 0.4501109089859238,
+"file": "results_multiomic/01_rii/variance_partition.csv",
+"where": {
+"PC": "PC1"
+},
+"column": "explained",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_pca_rii_explained_PC2",
+"value": 0.1158653807893784,
+"file": "results_multiomic/01_rii/variance_partition.csv",
+"where": {
+"PC": "PC2"
+},
+"column": "explained",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_pca_rii_r2_tissue_PC1",
+"value": 0.9909865511401912,
+"file": "results_multiomic/01_rii/variance_partition.csv",
+"where": {
+"PC": "PC1"
+},
+"column": "R2_tissue",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_pca_rii_r2_sex_PC1",
+"value": 0.0003923235757951,
+"file": "results_multiomic/01_rii/variance_partition.csv",
+"where": {
+"PC": "PC1"
+},
+"column": "R2_sex",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_pca_ratio_explained_PC1",
+"value": 0.1661484681016004,
+"file": "results_multiomic/01_rii/variance_partition_ratio.csv",
+"where": {
+"PC": "PC1"
+},
+"column": "explained",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_pca_ratio_explained_PC2",
+"value": 0.0579955745824577,
+"file": "results_multiomic/01_rii/variance_partition_ratio.csv",
+"where": {
+"PC": "PC2"
+},
+"column": "explained",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_pca_ratio_r2_tissue_PC1",
+"value": 0.000936019871198,
+"file": "results_multiomic/01_rii/variance_partition_ratio.csv",
+"where": {
+"PC": "PC1"
+},
+"column": "R2_tissue",
+"agg": "value",
+"tol": 1e-06
+},
+{
+"id": "mo_pca_ratio_r2_sex_PC1",
+"value": 0.2498582431655927,
+"file": "results_multiomic/01_rii/variance_partition_ratio.csv",
+"where": {
+"PC": "PC1"
+},
+"column": "R2_sex",
+"agg": "value",
+"tol": 1e-06
+},
+{
 "id": "mo_missingness_outer_acc",
 "value": 1.0,
 "file": "results_multiomic/01_rii/diagnostic_accuracy_summary.csv",
@@ -10342,6 +10432,22 @@
 "json_file": "panel_model.json",
 "json_path": "validation",
 "n_rows": 3
+},
+{
+"id": "mo_pca_scores_rii",
+"file": "results_multiomic/01_rii/pca_scores_rii.csv",
+"json_file": "multiomic.json",
+"json_path": "pca_two_scales.rii",
+"n_rows": 420,
+"matrix": true
+},
+{
+"id": "mo_pca_scores_ratio",
+"file": "results_multiomic/01_rii/pca_scores_ratio.csv",
+"json_file": "multiomic.json",
+"json_path": "pca_two_scales.ratio",
+"n_rows": 416,
+"matrix": true
 },
 {
 "id": "mo_ladder_within",

@@ -102,6 +102,27 @@ def main():
         out["scales"]["rows"].append({"PC": pc, "r2_rii": prov.val(f"mo_r2_rii_{pc}", vp, "R2_tissue", {"PC": pc}), "r2_rii_null95": prov.val(f"mo_r2_rii_null95_{pc}", vp, "R2_tissue_null95", {"PC": pc}),
                                       "r2_ratio": prov.val(f"mo_r2_ratio_{pc}", vpr, "R2_tissue", {"PC": pc}), "r2_complete": prov.val(f"mo_r2_complete_{pc}", vpc, "R2_tissue", {"PC": pc}),
                                       "explained_rii": prov.val(f"mo_explained_rii_{pc}", vp, "explained", {"PC": pc}), "explained_ratio": prov.val(f"mo_explained_ratio_{pc}", vpr, "explained", {"PC": pc})})
+    # per-vial PCA scores of the two matrices (scripts/multiomic/01b_pca_scores.py), gated: the tissue R² of PC1 and PC2
+    # recomputed from the scores must equal the published variance partitions to 4 decimals
+    out["pca_two_scales"] = {}
+    for tag, sc_file, vp_file in (("rii", "pca_scores_rii.csv", vp), ("ratio", "pca_scores_ratio.csv", vpr)):
+        sf = R / "01_rii" / sc_file
+        sd = prov.read(sf)
+        vpd = prov.read(vp_file)
+        for j, pc in enumerate(("PC1", "PC2")):
+            s = sd[pc].to_numpy(dtype=float)
+            cat = sd["tissue"].astype(str).to_numpy()
+            r2 = sum((cat == c).sum() * (s[cat == c].mean() - s.mean()) ** 2 for c in np.unique(cat)) / (np.var(s) * len(s))
+            pub = float(vpd.loc[vpd["PC"] == pc, "R2_tissue"].iloc[0])
+            assert round(r2, 4) == round(pub, 4), f"R² gate: {sc_file} {pc} tissue R² {r2:.6f} vs published {pub:.6f}"
+        out["pca_two_scales"][tag] = {"viallabel": [str(v) for v in sd["viallabel"]], "tissue": list(sd["tissue"]), "sex": list(sd["sex"]), "plex_id": list(sd["plex_id"]),
+                                      "x": [round(float(v), 5) for v in sd["PC1"]], "y": [round(float(v), 5) for v in sd["PC2"]],
+                                      "explained": [prov.val(f"mo_pca_{tag}_explained_PC1", vp_file, "explained", {"PC": "PC1"}), prov.val(f"mo_pca_{tag}_explained_PC2", vp_file, "explained", {"PC": "PC2"})],
+                                      "r2_tissue_pc1": prov.val(f"mo_pca_{tag}_r2_tissue_PC1", vp_file, "R2_tissue", {"PC": "PC1"}),
+                                      "r2_sex_pc1": prov.val(f"mo_pca_{tag}_r2_sex_PC1", vp_file, "R2_sex", {"PC": "PC1"}),
+                                      "n_vials": int(len(sd)), "source": rel(sf)}
+        assert all(abs(float(sd[f"explained_{pc}"].iloc[0]) - out["pca_two_scales"][tag]["explained"][j]) < 1e-9 for j, pc in enumerate(("PC1", "PC2")))
+        prov.tables.append({"id": f"mo_pca_scores_{tag}", "file": rel(sf), "json_file": "multiomic.json", "json_path": f"pca_two_scales.{tag}", "n_rows": int(len(sd)), "matrix": True})
     ds = R / "01_rii" / "diagnostic_accuracy_summary.csv"
     out["scales"]["missingness_outer_acc"] = prov.val("mo_missingness_outer_acc", ds, "mean", {"quantity": "missingness_outer_acc"})
     out["scales"]["means_removed_acc"] = prov.val("mo_means_removed_acc", ds, "mean", {"quantity": "per_tissue_means_removed_acc"})

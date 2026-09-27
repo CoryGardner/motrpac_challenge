@@ -488,3 +488,27 @@ def test_multiomic_page_v9_sections_and_citations():
     assert 'href="multiomic.html"' in home.split('id="sec-tour"')[1]
     methods = (ROOT / "site" / "methods.html").read_text()
     assert 'id="multiomic"' in methods and '"data/multiomic.json"' in (ROOT / "site" / "assets" / "pages" / "methods.js").read_text()
+
+
+@pytest.mark.skipif(not MO.exists(), reason="site/data/multiomic.json absent")
+def test_multiomic_pca_scores_pass_the_r2_gate():
+    """The per-vial PCA scores of both proteomics scales (scripts/multiomic/01b_pca_scores.py) reproduce the published
+    tissue R² of PC1 and PC2 to 4 decimals, and the page's copy equals the CSVs."""
+    m = _load("multiomic.json")["pca_two_scales"]
+    byid = {e["id"]: e["value"] for e in _load("provenance.json")["entries"] if e["id"].startswith("mo_pca_")}
+    for tag, sc, vp in (("rii", "pca_scores_rii.csv", "variance_partition.csv"), ("ratio", "pca_scores_ratio.csv", "variance_partition_ratio.csv")):
+        s = pd.read_csv(ROOT / "results_multiomic" / "01_rii" / sc, dtype={"viallabel": str})
+        v = pd.read_csv(ROOT / "results_multiomic" / "01_rii" / vp)
+        assert list(s.columns) == ["viallabel", "tissue", "sex", "plex_id", "PC1", "PC2", "explained_PC1", "explained_PC2"]
+        for pc in ("PC1", "PC2"):
+            x, cat = s[pc].to_numpy(), s["tissue"].to_numpy()
+            r2 = sum((cat == c).sum() * (x[cat == c].mean() - x.mean()) ** 2 for c in set(cat)) / (x.var() * len(x))
+            assert round(r2, 4) == round(float(v.loc[v["PC"] == pc, "R2_tissue"].iloc[0]), 4), (tag, pc, r2)
+            assert math.isclose(s[f"explained_{pc}"].iloc[0], float(v.loc[v["PC"] == pc, "explained"].iloc[0]), abs_tol=1e-12)
+        d = m[tag]
+        assert d["viallabel"] == list(s["viallabel"]) and d["tissue"] == list(s["tissue"]) and d["n_vials"] == len(s)
+        assert max(abs(a - b) for a, b in zip(d["x"], s["PC1"])) < 1e-5 and max(abs(a - b) for a, b in zip(d["y"], s["PC2"])) < 1e-5
+        assert d["r2_tissue_pc1"] == byid[f"mo_pca_{tag}_r2_tissue_PC1"] and d["r2_sex_pc1"] == byid[f"mo_pca_{tag}_r2_sex_PC1"]
+        assert d["explained"] == [byid[f"mo_pca_{tag}_explained_PC1"], byid[f"mo_pca_{tag}_explained_PC2"]]
+    html = (ROOT / "site" / "multiomic.html").read_text()
+    assert html.index('id="fig-pca-ratio"') < html.index('id="r2-details"') and "Show R² by component" in html

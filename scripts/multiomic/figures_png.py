@@ -28,9 +28,44 @@ def save(fig, name):
     print("wrote", OUT / name)
 
 
+TISSUE_NAMES = {"CORTEX": "cerebral cortex", "HEART": "heart", "KIDNEY": "kidney", "LIVER": "liver", "LUNG": "lung", "SKM-GN": "gastrocnemius", "WAT-SC": "white adipose"}
+
+
+def fig0(M):
+    """The proteomics problem in one picture: per-vial PC1 vs PC2 on both scales, tissue colours (the page's order), 1600 px wide."""
+    P = M["pca_two_scales"]
+    tissues = sorted(set(P["rii"]["tissue"]) | set(P["ratio"]["tissue"]))
+    col = {t: PAL[k % len(PAL)] for k, t in enumerate(tissues)}
+    fig, axes = plt.subplots(1, 2, figsize=(8, 4.1))
+    for ax, tag, title in ((axes[0], "ratio", "As distributed: each sample ÷ a reference\npool of the same tissue"),
+                           (axes[1], "rii", "Rebuilt from the reporter-ion intensities:\neach sample ÷ its own total signal")):
+        d = P[tag]
+        for t in tissues:
+            ii = [i for i, x in enumerate(d["tissue"]) if x == t]
+            ax.scatter([d["x"][i] for i in ii], [d["y"][i] for i in ii], s=9, color=col[t], label=TISSUE_NAMES.get(t, t), linewidths=0)
+        ax.set_xlabel(f"PC1 ({100 * d['explained'][0]:.0f} % of variance)"); ax.set_ylabel(f"PC2 ({100 * d['explained'][1]:.0f} %)")
+        ax.set_title(title, loc="left", color=INK, fontsize=9.5)
+        r2 = d["r2_tissue_pc1"]
+        ax.text(0, -0.25, f"tissue explains R² {r2:.4f} of PC1" if r2 < 0.01 else f"tissue explains R² {r2:.3f} of PC1", transform=ax.transAxes, fontsize=8.5, color=INK2)
+    axes[1].legend(frameon=False, fontsize=7, loc="upper left", bbox_to_anchor=(1.0, 1.0), markerscale=1.6)
+    fig.text(0.01, 0.01, "Source: results_multiomic/01_rii/pca_scores_ratio.csv, pca_scores_rii.csv (scripts/multiomic/01b_pca_scores.py); "
+             f"{P['ratio']['n_vials']} and {P['rii']['n_vials']} vials", fontsize=6.5, color=INK2)
+    fig.tight_layout(rect=(0, 0.05, 1, 1))
+    fig.savefig(OUT / "fig0_pca_two_scales.png", dpi=200, facecolor="white")
+    plt.close(fig)
+    print("wrote", OUT / "fig0_pca_two_scales.png")
+
+
 def main():
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--only", default=None, help="render one figure (fig0)")
+    args = ap.parse_args()
     OUT.mkdir(parents=True, exist_ok=True)
     M = json.loads((ROOT / "site" / "data" / "multiomic.json").read_text())
+    fig0(M)
+    if args.only == "fig0":
+        return
     # 1 same proteins two scales
     S = M["scales"]["rows"]
     fig, ax = plt.subplots(figsize=(7, 3.6))

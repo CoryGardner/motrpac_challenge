@@ -52,8 +52,15 @@
 
   <section class="section" id="scales">
     <h2>1. Same proteins, two scales</h2>
+    <h3 id="pca-h">The proteomics problem in one picture</h3>
+    <div class="controls" id="pca-controls"></div>
+    <div class="grid-2 pca-pair">
+      <div><div id="fig-pca-ratio"></div><p class="small" id="pca-r2-ratio"></p></div>
+      <div><div id="fig-pca-rii"></div><p class="small" id="pca-r2-rii"></p></div>
+    </div>
+    <p id="pca-caption"></p>
     <p id="p-scales"></p>
-    <div id="fig-scales"></div>
+    <details class="fig-notes" id="r2-details"><summary>Show R² by component</summary><div id="fig-scales"></div></details>
   </section>
 
   <section class="section" id="ladder">

@@ -4,6 +4,17 @@ All notable changes to this repository. The format follows [Keep a Changelog](ht
 dates are UTC. Each section is a `hackathon-submission-v<n>` git tag; the version numbers are those of `CITATION.cff`
 and `pyproject.toml`.
 
+## [2.0.1] — 2026-09-27 (tag `hackathon-submission-v10.1`)
+
+### Added
+- Multiomic page, section 1: "The proteomics problem in one picture", two per-vial PCA panels (as distributed vs rebuilt
+  from the reporter-ion intensities) with a colour-by tissue / sex / plex toggle and a shared legend; the R² bars move into
+  "Show R² by component". `scripts/multiomic/01b_pca_scores.py` rebuilds the two matrices of
+  `variance_partition.csv` and `variance_partition_ratio.csv` with the phase-1 code and seed and writes
+  `results_multiomic/01_rii/pca_scores_{rii,ratio}.csv`, gated on the published tissue R² (4 decimals; it matched, as
+  did the sex R² and explained variance). The export re-checks the gate; `mo_pca_*` provenance entries; a new test.
+- Slide `results_multiomic/figures/fig0_pca_two_scales.png` (`figures_png.py --only fig0`).
+
 ## [2.0.0] — 2026-09-27 (tag `hackathon-submission-v10`)
 
 ### Added

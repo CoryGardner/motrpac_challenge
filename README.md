@@ -10,7 +10,7 @@ of processing effects on the consortium's bridging standards, an exercise-specif
 every number carries provenance and whose Explorer scores new samples with the panel in the browser.
 
 [![tests](https://github.com/CoryGardner/motrpac_challenge/actions/workflows/tests.yml/badge.svg)](https://github.com/CoryGardner/motrpac_challenge/actions/workflows/tests.yml)
-**Live site:** https://corygardner.github.io/motrpac_challenge/ · **Release:** tag `hackathon-submission-v10` (version 2.0.0) · **Licence:** MIT
+**Live site:** https://corygardner.github.io/motrpac_challenge/ · **Release:** tag `hackathon-submission-v10.1` (version 2.0.1) · **Licence:** MIT
 
 ## Use it
 
@@ -289,7 +289,7 @@ Known failure modes and limits (details on the site's Limitations page):
 ## Reuse
 
 - **Licence:** MIT for code, site and derived tables (`LICENSE`); the data keep their own terms (table above).
-- **Cite:** `CITATION.cff` (version 2.0.0, tag `hackathon-submission-v10`), the three data papers, and the multiomic sources in the Data section.
+- **Cite:** `CITATION.cff` (version 2.0.1, tag `hackathon-submission-v10.1`), the three data papers, and the multiomic sources in the Data section.
 - **Score your samples:** the Explorer's *Score your own samples* tool takes a CSV of log2 CPM for the 20 panel genes
   (a template is provided) and returns tissue calls and 90 % prediction sets in the browser, with optional recalibration
   on labelled samples; the panel card (`site/data/panel_card.csv`, `.json`) lists the genes with their mean expression per

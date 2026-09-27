@@ -95,7 +95,59 @@ async function main() {
     `Rolling the peptide reporter-ion intensities up to proteins and dividing each channel by its total gives a value comparable across plexes and tissues in the sense “fraction of this sample's quantified protein mass”. On that matrix tissue explains R² ${fmt(pc1.r2_rii)} of PC1 (label-permutation null 95th percentile ${fmt(pc1.r2_rii_null95)}); on the distributed ratios, ${fmt(pc1.r2_ratio, 4)}. `,
     `The result is the same on the ${S.n_proteins_complete} proteins with no missing value (${fmt(S.rows.find((r) => r.PC === "PC1").r2_complete)}), so it is not an imputation artefact; a 20-protein panel reaches balanced accuracy ${fmt(S.panel_k20_bal_acc)} under animal-grouped folds (permutation null ${fmt(S.panel_k20_null95)}), and ${S.stability_ge_0_8} of its members are selected in ≥ 80 % of animal bootstraps.`,
   );
-  await figure(document.getElementById("fig-scales"), {
+  // ---- the proteomics problem in one picture: per-vial PCA on both scales --------------------------------------------
+  const PS = M.pca_two_scales;
+  const pcaState = { by: "tissue" };
+  const tissues = [...new Set([...PS.rii.tissue, ...PS.ratio.tissue])].sort();
+  const pcaTraces = (d) => {
+    const p = palette(), t = tokens();
+    const tColor = Object.fromEntries(tissues.map((tt, k) => [tt, p[k % p.length]]));
+    const idx = (pred) => d.tissue.map((_, i) => i).filter(pred);
+    const hov = (ii) => ii.map((i) => `vial ${d.viallabel[i]}<br>${TISSUE_NAMES[d.tissue[i]] || d.tissue[i]} · ${d.sex[i]} · plex ${d.plex_id[i]}`);
+    const mk = (ii, name, color, extra = {}) => ({ type: "scatter", mode: "markers", name, x: ii.map((i) => d.x[i]), y: ii.map((i) => d.y[i]), customdata: hov(ii),
+      hovertemplate: "%{customdata}<extra></extra>", marker: { size: 6, color, line: { width: 0 } }, ...extra });
+    if (pcaState.by === "sex") return ["female", "male"].map((sx, k) => mk(idx((i) => d.sex[i] === sx), sx, k ? p[0] : p[1]));
+    if (pcaState.by === "plex") {
+      const plexes = [...new Set(d.plex_id)].sort();
+      return plexes.map((px) => {
+        const tt = px.split(":")[0], n = plexes.filter((q) => q.startsWith(tt + ":"));
+        const shade = (n.indexOf(px) + 3) / (n.length + 2);
+        return mk(idx((i) => d.plex_id[i] === px), `${TISSUE_NAMES[tt] || tt} plexes`, hexAlpha(tColor[tt], shade), { legendgroup: tt, showlegend: n.indexOf(px) === 0 });
+      });
+    }
+    return tissues.map((tt) => mk(idx((i) => d.tissue[i] === tt), TISSUE_NAMES[tt] || tt, tColor[tt]));
+  };
+  const pcaLayout = (d) => ({ xaxis: { title: { text: `PC1 (${pct(d.explained[0])} of variance)` }, zeroline: false }, yaxis: { title: { text: `PC2 (${pct(d.explained[1])})` }, zeroline: false },
+                             showlegend: false, margin: { t: 10, b: 40 } });
+  const pcaLegend = () => {
+    const p = palette();
+    const sw = (color, label) => el("span", { class: "legend-item" }, [el("span", { class: "swatch", style: `background:${color}` }), label]);
+    const items = pcaState.by === "sex" ? [sw(p[1], "female"), sw(p[0], "male")]
+      : tissues.map((tt, k) => sw(p[k % p.length], TISSUE_NAMES[tt] || tt));
+    const note = pcaState.by === "plex" ? el("span", { class: "small" }, "each tissue's plexes in lighter to darker shades of its colour") : null;
+    document.getElementById("pca-legend").replaceChildren(...items, ...(note ? [note] : []));
+  };
+  const pcaSpec = (d, title, file) => ({
+    title, subtitle: `${d.n_vials} vials, one point each; PC1 and PC2 of the same PCA code as the R² bars below.`,
+    build: () => ({ traces: pcaTraces(d), layout: pcaLayout(d),
+                    table: { columns: ["viallabel", "tissue", "sex", "plex_id", "PC1", "PC2"], rows: d.viallabel.map((v, i) => ({ viallabel: v, tissue: d.tissue[i], sex: d.sex[i], plex_id: d.plex_id[i], PC1: d.x[i], PC2: d.y[i] })) } }),
+    source: `${file} (scripts/multiomic/01b_pca_scores.py: the matrix of results_multiomic/01_rii/${file.includes("ratio") ? "variance_partition_ratio.csv" : "variance_partition.csv"} rebuilt with the phase-1 loading code and pca_scores(), same seed; the tissue R² recomputed from these scores equals the published value to 4 decimals)`,
+    notShow: "components beyond PC2; how the scores were scaled (median-imputed, top-variance proteins, standardised, as in phase 03).",
+  });
+  const figRatio = await figure(document.getElementById("fig-pca-ratio"), pcaSpec(PS.ratio, "As distributed: each sample ÷ a reference pool of the same tissue", PS.ratio.source));
+  const figRii = await figure(document.getElementById("fig-pca-rii"), pcaSpec(PS.rii, "Rebuilt from the reporter-ion intensities: each sample ÷ its own total signal", PS.rii.source));
+  const rerenderPca = async () => { for (const [f, d] of [[figRatio, PS.ratio], [figRii, PS.rii]]) { const tr = pcaTraces(d); f.traces = tr; await window.Plotly.react(f.chart, tr, { ...template(), ...pcaLayout(d) }, CONFIG); } };
+  document.getElementById("pca-controls").replaceChildren(control("Colour by", segmented([["tissue", "tissue"], ["sex", "sex"], ["plex", "plex"]], pcaState.by, (v) => { pcaState.by = v; pcaLegend(); rerenderPca(); }, "colour by")),
+    el("div", { class: "pca-legend", id: "pca-legend", "aria-label": "legend" }));
+  pcaLegend();
+  document.getElementById("pca-r2-ratio").textContent = `Tissue explains R² ${fmt(PS.ratio.r2_tissue_pc1, 4)} of PC1.`;
+  document.getElementById("pca-r2-rii").textContent = `Tissue explains R² ${fmt(PS.rii.r2_tissue_pc1, 3)} of PC1.`;
+  document.getElementById("pca-caption").replaceChildren(
+    `On the distributed scale the main axis follows sex, not tissue (sex R² ${fmt(PS.ratio.r2_sex_pc1, 2)} of PC1, tissue ${fmt(PS.ratio.r2_tissue_pc1, 4)}): the ratios keep within-tissue biology, as designed. `,
+    `On the reporter-ion scale plex colours look like tissue colours because each plex holds one tissue; the external test below is what separates them. `,
+    el("span", { class: "small" }, `(${PS.rii.n_vials} vials on the reporter-ion scale, ${PS.ratio.n_vials} in the distributed ratio tables.)`));
+
+  const renderScales = () => figure(document.getElementById("fig-scales"), {
     title: "The same proteins carry a tissue axis on the reporter-ion scale and none on the ratio scale",
     subtitle: "Tissue R² of the first three principal components: distributed ratios to per-tissue reference pools vs reporter-ion log2 ppm (all proteins quantified in every tissue, and the complete-protein subset); dashes: permutation null 95th percentile.",
     build: () => {
@@ -111,6 +163,9 @@ async function main() {
     notShow: "whether the axis is tissue or plex: one plex holds one tissue, so R2_plex_id equals R2_tissue here (variance_partition.csv), exactly the audit's confound; an external design settles it (section 5).",
     height: "short",
   });
+  const r2d = document.getElementById("r2-details");
+  let scalesDone = false;
+  r2d.addEventListener("toggle", () => { if (r2d.open && !scalesDone) { scalesDone = true; renderScales(); } });
 
   // ---- 2. ladder protein vs RNA ---------------------------------------------------------------------
   const lad = { model: "k20" };

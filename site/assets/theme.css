@@ -307,3 +307,8 @@ table.results .badge { padding: 0.1rem 0.5rem; font-size: 0.8rem; font-weight: 5
 .drawer-badges { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.4rem 0; }
 #drawer { border-top: 2px solid var(--c1); }
 #drawer:focus { outline: none; }
+
+/* multiomic: shared legend of the two PCA panels */
+.pca-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem 0.9rem; font-size: 0.82rem; color: var(--ink-2); align-self: end; }
+.pca-legend .legend-item { display: inline-flex; align-items: center; gap: 0.35rem; }
+.pca-legend .swatch { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
