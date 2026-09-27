@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Does it transfer? — Tissue Fingerprints</title>
+<meta name="description" content="The rat tissue fingerprint under shift: held-out sex, another laboratory (rat BodyMap), another species (GTEx), juvenile and old animals, and what recalibration can and cannot repair.">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/theme.css">
+<script>
+  (function () { try { var p = new URLSearchParams(location.search).get("theme") || localStorage.getItem("tfp-theme"); if (p === "dark" || p === "light") document.documentElement.setAttribute("data-theme", p); } catch (e) {} })();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/plotly.js-cartesian-dist-min@2.35.2/plotly-cartesian.min.js" crossorigin="anonymous"
+        onerror="this.onerror=null;var s=document.createElement('script');s.src='vendor/plotly-cartesian-2.35.2.min.js';document.head.appendChild(s);"></script>
+<script type="module" src="assets/pages/transfer.js"></script>
+</head>
+<body>
+<header class="site-header"></header>
+<main id="main" class="wrap">
+  <h1>Does it transfer?</h1>
+  <p class="lede" id="lede"></p>
+
+  <section class="section" id="ladder">
+    <h2>The transfer ladder</h2>
+    <p>The same fingerprint, fit on MoTrPAC, applied one shift further away each rung. Accuracy is the fraction of samples whose top call is the right tissue (super-class scoring for muscle and brain on the external targets). Coverage is what the α = 0.10 conformal set, calibrated on held-out MoTrPAC animals, actually delivers.</p>
+    <div id="fig-ladder"></div>
+  </section>
+
+  <section class="section" id="empty-sets">
+    <h2>How coverage is lost</h2>
+    <p id="p-empty"></p>
+    <div id="fig-empty"></div>
+  </section>
+
+  <section class="section" id="recalibration">
+    <h2>What recalibration buys, and what it costs</h2>
+    <p id="p-recal"></p>
+    <div id="callout-recal"></div>
+    <div id="fig-recal"></div>
+  </section>
+
+  <section class="section" id="age">
+    <h2>Age: the panel is an adult fingerprint</h2>
+    <p id="p-age"></p>
+    <div id="fig-age"></div>
+    <div class="grid-2">
+      <div id="fig-dev-testes"></div>
+      <div id="fig-dev-spleen"></div>
+    </div>
+  </section>
+
+  <section class="section" id="gtex">
+    <h2>Human GTEx, tissue by tissue</h2>
+    <p id="p-gtex"></p>
+    <div id="fig-gtex-acc"></div>
+    <div id="fig-gtex-conf"></div>
+  </section>
+
+  <section class="section" id="representations">
+    <h2>Representation: z-scores transfer, ranks and pairs do not</h2>
+    <p id="p-rep"></p>
+    <div id="fig-rep"></div>
+    <div id="fig-cpm"></div>
+  </section>
+
+  <section class="section" id="survival">
+    <h2>Panel survival</h2>
+    <p id="p-survival"></p>
+    <div id="tbl-survival"></div>
+    <div id="tbl-genecheck"></div>
+  </section>
+</main>
+<footer class="site-footer"></footer>
+</body>
+</html>
