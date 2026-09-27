@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Limitations — Tissue Fingerprints</title>
+<meta name="description" content="Honest and specific: the pre-split gene filter, assumed BodyMap animal ids, super-class scoring, sex confounded with cohort, one data release, small n, the quantile-fix history, the untuned QC baseline.">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/theme.css">
+<script>
+  (function () { try { var p = new URLSearchParams(location.search).get("theme") || localStorage.getItem("tfp-theme"); if (p === "dark" || p === "light") document.documentElement.setAttribute("data-theme", p); } catch (e) {} })();
+</script>
+<script type="module" src="assets/pages/limitations.js"></script>
+</head>
+<body>
+<header class="site-header"></header>
+<main id="main" class="wrap">
+  <h1>Limitations</h1>
+  <p class="lede">What the numbers do not establish, and what was done less well than it could have been. Specific, so that each item can be checked or fixed.</p>
+
+  <section class="section prose">
+    <h2>Evaluation</h2>
+    <ul>
+      <li><b>The transcript gene filter runs before the split.</b> Genes are kept when they have ≥ 10 counts in ≥ 20 % of the samples of at least one tissue, computed on all 899 vials. It uses no labels beyond tissue membership and no fitted statistic, but it is a data-dependent step outside the fold. Its effect on the accuracies is unmeasured; it is the one known deviation from the frozen rules (recorded in the findings report, §14, item 13(b)).</li>
+      <li><b>Pooled-vial calibration is only approximately valid.</b> The 18 vials of one animal are not exchangeable with vials of other animals, so the pooled conformal rows (n ≈ 396) overstate the effective calibration size; the one-vial-per-animal rows (n = 22) are the honest version and are the ones reported as the in-distribution guarantee. With 22 points coverage moves in steps of 1/23.</li>
+      <li><b>Small n.</b> 50 animals in transcriptomics (10 test animals per fold), 8 adult BodyMap animals, 3 or 5 target individuals in recalibration. Every accuracy carries a fold sd for that reason, and the certificate is reported as a distribution over splits, not a number.</li>
+      <li><b>The QC-only baseline is untuned</b> (multinomial logistic regression, C = 1). It is a floor on what QC numbers can do, not a ceiling; the argument it supports only needs the floor.</li>
+    </ul>
+  </section>
+
+  <section class="section prose">
+    <h2>Transfer</h2>
+    <ul>
+      <li><b>BodyMap animal ids are assumed.</b> GEO carries no animal identifier; the animal is taken to be the replicate index within organ × age × sex, and every BodyMap split is grouped on that assumption. If replicates were re-indexed across organs, BodyMap recalibration would have leaked animals across calibration and test.</li>
+      <li><b>Super-class scoring.</b> BodyMap “Muscle” counts as correct for either skeletal muscle and “Brain” for any of the three brain regions; GTEx “Muscle – Skeletal” likewise. Artery – Aorta → vena cava is an imperfect mapping, and thymus and uterus have no MoTrPAC tissue at all (they are scored for abstention only).</li>
+      <li><b>Seven panel markers have no BodyMap organ</b> (ovary, adipose, blood, brown fat, small intestine, colon, vena cava): their only external check is the human transfer, where orthology and species confound it.</li>
+      <li><b>GTEx is scored on 1:1 orthologs only</b> (14,569 of 21,193 genes), and the human panel is re-selected in that space; the recalibration draws include infinite thresholds (45 % of the three-donor draws for the 20-gene panel), so the recalibrated GTEx coverage must be read with its set size.</li>
+    </ul>
+  </section>
+
+  <section class="section prose">
+    <h2>Design and data</h2>
+    <ul>
+      <li><b>Sex is confounded with arrival cohort</b> in every group (males and females arrived about a month apart), and only the 8-week animals share arrival cohort and sacrifice dates with the controls; 1-, 2- and 4-week contrasts also compare seasons. Ovary and testes are single-sex tissues, so the held-out-sex shift is also a label shift.</li>
+      <li><b>One data release.</b> Everything here is portal release c1.0 (rn6, the R package MotrpacRatTraining6moData 2.0.0). The rn7 reprocessing (c2.0) shares 21,651 of 32,883 gene ids and changes the training-regulated gene sets; the tissue fingerprint was not rerun on it.</li>
+      <li><b>Consortium outliers remain in the matrices</b>, including the female 1- and 2-week vena cava vials flagged as brown-fat contaminated; they account for most vena cava → brown fat errors.</li>
+      <li><b>Proteomics is within-tissue only</b> (ratios to per-tissue reference pools; missingness identifies the tissue), so no cross-tissue protein fingerprint is claimed.</li>
+    </ul>
+  </section>
+
+  <section class="section prose">
+    <h2>History of the numbers</h2>
+    <ul>
+      <li><b>The conformal quantile was fixed on 2026-09-25</b> (textbook rank rule, +∞ when the rank exceeds n). Phases 06, 08, 12, 13 and 14 were rerun; <span id="n-moved"></span> of the exported numbers moved. Three documents in the workspace still carry pre-fix numbers and now open with a banner: <code>results/SUMMARY.md</code>, <code>results/ABSTRACT.md</code> and <code>docs/findings/FINDINGS_REPORT.md</code>. <code>docs/NUMBERS_RECONCILIATION.md</code> lists every headline number with its pre- and post-fix value.</li>
+      <li><b>Two parallel analyses are not in this copy</b> (training transfer, phase 17; identifiability audit and exercise decomposition, phases 21–26). Their pages render as pending rather than as results.</li>
+    </ul>
+  </section>
+</main>
+<footer class="site-footer"></footer>
+</body>
+</html>

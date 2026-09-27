@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About — Tissue Fingerprints</title>
+<meta name="description" content="Team, the challenge statement, data sources and licences, competition compliance, how to reproduce, how to cite.">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/theme.css">
+<script>
+  (function () { try { var p = new URLSearchParams(location.search).get("theme") || localStorage.getItem("tfp-theme"); if (p === "dark" || p === "light") document.documentElement.setAttribute("data-theme", p); } catch (e) {} })();
+</script>
+<script type="module" src="assets/pages/about.js"></script>
+</head>
+<body>
+<header class="site-header"></header>
+<main id="main" class="wrap">
+  <h1>About</h1>
+
+  <section class="section prose" id="team">
+    <h2>Team</h2>
+    <div class="callout note">
+      <div class="kind">Placeholder: edit before submission</div>
+      <p><b>Team name:</b> [team name] · <b>Members:</b> [name, affiliation]; [name, affiliation]; [name, affiliation]; [name, affiliation] · <b>Contact:</b> [email]</p>
+      <p class="small">Edit this block in <code>site/about.html</code>; nothing else on the site depends on it.</p>
+    </div>
+  </section>
+
+  <section class="section prose" id="challenge">
+    <h2>The challenge</h2>
+    <blockquote>
+      <p><b>Molecular Tissue Fingerprints — Can molecular signatures identify a tissue reliably?</b><br>
+      Use one or more omics layers to predict tissue identity and determine whether a compact, interpretable signature is sufficient. Data: individual-sample rat endurance-training data across a selected set of tissues, with GTEx or another tissue resource for external context.</p>
+    </blockquote>
+    <p>Stanford Bioinformatics Center / MoTrPAC Hackathon, 25–27 September 2026. Rules: at least one MoTrPAC component, at least one CFDE component, an open-source repository as the deliverable.</p>
+  </section>
+
+  <section class="section prose" id="data">
+    <h2>Data sources and licences</h2>
+    <ul>
+      <li><b>MoTrPAC</b> 6-month rat endurance-training study, portal release c1.0 (rn6), as the R package <a href="https://motrpac.github.io/MotrpacRatTraining6moData/">MotrpacRatTraining6moData 2.0.0</a>, exported to CSV once with <code>R/export_motrpac.R</code>. MoTrPAC data are released under the consortium's data-use terms; the study is MoTrPAC Study Group, <i>Nature</i> 629:174–183 (2024).</li>
+      <li><b>Rat BodyMap</b>, <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE53960">GEO GSE53960</a> (Yu et al., 2014), via the Bioconductor package <code>bodymapRat</code>: 316 samples, 11 organs, 4 ages, technical runs summed. Public domain data (GEO).</li>
+      <li><b>GTEx v8</b> open-access gene expression (release 2017-06-05, RNASeQCv1.1.9 TPM and read counts) and sample attributes; ≤ 150 donors per tissue. GTEx open-access data are free to use under the <a href="https://gtexportal.org/home/license">GTEx data-use policy</a>.</li>
+      <li><b>Orthology</b>: the rat-to-human table shipped with the MoTrPAC package (1:1 pairs only used here).</li>
+    </ul>
+    <p>No data file is in the repository: <code>data/raw/</code> (1.9 GB) is the R-package export and <code>data/external/</code> (5.8 GB) the GTEx and BodyMap downloads; both are recreated by the scripts in <code>R/</code> and <code>scripts/11_gtex_prepare.py</code>, <code>scripts/12_bodymap_prepare.py</code>. The portal download of the full study (~128 GB) is not needed for anything on this site except the consortium QC table used by phase 16, which the script falls back from to the package metadata.</p>
+  </section>
+
+  <section class="section prose" id="compliance">
+    <h2>Competition compliance</h2>
+    <ul>
+      <li><b>MoTrPAC component:</b> the dataset itself: 899 transcriptome vials of 50 rats in 19 tissues, plus the proteomics, metabolomics, immunoassay, ATAC and methylation metadata used for the identifiability audit.</li>
+      <li><b>CFDE components:</b> <a href="https://gtexportal.org/">GTEx</a> (the human transfer and its 2,485 samples), a CFDE Data Coordinating Center; and the <a href="https://www.metabolomicsworkbench.org/">Metabolomics Workbench</a>, a CFDE DCC that holds the MoTrPAC rat metabolomics as project PR001020, the metabolomics layer whose batch structure is discussed on the Identifiability page.</li>
+      <li><b>Open source:</b> all code and the site are MIT-licensed; the data are not redistributed.</li>
+    </ul>
+    <p>Details: <code>docs/COMPETITION_COMPLIANCE.md</code>.</p>
+  </section>
+
+  <section class="section prose" id="reproduce">
+    <h2>How to reproduce</h2>
+    <pre>conda activate motrpac-py            # environment specs in ../../docs/setup/
+make test                            # leakage, I/O, conformal and site tests
+make all bodymap gtex                # the analysis phases (about 1 h on 20 cores)
+make identifiability                 # phase 16: batch nesting and the QC-only baseline
+make site                            # regenerate results/31_site_regen, site/data and run the site tests
+python -m http.server -d site 8000   # then open http://localhost:8000</pre>
+    <p>Every page's figures name the <code>results/</code> file they come from; <code>site/data/provenance.json</code> records file, row and column for every headline number.</p>
+  </section>
+
+  <section class="section prose" id="cite">
+    <h2>How to cite</h2>
+    <p>See <code>CITATION.cff</code> in the repository. Please also cite the data: MoTrPAC Study Group (2024) <i>Nature</i> 629:174–183; Yu et al. (2014) <i>Nature Communications</i> 5:3230 (rat BodyMap); the GTEx Consortium (2020) <i>Science</i> 369:1318–1330.</p>
+  </section>
+
+  <section class="section prose" id="licence">
+    <h2>Licence</h2>
+    <p>Code and site: MIT. Plotly.js (MIT) is loaded from a CDN with a vendored copy for offline use. Data licences as listed above.</p>
+    <dl class="kv" id="build-info"></dl>
+  </section>
+</main>
+<footer class="site-footer"></footer>
+</body>
+</html>
