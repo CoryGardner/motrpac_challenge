@@ -1,0 +1,27 @@
+# Competition compliance
+
+Stanford Bioinformatics Center / MoTrPAC Hackathon, 25–27 September 2026. Track: **Molecular Tissue
+Fingerprints — Can molecular signatures identify a tissue reliably?**
+
+| Rule | How this submission meets it | Where to check |
+|---|---|---|
+| At least one MoTrPAC component | The dataset: MoTrPAC 6-month rat endurance training, portal release c1.0 (= `MotrpacRatTraining6moData` 2.0.0): 899 transcriptome vials of 50 animals in 19 tissues for the fingerprint; proteomics, phosphoproteomics, acetyl- and ubiquitylome, metabolomics, immunoassay, ATAC and RRBS metadata for the identifiability audit. | `docs/DATA_GUIDE.md`, `results/02_inventory/`, `scripts/16_identifiability.py` |
+| At least one CFDE component | (1) **GTEx** (a CFDE Data Coordinating Center): GTEx v8 open-access expression, 2,485 samples, 862 donors, 17 tissues, used for the cross-species transfer (`scripts/11_gtex_prepare.py`, `scripts/13_gtex_transfer.py`, `results/13_gtex/`). (2) **Metabolomics Workbench** (a CFDE DCC): holds the MoTrPAC rat metabolomics as project PR001020; the metabolomics layer is part of the fusion and identifiability results (`results/07_fusion/`, `results/16_identifiability/layers.json`). | `site/about.html`, `site/transfer.html` |
+| Open-source repository | This repository, MIT (`LICENSE`); the site is static HTML/JS in `site/` and deploys unchanged to GitHub Pages (`.github/workflows/pages.yml`). Data are not redistributed; fetch scripts are. | `README.md` |
+| Data used as licensed | MoTrPAC: consortium data-use terms (public release). GEO GSE53960: public domain. GTEx open-access: GTEx data-use policy. No restricted data are committed. | `site/about.html` |
+| Judging criteria | Scientific impact: the three-part answer (accuracy, guarantee, identifiability). Technical quality: animal-grouped splits, in-fold pipelines, tuned baselines, conformal sets with the textbook quantile, provenance for every number, tests. Presentation: the site, the explorer, the five-minute tour, `figures/summary_figure.png`. | `docs/EVALUATION_RULES.md`, `tests/`, `site/` |
+
+## What the site guarantees about its numbers
+
+- Every number shown comes from `results/` through `scripts/30_export_site_data.py`; `site/data/provenance.json`
+  records the file, row selector, column and aggregation of every headline number and the source of every table.
+- `tests/test_site_data.py` checks those entries against the results files; `tests/test_site_conformal.js` checks
+  the browser's conformal port against Python-computed sets.
+- Numbers that could not be sourced in this copy render as "pending" with the reason (the bridge-sample
+  measurement; the parallel phases 17 and 21–26).
+- `docs/NUMBERS_RECONCILIATION.md` lists every headline number with its pre-fix value where the 2026-09-25
+  conformal-quantile fix moved it.
+
+## Team
+
+See `site/about.html` (placeholder block) and `CITATION.cff`.

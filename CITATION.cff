@@ -1,0 +1,49 @@
+cff-version: 1.2.0
+message: "If you use this code or site, please cite it as below, and cite the data sources listed in the README."
+title: "Molecular Tissue Fingerprints: a 20-gene panel, its conformal guarantee, and what a within-study fingerprint can identify"
+type: software
+version: "1.0.0"
+date-released: "2026-09-27"
+license: MIT
+authors:
+  - name: "[team name — edit CITATION.cff and site/about.html]"
+keywords:
+  - MoTrPAC
+  - tissue classification
+  - conformal prediction
+  - batch effects
+  - GTEx
+  - rat BodyMap
+abstract: >-
+  A leakage-safe evaluation of compact tissue fingerprints in the MoTrPAC 6-month rat endurance-training
+  transcriptomes (19 tissues, 899 vials, 50 animals), with split-conformal prediction sets, shift tests
+  (held-out sex, another laboratory, another species) and an identifiability audit of the processing batches.
+  Stanford Bioinformatics Center / MoTrPAC Hackathon, September 2026.
+references:
+  - type: article
+    title: "Temporal dynamics of the multi-omic response to endurance exercise training"
+    authors:
+      - name: "MoTrPAC Study Group"
+    journal: Nature
+    volume: 629
+    start: 174
+    end: 183
+    year: 2024
+  - type: article
+    title: "A rat RNA-Seq transcriptomic BodyMap across 11 organs and 4 developmental stages"
+    authors:
+      - family-names: Yu
+        given-names: Ying
+    journal: Nature Communications
+    volume: 5
+    start: 3230
+    year: 2014
+  - type: article
+    title: "The GTEx Consortium atlas of genetic regulatory effects across human tissues"
+    authors:
+      - name: "GTEx Consortium"
+    journal: Science
+    volume: 369
+    start: 1318
+    end: 1330
+    year: 2020

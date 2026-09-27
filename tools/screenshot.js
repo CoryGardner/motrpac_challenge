@@ -27,7 +27,12 @@ for (const page of pages) {
       if (args["block-cdn"]) await ctx.route(/cdn\.jsdelivr\.net|cdnjs\.cloudflare\.com/, (route) => route.abort());
       const p = await ctx.newPage();
       const errors = [];
-      p.on("console", (m) => { if (m.type() === "error") errors.push(m.text()); });
+      p.on("console", (m) => {
+        if (m.type() !== "error") return;
+        // in offline mode the blocked CDN request is the expected failure that triggers the vendored fallback
+        if (args["block-cdn"] && /Failed to load resource: net::ERR_FAILED/.test(m.text())) return;
+        errors.push(m.text());
+      });
       p.on("pageerror", (e) => errors.push("pageerror: " + e.message));
       p.on("requestfailed", (r) => { if (!args["block-cdn"] || !/jsdelivr|cdnjs/.test(r.url())) errors.push("requestfailed: " + r.url()); });
       const t0 = Date.now();

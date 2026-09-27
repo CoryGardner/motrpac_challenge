@@ -3,7 +3,7 @@
 Times are local (Spark, UTC-5 host clock as reported by `date`). Every entry: done / next / blockers.
 
 ## 2026-09-26 17:30–18:20 — orientation and plan
-**Done.** Read CLAUDE.md, EVALUATION_RULES, DATA_GUIDE, all of `src/motrpac`, scripts 04/05/06/12/13, the
+**Done.** Read CLAUDE.md, EVALUATION_RULES, DATA_GUIDE, all of `src/tfp`, scripts 04/05/06/12/13, the
 result tables of phases 02–15, `QUANTILE_FIX_CHANGES.md`, `expected_values.csv` (published = pre-fix,
 reference = post-fix). Inventoried `results/`: phases 02–09, 12–14 (+14_cpm), 15_time_course present;
 16–26 absent; no pre-registration file anywhere in the workspace. Confirmed the toolchain: motrpac-py
@@ -16,3 +16,27 @@ brief) and the plan under `docs/superpowers/`.
 in the background), Task 4 (export script + provenance test).
 **Blockers.** None. Note: the in-distribution coverage headline is 0.908 (pooled) / 0.916 (one vial per
 animal) post-fix, not the 0.96 in the brief; the site will use the post-fix values.
+
+## 2026-09-26 18:20–19:20 — Phase A: recomputes and regenerations
+**Done.** `tfp.batch` + `scripts/16_identifiability.py` (results/16_identifiability/): RNA-seq 1 of 171 tissue pairs
+estimable (OVARY|TESTES); METHYL/ATAC 0 of 28; TMT layers 0 (plex = tissue × label); immunoassay plates hold 2–4 tissues
+(16 of 136 pairs). QC-only baseline reproduced the notebook exactly (0.8732 / 0.9488 / 0.9755). `--save-scores` added
+to phases 06, 12, 13 (+ `transfer.save_transfer_scores`, per-draw recalibration thresholds); regeneration runs under
+results/31_site_regen/ reproduce the published tables cell-for-cell (7 tests). Export script `scripts/30_export_site_data.py`
+written; JS conformal port + fixture test written.
+**Next.** Run the export, check anchors, reconciliation doc + banners (Task 5), then the design system (Task 6).
+**Blockers.** None.
+
+## 2026-09-26 19:20–2026-09-27 00:10 — Phase B and C: design system and all nine pages
+**Done.** Export run: 235 provenance entries, 84 copied tables, all 55 sanity anchors reconcile (the spec's
+"heart → skeletal muscle 0.907" is the SKM-GN + SKM-VL fraction, exported as such); `docs/NUMBERS_RECONCILIATION.md`
+(102 of 182 comparable numbers moved with the fix) and banners on the three stale documents. Design system
+(theme.css, charts.js template, site.js components, vendored Plotly 2.35.2), the JS conformal port (2,713
+assertions, 540 infinite-threshold cases), and pages: Home, Explore (tissue card with client-side sets incl.
+BodyMap thymus/uterus and recalibrated thresholds, gene explorer, panel builder, calculator), Transfer,
+Fingerprint, Identifiability, Beyond, Methods, Limitations, About. Render pass: 36 renders (9 pages × 2 sizes ×
+2 themes), zero console errors, no horizontal overflow. Fixed along the way: a protein-id symbol mapping in the
+gene export (Pgk2 was NP_001012130.1), select/caption overflow on phones, the duplicate symIdx in transfer.js.
+**Next.** Task 13 (link check, offline mode, sizes, load time, a11y), Task 14 (rename src/motrpac → src/tfp,
+README, LICENSE, CITATION, compliance doc, workflows, Makefile targets, abstract, summary figure), final review.
+**Blockers.** None. Optional 6b (bridge variance) still open.

@@ -19,3 +19,8 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+Data are not part of this repository and keep their own terms: MoTrPAC (consortium data-use terms for the
+public release c1.0 / MotrpacRatTraining6moData 2.0.0), rat BodyMap GEO GSE53960 (public domain), GTEx v8
+open-access expression (GTEx data-use policy). Plotly.js (site/vendor/) is MIT-licensed by Plotly, Inc.
