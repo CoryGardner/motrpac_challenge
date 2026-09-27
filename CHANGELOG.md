@@ -4,6 +4,15 @@ All notable changes to this repository. The format follows [Keep a Changelog](ht
 dates are UTC. Each section is a `hackathon-submission-v<n>` git tag; the version numbers are those of `CITATION.cff`
 and `pyproject.toml`.
 
+## [2.1.1] — 2026-09-27 (tag `hackathon-submission-v10.3.1`)
+
+### Added
+- Team roles, in the team's own wording: a "Team" section in the README (after Track outputs, with the AI-use
+  sentence), the list on the About page (#team, before "Use of AI"), and in `docs/COMPETITION_COMPLIANCE.md` with the
+  collaboration sentence (parallel workstreams against rules frozen on day one; the multi-omic follow-up pre-registered).
+- GitHub Pages on the team repository: the publish workflow now deploys from both repositories (the guard that limited
+  it to the public mirror is removed); the README lists the team site (organization members) beside the public one.
+
 ## [2.1.0] — 2026-09-27 (tag `hackathon-submission-v10.3`)
 
 ### Changed
@@ -375,6 +384,7 @@ through `bodymapRat` (2026-09-17); the GTEx v8 downloads (TPM and sample attribu
 were rerun — its effect on every headline number is in `docs/NUMBERS_RECONCILIATION.md`. `results/` and `data/`
 are not versioned; the results are reproducible with `make all`, `make external` and `make identifiability`.
 
+[2.1.1]: https://github.com/CoryGardner/motrpac_challenge/compare/hackathon-submission-v10.3...hackathon-submission-v10.3.1
 [2.1.0]: https://github.com/CoryGardner/motrpac_challenge/compare/hackathon-submission-v10.2.2...hackathon-submission-v10.3
 [2.0.4]: https://github.com/CoryGardner/motrpac_challenge/compare/hackathon-submission-v10.2.1...hackathon-submission-v10.2.2
 [2.0.3]: https://github.com/CoryGardner/motrpac_challenge/compare/hackathon-submission-v10.2...hackathon-submission-v10.2.1
