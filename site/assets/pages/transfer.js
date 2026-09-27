@@ -38,7 +38,7 @@ async function main() {
   const e20 = rowsFor("k20");
   document.getElementById("p-empty").replaceChildren(
     "A conformal set can miss in two ways, non-empty and wrong or empty; across every shift the loss is almost entirely empty sets ",
-    `(20-gene panel, source calibration: ${e20.map(([l, r]) => `${l.toLowerCase()} ${fmt(r.empty, 2)}`).join(", ")} of samples receive no tissue) while wrong non-empty sets stay rare. `,
+    `(20-gene panel, source calibration: ${e20.map(([l, r]) => `${l.replace(/^./, (c) => c.toLowerCase())} ${fmt(r.empty, 2)}`).join(", ")} of samples receive no tissue) while wrong non-empty sets stay rare. `,
     "That is how a calibrated model should behave under shift: “I do not know” rather than the wrong tissue with confidence.",
   );
   const emptyCtl = el("div", { class: "controls" }, [control("Model", segmented(MODELS.map((m) => [m, MODEL_LABEL[m]]), emptyState.model, (v) => { emptyState.model = v; emptyFig.rerender(); }, "model"))]);
@@ -97,12 +97,13 @@ async function main() {
       const clusterNotes = [
         { x: Math.max(...rb.map((r) => r.set_size_recalibrated)) + 0.55, xanchor: "left", y: mean(rb.map((r) => r.coverage_recalibrated)), yanchor: "middle", align: "left", text: `BodyMap, 3 or 5 animals:<br>${fmt(Math.min(...rb.map((r) => r.set_size_recalibrated)), 2)}–${fmt(Math.max(...rb.map((r) => r.set_size_recalibrated)), 2)} tissues per set` },
         { x: mean(g3.map((r) => r.set_size_recalibrated)), y: Math.max(...g3.map((r) => r.coverage_recalibrated)) + 0.012, text: `GTEx, 3 donors:<br>${fmt(Math.min(...g3.map((r) => r.set_size_recalibrated)), 1)}–${fmt(Math.max(...g3.map((r) => r.set_size_recalibrated)), 1)} tissues per set`, yanchor: "bottom" },
-        { x: mean(g5.map((r) => r.set_size_recalibrated)), y: Math.min(...g5.map((r) => r.coverage_recalibrated)) - 0.012, text: "GTEx, 5 donors", yanchor: "top" },
+        { x: mean(g5.map((r) => r.set_size_recalibrated)), y: Math.max(...g5.map((r) => r.coverage_recalibrated)) + 0.012, yanchor: "bottom",
+          text: `GTEx, 5 donors:<br>${fmt(Math.min(...g5.map((r) => r.set_size_recalibrated)), 1)}–${fmt(Math.max(...g5.map((r) => r.set_size_recalibrated)), 1)} tissues per set` },
       ].map((a) => ({ ...a, xref: "x", yref: "y", showarrow: false, font: { color: t.ink2, size: 11 } }));
       return { traces,
                layout: { xaxis: { title: { text: "mean set size (tissues per set)" }, range: [0.5, 13] }, yaxis: { title: { text: "coverage after recalibration" }, range: [0.8, 1.02] },
                          shapes: [{ type: "rect", x0: 0.5, x1: 1.5, y0: 0.9, y1: 1.02, xref: "x", yref: "y", fillcolor: hexAlpha(p[0], 0.08), line: { width: 0 } }],
-                         annotations: [{ x: 1.0, y: 1.015, xref: "x", yref: "y", text: "target: ≥ 0.90 observed coverage, about one tissue per set", showarrow: false, font: { color: t.ink2, size: 11 } }, ...clusterNotes], legend: { y: 1.14 }, margin: { t: 40 } },
+                         annotations: [{ x: 0.55, xanchor: "left", y: 1.015, xref: "x", yref: "y", text: "target: ≥ 0.90 observed coverage, about one tissue per set", showarrow: false, font: { color: t.ink2, size: 11 } }, ...clusterNotes], legend: { y: 1.14 }, margin: { t: 40 } },
                table: { columns: ["target", "model", "n_recal", "coverage_recalibrated", "coverage_source_cal_same_test", "set_size_recalibrated", "draws"],
                         rows: [...rb.map((r) => ({ target: "BodyMap", ...r })), ...rg.map((r) => ({ target: "GTEx", ...r })), ...shiftRows.map((r) => ({ target: r.split, model: r.model, n_recal: r.n_recal_animals, coverage_recalibrated: r.coverage_recalibrated, coverage_source_cal_same_test: r.coverage_source_cal_same_test, set_size_recalibrated: r.set_size_recalibrated, draws: r.repeats }))] } };
     },

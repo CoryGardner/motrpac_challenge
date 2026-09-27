@@ -4,6 +4,18 @@ All notable changes to this repository. The format follows [Keep a Changelog](ht
 dates are UTC. Each section is a `hackathon-submission-v<n>` git tag; the version numbers are those of `CITATION.cff`
 and `pyproject.toml`.
 
+## [2.1.3] — 2026-09-27 (tag `hackathon-submission-v10.3.3`)
+
+### Changed (site polish from the final audit)
+- Transfer: the recalibration scatter's target-zone label no longer clips at the left edge; the GTEx five-donor label
+  sits above its points and gives their set-size range; the "How coverage is spent" text keeps display names
+  ("other laboratory (BodyMap)", "held-out sex (M → F)") instead of lower-casing them.
+- The shift-ladder subtitle says why its in-distribution accuracy (the conformal design's models) differs from the
+  headline balanced accuracy (the 40-animal cross-validation), both read from site data.
+- Check samples: on phones the results table puts status and claim right after the sample; Esc returns focus to the
+  row that opened the drawer; the hidden file input is out of the tab order; "What you can upload" says Ensembl IDs
+  must be rn6 (with another build, use gene symbols).
+
 ## [2.1.2] — 2026-09-27 (tag `hackathon-submission-v10.3.2`)
 
 ### Changed
@@ -394,6 +406,7 @@ through `bodymapRat` (2026-09-17); the GTEx v8 downloads (TPM and sample attribu
 were rerun — its effect on every headline number is in `docs/NUMBERS_RECONCILIATION.md`. `results/` and `data/`
 are not versioned; the results are reproducible with `make all`, `make external` and `make identifiability`.
 
+[2.1.3]: https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3/compare/hackathon-submission-v10.3.2...hackathon-submission-v10.3.3
 [2.1.2]: https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3/compare/hackathon-submission-v10.3.1...hackathon-submission-v10.3.2
 [2.1.1]: https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3/compare/hackathon-submission-v10.3...hackathon-submission-v10.3.1
 [2.1.0]: https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3/compare/hackathon-submission-v10.2.2...hackathon-submission-v10.3

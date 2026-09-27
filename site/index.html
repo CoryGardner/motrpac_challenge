@@ -61,7 +61,7 @@
       <ul class="checklist">
         <li>Rat bulk RNA-seq.</li>
         <li>CSV or TSV with a header row.</li>
-        <li><b>Format A</b>: the 20 panel genes in log2 CPM, samples in rows and genes as columns; or <b>format B</b>: a full raw-count matrix, genes × samples or samples × genes, Ensembl IDs or gene symbols (converted to log2 CPM here with the pipeline's transform).</li>
+        <li><b>Format A</b>: the 20 panel genes in log2 CPM, samples in rows and genes as columns; or <b>format B</b>: a full raw-count matrix, genes × samples or samples × genes, Ensembl IDs or gene symbols (converted to log2 CPM here with the pipeline's transform). Ensembl IDs must be rat <b>rn6</b> (Rnor_6.0, the build of MoTrPAC release c1.0); with another build, use gene symbols.</li>
         <li>If no tissue clears the calibrated threshold, the sample is marked <b>Unknown</b>: the model abstains.</li>
       </ul>
       <div class="optional">
@@ -83,7 +83,7 @@
     <div class="dropzone" id="dropzone">
       <p><b>Drop a CSV or TSV file here</b> (one file at a time)</p>
       <label class="btn" for="in-file" id="choose-file">Choose a file</label>
-      <input id="in-file" class="visually-hidden" type="file" accept=".csv,.tsv,.txt,.tab,text/csv,text/tab-separated-values,text/plain">
+      <input id="in-file" class="visually-hidden" tabindex="-1" type="file" accept=".csv,.tsv,.txt,.tab,text/csv,text/tab-separated-values,text/plain">
     </div>
     <label class="control block" for="in-text"><span>Or paste the table</span></label>
     <textarea id="in-text" rows="5" spellcheck="false" placeholder="sample,Cyp21a1,Pmch,…,claimed_tissue"></textarea>

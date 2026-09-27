@@ -11,7 +11,7 @@ every number carries provenance and whose Check samples page scores new samples 
 
 [![tests](https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3/actions/workflows/tests.yml/badge.svg)](https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3/actions/workflows/tests.yml)
 **Repository:** https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3
-**Site** (GitHub Pages, organization members): https://turbo-guide-2yve4kz.pages.github.io/ · **Release:** tag `hackathon-submission-v10.3.2` (version 2.1.2) · **Licence:** MIT (`LICENSE`); third-party data and their terms: [`NOTICE.md`](NOTICE.md)
+**Site** (GitHub Pages, organization members): https://turbo-guide-2yve4kz.pages.github.io/ · **Release:** tag `hackathon-submission-v10.3.3` (version 2.1.3) · **Licence:** MIT (`LICENSE`); third-party data and their terms: [`NOTICE.md`](NOTICE.md)
 
 ## The Track 3 brief
 
@@ -156,6 +156,6 @@ check are in [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md#validation).
 
 ## Cite
 
-`CITATION.cff` (version 2.1.2, tag `hackathon-submission-v10.3.2`), and the data: MoTrPAC Study Group, *Nature* 629,
+`CITATION.cff` (version 2.1.3, tag `hackathon-submission-v10.3.3`), and the data: MoTrPAC Study Group, *Nature* 629,
 174–183 (2024); Yu et al., *Nat Commun* 5, 3230 (2014); GTEx Consortium, *Science* 369, 1318–1330 (2020); for the
 multiomic follow-up the sources listed in [NOTICE.md](NOTICE.md). History: [CHANGELOG.md](CHANGELOG.md).
