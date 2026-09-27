@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The signature — Tissue Fingerprints</title>
+<meta name="description" content="How small can a tissue fingerprint be: the panel curve, the round-robin selector vs the F-test, the ten-gene stable core, per-tissue accuracy and the hard tissues.">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/theme.css">
+<script>
+  (function () { try { var p = new URLSearchParams(location.search).get("theme") || localStorage.getItem("tfp-theme"); if (p === "dark" || p === "light") document.documentElement.setAttribute("data-theme", p); } catch (e) {} })();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/plotly.js-cartesian-dist-min@2.35.2/plotly-cartesian.min.js" crossorigin="anonymous"
+        onerror="this.onerror=null;var s=document.createElement('script');s.src='vendor/plotly-cartesian-2.35.2.min.js';document.head.appendChild(s);"></script>
+<script type="module" src="assets/pages/fingerprint.js"></script>
+</head>
+<body>
+<header class="site-header"></header>
+<main id="main" class="wrap">
+  <h1>The signature</h1>
+  <p class="lede" id="lede"></p>
+
+  <section class="section" id="curve">
+    <h2>How small can the panel be?</h2>
+    <p id="p-curve"></p>
+    <div id="fig-curve"></div>
+  </section>
+
+  <section class="section" id="core">
+    <h2>The ten-gene stable core</h2>
+    <p id="p-core"></p>
+    <div id="tbl-core"></div>
+  </section>
+
+  <section class="section" id="per-tissue">
+    <h2>Which tissues are easy, which are hard</h2>
+    <p id="p-tissue"></p>
+    <div id="fig-tissue"></div>
+    <div id="fig-confusion"></div>
+  </section>
+
+  <section class="section" id="hard">
+    <h2>Why the hard tissues are hard</h2>
+    <p id="p-hard"></p>
+    <div id="fig-markers"></div>
+    <div id="p-liver"></div>
+  </section>
+</main>
+<footer class="site-footer"></footer>
+</body>
+</html>

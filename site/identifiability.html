@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What is the fingerprint identifying? — Tissue Fingerprints</title>
+<meta name="description" content="Within one multi-tissue study every tissue is its own processing batch. Nesting per omic layer, estimable tissue pairs, QC-only classification, and why external transfer is the evidence.">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/theme.css">
+<script>
+  (function () { try { var p = new URLSearchParams(location.search).get("theme") || localStorage.getItem("tfp-theme"); if (p === "dark" || p === "light") document.documentElement.setAttribute("data-theme", p); } catch (e) {} })();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/plotly.js-cartesian-dist-min@2.35.2/plotly-cartesian.min.js" crossorigin="anonymous"
+        onerror="this.onerror=null;var s=document.createElement('script');s.src='vendor/plotly-cartesian-2.35.2.min.js';document.head.appendChild(s);"></script>
+<script type="module" src="assets/pages/identifiability.js"></script>
+</head>
+<body>
+<header class="site-header"></header>
+<main id="main" class="wrap">
+  <h1>What is the fingerprint identifying?</h1>
+  <p class="lede">The organizers' own framing of the question: is a tissue fingerprint a set of analytes, or a set of analytes <em>given that the sample came from a particular centre, plate and run</em>? In this study the two cannot be told apart from the inside.</p>
+
+  <section class="section" id="nesting">
+    <h2>Batch is nested in tissue, in every layer</h2>
+    <p id="p-nesting"></p>
+    <div id="fig-nesting"></div>
+    <div id="fig-estimable"></div>
+    <div id="layers-note"></div>
+  </section>
+
+  <section class="section" id="qc">
+    <h2>Library QC numbers alone classify the tissue</h2>
+    <p id="p-qc"></p>
+    <div id="fig-qc"></div>
+    <div id="qc-caveat"></div>
+  </section>
+
+  <section class="section" id="bridge">
+    <h2>Measuring batch directly: the bridging standards</h2>
+    <p>Reference-standard RNA pools were run on every extraction plate. Their between-plate variance, measured on the panel genes and compared with the variance that separates tissues, is the one direct measurement of batch this design allows.</p>
+    <div id="bridge-block"></div>
+  </section>
+
+  <section class="section" id="modes">
+    <h2>Two failure modes</h2>
+    <p id="p-modes"></p>
+    <div id="fig-modes"></div>
+  </section>
+
+  <section class="section" id="verdict">
+    <h2>Training or batch? The within-tissue control-vs-trained contrast</h2>
+    <p id="p-verdict"></p>
+    <div id="tbl-verdict"></div>
+    <div id="verdict-revision"></div>
+  </section>
+
+  <section class="section" id="resolution">
+    <h2>The resolution: transfer</h2>
+    <p id="p-resolution"></p>
+  </section>
+</main>
+<footer class="site-footer"></footer>
+</body>
+</html>

@@ -1,6 +1,6 @@
 {
- "generated": "2026-09-26 23:37 UTC",
- "git_hash": "1bd7e3e",
+ "generated": "2026-09-27 00:02 UTC",
+ "git_hash": "375e78f",
  "results_dir": "results",
  "phases": {
   "02_inventory": {
@@ -1843,8 +1843,8 @@
   },
   {
    "path": "results/ABSTRACT.md",
-   "bytes": 2139,
-   "sha256": "43f638c716ea92b3702ce0583c635da38f162339b1ad97c8ead3634d15af42db"
+   "bytes": 2423,
+   "sha256": "099866fdd0e646159280b2ceb2f8a8a8ca96dc96a85642282d4609cde5929029"
   },
   {
    "path": "results/PHASE_TIMINGS.csv",
@@ -1873,8 +1873,8 @@
   },
   {
    "path": "results/SUMMARY.md",
-   "bytes": 37145,
-   "sha256": "1a6a9903a58f8b0a3034bbfd85a7fba3b7990c8be26f77026dfa1418a352a044"
+   "bytes": 37429,
+   "sha256": "734c5b8f397e4103f4f6ecbd7d0909f3c49f8fbd1cfe6c05345b5329e1c5bee9"
   }
  ],
  "regeneration_runs": {

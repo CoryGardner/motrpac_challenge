@@ -1,10 +1,18 @@
 {
 "_meta": {
-"generated": "2026-09-26 23:37 UTC",
-"git_hash": "1bd7e3e",
+"generated": "2026-09-27 00:02 UTC",
+"git_hash": "375e78f",
 "sources": [
 "results/02_inventory/inventory.csv",
 "results/02_inventory/tissue_by_assay.csv",
+"results/03_eda/batch_partition_METAB.csv",
+"results/03_eda/batch_partition_PROT.csv",
+"results/03_eda/batch_partition_TRNSCRPT.csv",
+"results/03_eda/readout_variance_pc1-3.csv",
+"results/03_eda/variance_partition_METAB.csv",
+"results/03_eda/variance_partition_PROT.csv",
+"results/03_eda/variance_partition_TRNSCRPT.csv",
+"results/04_baselines/PROT/diagnostic_accuracy.csv",
 "results/04_baselines/TRNSCRPT/confusable_pairs_logreg_l2.csv",
 "results/04_baselines/TRNSCRPT/confusion_logreg_l2.csv",
 "results/04_baselines/TRNSCRPT/per_fold.csv",
@@ -3435,6 +3443,62 @@
 "json_file": "inventory.json",
 "json_path": "inventory",
 "n_rows": 92
+},
+{
+"id": "variance_partition_TRNSCRPT",
+"file": "results/03_eda/variance_partition_TRNSCRPT.csv",
+"json_file": "eda.json",
+"json_path": "variance_TRNSCRPT",
+"n_rows": 10
+},
+{
+"id": "batch_partition_TRNSCRPT",
+"file": "results/03_eda/batch_partition_TRNSCRPT.csv",
+"json_file": "eda.json",
+"json_path": "batch_TRNSCRPT",
+"n_rows": 10
+},
+{
+"id": "variance_partition_PROT",
+"file": "results/03_eda/variance_partition_PROT.csv",
+"json_file": "eda.json",
+"json_path": "variance_PROT",
+"n_rows": 10
+},
+{
+"id": "batch_partition_PROT",
+"file": "results/03_eda/batch_partition_PROT.csv",
+"json_file": "eda.json",
+"json_path": "batch_PROT",
+"n_rows": 10
+},
+{
+"id": "variance_partition_METAB",
+"file": "results/03_eda/variance_partition_METAB.csv",
+"json_file": "eda.json",
+"json_path": "variance_METAB",
+"n_rows": 10
+},
+{
+"id": "batch_partition_METAB",
+"file": "results/03_eda/batch_partition_METAB.csv",
+"json_file": "eda.json",
+"json_path": "batch_METAB",
+"n_rows": 10
+},
+{
+"id": "readout_variance_pc",
+"file": "results/03_eda/readout_variance_pc1-3.csv",
+"json_file": "eda.json",
+"json_path": "readout_variance",
+"n_rows": 9
+},
+{
+"id": "prot_diagnostic_accuracy",
+"file": "results/04_baselines/PROT/diagnostic_accuracy.csv",
+"json_file": "eda.json",
+"json_path": "prot_diagnostic",
+"n_rows": 1
 },
 {
 "id": "samples_motrpac",

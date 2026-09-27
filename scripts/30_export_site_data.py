@@ -285,9 +285,29 @@ def export_aggregates(w: Writer, prov: Prov, rec: pd.DataFrame | None):
     sel = P.read("05_panels/TRNSCRPT/selected_by_fold.csv")
     selected = {str(k): {str(f): d[d["fold"] == f]["feature_ID"].tolist() for f in sorted(d["fold"].unique())}
                 for k, d in sel.groupby("k")}
+    sym_sel = io.map_to_gene_symbols(sorted(sel["feature_ID"].unique()))
+    stab = P.read("05_panels/TRNSCRPT/stability_k20_annotated.csv").set_index("feature_ID")
+    # the round-robin selector picks the best remaining gene of each class in turn, classes in sorted order
+    # (models.roundrobin_order): the k-th pick belongs to class (k − 1) mod n_classes. Verified below on the annotated genes.
+    classes_sorted = sorted(C.TISSUES)
+    classes_sorted = [t for t in classes_sorted if t != "PLASMA"]
+    marker_known = {g: stab.loc[g, "marker_tissue"] for g in sel["feature_ID"].unique() if g in stab.index}
+    verify = []
+    for k in (5, 10, 15, 20):
+        for f in (0, 1, 2, 3, 4):
+            genes_k = selected[str(k)][str(f)]
+            covered = {marker_known[g] for g in genes_k if g in marker_known}
+            expected = set(classes_sorted[:min(k, len(classes_sorted))])
+            verify.append({"k": k, "fold": f, "n_annotated": len([g for g in genes_k if g in marker_known]),
+                           "annotated_markers_within_first_k_classes": bool(covered <= expected)})
     w.write("panel_curve.json", {
         "design": "5-fold animal-grouped CV on 899 TRNSCRPT vials (50 animals); selection inside the fold; logreg_l2 (C = 0.1) on the selected genes",
         "curve": curve, "selected_by_fold": selected,
+        "gene_symbols": {g: (s if isinstance(s, str) else g) for g, s in sym_sel.items()},
+        "marker_tissue_known": marker_known,
+        "roundrobin_class_order": classes_sorted,
+        "roundrobin_note": "the selector takes the best remaining gene of each class in turn, classes in sorted order, so the k-th pick is a marker of class (k − 1) mod 19; tissues covered at k are the first min(k, 19) classes in this order",
+        "roundrobin_verification": verify,
         "consistency": P.table("selection_consistency", "05_panels/TRNSCRPT/selection_consistency.csv", "panel_curve.json", "consistency"),
         "baselines": P.table("baselines_summary", "04_baselines/TRNSCRPT/summary.csv", "panel_curve.json", "baselines"),
         "baselines_per_fold": P.table("baselines_per_fold", "04_baselines/TRNSCRPT/per_fold.csv", "panel_curve.json", "baselines_per_fold"),
@@ -473,6 +493,15 @@ def export_aggregates(w: Writer, prov: Prov, rec: pd.DataFrame | None):
                                             "system_name": next((n for n, ts in ORGAN_SYSTEMS if t in ts), None)} for t in C.TISSUES],
                                "organ_systems": [{"index": i + 1, "name": n, "tissues": ts} for i, (n, ts) in enumerate(ORGAN_SYSTEMS)]},
             [rel(RES / "02_inventory/summary.json"), rel(RES / "02_inventory/tissue_by_assay.csv")])
+
+    # ---- EDA: variance and batch partition of the leading PCs (03) ------------------------------------
+    eda = {}
+    for assay in ("TRNSCRPT", "PROT", "METAB"):
+        eda[f"variance_{assay}"] = P.table(f"variance_partition_{assay}", f"03_eda/variance_partition_{assay}.csv", "eda.json", f"variance_{assay}")
+        eda[f"batch_{assay}"] = P.table(f"batch_partition_{assay}", f"03_eda/batch_partition_{assay}.csv", "eda.json", f"batch_{assay}")
+    eda["readout_variance"] = P.table("readout_variance_pc", "03_eda/readout_variance_pc1-3.csv", "eda.json", "readout_variance")
+    eda["prot_diagnostic"] = P.table("prot_diagnostic_accuracy", "04_baselines/PROT/diagnostic_accuracy.csv", "eda.json", "prot_diagnostic")
+    w.write("eda.json", eda, [rel(RES / f"03_eda/variance_partition_{a}.csv") for a in ("TRNSCRPT", "PROT", "METAB")] + [rel(RES / "04_baselines/PROT/diagnostic_accuracy.csv")])
 
     # ---- beyond: status of the parallel phases ------------------------------------------------------
     beyond = {"training_transfer": {"phase": "17", "present": bool(list(RES.glob("17_*"))), "dirs": [rel(p) for p in RES.glob("17_*")]},
@@ -755,14 +784,26 @@ def gene_set(prov: Prov, sym: pd.Series, f2g: pd.DataFrame):
     surv = P.read("12_bodymap/panel_survival.csv").set_index("panel")
     k20_all = surv.loc["k=20 (all-animal fit)", "genes"].split(";")
     k50_all = surv.loc["k=50 (all-animal fit)", "genes"].split(";")
+    # symbol → transcript gene id (ENSRNOG only: feature_to_gene also lists protein and metabolite feature ids);
+    # ids already named in the results tables win, then the stacked-matrix symbol map, then feature_to_gene
     sym_to_id = {}
+    for fid, s in sym.items():                       # genes of the stacked MoTrPAC matrix
+        if isinstance(s, str) and s not in sym_to_id:
+            sym_to_id[s] = fid
     m = f2g.dropna(subset=["feature_ID"])
+    m = m[m["feature_ID"].astype(str).str.startswith("ENSRNOG")]
     symcol = "gene_symbol" if "gene_symbol" in m.columns else "symbol"
     for fid, s in zip(m["feature_ID"], m[symcol]):
         if isinstance(s, str) and s not in sym_to_id:
             sym_to_id[s] = fid
-    ids_k20_all = [sym_to_id.get(s) or next((i for i, ss in sym.items() if ss == s), None) for s in k20_all]
-    ids_k50_all = [sym_to_id.get(s) or next((i for i, ss in sym.items() if ss == s), None) for s in k50_all]
+    for fid, s in zip(gc12["feature_ID"], gc12["gene_symbol"]):
+        sym_to_id[s] = fid
+    for fid, s in zip(stab["feature_ID"], stab["gene_symbol"]):
+        if isinstance(s, str):
+            sym_to_id[s] = fid
+    ids_k20_all = [sym_to_id.get(s) for s in k20_all]
+    ids_k50_all = [sym_to_id.get(s) for s in k50_all]
+    assert all(ids_k20_all) and len(set(ids_k20_all)) == 20, ("k20 panel symbols did not all map", k20_all)
     dev_ids = [sym_to_id.get(s) for s in DEVELOPMENTAL]
     ordered = []
     for group in (core, list(k20cv.index), gc12["feature_ID"].tolist(), gc13["feature_ID"].tolist(), [i for i in ids_k20_all if i],
