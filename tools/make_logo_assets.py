@@ -46,7 +46,7 @@ FEATHER = 1.5           # px, linear alpha ramp at the mask edge
 SIZE_WARN = 400_000     # bytes
 FONT_DIR = Path("/usr/share/fonts/truetype/dejavu")
 LANCZOS = Image.Resampling.LANCZOS
-SITE_URL = "corygardner.github.io/motrpac_challenge"
+SITE_URL = "Stanford Bioinformatics Center · Track 3"   # the card's last line (the Pages site is private, so no URL)
 TEAM_LINE = "The Rat PAC · MoTrPAC Hackathon 2026"
 
 

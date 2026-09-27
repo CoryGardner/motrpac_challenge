@@ -13,9 +13,8 @@ concurrency:
   cancel-in-progress: true
 jobs:
   publish:
-    # Publishes from both repositories: the team repository (Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3,
-    # a private Pages site for organization members) and the public mirror (CoryGardner/motrpac_challenge). Both have
-    # Pages enabled with source "GitHub Actions"; the site uses relative links only, so it works under either root.
+    # Publishes site/ to the repository's GitHub Pages site (Pages source: GitHub Actions). The site uses relative links
+    # only, so it works under any root.
     runs-on: ubuntu-latest
     environment:
       name: github-pages

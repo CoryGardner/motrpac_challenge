@@ -22,7 +22,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "site" / "data"
 README = ROOT / "README.md"
-LIVE = "https://corygardner.github.io/motrpac_challenge/"
+LIVE = "https://turbo-guide-2yve4kz.pages.github.io/"
 TEAM = "https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3"
 
 

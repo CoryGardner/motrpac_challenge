@@ -1,7 +1,7 @@
 // Shared chrome and components: nav, footer, theme toggle, data loader, stat tile, callouts, tables.
 // All text goes through textContent (never innerHTML with data).
 
-export const REPO_URL = "https://github.com/CoryGardner/motrpac_challenge";
+export const REPO_URL = "https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3";
 // primary nav: the product first, the science second; the science pages carry a secondary row
 const PAGES = [["index.html", "Check samples"], ["explore.html", "Reference atlas"], ["science.html", "The science"], ["about.html", "About"]];
 export const SCIENCE_PAGES = [
@@ -101,7 +101,7 @@ export async function mountChrome(page) {
   document.body.insertBefore(el("a", { class: "skip", href: "#main" }, "Skip to content"), document.body.firstChild);
   const footer = document.querySelector("footer.site-footer") || document.body.appendChild(el("footer", { class: "site-footer" }));
   footer.replaceChildren(el("div", { class: "wrap" }, [
-    el("span", {}, ["Code and data exports: ", el("a", { href: REPO_URL }, "github.com/CoryGardner/motrpac_challenge"), " (MIT)."]),
+    el("span", {}, ["Code and data exports: ", el("a", { href: REPO_URL }, "github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3"), " (MIT)."]),
     el("span", {}, ["Every number on this site is read from the result tables; ", el("code", {}, "site/data/provenance.json"), " records where."]),
   ]));
   window.addEventListener("resize", () => { /* Plotly handles responsive */ });

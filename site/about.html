@@ -13,7 +13,7 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="About — Tissue Fingerprints">
 <meta property="og:description" content="The Rat PAC at the MoTrPAC Hackathon 2026: team, data sources, versions, reproduction and citation.">
-<meta property="og:image" content="https://corygardner.github.io/motrpac_challenge/assets/brand/badge-og.png">
+<meta property="og:image" content="https://turbo-guide-2yve4kz.pages.github.io/assets/brand/badge-og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
@@ -71,8 +71,8 @@
       <li><b>Mouse exercise metabolome</b>: Sato et al., <i>Cell Metab</i> 34:329–345 (2022), <a href="https://doi.org/10.1016/j.cmet.2021.12.016">doi:10.1016/j.cmet.2021.12.016</a>.</li>
       <li><b>Mouse aging metabolome</b>: Metabolomics Workbench study <a href="https://www.metabolomicsworkbench.org/data/DRCCMetadata.php?Mode=Study&amp;StudyID=ST003188">ST003188</a>, “A metabolic atlas of mouse aging” (Mullen Lab, University of Southern California; project PR001984), <a href="https://doi.org/10.21228/M88J0W">doi:10.21228/M88J0W</a>. CC BY 4.0.</li>
     </ul>
-    <p>Download URLs and sha256 of the external files are in <a href="https://github.com/CoryGardner/motrpac_challenge/blob/main/docs/REPRODUCIBILITY.md">docs/REPRODUCIBILITY.md</a> and <code>results_multiomic/02_discovery/download_log.csv</code>. The third-party data the repository contains, with their licences and what was changed, are listed in <a href="https://github.com/CoryGardner/motrpac_challenge/blob/main/NOTICE.md">NOTICE.md</a>.</p>
-    <p>The full datasets are not in the repository; the small subsets and derived values that are (a four-sample BodyMap count fixture, log2 CPM of at most 100 genes, per-sample predictions) are listed with their licences in <a href="https://github.com/CoryGardner/motrpac_challenge/blob/main/NOTICE.md">NOTICE.md</a>. <code>data/raw/</code> (1.9 GB) is recreated by <code>R/export_motrpac.R</code> (<code>make export</code>); <code>data/external/</code> (5.8 GB) by <code>R/export_bodymap.R</code> (<code>make bodymap</code>, Bioconductor <code>bodymapRat</code>) and, for GTEx, by downloading the three v8 files named in the Makefile and running <code>scripts/11_gtex_prepare.py</code> (<code>make gtex</code>). The full portal download is not needed; phase 16 reads a 165 MB subset of it (the RNA-seq QC table and the 19 per-tissue count files with the reference-standard vials) when <code>MOTRPAC_PORTAL</code> is set, otherwise it uses the package metadata and reports the bridging measurement as pending.</p>
+    <p>Download URLs and sha256 of the external files are in <a href="https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3/blob/main/docs/REPRODUCIBILITY.md">docs/REPRODUCIBILITY.md</a> and <code>results_multiomic/02_discovery/download_log.csv</code>. The third-party data the repository contains, with their licences and what was changed, are listed in <a href="https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3/blob/main/NOTICE.md">NOTICE.md</a>.</p>
+    <p>The full datasets are not in the repository; the small subsets and derived values that are (a four-sample BodyMap count fixture, log2 CPM of at most 100 genes, per-sample predictions) are listed with their licences in <a href="https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3/blob/main/NOTICE.md">NOTICE.md</a>. <code>data/raw/</code> (1.9 GB) is recreated by <code>R/export_motrpac.R</code> (<code>make export</code>); <code>data/external/</code> (5.8 GB) by <code>R/export_bodymap.R</code> (<code>make bodymap</code>, Bioconductor <code>bodymapRat</code>) and, for GTEx, by downloading the three v8 files named in the Makefile and running <code>scripts/11_gtex_prepare.py</code> (<code>make gtex</code>). The full portal download is not needed; phase 16 reads a 165 MB subset of it (the RNA-seq QC table and the 19 per-tissue count files with the reference-standard vials) when <code>MOTRPAC_PORTAL</code> is set, otherwise it uses the package metadata and reports the bridging measurement as pending.</p>
   </section>
 
   <section class="section prose" id="versions">
@@ -102,7 +102,7 @@ python -m http.server -d site 8000    # then open http://localhost:8000</pre>
 
   <section class="section prose" id="licence">
     <h2>Licence</h2>
-    <p>Code and site: MIT (<code>LICENSE</code>). Third-party data and their terms: <a href="https://github.com/CoryGardner/motrpac_challenge/blob/main/NOTICE.md">NOTICE.md</a>. Plotly.js (MIT) is loaded from a CDN with a vendored copy for offline use.</p>
+    <p>Code and site: MIT (<code>LICENSE</code>). Third-party data and their terms: <a href="https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3/blob/main/NOTICE.md">NOTICE.md</a>. Plotly.js (MIT) is loaded from a CDN with a vendored copy for offline use.</p>
   </section>
 </main>
 <footer class="site-footer"></footer>

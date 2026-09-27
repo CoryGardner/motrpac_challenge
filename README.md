@@ -9,9 +9,9 @@ replicated in an independent laboratory's rats (rat BodyMap) and across species 
 of processing effects on the consortium's bridging standards, an exercise-specific follow-up, and a static site on which
 every number carries provenance and whose Check samples page scores new samples in the browser.
 
-[![tests](https://github.com/CoryGardner/motrpac_challenge/actions/workflows/tests.yml/badge.svg)](https://github.com/CoryGardner/motrpac_challenge/actions/workflows/tests.yml)
-**Team repository:** https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3 · **Public mirror:** https://github.com/CoryGardner/motrpac_challenge
-**Live site:** https://corygardner.github.io/motrpac_challenge/ (public) · **Team site** (organization members): https://turbo-guide-2yve4kz.pages.github.io/ · **Release:** tag `hackathon-submission-v10.3.1` (version 2.1.1) · **Licence:** MIT (`LICENSE`); third-party data and their terms: [`NOTICE.md`](NOTICE.md)
+[![tests](https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3/actions/workflows/tests.yml/badge.svg)](https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3/actions/workflows/tests.yml)
+**Repository:** https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3
+**Site** (GitHub Pages, organization members): https://turbo-guide-2yve4kz.pages.github.io/ · **Release:** tag `hackathon-submission-v10.3.2` (version 2.1.2) · **Licence:** MIT (`LICENSE`); third-party data and their terms: [`NOTICE.md`](NOTICE.md)
 
 ## The Track 3 brief
 
@@ -37,7 +37,7 @@ Molecular Tissue Fingerprints)
 ## Use it
 
 <!-- BEGIN generated:useit -->
-**[Check samples](https://corygardner.github.io/motrpac_challenge/)**: *is this sample the tissue you think it is?* Drop in a rat RNA-seq table (the 20 panel genes in log2 CPM, or a full raw-count matrix) with an optional claimed-tissue column; for every sample the page returns a tissue call, its 90 % prediction set (the tissues the model cannot rule out), the genes behind the call, and a flag when the label does not fit. It runs in the browser; nothing is uploaded. “Try the example” loads 80 rat BodyMap samples from another laboratory with two labels deliberately swapped: both are flagged.
+**[Check samples](https://turbo-guide-2yve4kz.pages.github.io/)**: *is this sample the tissue you think it is?* Drop in a rat RNA-seq table (the 20 panel genes in log2 CPM, or a full raw-count matrix) with an optional claimed-tissue column; for every sample the page returns a tissue call, its 90 % prediction set (the tissues the model cannot rule out), the genes behind the call, and a flag when the label does not fit. It runs in the browser; nothing is uploaded. “Try the example” loads 80 rat BodyMap samples from another laboratory with two labels deliberately swapped: both are flagged.
 
 How good the flag is, at α = 0.10, on existing held-out scores (`results_product/40_product/flag_rates.csv`):
 
@@ -49,8 +49,8 @@ How good the flag is, at α = 0.10, on existing held-out scores (`results_produc
 A small or single-tissue upload is never z-scored within itself: on the same BodyMap adults, scaling each organ alone names 4.4 % of mapped organs, against 100 % for the whole mixed set and 98.5 % with MoTrPAC reference scaling (`results_product/40_product/scaling.csv`).
 <!-- END generated:useit -->
 
-The science behind it is on **[The science](https://corygardner.github.io/motrpac_challenge/science.html)**; the
-per-sample reference data are in the **[Reference atlas](https://corygardner.github.io/motrpac_challenge/explore.html)**.
+The science behind it is on **[The science](https://turbo-guide-2yve4kz.pages.github.io/science.html)**; the
+per-sample reference data are in the **[Reference atlas](https://turbo-guide-2yve4kz.pages.github.io/explore.html)**.
 
 ![The Check samples page](figures/home.png)
 
@@ -69,7 +69,7 @@ per-sample reference data are in the **[Reference atlas](https://corygardner.git
 
 **It is biology, not processing.** Like every large multi-tissue design, this study processed each tissue as a unit, so within-study accuracy alone cannot say how much of a fingerprint is biology. Two things can: the external replicate, and MoTrPAC's bridging reference pools, on which batch measured directly is 1.6 %–5.3 % of the variance that separates tissues across the 6 pools. Training itself barely moves the fingerprint (see the Exercise page).
 
-**Proteins and metabolites carry the tissue axis too, more weakly.** On the portal's reporter-ion intensities tissue explains R² 0.991 of the first proteomics component (0.0009 on the distributed ratios, which are built to remove it); a 20-protein panel names the tissue of 0.455 of 44 human samples from another laboratory (chance 0.143), below RNA on the same 42 samples (0.476 vs 1.000), and fusing the two does not help (0.738). A 20-metabolite panel names the organ of 0.637 of mouse samples (chance 0.111). The core fingerprint is RNA ([Multiomic page](https://corygardner.github.io/motrpac_challenge/multiomic.html)).
+**Proteins and metabolites carry the tissue axis too, more weakly.** On the portal's reporter-ion intensities tissue explains R² 0.991 of the first proteomics component (0.0009 on the distributed ratios, which are built to remove it); a 20-protein panel names the tissue of 0.455 of 44 human samples from another laboratory (chance 0.143), below RNA on the same 42 samples (0.476 vs 1.000), and fusing the two does not help (0.738). A 20-metabolite panel names the organ of 0.637 of mouse samples (chance 0.111). The core fingerprint is RNA ([Multiomic page](https://turbo-guide-2yve4kz.pages.github.io/multiomic.html)).
 <!-- END generated:answer -->
 
 ## Track outputs → where they are
@@ -77,10 +77,10 @@ per-sample reference data are in the **[Reference atlas](https://corygardner.git
 <!-- BEGIN generated:outputs -->
 | output the track names | what it is | where |
 |---|---|---|
-| A classifier | the 20-gene logistic regression with 90 % conformal prediction sets, applied to your samples | [Check samples](https://corygardner.github.io/motrpac_challenge/) (calls, sets, claim checks, CSV and report); `site/data/panel_model.json` (the model the browser runs); [`src/tfp/models.py`](src/tfp/models.py) |
-| Minimal tissue-signature panel | the 20 genes and the 10-gene stable core | [Panel page](https://corygardner.github.io/motrpac_challenge/fingerprint.html); `site/data/panel_card.csv`, `site/data/panel_card.json` |
-| Feature-selection workflow | the class-aware round-robin selector, fitted inside animal-grouped folds | [Methods: the selector](https://corygardner.github.io/motrpac_challenge/methods.html#selector); [Reference atlas: panel builder](https://corygardner.github.io/motrpac_challenge/explore.html#panel-builder); [`RoundRobinSelector`](src/tfp/models.py#L58) in `src/tfp/models.py` |
-| Interactive model-explanation tool | per sample: probabilities against the calibrated threshold, per-gene contributions (“why X, not Y”), gene values against the reference tissues, a reference map | [Check samples](https://corygardner.github.io/motrpac_challenge/) (the sample drawer); [Reference atlas](https://corygardner.github.io/motrpac_challenge/explore.html): [tissue card](https://corygardner.github.io/motrpac_challenge/explore.html#tissue-card), [gene explorer](https://corygardner.github.io/motrpac_challenge/explore.html#gene-explorer), [panel builder](https://corygardner.github.io/motrpac_challenge/explore.html#panel-builder) |
+| A classifier | the 20-gene logistic regression with 90 % conformal prediction sets, applied to your samples | [Check samples](https://turbo-guide-2yve4kz.pages.github.io/) (calls, sets, claim checks, CSV and report); `site/data/panel_model.json` (the model the browser runs); [`src/tfp/models.py`](src/tfp/models.py) |
+| Minimal tissue-signature panel | the 20 genes and the 10-gene stable core | [Panel page](https://turbo-guide-2yve4kz.pages.github.io/fingerprint.html); `site/data/panel_card.csv`, `site/data/panel_card.json` |
+| Feature-selection workflow | the class-aware round-robin selector, fitted inside animal-grouped folds | [Methods: the selector](https://turbo-guide-2yve4kz.pages.github.io/methods.html#selector); [Reference atlas: panel builder](https://turbo-guide-2yve4kz.pages.github.io/explore.html#panel-builder); [`RoundRobinSelector`](src/tfp/models.py#L58) in `src/tfp/models.py` |
+| Interactive model-explanation tool | per sample: probabilities against the calibrated threshold, per-gene contributions (“why X, not Y”), gene values against the reference tissues, a reference map | [Check samples](https://turbo-guide-2yve4kz.pages.github.io/) (the sample drawer); [Reference atlas](https://turbo-guide-2yve4kz.pages.github.io/explore.html): [tissue card](https://turbo-guide-2yve4kz.pages.github.io/explore.html#tissue-card), [gene explorer](https://turbo-guide-2yve4kz.pages.github.io/explore.html#gene-explorer), [panel builder](https://turbo-guide-2yve4kz.pages.github.io/explore.html#panel-builder) |
 <!-- END generated:outputs -->
 
 ## Team
@@ -130,7 +130,7 @@ The `results/…` sources are the live pipeline outputs (git-ignored); the same 
 - In another laboratory most prediction sets start empty (the model abstains) until the threshold is recalibrated on a few of your own labelled samples; recalibrated coverage is observed, not guaranteed.
 - Across species (human GTEx) accuracy drops and recalibration restores the coverage number before it restores informative sets.
 - A small or single-tissue upload is scored with MoTrPAC reference scaling, which does not abstain on organs the model never saw.
-- Proteomics as distributed (ratios to per-tissue pools) cannot carry tissue identity; the full list is on the [Limitations page](https://corygardner.github.io/motrpac_challenge/limitations.html).
+- Proteomics as distributed (ratios to per-tissue pools) cannot carry tissue identity; the full list is on the [Limitations page](https://turbo-guide-2yve4kz.pages.github.io/limitations.html).
 
 ## Reproduce
 
@@ -142,7 +142,7 @@ repository map. Third-party data committed here and their licences: [NOTICE.md](
 ## Quick start (no data needed)
 
 ```bash
-git clone https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3 tfp && cd tfp   # the team repository; or the public mirror: https://github.com/CoryGardner/motrpac_challenge
+git clone https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3 tfp && cd tfp
 conda env create -f environment.yml && conda activate tfp      # or: pip install -r requirements.txt
 make test          # Python tests (the results-dependent ones read results_frozen/), the JS conformal test, snapshot checksums
 make site          # export site/data from results_frozen/, check the sanity anchors, run the site tests
@@ -156,6 +156,6 @@ check are in [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md#validation).
 
 ## Cite
 
-`CITATION.cff` (version 2.1.1, tag `hackathon-submission-v10.3.1`), and the data: MoTrPAC Study Group, *Nature* 629,
+`CITATION.cff` (version 2.1.2, tag `hackathon-submission-v10.3.2`), and the data: MoTrPAC Study Group, *Nature* 629,
 174–183 (2024); Yu et al., *Nat Commun* 5, 3230 (2014); GTEx Consortium, *Science* 369, 1318–1330 (2020); for the
 multiomic follow-up the sources listed in [NOTICE.md](NOTICE.md). History: [CHANGELOG.md](CHANGELOG.md).

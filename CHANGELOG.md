@@ -4,6 +4,16 @@ All notable changes to this repository. The format follows [Keep a Changelog](ht
 dates are UTC. Each section is a `hackathon-submission-v<n>` git tag; the version numbers are those of `CITATION.cff`
 and `pyproject.toml`.
 
+## [2.1.2] — 2026-09-27 (tag `hackathon-submission-v10.3.2`)
+
+### Changed
+- The team repository is the only home: every link to the personal repository and its GitHub Pages site (README,
+  site footer and page metadata, the downloadable report, the About, Science and Multiomic pages, `CITATION.cff`,
+  `pyproject.toml`, the compliance doc, the CHANGELOG compare links, the README generator) now points to
+  Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3 and its Pages site
+  (https://turbo-guide-2yve4kz.pages.github.io/, private to organization members); the "public mirror" lines are removed.
+  The social-preview card's last line names the event instead of a URL.
+
 ## [2.1.1] — 2026-09-27 (tag `hackathon-submission-v10.3.1`)
 
 ### Added
@@ -324,7 +334,7 @@ and `pyproject.toml`.
 - Explorer: α and variant controls disabled in recalibrated mode; the stable-core table fits; annotation moved;
   limitations wording.
 - The one estimable RNA-seq tissue pair (ovary and testes) is named wherever "1 of 171" appears.
-- Site footer and README point to github.com/CoryGardner/motrpac_challenge and the GitHub Pages URL; the deployment
+- Site footer and README point to the repository and its GitHub Pages URL (then a personal repository; since v10.3.2 the team repository); the deployment
   is recorded in the docs.
 
 ## [1.1.0] — 2026-09-27 01:14 UTC (tag `hackathon-submission-v2`, commit `d960d96`)
@@ -384,20 +394,21 @@ through `bodymapRat` (2026-09-17); the GTEx v8 downloads (TPM and sample attribu
 were rerun — its effect on every headline number is in `docs/NUMBERS_RECONCILIATION.md`. `results/` and `data/`
 are not versioned; the results are reproducible with `make all`, `make external` and `make identifiability`.
 
-[2.1.1]: https://github.com/CoryGardner/motrpac_challenge/compare/hackathon-submission-v10.3...hackathon-submission-v10.3.1
-[2.1.0]: https://github.com/CoryGardner/motrpac_challenge/compare/hackathon-submission-v10.2.2...hackathon-submission-v10.3
-[2.0.4]: https://github.com/CoryGardner/motrpac_challenge/compare/hackathon-submission-v10.2.1...hackathon-submission-v10.2.2
-[2.0.3]: https://github.com/CoryGardner/motrpac_challenge/compare/hackathon-submission-v10.2...hackathon-submission-v10.2.1
-[2.0.2]: https://github.com/CoryGardner/motrpac_challenge/compare/hackathon-submission-v10.1...hackathon-submission-v10.2
-[2.0.1]: https://github.com/CoryGardner/motrpac_challenge/compare/hackathon-submission-v10...hackathon-submission-v10.1
-[2.0.0]: https://github.com/CoryGardner/motrpac_challenge/compare/hackathon-submission-v9.1...hackathon-submission-v10
-[1.8.1]: https://github.com/CoryGardner/motrpac_challenge/compare/hackathon-submission-v9...hackathon-submission-v9.1
-[1.8.0]: https://github.com/CoryGardner/motrpac_challenge/compare/hackathon-submission-v8...hackathon-submission-v9
-[1.7.0]: https://github.com/CoryGardner/motrpac_challenge/compare/hackathon-submission-v7...hackathon-submission-v8
-[1.6.0]: https://github.com/CoryGardner/motrpac_challenge/compare/hackathon-submission-v6...hackathon-submission-v7
-[1.5.0]: https://github.com/CoryGardner/motrpac_challenge/compare/hackathon-submission-v5...hackathon-submission-v6
-[1.4.0]: https://github.com/CoryGardner/motrpac_challenge/compare/hackathon-submission-v4...hackathon-submission-v5
-[1.3.0]: https://github.com/CoryGardner/motrpac_challenge/compare/hackathon-submission-v3...hackathon-submission-v4
-[1.2.0]: https://github.com/CoryGardner/motrpac_challenge/compare/hackathon-submission-v2...hackathon-submission-v3
-[1.1.0]: https://github.com/CoryGardner/motrpac_challenge/compare/hackathon-submission-v1...hackathon-submission-v2
-[1.0.0]: https://github.com/CoryGardner/motrpac_challenge/releases/tag/hackathon-submission-v1
+[2.1.2]: https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3/compare/hackathon-submission-v10.3.1...hackathon-submission-v10.3.2
+[2.1.1]: https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3/compare/hackathon-submission-v10.3...hackathon-submission-v10.3.1
+[2.1.0]: https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3/compare/hackathon-submission-v10.2.2...hackathon-submission-v10.3
+[2.0.4]: https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3/compare/hackathon-submission-v10.2.1...hackathon-submission-v10.2.2
+[2.0.3]: https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3/compare/hackathon-submission-v10.2...hackathon-submission-v10.2.1
+[2.0.2]: https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3/compare/hackathon-submission-v10.1...hackathon-submission-v10.2
+[2.0.1]: https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3/compare/hackathon-submission-v10...hackathon-submission-v10.1
+[2.0.0]: https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3/compare/hackathon-submission-v9.1...hackathon-submission-v10
+[1.8.1]: https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3/compare/hackathon-submission-v9...hackathon-submission-v9.1
+[1.8.0]: https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3/compare/hackathon-submission-v8...hackathon-submission-v9
+[1.7.0]: https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3/compare/hackathon-submission-v7...hackathon-submission-v8
+[1.6.0]: https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3/compare/hackathon-submission-v6...hackathon-submission-v7
+[1.5.0]: https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3/compare/hackathon-submission-v5...hackathon-submission-v6
+[1.4.0]: https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3/compare/hackathon-submission-v4...hackathon-submission-v5
+[1.3.0]: https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3/compare/hackathon-submission-v3...hackathon-submission-v4
+[1.2.0]: https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3/compare/hackathon-submission-v2...hackathon-submission-v3
+[1.1.0]: https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3/compare/hackathon-submission-v1...hackathon-submission-v2
+[1.0.0]: https://github.com/Stanford-Bioinformatics-Center/multiomics-hackathon-2026-track-3/releases/tag/hackathon-submission-v1
