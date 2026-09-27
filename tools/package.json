@@ -1,0 +1,8 @@
+{
+  "name": "tfp-site-tools",
+  "private": true,
+  "type": "module",
+  "description": "Render pass and link check for the static site (uses the system Chrome through Playwright).",
+  "scripts": { "screenshots": "node screenshot.js", "test-conformal": "node ../tests/test_site_conformal.js" },
+  "devDependencies": { "playwright": "1.47.2" }
+}
