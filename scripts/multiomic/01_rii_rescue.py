@@ -277,6 +277,18 @@ def main() -> None:
                           "effect_z": [float(mu[c].max() - mu[c].drop(mu[c].idxmax()).max()) for c in chosen],
                           "frac_nan": om.X[chosen].isna().mean().to_numpy()})
     panel.to_csv(out / "panel_k20_all_animals.csv", index=False)
+    # stability of the k = 20 selection over bootstrap resamples of animals (EVALUATION_RULES §5: a panel is only "the panel" if its members are stable)
+    n_boot = 10 if args.quick else 50
+    stab = models.stability_selection(om, label="tissue", k=k_null, n_boot=n_boot, prefilter=args.prefilter, seed=args.seed)
+    stab = stab.rename(columns={stab.columns[0]: "feature_ID"})     # the RII columns carry an index name, so reset_index() did not yield "index"
+    stab["gene_symbol"] = om.features.reindex(stab["feature_ID"])["gene_symbol"].to_numpy()
+    stab["in_all_animal_panel"] = stab["feature_ID"].isin(chosen)
+    stab.to_csv(out / f"stability_k{k_null}.csv", index=False)
+    stab_summary = pd.DataFrame([{"k": k_null, "n_boot": n_boot, "n_features_ever_selected": len(stab), "n_selected_ge_0.8": int((stab["selection_frequency"] >= 0.8).sum()),
+                                  "n_selected_ge_0.5": int((stab["selection_frequency"] >= 0.5).sum()),
+                                  "all_animal_panel_median_frequency": float(stab.loc[stab["in_all_animal_panel"], "selection_frequency"].median()) if stab["in_all_animal_panel"].any() else np.nan,
+                                  "all_animal_panel_n_ge_0.8": int((stab.loc[stab["in_all_animal_panel"], "selection_frequency"] >= 0.8).sum())}])
+    stab_summary.to_csv(out / f"stability_k{k_null}_summary.csv", index=False)
 
     # ---- 4b. the same headline numbers on the complete-protein matrix (no missing value anywhere) ---------------------
     # missingness alone identifies tissue on this scale too (per-tissue searches), so every headline number is repeated on
@@ -448,6 +460,9 @@ def main() -> None:
               f"Pre-registration (b) asks for mean balanced accuracy ≥ 0.95 at some k ≤ 100: best {fmt(agg['bal_acc_mean'].max())} at k = {int(agg.loc[agg['bal_acc_mean'].idxmax(), 'k'])} → "
               f"{'PASS' if agg['bal_acc_mean'].max() >= 0.95 else 'FAIL'} (within-study; context, not a finding).", "",
               f"The k = {k_null} panel selected on all animals (`panel_k20_all_animals.csv`):", "", report.df_to_md(panel, floatfmt=".2f"), "",
+              f"Stability (`stability_k{k_null}.csv`, `stability_k{k_null}_summary.csv`; {n_boot} animal-bootstraps): {int(stab_summary['n_features_ever_selected'].iloc[0])} proteins ever selected, "
+              f"{int(stab_summary['n_selected_ge_0.8'].iloc[0])} in ≥ 80 % of resamples, {int(stab_summary['n_selected_ge_0.5'].iloc[0])} in ≥ 50 %; the all-animal panel's members have median selection frequency "
+              f"{fmt(stab_summary['all_animal_panel_median_frequency'].iloc[0], 2)} ({int(stab_summary['all_animal_panel_n_ge_0.8'].iloc[0])} of {len(chosen)} at ≥ 80 %). Few stable members is the expected picture when many proteins separate the tissues equally well.", "",
               f"**Missingness-free check** (`variance_partition_complete.csv`, `diagnostic_accuracy_complete.csv`, `panel_curve_complete_summary.csv`): on the "
               f"{len(comp_cols)} proteins quantified in every vial (no NaN, no imputation), tissue R² of PC1 = {fmt(vp_c['R2_tissue'].iloc[0])}, PC2 = {fmt(vp_c['R2_tissue'].iloc[1])}; "
               f"logreg_l2 accuracy {fmt(diag_c['model_as_fitted_acc'].mean())} ± {fmt(diag_c['model_as_fitted_acc'].std())}, means-removed {fmt(diag_c['per_tissue_means_removed_acc'].mean())}; "

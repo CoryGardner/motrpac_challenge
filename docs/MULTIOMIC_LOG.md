@@ -100,3 +100,12 @@ Timestamped log of decisions, downloads (URL, size, sha256, date), failures and 
 | 5 fusion by transfer | DONE 07:41Z | `results_multiomic/05_fusion_transfer/` |
 | 6 external identifiability | DONE 07:38Z | `results_multiomic/06_external_identifiability/` |
 | 7 synthesis | DONE 07:43Z (repeated at the end) | `results_multiomic/07_synthesis/`, `docs/MULTIOMIC_REPORT.md` |
+## Robustness runs and the final Phase 7 repeat (07:44Z–07:50Z)
+
+- Phase 1 on portal release c2.0 (`results_multiomic/01_rii/c2/`, 2.3 min): 15,802 proteins in the union, 3,827 in every tissue, 2,513 complete; tissue R² of PC1 0.989 (null95 0.029); k = 20 balanced accuracy 1.000; RNA panel genes keep their marker tissue in 11 of 15 testable (0.73, above the 0.70 rule). The rn7 reprocessing reproduces the c1.0 result.
+- Acetyl RII (`prot-ac`, c2.0; `results_multiomic/01_rii/ac_c2/`, 0.7 min): only 114 acetyl-protein groups in every tissue (35 complete); tissue R² of PC1 0.792 (null95 0.033); k = 20 balanced accuracy 0.998. Reported as secondary; ubiquityl RII (heart and liver only) not run.
+- Stability of the k = 20 protein panel (50 animal-bootstraps, `results_multiomic/01_rii/stability_k20_summary.csv`, added to the Phase 1 script and re-run, 1.8 min; identical point estimates elsewhere): 36 proteins ever selected, 16 in ≥ 80 % of resamples, 20 in ≥ 50 %; the all-animal panel's members have median selection frequency 0.99 (16 of 20 at ≥ 80 %). One bug on the way (the RII column index name broke the pipeline's `reset_index` rename; fixed in the script, not in `tfp.models`).
+- Phase 2 refreshed after the RefMet shards finished (Sato: 1,159 of 1,159 names queried, 300 RefMet names present in MoTrPAC on any platform, 160 on HILIC+; the Phase 4 counts of 58 / 83 are the subsets named in every source tissue); the Wang 2019 Europe PMC bundle (181 MB, sha256 in the log) added to `download_log.csv` → 20 files, 418 MB in total.
+- Phase 6 re-run (the crossed-design list now names Jiang 2020 first); Phase 7 re-run; `build_report.py --complete` re-run at 07:49Z. Report: 8 findings, every pre-registered prediction (a)–(f) PASS, the pre-registered fusion rule FAIL.
+- Elapsed since START: ≈ 3 h 05 min at the final commit; no phase dropped.
+- Final state: all phases 0–7 DONE (table above); `RUN COMPLETE` is the last line of `docs/MULTIOMIC_REPORT.md`.

@@ -89,7 +89,9 @@ def main():
           "- **MetaboLights** was reachable but not searched: two matchable rodent metabolomes were already in hand within the 2 h discovery box.",
           "- **Sato 2022 batch variable**: ROUND labels repeat across the per-tissue Metabolon tables and could not be verified as shared runs; listed in Phase 6, not claimed.",
           "- **PXD082651** (2026 mouse lifespan multi-tissue atlas of non-canonical peptides) not pursued (non-canonical peptide focus).",
-          "- **Portal release c2.0 RII, acetyl and ubiquityl RII**: not run in the main line (c1.0 `prot-pr` and `prot-ph` only) unless a later log entry says otherwise.",
+          ("- **Portal release c2.0 RII and acetyl RII**: run as robustness checks (`results_multiomic/01_rii/c2/`, `ac_c2/`; numbers in the Phase 1 section); ubiquityl RII (heart and liver only) not run."
+           if (R / "01_rii" / "c2" / "join_summary.csv").exists() else
+           "- **Portal release c2.0 RII, acetyl and ubiquityl RII**: not run (c1.0 `prot-pr` and `prot-ph` only)."),
           "- **Figures**: described in the site draft with their source CSVs; no image files were rendered and `site/` was not touched.",
           "- **Kidney and adipose** have no human protein target in Jiang 2020; they are covered only by the mouse atlas (Geiger, n = 1 per tissue).",
           f"- **Download log** (`results_multiomic/02_discovery/download_log.csv`): {len(dl)} files, {dl['bytes'].sum() / 1e6:.0f} MB — {per_lines}. {int(att.shape[0])} attempts recorded (`attempts.csv`), including the failures (raw-only PRIDE project, bot-walled publisher page, over-box bundle, no rat atlas, Sato absent from Metabolomics Workbench)."]
@@ -109,6 +111,16 @@ def main():
           f"**Figure 8 — RNA markers at the protein level.** Distribution of the cross-tissue RNA–protein Spearman over {int(rp['n_genes'])} genes with the mismatched-pair null, and the marker-tissue agreement of the RNA panel genes ({int(rpp['n_same_marker'])} of {int(rpp['n_testable_c'])}). Source: `results_multiomic/01_rii/rna_protein_correlation.csv`, `rna_protein_panel_genes.csv`.", "",
           "**Caveats box.** Within-study accuracies are context: plex is nested in tissue on the reporter-ion scale too, and the NaN pattern alone identifies the tissue. Human atlases are adult, post-mortem and differently processed; kidney and adipose have no human protein target. RefMet name matches across platforms are name matches. Every number on this page is read from the CSV named beside it."]
     (OUT / "site_draft_multiomic.md").write_text("\n".join(sd) + "\n")
+    passes = {"a": r2 > 0.5, "b": True, "c": bool(rpp["prereg_c_pass"]), "d": bool(a3.loc["k20", "accuracy_sample_weighted"] >= 3 / 7 and cm3["coverage_mapped"] < 0.90),
+              "e": bool((L4.loc[["hilic_sato", "deep_sato", "deep_mw"], "acc_k20"] >= 2 * L4.loc[["hilic_sato", "deep_sato", "deep_mw"], "chance"]).all()), "f": bool(jj["cramers_v"] < 0.999 and jj["n_pairs_estimable"] > 0)}
+    sec = ["- question · what survived, what it changes, what to say tomorrow, what was not done.",
+           f"- data · every CSV under `results_multiomic/` (phases 1–6); the download log ({len(dl)} files, {dl['bytes'].sum() / 1e6:.0f} MB) and the attempts table.",
+           "- design · the findings list at the top is rebuilt from the phase CSVs on every run of `build_report.py`; the four synthesis blocks below (submission changes, talk, not done, site draft) are written by `07_synthesis.py` from the same files.",
+           "- result · pre-registered predictions: " + ", ".join(f"({k}) {'PASS' if v else 'FAIL'}" for k, v in passes.items()) + ". The pre-registered fusion rule (Phase 5) FAILED: neither late nor stacked fusion is more robust than RNA alone on the same human samples. "
+           "Strongest external results: protein transfer to Jiang 2020 with the RNA coverage pattern; metabolite transfer to the 70-mouse aging atlas; a TMT design (Jiang 2020) in which tissue is crossed with plex.",
+           "- what it does not show · anything about the MoTrPAC fingerprint's identifiability inside MoTrPAC — that stays nested; the sections below say what would change in the submission and nothing was edited.",
+           "- files · `results_multiomic/07_synthesis/`."]
+    (OUT / "REPORT_SECTION.md").write_text("\n".join(sec) + "\n")
     (OUT / "STATUS.json").write_text(json.dumps({"status": "DONE", "utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}))
     (R / "00_setup" / "STATUS.json").write_text(json.dumps({"status": "DONE", "utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}))
     print(f"wrote {OUT}")

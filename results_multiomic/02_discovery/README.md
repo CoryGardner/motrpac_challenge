@@ -1,6 +1,6 @@
 # Phase 2 — data discovery
 
-Built by `scripts/multiomic/02_discovery.py` on 2026-09-27 07:24 UTC. Every attempt is in `attempts.csv`; every download (URL, bytes, sha256, time) in `download_log.csv` (19 files, 237 MB); usable datasets in `datasets.csv`; tissue maps in `tissue_maps.csv`.
+Built by `scripts/multiomic/02_discovery.py` on 2026-09-27 07:46 UTC. Every attempt is in `attempts.csv`; every download (URL, bytes, sha256, time) in `download_log.csv` (20 files, 418 MB); usable datasets in `datasets.csv`; tissue maps in `tissue_maps.csv`.
 
 ## Attempts (prompt order)
 
@@ -29,7 +29,7 @@ Built by `scripts/multiomic/02_discovery.py` on 2026-09-27 07:24 UTC. Every atte
 | Jiang 2020 human proteome map | protein (TMT, human) | 201 | 12627 | 14 | 32 | log2 relative abundance to the run's pooled reference (cleaned); raw reporter intensities also given | TMT run (56), TMT tag (10), donor | 3097 of 3570 RII genes by 1:1 ortholog | yes — Phases 3, 5, 6 |
 | Wang 2019 human tissue atlas (29 tissues) | protein (label-free iBAQ, human) | 29 | 13640 | one donor per tissue (Table EV1 A) | 29 | iBAQ | MS run per tissue (one sample per tissue) | 3123 of 3570 RII genes by 1:1 ortholog | yes — Phase 3 secondary target (one sample per tissue), Phase 5 (matched RNA), Phase 6 |
 | Geiger 2013 mouse tissue proteome (28 tissues) | protein (SILAC H/L ratios to one SILAC-mouse standard; mouse) | 28 | 7349 | pooled mice per tissue | 28 | normalised H/L SILAC ratio (common heavy standard) | none per sample (one run per tissue) | 2800 RII genes by gene symbol (rat↔mouse, caveat: symbol match, not orthology table) | yes — Phase 3 secondary target (covers KIDNEY and WAT-SC, n = 1 per tissue) |
-| Sato 2022 atlas of exercise metabolism (mouse) | metabolite (Metabolon HD4 untargeted; mouse) | 191 | 547–804 named per tissue (1159 union) | 24 | 8 | peak area (raw) / median-scaled | ROUND, RUN DAY (per sample), platform | RefMet-matched names: 100 of 1159 queried, 7 in MoTrPAC (any platform), 7 in HILIC+; crude name overlap 191 | yes — Phase 4 (target + exercise-invariance test), Phase 6 |
+| Sato 2022 atlas of exercise metabolism (mouse) | metabolite (Metabolon HD4 untargeted; mouse) | 191 | 547–804 named per tissue (1159 union) | 24 | 8 | peak area (raw) / median-scaled | ROUND, RUN DAY (per sample), platform | RefMet-matched names: 1159 of 1159 queried, 300 in MoTrPAC (any platform), 160 in HILIC+; crude name overlap 191 | yes — Phase 4 (target + exercise-invariance test), Phase 6 |
 | Metabolomics Workbench ST003188 — A metabolic atlas of mouse aging (Mullen lab, USC, 2025) | metabolite (targeted RP-negative triple-quad; mouse) | 840 | 190 | 70 | 12 | AU (peak area) | Batch (12 levels — one per organ, nested) | 109 RefMet names in MoTrPAC (any platform), 46 in HILIC+ | yes — Phase 4 (second target), Phase 6 (nested design) |
 
 ## Tissue maps

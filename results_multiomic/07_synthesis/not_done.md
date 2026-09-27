@@ -5,7 +5,7 @@
 - **MetaboLights** was reachable but not searched: two matchable rodent metabolomes were already in hand within the 2 h discovery box.
 - **Sato 2022 batch variable**: ROUND labels repeat across the per-tissue Metabolon tables and could not be verified as shared runs; listed in Phase 6, not claimed.
 - **PXD082651** (2026 mouse lifespan multi-tissue atlas of non-canonical peptides) not pursued (non-canonical peptide focus).
-- **Portal release c2.0 RII, acetyl and ubiquityl RII**: not run in the main line (c1.0 `prot-pr` and `prot-ph` only) unless a later log entry says otherwise.
+- **Portal release c2.0 RII and acetyl RII**: run as robustness checks (`results_multiomic/01_rii/c2/`, `ac_c2/`; numbers in the Phase 1 section); ubiquityl RII (heart and liver only) not run.
 - **Figures**: described in the site draft with their source CSVs; no image files were rendered and `site/` was not touched.
 - **Kidney and adipose** have no human protein target in Jiang 2020; they are covered only by the mouse atlas (Geiger, n = 1 per tissue).
-- **Download log** (`results_multiomic/02_discovery/download_log.csv`): 19 files, 237 MB — geiger2013 1 files, 10 MB; jiang2020 8 files, 169 MB; mw_ST003188 3 files, 6 MB; sato2022 7 files, 53 MB. 15 attempts recorded (`attempts.csv`), including the failures (raw-only PRIDE project, bot-walled publisher page, over-box bundle, no rat atlas, Sato absent from Metabolomics Workbench).
+- **Download log** (`results_multiomic/02_discovery/download_log.csv`): 20 files, 418 MB — geiger2013 1 files, 10 MB; jiang2020 8 files, 169 MB; mw_ST003188 3 files, 6 MB; sato2022 7 files, 53 MB; wang2019 1 files, 181 MB. 15 attempts recorded (`attempts.csv`), including the failures (raw-only PRIDE project, bot-walled publisher page, over-box bundle, no rat atlas, Sato absent from Metabolomics Workbench).

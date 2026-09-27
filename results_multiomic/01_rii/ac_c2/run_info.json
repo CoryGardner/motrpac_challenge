@@ -1,7 +1,7 @@
 {
  "args": {
-  "assay": "prot-pr",
-  "release": "c1.0",
+  "assay": "prot-ac",
+  "release": "c2.0",
   "min_peptides": 2,
   "norm": "total",
   "n_splits": 5,
@@ -9,10 +9,10 @@
   "grid": "1,2,3,5,8,10,15,20,30,50,100",
   "seed": 20260925,
   "n_perm": 200,
-  "n_perm_panel": 20,
+  "n_perm_panel": 10,
   "quick": false,
-  "skip_rna": false,
-  "out": null
+  "skip_rna": true,
+  "out": "results_multiomic/01_rii/ac_c2"
  },
- "minutes": 1.772330109278361
+ "minutes": 0.7190769712130228
 }

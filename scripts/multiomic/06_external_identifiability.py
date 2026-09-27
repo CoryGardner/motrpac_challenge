@@ -105,6 +105,7 @@ def main():
     jn = nest[(nest["dataset"] == "Jiang2020") & (nest["variable"] == "tmt_run")].iloc[0]
     jd = nest[(nest["dataset"] == "Jiang2020") & (nest["variable"] == "donor")].iloc[0]
     crossed = comp[(comp["cramers_v"] < 0.999) & (comp["n_pairs_estimable"] > 0)]
+    crossed = crossed.iloc[np.argsort([0 if d == "Jiang2020" else 1 if not d.startswith("MoTrPAC") else 2 for d in crossed["dataset"]], kind="stable")]
     lines = [f"# Phase 6 — identifiability of the external designs (metadata only)", "", f"Built by `scripts/multiomic/06_external_identifiability.py` on {time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime())}; numbers from the CSVs here and from `results_frozen/16_identifiability/`.", "",
              "## Design comparison — `design_comparison.csv`", "", report.df_to_md(comp, floatfmt=".3f"), "",
              "## Per variable — `nesting_all.csv`", "", report.df_to_md(nest, floatfmt=".3f"), "",

@@ -105,8 +105,8 @@ def phase1(findings):
         f"complete proteins {f(float(vpc['R2_tissue'].iloc[0]))}). **(b) PASS** (context): balanced accuracy ≥ 0.95 from k = {k_first}; k = 20 gives {f(k20['bal_acc_mean'])} ± {f(k20['bal_acc_sd'])} "
         f"over {int(k20['n_folds'])} folds ({f(k20['n_test_animals_mean'], 0)} test animals each; permutation null 95th pct {f(null['null_q95'])}); the same on the complete-protein matrix "
         f"({f(float(pcc.loc[pcc['k'] == 20, 'bal_acc_mean'].iloc[0]))}). Diagnostic: missingness alone still classifies tissue ({f(ds.loc['missingness_outer_acc', 'mean'])} outer, "
-        f"{f(ds.loc['missingness_inner_acc', 'mean'])} inner), per-tissue-mean removal collapses to {f(ds.loc['per_tissue_means_removed_acc', 'mean'])} (chance {f(ds.loc['chance', 'mean'])}; ratios "
-        f"{f(ds.loc['per_tissue_means_removed_acc', 'frozen_ratio_fold0']) if 'frozen_ratio_fold0' in ds.columns else 'n/a'}). "
+        f"{f(ds.loc['missingness_inner_acc', 'mean'])} inner), per-tissue-mean removal collapses to {f(ds.loc['per_tissue_means_removed_acc', 'mean'])} (chance {f(ds.loc['chance', 'mean'])}; on the ratio matrix, frozen phase 04 fold 0: "
+        f"{f(float(pd.read_csv(ROOT / 'results_frozen' / '04_baselines' / 'PROT' / 'diagnostic_accuracy.csv')['per_tissue_means_removed'].iloc[0]))}, `results_frozen/04_baselines/PROT/diagnostic_accuracy.csv`). "
         + (f"**(c) PASS**: {int(rpp['n_same_marker'])} of {int(rpp['n_testable_c'])} testable RNA panel genes ({pct(rpp['frac_same_marker'])}) keep their marker tissue at the protein level. "
            f"Cross-tissue RNA–protein Spearman over {int(rp['n_genes'])} genes: median {f(rp['spearman_median'])}, {pct(rp['frac_spearman_gt_0.5'], 1)} above 0.5, {pct(rp['frac_genes_above_null_q95'], 1)} above the "
            f"mismatched-pair null 95th percentile ({f(rp['null_mismatched_q95'])}); same marker tissue in {pct(rp['frac_same_marker_tissue'], 1)} of genes (chance {pct(rp['chance_same_marker'], 1)}); "
@@ -116,11 +116,22 @@ def phase1(findings):
         "median of the RNA–protein correlation is far above zero, meaning a large part of any gene's cross-tissue agreement is a shared tissue structure (e.g. muscle/heart vs brain), not gene-specific.",
         f"- files · `results_multiomic/01_rii/README.md` (built from the CSVs), matrices `rii_inner_log2ppm.parquet`, `rii_outer_log2ppm.parquet`, `rii_meta.csv`.",
     ]
-    ph = csv("01_rii/ph/join_summary.csv")
-    if ph is not None:
-        vph = csv("01_rii/ph/variance_partition.csv"); pph = csv("01_rii/ph/panel_curve_summary.csv")
-        lines.append(f"- secondary, phospho (`prot-ph`, `results_multiomic/01_rii/ph/`): {int(ph.iloc[0]['n_proteins_inner'])} phosphoprotein groups in every tissue; tissue R² of PC1 = "
-                     f"{f(float(vph['R2_tissue'].iloc[0]))}; k = 20 balanced accuracy {f(float(pph.loc[pph['k'] == 20, 'bal_acc_mean'].iloc[0]))}.")
+    st = csv("01_rii/stability_k20_summary.csv")
+    if st is not None:
+        s = st.iloc[0]
+        lines.append(f"- stability of the k = 20 selection ({int(s['n_boot'])} animal-bootstraps; `stability_k20_summary.csv`): {int(s['n_features_ever_selected'])} proteins ever selected, {int(s['n_selected_ge_0.8'])} in ≥ 80 % of resamples, "
+                     f"{int(s['n_selected_ge_0.5'])} in ≥ 50 %; the all-animal panel's members have median selection frequency {f(s['all_animal_panel_median_frequency'], 2)}.")
+    for sub, label in (("ph", "phospho (`prot-ph`, c1.0)"), ("c2", "portal release c2.0 (rn7 reprocessing, `prot-pr`)"), ("ac_c2", "acetyl (`prot-ac`, c2.0)")):
+        js2 = csv(f"01_rii/{sub}/join_summary.csv")
+        if js2 is None:
+            continue
+        v2 = csv(f"01_rii/{sub}/variance_partition.csv"); p2 = csv(f"01_rii/{sub}/panel_curve_summary.csv"); rp2 = csv(f"01_rii/{sub}/rna_protein_panel_summary.csv")
+        extra = ""
+        if rp2 is not None:
+            q2 = rp2.iloc[0]
+            extra = f"; RNA panel genes with the same marker tissue {int(q2['n_same_marker'])} of {int(q2['n_testable_c'])}"
+        lines.append(f"- secondary, {label} (`results_multiomic/01_rii/{sub}/`): {int(js2.iloc[0]['n_vials'])} vials, {int(js2.iloc[0]['n_proteins_inner'])} features in every tissue; tissue R² of PC1 = "
+                     f"{f(float(v2['R2_tissue'].iloc[0]))} (permutation null95 {f(float(v2['R2_tissue_null95'].iloc[0]))}); k = 20 balanced accuracy {f(float(p2.loc[p2['k'] == 20, 'bal_acc_mean'].iloc[0]))}{extra}.")
     return lines
 
 

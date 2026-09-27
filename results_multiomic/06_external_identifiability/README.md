@@ -1,6 +1,6 @@
 # Phase 6 — identifiability of the external designs (metadata only)
 
-Built by `scripts/multiomic/06_external_identifiability.py` on 2026-09-27 07:35 UTC; numbers from the CSVs here and from `results_frozen/16_identifiability/`.
+Built by `scripts/multiomic/06_external_identifiability.py` on 2026-09-27 07:49 UTC; numbers from the CSVs here and from `results_frozen/16_identifiability/`.
 
 ## Design comparison — `design_comparison.csv`
 
